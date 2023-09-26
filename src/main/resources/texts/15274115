@@ -1,0 +1,18 @@
+SQLとは？
+シークェル、エスキューエルと読む。 IBM社が開発したデータベース操作用言語。リレーショナルデータベースの操作に使用する。 アメリカ規格協会(ANSI)やJISで標準化されている世界標準規格。 RDBMS毎に使えるSQL文などがあり、「SQL文の方言」といわれている。
+ROWNUMとインラインビュー †
+SQLで先頭三件だけを出力するというのはOracleでは出来なかったが、Oracle8では出来るようになったようである。注意点はあるがROWNUMを使うと可能。ROWNUMはテーブルから取り出した時に自動で採番される擬似の行である。物理的にテーブルを読み込んだタイミングで採番されてしまうもの。 
+※Oracle7ではできない
+また、更にSQLServerでは出来ていたFROMの後に「副問い合わせの仮想VIEW」を使う方法も
+Oracle8では使用可能になっている。これを『インラインビュー』と言います。
+SQLServerでは「 TOP 3 」ですむところですが、OracleではこのROWNUMとインラインビューを
+使い、機能を実現しています。
+SQLServerでは「TOP 3」をいれると先頭三件が出力される
+例)
+SELECT TOP 3 * FROM EMP;
+Oracleの場合は
+例)
+SELECT * FROM EMP WHERE ROWNUM <=3 ;
+とする。 
+但し、ROWNUMは「Order By」では並びが狂うので注意が必要。
+SQL> SELECT ROWNUM,ENAME,SAL FROM EMP WHERE DEPTNO = 30;

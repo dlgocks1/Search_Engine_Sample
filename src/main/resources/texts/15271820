@@ -1,0 +1,106 @@
+本当は怖い文字コードの話
+第7回　Unicodeからの多対一の変換
+2009年8月11日
+はせがわようすけ
+セキュリティ, 文字コード, Unicode, UTF-16LE, パストラバーサル, クロスサイ トスクリプティング
+1
+2
+文字コードが引き起こすセキュリティ上の問題として，もっとも興味深いもののひとつである，Unicodeから他の文字コードへの「多対一の変換」で引き起こされる問題点について，今回と次回で説明します。
+ご存じのとおり，Unicodeには非常に多数の文字が収録されていますが（現在最新版のUnicode 5.1.0では100,713文字が収録されているそうです），Unicodeから他の文字コードへの変換においては，互換性や可読性の維持のためか，複数のUnicodeの文字が他の文字コードでは単一の文字に変換されることがあります。
+この「多対一」の変換が，開発者も想定していなかったような問題を引き起こす原因となることが多々あります。
+具体的な例として，Windows上でのUnicodeからの変換について説明します。
+Windows上でのUnicodeからShift_JISへの変換
+Windows上での文字列のUnicode（UTF-16LE）からShift_JISへの変換においては，多くの場合APIのWideCharToMultiByteが使用されます。
+このWideChatToMultiByte関数は，2番目の引数にWC_NO_BEST_FIT_CHARSというフラグを指定することができます。
+WC_NO_BEST_FIT_CHARSを指定した場合，Unicode文字に対応するShift_JISの文字が存在しない場合には，特定の文字(デフォルトでは '?')に変換されます。
+WC_NO_BEST_FIT_CHARSが指定されていない場合，Unicode文字に対応するShift_JISの文字が存在しない場合には，「よく似た文字」に変換されてしまいます。
+WC_NO_BEST_FIT_CHARSを指定せずにWideCharToMultiByte関数を実際に呼び出した場合の文字の変換例を，表1に示しておきます。
+表1　WC_NO_BEST_FIT_CHARSを指定しない場合のWideCharToMultiByte関数による変換
+UnicodeShift_JIS
+¡U+00a1! 0x21
+¢U+00a2￠ 0x81 0x91
+£U+00a3￡ 0x81 0x92
+¥U+00a5\ 0x5C
+¦U+00a6| 0x7C
+©U+00a9c 0x63
+ªU+00aaa 0x61
+«U+00ab≪ 0x81 0xE1
+¬U+00ac￢ 0x81 0xCA
+(Soft Hyphen)U+00ad- 0x2D
+®U+00aeR 0x52
+¯U+00af￣ 0x81 0x50
+²U+00b22 0x32
+³U+00b33 0x33
+µU+00b5μ 0x83 0xCA
+·U+00b7・ 0x81 0x45
+¸U+00b8， 0x81 0x43
+¹U+00b91 0x31
+ºU+00bao 0x6F
+»U+00bb≫ 0x81 0xE2
+ÀU+00c0A 0x41
+ÁU+00c1A 0x41
+ÂU+00c2A 0x41
+ÃU+00c3A 0x41
+ÄU+00c4A 0x41
+ÅU+00c5A 0x41
+ÆU+00c6A 0x41
+ÇU+00c7C 0x43
+ÈU+00c8E 0x45
+ÉU+00c9E 0x45
+ÊU+00caE 0x45
+ËU+00cbE 0x45
+ÌU+00ccI 0x49
+ÍU+00cdI 0x49
+ÎU+00ceI 0x49
+ÏU+00cfI 0x49
+ÐU+00d0D 0x44
+ÑU+00d1N 0x4E
+ÒU+00d2O 0x4F
+ÓU+00d3O 0x4F
+ÔU+00d4O 0x4F
+ÕU+00d5O 0x4F
+ÖU+00d6O 0x4F
+ØU+00d8O 0x4F
+ÙU+00d9U 0x55
+ÚU+00daU 0x55
+ÛU+00dbU 0x55
+ÜU+00dcU 0x55
+ÝU+00ddY 0x59
+ÞU+00deT 0x54
+ßU+00dfs 0x73
+àU+00e0a 0x61
+áU+00e1a 0x61
+âU+00e2a 0x61
+ãU+00e3a 0x61
+äU+00e4a 0x61
+åU+00e5a 0x61
+æU+00e6a 0x61
+çU+00e7c 0x63
+èU+00e8e 0x65
+éU+00e9e 0x65
+êU+00eae 0x65
+ëU+00ebe 0x65
+ìU+00eci 0x69
+íU+00edi 0x69
+îU+00eei 0x69
+ïU+00efi 0x69
+ðU+00f0d 0x64
+ñU+00f1n 0x6E
+òU+00f2o 0x6F
+óU+00f3o 0x6F
+ôU+00f4o 0x6F
+õU+00f5o 0x6F
+öU+00f6o 0x6F
+øU+00f8o 0x6F
+ùU+00f9u 0x75
+úU+00fau 0x75
+ûU+00fbu 0x75
+üU+00fcu 0x75
+ýU+00fdy 0x79
+þU+00fet 0x74
+ÿU+00ffy 0x79
+ゔU+3094ヴ 0x83 0x94
+この表を見るとわかるように，例えば発音記号のついた文字「À」（U+00C0）やU+00C1（Á）はShift_JISに変換すると「A」（0x41）に置き換わりますし，コピーライトマーク「©」（U+00A9）は 「c」（0x63）に置き換わります。
+このように，WC_NO_BEST_FIT_CHARS を設定しない変換においては，Unicode と Shift_JIS の間では多対一の変換が行われてしまいます。
+1
+2

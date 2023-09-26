@@ -1,0 +1,10 @@
+An implementation of JMS using gearmand as the JMS provider. Gearman-JMS started as a capstone project for Portland State University's CS487-88 Spring-Summer 2009 Sequence.
+Home page
+Wiki
+Part of: The Gearman Project
+Uses Launchpad for: 
+Answers, Blueprints, Bug Tracking, and Code.
+Programming Languages:
+Java
+Maintainer: Gearman-developers
+Driver: Gearman-developers

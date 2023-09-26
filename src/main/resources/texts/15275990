@@ -1,0 +1,119 @@
+ＨＴＭＬヘルパーで画像にリンクを設定する方法は以下の通り
+<?php echo $html->link($html->image('/img/sanpule.png'),
+'http://localhost/book/diaries',null,null,false);?>
+第5引数にfalseを設定することで画像タグがエスケープされずに、第2引数で設定した 
+アドレスにリンクが設定されます。
+CakePHP
+以下のサイトを参考にCakePHPでFckeditorを使ってみました。 
+SLYWAKER 
+ダウンロードサイトはこちら 
+http://www.fckeditor.net/ 
+解凍して「app/webroot/js/fckeditor」に展開
+以下のいらないファイルを削除 
+app/webroot/js/内の_* のファイルやフォルダ 
+app/webroot/js/fckeditor/fckeditor.*の拡張子がphp以外のファイル 
+app/webroot/js/fckeditor/editor/filemanager/connectors/のphp以外のフォルダ 
+以下のファイルをコピー 
+app/webroot/js/fckeditor/fckeditor.php -> vendors/fckeditor/fckeditor.php 
+app/webroot/js/fckeditor/fckeditor_php4.php -> vendors/fckeditor/fckeditor_php4.php 
+app/webroot/js/fckeditor/fckeditor_php5.php -> vendors/fckeditor/fckeditor_php5.php 
+FCKHelperを作成　「app/views/helpers/fck.php」
+<?php
+App::import('Vendor', 'FCKeditor', array('file' => 'fckeditor/fckeditor.php'));
+class FckHelper extends AppHelper { 
+var $helpers = array('Form');
+function textarea($fieldName, $options = array())
+{
+$defaultOptions = array(
+'value' => '',
+'width' => '100%',
+'height' => '300',
+'toolbar' => 'Cake',
+);
+$options = array_merge($defaultOptions, $options);
+$fieldName = explode('.', $fieldName);
+$editor_name = "data";
+if (count($fieldName) > 1) {
+foreach ($fieldName as $key) {
+$editor_name .= "[{$key}]";
+}
+} else {
+$model = $this->Form->params['models'][0];
+$editor_name .= "[{$model}][{$fieldName[0]}]";
+}
+$oFCKeditor = new FCKeditor($editor_name) ;
+/* コメント受けて変更 */
+/* $oFCKeditor->BasePath = $this->url('/js/fckeditor/') ; */
+$oFCKeditor->BasePath = $this->webroot('/js/fckeditor/') ;
+$oFCKeditor->Value = $options['value'];
+$oFCKeditor->Width = $options['width'];
+$oFCKeditor->Height = $options['height'];
+$oFCKeditor->ToolbarSet = $options['toolbar'];
+return $oFCKeditor->CreateHtml();
+}
+function input($fieldName, $options = array())
+{
+$options = array_merge($options, array('type' => 'textarea'));
+$out = $this->Form->input($fieldName, $options);
+$out = preg_replace('/]*>[^/', $this->textarea($fieldName, $options), $out);
+return $out;
+}
+}
+?>
+app/webroot/js/fckeditor/fckconfig.jsにツールバーを追加
+FCKConfig.ToolbarSets["Cake"] = [
+['Source','-','Preview'],
+['Cut','Copy','Paste','PasteText'],
+['Undo','Redo','-','Find','Replace','-','SelectAll','RemoveFormat'],
+['FitWindow','ShowBlocks','-','About'],
+'/',
+['Bold','Italic','Underline','StrikeThrough','-','Subscript','Superscript'],
+['OrderedList','UnorderedList','-','Outdent','Indent','Blockquote'],
+['JustifyLeft','JustifyCenter','JustifyRight','JustifyFull'],
+['Link','Unlink','Anchor'],
+['Image','Flash','Table','Rule','Smiley','SpecialChar'],
+'/',
+['Style','FontFormat','FontSize'],
+['TextColor','BGColor']
+] ;
+app/webroot/js/fckeditor/editor/filemanager/connectors/php/config.php 
+以下を変更
+<?php
+// SECURITY: You must explicitly enable this "connector". (Set it to "true").
+// WARNING: don't just set "$Config['Enabled'] = true ;", you must be sure that only
+// authenticated users can access this file or use some kind of session checking.
+$Config['Enabled'] = true ;
+// Path to user files relative to the document root.
+$fullPath = __FILE__;
+for ($i = 0; $i 
+Controllerでのヘルパー指定を忘れずに 
+var $helpers = array(’Fck’); 
+Viewにて
+<?php echo $fck->input('body', array('label' => '本文')); ?>
+CakePHP
+カレンダーヘルパー仕様 
+1.横一列に1週間が表示される普通に市販されているようなカレンダーを一月分表示することができる 
+2.祝祭日を判断し休日のセルの書式を変更できる 
+3.祝祭日や登録したスケジュールをセルの中に表示できる 
+4.カレンダーの大きさは大中小の3段階を選択できる 
+5.cssを変更することで表示書式を自由に変更できる 
+ダウンロードサイト
+ダウンロードしたファイルを解凍し、calendar.phpをappフォルダのviews/helpersフォルダにコピーします。 
+同じくcalendar.cssをappフォルダのwebroot/cssにコピーします。 
+controllerで$helpersの中にCalendarを加えます。
+var $helpers = array('Html','Calendar');
+cssを有効にするために，layoutまたは表示するctpファイルでcssファイルを読み出す記述をします。
+<?php echo $html->css('calendar');?>
+表示させるビューファイルは以下の通りです。
+<?php
+$year = 2008;
+echo "<h2>$year 年のカレンダー</h2>";
+$calendar->showSaijitsu = true;
+$calendar->showSchedule = true;
+$calendar->setTableSize('s');
+$calendar->addSchedule($year,1,7,'新年会');
+$calendar->addSchedule($year,1,15,'ミーティング');
+$calendar->showCalendar($year,1);
+?>
+参考サイトPHP学習日誌
+CakePHP

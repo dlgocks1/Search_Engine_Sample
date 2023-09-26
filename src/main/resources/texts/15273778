@@ -1,0 +1,38 @@
+linux, memoずっと PXE ブートはやってみたかったんだけど，すでに（PXE に対応しない）DHCP サーバがあがっている環境なので半ば諦めていた。もう一台 PXE に対応した DHCP サーバを立てるというのも一つの手*1なんだけど，その新規 DHCP サーバが先に応答するという運に依存する部分があるのと，リースする IP アドレス空間をわけなきゃいけないので結局旧 DHCP サーバの設定を変える必要があるということで二の足を踏んでいた。サブネット切って自分用ローカル環境でやるかなぁと思っていたところ，id:viver さんが Proxy DHCP という素敵なしくみを紹介なさっていた。というわけで、PXEには3種類ある。 普通のDHCPのやりとりだけど、DHCPOFFERにPXEの拡張オプションが入っている（DHCPサーバーの設定の変更が必要）DHCPサーバーを動かしているホストでProxyDHCPサーバーを動かす（少しだけDHCPサーバーの設定の変更が必要）DHCPサーバーとは別のホストでProxyDHCPサーバーを動かす（DHCPサーバーの設定の変更が不要）PXEには３種類ある - 古橋貞之の日記1番目は普通の PXE としてもちいられる手段（dhcpd.conf に next-server や filename を書く方法）。2番目と3番目が Proxy DHCP というしくみ。Proxy という名前からすると DHCP シーケンスを proxy するのかなと思いきやそういうわけではなく，PXE にかかわるシーケンスだけ（通常の DHCP サーバと）別のサーバでまかなうという手法。これがそもそも PXE の規格で決まっているらしい。2番目の方法は，同一ホストに DHCP サーバと Proxy DHCP サーバを共存させる*2方法。だから Proxy DHCP サーバは 4011 という DHCP とは別のポートであがることになる。そして3番目の方法が，DHCP サーバと Proxy DHCP サーバを別のサーバで立てる方法。まさに今回のような状況のためのもの。Proxy DHCP サーバは DHCP サーバポート（67）と Proxy DHCP ポート（4011）両者に応答する必要が（仕様書にしたがって full spec に実装する場合）ある。 で，id:viver さんは Proxy DHCP を紹介なさるだけではなく，この3番目の Proxy DHCP サーバとして動く実装も作ってらっしゃった。それが pxe-pdhcp（⇒ PXEには３種類ある - 古橋貞之の日記）。ということで，今回 CentOS 5.3 で pxe-pdhcp を使って PXE ブートをやってみた。 余談: Proxy DHCP サーバでポート 4011 の待ち受けは必須か仕様書を読むと，3番目の Proxy DHCP でも 4011 ポートを使って PXE Client とやりとりをしなくてはいけないように読める。でも pxe-pdhcp ではそのようになっていない。ほんとに大丈夫かいなと思って試してみるとうまくいく。で，ソースと仕様書を付き合わせて謎がとけた。通常，（一般的な DHCP でも）DHCPDISCOVER(C) → DHCPOFFER(S) → DHCPREQUEST(C) → DHCPACK(S) のようなシーケンスをたどる。Proxy DHCP の場合，この DHCPREQUEST(C) 以降で 4011 ポートでやりとりする（ことに仕様書の上ではなっているようだ）。ところが，仕様書 Table 2-1 PXE DHCP Options によると PXE_DISCOVERY_CONTROL の bit 3 を立てると，最初の DHCPOFFER にブートファイル名（たとえば pxelinux.0）を含めることができる。なので，pxe-pdhcp は，DHCPOFFER に NBP ファイル名を含めて返し（この時点ではポート 67だ），その後はなにもしない。実際の IP アドレスの割当などは通常の DHCP サーバが REQUEST や ACK などのシーケンスを通じてやってくれる。pxe-pdhcp のビルドProxy DHCPを使ってネットワークブートサーバーを構築する - 古橋貞之の日記 のとおり。 TFTP サーバのインストールCentOS 5では（つまり RHEL 5 も; 以下 RHEL については略） tftp-server というパッケージが用意されている。PXE を使うためには（PXELINUX で使うためには？）tftp-hpa*3 という実装を利用しなくてはいけない？したほうがよい？という話をどこかで読んだんだけど*4，tftp-server で普通に動いたということは，こいつの実体は tftp-hpa かもしれない*5。
+$ sudo yum install tftp-server
+CentOS だと tftpd は xinetd 経由で駆動するようになってる。そのへんの設定はあとで。 PXELINUX のセットアップ元記事だと syslinux tar ball をとってきてビルドしてるけど，CentOS 5 だと syslinux パッケージがインストールされていれば（そしてまず間違いなくインストールされていると思う）そこに含まれている。/usr/lib/syslinux/pxelinux.0が，それ。 TFTP サーバで公開するファイルの準備tftp-server のデフォルト設定は，/tftpboot/ というディレクトリ以下を公開するんで，それをそのまま利用する。まずは先ほどの pxelinux をコピーする。
+# cd /tftpboot
+# cp /usr/lib/syslinux/pxelinux.0 .
+とりあえずの動作確認用に元記事と同じように現在動いているカーネルと initrd をコピーする。
+# cp /boot/vmlinuz-`uname -r` .
+# cp /boot/initrd-`uname -r` .
+# chmod 644 initrd-`uname-r`
+# ln -s vmlinuz-`uname -r` vmlinuz
+# ln -s initrd-`uname -r` initrd.img
+CentOS だと initrd のパーミッションが 0600 になっている（ため tftpd がアクセスできない）ことに注意。ここではまった。ちなみに元記事にならって initrd.img という名前にしてるけど，ここを initrd という名前にしておくと，boot コマンドラインで initrd=initrd.img というオプションを指定する必要がなくなる（自動的に initrd というファイルを取得してくれる）。 PXELINUX 用の設定ファイルを書く。
+# mkdir pxelinux.cfg
+# vi pxelinux.cfg/default
+default という名前にしておくと，最終的な fallback としてこいつを読んでくれる。というのは，（下記の実行画面をみるとわかるけど）PXELINUX ブートローダは最初に MAC アドレスに基づく設定ファイルを取得しようとし，そのあとは DHCP で割り振られた IP アドレスに基づく設定ファイルを取得しようとし，それでもなければ default という名前のファイルを取得しようとするのだ。なので，ぎっちぎちに静的割当で管理するのなら，各マシン用に設定ファイルを用意してもいい。今回は IP は動的割当するので，とりあえず default ということで。なお，全マシン用に共通の設定ファイルを使ったとしても，Linux を起動する場合は initrd (initramfs) に IP や MAC アドレスに基づく処理を記述しておけば，client によって挙動を変えることができる。そういう方針のほうが楽だと思う。 んで，設定内容は元記事と同じような感じで以下のとおり。
+default mypxe
+prompt 1
+timeout 50
+label mypxe
+kernel vmlinuz
+append initrd=initrd.img
+これで，TFTP サーバで公開するディレクトリツリーは以下のようになった。
++ /tftpboot/
+- vmlinuz (symlink to => vmlinuz-2.6.18-128.2.1.el5)
+- initrd.img (symlink to => initrd-2.6.18-128.2.1.el5.img)
+- vmlinuz-2.6.18-128.2.1.el5
+- initrd-2.6.18-128.2.1.el5.img
++ pxelinux.cfg/
+- default
+各種サーバの起動あとはサーバ（pxe-pdhcp，tftpd）を起動するだけ。と，そのまえに，CentOS だと iptables で DHCP や TFTP のポートが閉じられているので開けておく。system-config-securitylevel-tui で操作するのなら，Other ports のところに tftp:udp, bootps:udp を追加する（それぞれポート番号は 69, 67）。tftpd の起動についてだが，CentOS の場合 xinetd 経由で駆動しているので，chkconfig で tftp を on にしておいて（もちろん /etc/xinetd.d/tftp を手でいじってもいいけど），xinetd を再起動する。
+$ sudo /sbin/chkconfig tftp on
+$ sudo /sbin/service xinetd restart
+で，pxe-pdhcp を起動。
+$ sudo ./pxe-pdhcp -l 0.0.0.0 -b 255.255.255.255 -t 192.168.0.145 -d pxelinux.0
+元記事だと -i eth0 のようにネットワークインタフェースを指定して起動しているけれど，これではわたしの環境ではうまくいかなかった*6。Proxy DHCPによるネットワークブート - Geek Not Found のように，Proxy DHCP daemon の listen address と broadcast address を指定してうまくいった。また tftp サーバとして -t オプションで指定している 192.168.0.145 というのは，このマシンに割り振られているアドレス（ここで TFTP も提供しているからね）。当たり前だけど localhost ではうまく動作しない（PXE Client に通知するアドレスだから）。PXE Client の起動PXE ブートが可能なように BIOS 等で設定して起動すると PXE ブートする。VMware Server（等）の場合，BIOS 画面で [ESC] キーを押して，Boot Menu から Network boot を選ぶと PXE ブートを試みてくれる（もちろん BIOS 設定で起動優先順位を変えてもいいけど）。さきほどちらりと書いたけど，まず client の MAC アドレス（上記例では 00 0C 29 26 8F A9）に基づいたファイル名の PXELINUX の設定ファイル（01-00-0c-29-26-8f-a9 ……先頭の 01- はなんなんだろう）をまず読みにいく。次に，この client に割り振られた IP アドレス（上記例では 192.168.0.146）を16進数で表記したもの（上記例では C0A88092）に基づいたファイル名を読みにいき，なければ順次サブネット（/4 単位で）さかのぼって探していってる。 さて。PXELINUX の config で prompt を表示するように設定したので boot: ってでてる。で Enter キーを押すかタイムアウトまで待つと，ブートシーケンスが始まる。んで，root ファイルシステムが見つからないので PANIC する*7。あとはネットワークブート可能な initramfs を用意したりいろいろあるんだけど，とりあえずのテストなのでここまで。memtest86+ の起動というので終わるとあまりに実用的じゃないので，memtest86 系を PXE でブートできるようにしてみた。つっても Memtest86+ - Advanced Memory Diagnostic Tool にある Pre-Compiled Bootable Binary (.gz) をとってきて，gunzip して /tftpboot/ 以下に memtest86plus などの名前で置き，pxelinux.cfg/default に
+label memtest86+
+kernel memtest86plus
+のように書くだけ。＋のつかない memtest86 のほうは USB key image を使えばいいのかなと思ってやったらうまくいかなかった。よくみてみたら，ダウンロードページの Linux source and binary package という tar ball を落として，そのなかの precomp.bin というファイルを同じように使えばいいみたい。 あとは，ハードディスクベンダのテストツールが動かせたら便利かなと思ったけど，たいてい DOS ベースなので試してないです。ちらりと調べたら DOS を PXE で起動するには BpBatch を使う（⇒ LinuxのPXEでDOSをネットワークブートする - adsaria mood） SYSLINUX 付属の memdisk をカーネルとして使う（⇒ MEMDISK - Syslinux Wiki, http://mihix.hp.infoseek.co.jp/netbootdos.txt）などの方法があるみたい。入手性からいうと今だと後者のほうが試しやすいのかな。 と，いろいろ便利なツールを PXE ブート可能にしていくと地味なブートプロンプトじゃなく GRUB のメニューを使いたくなってくるけど，PXE GRUB はまだやってない*8。PXELINUX 単体でもメニューは出せるみたい（⇒ PXEでメニューを表示する。 - adsaria mood）。

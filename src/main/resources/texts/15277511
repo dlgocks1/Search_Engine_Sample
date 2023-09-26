@@ -1,0 +1,1 @@
+int x = 4; int y = 3; int **table = (int **)malloc(sizeof(int *) * y); for(i = 0; i < y; i++){     table[i] = (int *)malloc(sizeof(int) * x); }

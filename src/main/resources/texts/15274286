@@ -1,0 +1,49 @@
+Subject: [ruby-list:46273] [ANN] neversaydie 1.0.0 リリース 
+From: Aaron Patterson <aaron tenderlovemaking.com> 
+Date: Tue, 11 Aug 2009 15:21:15 +0900
+こんばんは（PST）！こんにちは（日本時間）！
+最近、悪い事を構想中のたこ焼き仮面だぜ。
+neversaydie version 1.0.0 をリリースした
+* <http://seattlerb.rubyforge.org>
+* <http://github.com/tenderlove/neversaydie>
+NEVER SAY DIEはSEGV発生時の救助を果たす為に開発されました。どんな過酷な
+状況下でも、SEGVがあれば君の人生は救われたも同然。なんでSEGVが必要かって？
+ただのメモリだろ？ 俺が、高校生だった時、テストで１００点なんか進級するのに
+必要なかったんだから。なんで、作業を済ます為に君のメモリが１００％
+厳密でなくちゃあいけなんだよ。メモリのコラプションがあっちでもこっちでも
+発生しても痛くも痒くもないんだろう？
+当たって砕けてみろよ。畳の上でゴロゴロしてビールでも飲んで、NEVER SAY DIEを
+使ってごらんよ。ほうら、君の悩みはなんてどっかに行っちゃっただろ？
+## FEATURES/PROBLEMS:
+* 問題は間違いなくあるだろう
+* 移植性
+* 根本的な問題には修正不能
+* 時々機能停止する
+* 以上
+## SYNOPSIS:
+以下のテストでどんな事だかみせてやるぜ:
+assert_raises NeverSayDie do
+NeverSayDie.segv
+end
+以下はsegvのメソッドのソースコード:
+static VALUE segv(VALUE self)
+{
+int *ptr = NULL;
+*ptr = 1;
+return self;
+}
+## REQUIREMENTS:
+* libsigsegv
+## INSTALL:
+第1章: libsigsegv をインストール。OS X を使用の場合、以下のコマンドを使用:
+$ sudo port install libsigsegv
+他のプラットホームについては現在未確認
+第2章: gem をインストール：
+$ sudo gem install neversaydie
+Changes:
+### 1.0.0 / 2009-08-10
+* 新しい機能
+* お誕生日！
+-- 
+Aaron Patterson
+http://tenderlovemaking.com/

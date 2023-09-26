@@ -1,0 +1,36 @@
+ruybonrails.org(http://rubyonrails.org/screencasts)の一番上にある”Creating a weblog in 15 minutes with Rails 2”ではrailsを用いて簡単なブログの作成方法を動画で紹介しています。第2回の講義では簡単にこのブログの作成を行いました。参加できなかった人も是非これを見て試してみてください。
+■プロジェクト、データベース作成
+ではまずターミナルを立ち上げて以下のコマンドを打ってください
+rails blog -d mysql
+blogというのは今回のrailsプロジェクトの名前なので任意の名前で大丈夫です。-d mysql というのはデータベースの指定をしていて今回はMYSQLというデータベースを使います。次にMYSQLの中に今回使うデータベースを作ります。 
+mysql -u root
+というコマンドを打つとMYSQLの操作モードに入り左端のディレクトリを示す部分が mysql> になります。
+mysql> create database blog_development character set utf8;
+さらに以上のコマンドを打つとデータベースの大枠が作成されます。blog_developmentというのがデータベースの名前になり最初のプロジェクトの名前に合わせます。今回はblogという名前をつけたのでデータベースの名前はblog_developmentになります。データベースが出来ているかどうか確認したい時は
+mysql> show databases;
+と打つと現在PCの中のMYSQLに入っているデータベースの一覧を見ることが出来ます。そうしたらexitとコマンドを打ってMYSQLを終了してください。
+■railsページにアクセス
+lsとターミナルに入力するとblogというディレクトリが出来上がっているはずです。これがさっき作ったrailsのプロジェクトですね。そうしたらcd blog と入力してディレクトリを移動し
+ruby script/server
+と入力します。そうするとrailsプロジェクトのサーバーが動き出します。そうしたらwebブラウザを開いて
+http://localhost:3000/ にアクセスしてください。Welcome aboard と大きく書かれたページにアクセスできるはずです。このページが出ればとりあえずrailsは問題なく動いていることが分かります。
+■マイグレーション
+それではブログを作っていくので一度サーバーを止めます。control + C のキーを打つと止まります。（おすすめとしてはターミナルを２つ開き片方はruby script/serverを常に起動しておいてもう片方で別の作業を行うこともできます）
+そうしたらさっきのblogディレクトリにいることを確認し、
+ruby script/generate scaffold Post title:string body:text
+と入力します。scaffoldというのはrailsにおいて特殊なコマンドで例えばブラウザで見るレイアウトなどを自動的に生成してくれたりと最初のうちはとても便利です。Postはテーブル名に当たります。テーブルとは一つのデータベースの中のうちの一つのデータの固まりで今回だとblog_developmentの中にpostというテーブルが出来たことになります。そしてtitle:string body:text というのがカラム名とその形式です。カラムとは一つのテーブルの中に入るデータの項目になります。 
+そうしたら以下のコマンドを入力します。
+rake db:migrate
+特にエラーが出ていなければデータベースの中にテーブルやカラムが作成できているかを確認します。前にデータベースを作った時と同じ要領でまずmysqlの操作モードに入ります。
+mysql -u root
+次にどのデータベースの情報を見るのかを選択。当然blog_developmentの情報を見るので
+mysql> use blog_development;
+データベースを選択したら以下のコマンドをそれぞれ入力してみてください。
+mysql> show tables;
+mysql> desc posts;
+show tables; と入力するとpostsというテーブル、desc posts;と入力するとtitleやbodyというカラムが確認できるかと思います。そうしたらまたブラウザで動作を確認するのでmyswl操作モードを終了し 
+ruby script/server
+と入力しサーバーを起動します。そうしたら今度は
+http://localhost:3000/posts にアクセスします。 
+ブログが出来ているのでフォームに書き込んで更新してみてください。
+“Creating a weblog in 15 minutes with Rails 2”では他にもコメント機能やRSSフィード機能や非同期通信による書き込みなどの実装を行っています。今回はとりあえずここまでで（余力があれば）また随時追記していきます。

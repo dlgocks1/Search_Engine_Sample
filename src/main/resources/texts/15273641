@@ -1,0 +1,16 @@
+Section Navigation      [Toggle]
+23.3 MySQL PHP API23.3.1 MySQLとPHPに対する共通問題
+23.3.2 mysql と mysqli の両方を
+PHP内で可能にする
+PHPをこのように設定してください。
+./configure --with-mysqli=/usr/bin/mysql_config --with-mysql=/usr 
+Makefileを編集し、EXTRA_LIBSを編集し、探してください。　それは(すべてが１行の上にある)これのように見えるかもしれません。
+EXTRA_LIBS = -lcrypt -lcrypt -lmysqlclient -lz -lresolv -lm -ldl -lnsl
+-lxml2 -lz -lm -lxml2 -lz -lm -lmysqlclient -lz -lcrypt -lnsl -lm
+-lxml2 -lz -lm -lcrypt -lxml2 -lz -lm -lcrypt
+ラインが(すべてが１行の上にある)これのように見えるように、すべての重複部分を除去してください：
+EXTRA_LIBS = -lcrypt -lcrypt -lmysqlclient -lz -lresolv -lm -ldl -lnsl
+-lxml2
+PHPを構築して搭載してください。
+make
+make install

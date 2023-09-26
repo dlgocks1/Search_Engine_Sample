@@ -1,0 +1,17 @@
+perl最近ちょいちょい触り始めてます。DBICは確かに便利だけど、もっと気楽にいいように手を入れられるORマッパが欲しいとも思ってたので、Skinnyの薄い設計はうってつけ。nekokak’s p5-dbix-skinny at master - GitHubこれをどうラッピングして料理するかで右往左往してばっかりなのも何なので、コード読めばすぐ分かるようなちょっとしたネタレベルでもエントリ上げていこうと思います。というわけで、クエリログを見る方法。DBIx::Skinny->attribute->{ profile }を有効にすると、DBIx::Skinny::Profilerにログが記録されます。あるいは、$ENV{ SKINNY_PROFILE }に有効な値が入っていれば、デフォルトでログを取ります。
+package MyApp::DB;
+use DBIx::Skinny setup => +{
+dsn => 'dbi:mysql:dbname',
+username => 'username',
+password => 'password',
+};
+sub debug {
+my ($class, $debug) = @_;
+$class->attribute->{ profile } = $debug;
+}
+sub query_log {
+my $class = shift;
+$class->profiler->query_log(@_);
+}
+1;
+今のところ、こんな風に書いて、MyApp::DB->debug(1); とか print Dumper(MyApp::DB->query_log); とかしてます。あと、そう言えばCPANのSYNOPSISは use DBIx::Skinny setup => +{ 〜 } の後のセミコロンが抜けてるように思います。

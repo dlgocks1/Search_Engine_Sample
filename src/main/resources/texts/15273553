@@ -1,0 +1,4 @@
+M-x eval-current-buffer
+もしくは
+M-x load-file RET ~/.emacs
+参考： .emacs を再読み込みする方法 - gan2 の Ruby 勉強日記

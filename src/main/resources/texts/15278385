@@ -1,0 +1,138 @@
+携帯の文字コードと絵文字の基礎知識
+説明
+これは日本の携帯電話の文字コードと絵文字まわりの仕様をまとめた資料です。Encode::JP::Mobile の開発の中で作成されました。
+記述に関してはできるだけ公式資料の URL を併記していますので合わせて参照してください。公式資料に言及されていない内容については [unofficial] を併記してあります。
+修正・追記歓迎です。
+DoCoMo
+絵文字リスト: 
+基本 http://www.nttdocomo.co.jp/service/imode/make/content/pictograph/basic/index.html
+拡張 http://www.nttdocomo.co.jp/service/imode/make/content/pictograph/extention/index.html
+DoCoMo Web
+表示できる charset: shift_jis, XHTML対応機種（ほとんど全ての FOMA）は utf-8も可。(XHTML), (HTML)。
+絵文字の表記方法: http://www.nttdocomo.co.jp/service/imode/make/content/pictograph/howto/index.html
+以下はすべて “晴れ” の絵文字を表示する方法を Perl コードで例示したものです。
+# sjisコード
+print "\xF8\x9F"; # ページのcharset=shift_jisの場合のみ
+# unicodeの16進数値文字参照
+print ''; # iモード対応HTML4.0対応機種のみ（ほぼ全て）
+# sjisコードの10進数値文字参照
+print ''; # 基本絵文字のみで、ページのcharset=shift_jisの場合のみ
+# unicodeのutf-8コード [unofficial]
+print "\xEE\x98\xBE"; # ページのcharset=utf-8の場合のみで、かつFOMAのみ
+フォームから送出される絵文字: 下記のとおり。
+charset=shift_jis から: sjis コード。例: \xF8\x9F
+charset=utf-8 から（FOMA）: unicode の utf-8 コード。例: \xEE\x98\xBE
+charset=euc-jp から: FOMA は絵文字だけ送ってこない模様
+DoCoMo Mail
+表示できる charset: iso-2022-jp, shift_jis, utf-8（[unofficial]）。
+絵文字の表記方法: shift_jis か iso-2022-jp で sjis コードを埋め込む。
+以下は http://search.cpan.org/perldoc?MIME::Lite#build に渡すパラメータに模した Perl コードの例です。
+# shift_jis
+Subject => '=?Shift_JIS?B?'. encode_base64("\xF8\x9F") .'?=',
+Type => 'text/plain; charset=shift_jis',
+Encoding => 'base64',
+Data => "\xF8\x9F",
+# iso-2022-jp
+Subject => '=?ISO-2022-JP?B?'. encode_base64("\xF8\x9F") .'?=',
+Type => 'text/plain; charset=iso-2022-jp',
+Encoding => 'base64',
+Data => "\xF8\x9F",
+キャリア間の相互変換: http://www.nttdocomo.co.jp/service/mail/imode_mail/function/emoji_convert/index.html 
+端末から携帯以外のアドレスにメールを送った場合、iso-2022-jp で、絵文字は一律ゲタとなってしまいます。
+KDDI/AU
+絵文字リスト: http://www.au.kddi.com/ezfactory/tec/spec/pdf/typeD.pdf
+KDDI/AU Web
+表示できる charset: shift_jis。http://www.au.kddi.com/ezfactory/tec/spec/4_2.html 。XHTML対応機種（WIN と一部の 1X）の場合 utf-8 や euc-jp も使えるようだが文字化けすることがある。
+絵文字の表記方法: http://www.au.kddi.com/ezfactory/tec/spec/3.html
+http://www.au.kddi.com/emoji/index.html
+以下はすべて “晴れ” の絵文字を表示する方法を Perl コードで例示したものです。尚 HDML については省略します。
+# <img localsrc="絵文字番号または絵文字名" />
+print '<img localsrc="44" />';
+print '<img localsrc="sun" />'; # 半[unofficial]
+# sjisコードの16進数値文字参照 [unofficial]
+print '';
+# sjisコードの10進数値文字参照 [unofficial]
+print '';
+以上は WIN/1X 問わず、ページの charset も shift_jis/utf-8/euc-jp 問わず利用できるものですが、以下は特定の場合にのみ表示できる方法です。「裏KDDI Unicode」については こちらを参照|Encode::JP::Mobile/"x-sjis-kddi-auto" してください。
+# sjisコード [unofficial]
+print "\xF6\x60"; # 1X/WIN共にsjisのページでのみ表示できる
+# 「裏KDDI Unicode」のutf-8コード [unofficial]
+print "\xEE\xBD\xA0"; # 1X/WIN共にutf-8のページでのみ表示できる
+# unicodeの16進数値文字参照 [unofficial]
+print ''; # 1Xの古い機種で不可の模様
+# unicodeの10進数値文字参照 [unofficial]
+print ''; # 1Xの古い機種で不可の模様
+さらに、au 端末はドコモの文字も表示することができますので、 “晴れ” を出したいのであれば以下のようにドコモのコード（と表記方法）をそのまま使うこともできます。http://www.au.kddi.com/ezfactory/tec/spec/html_con004.html
+# ドコモのsjisコード
+print "\xF8\x9F"; # ページのcharset=shift_jisの場合のみ
+# ドコモのunicodeの16進数値文字参照
+print ''; # iモード対応HTML4.0対応機種のみ（ほぼ全て）
+# ドコモのsjisコードの10進数値文字参照
+print ''; # 基本絵文字のみで、ページのcharset=shift_jisの場合のみ
+フォームから送出される絵文字: 下記のとおり。
+charset=shift_jis から: sjis コード。例: \xF6\x60
+charset=utf-8 から: 裏KDDI Unicode の utf-8 コード。例: \xEE\xBD\xA0
+charset=euc-jp から: 一律 \x3F (?) となる模様
+KDDI/AU Mail
+表示できる charset: iso-2022-jp, shift_jis。http://www.au.kddi.com/ezfactory/tec/spec/3.html
+絵文字の表記方法: sjis コードを埋め込む。WINの場合「（参考）Eメール送出用JISコードに対応したShift-JISコード」も使える。Subject を MIME エンコードすると化ける（解釈されない）ので注意。
+# shift_jis
+Subject => "\xF6\x60",
+Type => 'text/plain; charset=shift_jis',
+Encoding => 'base64',
+Data => "\xF6\x60",
+# iso-2022-jp
+Subject => "\xF6\x60",
+Type => 'text/plain; charset=iso-2022-jp',
+Encoding => 'base64',
+Data => "\xF6\x60",
+キャリア間の相互変換: http://www.au.kddi.com/emoji/index.html
+端末から携帯以外のアドレスにメールを送った場合、iso-2022-jp で、絵文字はリストの「Eメール送出用JISコード」で届きます。（例: \x75\x41）
+SoftBank
+絵文字リスト: http://creation.mb.softbank.jp/web/web_pic_about.html
+SoftBank Web
+表示できる charset: shift_jis, utf-8, euc-jp 。http://creation.mb.softbank.jp/web/web_doc.html (要登録 / HTML編 103-111-HTML_2.0.0.pdf p.30, XHTML編 104-011-XHTML_2.0.0.pdf p33)
+絵文字の表記方法: http://creation.mb.softbank.jp/web/web_doc.html (要登録 / HTML編 103-111-HTML_2.0.0.pdf pp.30-47)
+以下はすべて “晴れ” の絵文字を表示する方法を Perl コードで例示したものです。
+# Webコード: エスケープシーケンス開始(\x1B\x24) + コード + エスケープ終わり(\x0F)
+print "\x1B\x24Gj\x0F";
+print "\x1B\x24\x47\x6A\x0F";
+# unicodeのutf-8コード
+print "\xEE\x81\x8A"; # ページのcharset=utf-8の場合のみ
+# unicodeの16進数値文字参照
+print '';
+# unicodeの10進数値文字参照
+print '';
+# x-sjis-softbank-auto のsjisコード[unofficial]
+print "\xF9\x8B"; # ページのcharset=shift_jisの場合のみ
+フォームから送出される絵文字: 下記のとおり。
+charset=utf-8 から: unicode の utf-8 コード。例: \xEE\x81\x8A
+charset=shift_jis から: 3GC 端末の場合 x-sjis-softbank-auto な sjis（例: \xF9\x8B）/ それ以前の端末は Web コード（例: \x1B\x24\x47\x6A\x0F。絵文字が続いた場合はエスケープシーケンス内にコードが続く場合がある）
+charset=euc-jp から: shift_jis と同じ模様
+SoftBank Mail
+表示できる charset: iso-2022-jp, utf-8, 機種によっては shift_jis や euc-jp。http://creation.mb.softbank.jp/mail/mail_contract.html
+絵文字の表記方法: 絵文字を出すには、utf-8 に utf-8 コードで入れるのが良い模様。
+# utf-8
+Subject => '=?UTF-8?B?'. encode_base64("\xEE\x81\x8A") .'?=',
+Type => 'text/plain; charset=utf-8',
+Encoding => 'base64',
+Data => "\xEE\x81\x8A",
+キャリア間の相互変換: http://mb.softbank.jp/mb/service/3G/mail/pictogram/
+端末から携帯以外のアドレスにメールを送った場合、iso-2022-jp で、絵文字は一律ゲタとなってしまいます。ただし Yahoo メール（@yahoo.co.jp） 宛ては特別で、Yahoo メール上で画像で絵文字を見ることができます。
+Willcom
+絵文字リスト: http://www.willcom-inc.com/ja/service/contents_service/club_air_edge/for_phone/homepage/pdf/contents_reference.pdf(p.30)
+Willcom Web
+表示できる charset: 
+絵文字の表記方法: 
+# TODO
+フォームから送出される絵文字: 
+charset=utf-8 から: 
+charset=shift_jis から: 
+charset=euc-jp から: 
+Willcom Mail
+表示できる charset: 
+絵文字の表記方法: 
+# TODO
+キャリア間の相互変換: 
+SEE ALSO
+Encode::JP::Mobile

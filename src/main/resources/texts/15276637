@@ -1,0 +1,5 @@
+I've been searching for an HTML -> pdf converter for a few years -- from the Java universe, I've finally found a solution.
+PD4ML 
+PD4ML is not free -- it'll cost you about USD120, which is affordable to any good developer with a job and the output seems to be just as good as Prince XML, which'll cost you $3800 for a server license. download the fully functional evaluation version (only difference is it applies a small watermark to each page's footer).
+Usage:
+Try a simple test of PD4ML from the command line. Make your self a simple html file or point it at an url.

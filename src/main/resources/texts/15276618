@@ -1,0 +1,44 @@
+先日リリースした「ポケット1.2」で、MyWebClipと連携する機能を追加したわけですが、きっと、「自分のアプリもMyWebClipに連携したい！」という方もいらっしゃるのでは？と勝手に思ってます。（そういう質問が私のところに来ているわけではないんですけどねｗ） 連携仕様の開示について、フォーユーのMyWebClipプログラマーである岸川氏に伺ったところ、ブログで公開する時間がない、とのことでした。 そこで、開発者のフォーユーさんに許可を頂きましたので、MyWebClip連携方法について、本エントリで紹介したいと思います。 一部、私の認識に謝りがありましたので訂正しております。申し訳ございませんでしたm(_ _)m 少しでも、連携の輪が広がっていきますように。 「MyWebClip スキーマ仕様」 MyWebClipのURLスキーマ仕様は以下となります。
+://?#
+上記のように、アクションの種類とクエリを指定します。詳細は以下にて。 ■通常版とLite版で、以下のように指定します。MyWebClip：mywebclipMyWebClip Lite：mywebcliplただし、現在のLite版には不具合があるそうで、正常動作しません。※アップデートにて対応されるそうです。 ■アクションは「open」と「add」の２種類があります。 ■?クエリはURLになり、パラメータが指定できます。 ■#ハッシュ（#）以降にコールバックを指定できます。MyWebClipの終了時にコールバックを呼び出します。例えば、コールバックにポケットのスキーマを指定しておくと、終了後ポケットに戻ることができます。 実装例 実装例は以下です。
+[MyWebClipでURLを開く]
+mywebclip://open?url=http://www.example.com
+[MyWebClipのブックマークにURLを追加]
+mywebclip://add?url=http://www.example.com
+[MyWebClipのブックマークにURLをタイトルを指定して追加]
+mywebclip://add?url=http://www.example.com&title=example
+[終了した後に別のアプリを開く（ポケットに戻る場合）]
+mywebclip://add?url=http://www.example.com&title=example#Pocket://http://www.example.com
+はてブポケットでの連携実装例 更なる具体例として、ポケットに実装している内容の一部を抜粋して紹介します。 
+NSURL *mwcstr;
+NSString *urlstr = [NSString stringWithFormat:
+@"mywebclip://open?url=%@#Pocket://%@", , ]];
+mwcstr = [NSURL URLWithString:urlstr];
+[[UIApplication sharedApplication] openURL:mwcstr];
+※にURLをセットします。
+上記は、「ポケット」→「MyWebClip」→「ポケット」の例です。このコードを実行すれば、指定したURLでMyWebClipと連携し、MyWebClip終了後にポケットに戻ってきてくれます。 ※ポケットにも同様のことを行えるようにしています。 はてブポケットのURLスキーマ実装方法 上記では「自アプリへの戻り」の内容を紹介していますが、これを行うには当然、自アプリ側もURLスキーマを実装している必要があります。「ポケット」では以下のようにURLスキーマを実装しています。 まず、info.plistに以下のようにURL Typesを追加します。 ※「Pocket」の箇所は別のものを使用してください。 そして、xxxxAppDelegate.mに以下のようなコードを記述します。※本エントリー用に抜粋してるので、そのままでは動かないかも。すみませんm(_ _)m 
+xxxxAppDelegate.m
+NSString *urlstr;
+NSString *backtoAppStr;
+- (BOOL)application:(UIApplication *)application handleOpenURL:(NSURL *)url {
+// URLを取得
+NSMutableString *mstr = [NSMutableString stringWithString:[url absoluteString]];
+// ハッシュ（#）以降を取得（戻り用URL）
+backtoAppStr = [url fragment];
+[backtoAppStr retain];
+// 先頭の「Pocket://」を除去(^^;;
+[mstr replaceCharactersInRange:NSMakeRange(0,9) withString:@""];
+NSString *urlstr = [NSString stringWithFormat:@"%@", mstr];
+// UIWebViewを含んだViewをプッシュ。この辺は各アプリに合わせてください。
+webview.url = urlstr;
+[[self navigationController] pushViewController:webview animated:YES];
+return NO;
+}
+- (void)applicationDidFinishLaunching:(UIApplication *)application {
+// アプリ終了時に、戻り用URLが存在する場合に実行
+if([backtoAppStr length] > 0){
+NSURL *bkurl = [NSURL URLWithString:backtoAppStr];
+[[UIApplication sharedApplication] openURL:bkurl];
+}
+}
+これで他アプリから自アプリを起動できると思います。※不足があればご指摘くださいm(_ _)m 上記の連携実装例で紹介した内容のテストアプリ等を作成して、動作確認してみてください。

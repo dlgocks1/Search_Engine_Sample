@@ -1,0 +1,16 @@
+cut
+ファイルの各行から特定の場所だけ抜き出してを表示してくれます。
+「ls -alt」だけを実行すると、
+% ls -alt
+合�[ 44
+drwx-----x 11 susaki teacher 512 4月 16 16:51 .
+drwx-----x 2 susaki teacher 1024 4月 16 16:48 command
+drwx--s--x 45 susaki teacher 2560 4月 16 16:39 ..
+drwx-----x 3 susaki teacher 1024 4月 16 16:35 literacy
+drwx-----x 3 susaki teacher 512 4月 15 14:25 gis
+drwx-----x 6 susaki teacher 1024 3月 1 13:40 lab
+drwx-----x 2 susaki teacher 2048 1月 29 11:45 soft
+drwx-----x 2 susaki teacher 512 1月 7 09:38 perl
+drwx-----x 10 susaki teacher 1024 7月 31 2001 lecture
+drwx-----x 2 susaki teacher 512 6月 29 2001 image
+drwxr-x--- 2 susaki teacher 512 6月 28 2001 applets

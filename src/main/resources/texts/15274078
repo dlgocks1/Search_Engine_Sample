@@ -1,0 +1,13 @@
+2007/02/19
+Plagger::Plugin::FIlter::ReverseEntries
+既に似たようなモノがあると思うんだが、分からんから作る。 フィード中のエントリを逆順ソートするだけのフィルタ。 大体のフィードは新しいものが先、古いものが後になっているのだが、 これをそのまま Publish::Gmail あたりで投げると新しいものが先に来てしまう。 古いのが先に来いよ、おかしいだろ。ということで。 # custom_feed_* か、Subscription::Config あたりで出来ると一番美しいんだが、 # 出来ないんだなぁ、コレが。package Plagger::Plugin::Filter::ReverseEntries; use strict; use warnings; use base qw/Plagger::Plugin/; sub register { my ($self, $context) = @_; $context->register( $self, 'update.feed.fixup' = \&_reverse, ); } sub _reverse { my ($self, $context, $args) = @_; $args->sort_entries(); # needed? $args->{feed}->{entries} = [ reverse @{ $args->{feed}->{entries} } ]; } 1; sort_entries() は要らん気もするが念のため。 もしこれが必要なのなら、モジュール名を Filter::SortEntries とかにして、 config.yaml で昇順・降順を設定できるのが美しいんかな。 
+投稿:
+Xeres
+[
+4:48:00
+1 コメント ]:
+Xeres
+さんのコメント...
+config.yaml を書く際、P::P::Filter::BreakEntriesToFeeds より 前に書かないと上手く動かない。 追っ掛けてないので原因はよく分からないけど、あまり直感的な 動作とは思えない。 Plagger 内部を熟知してないと config.yaml と出力結果に 剥離が出てくるのは何とかしてほしいなぁ。
+2007/04/05 2:02:00 JST
+コメントを投稿

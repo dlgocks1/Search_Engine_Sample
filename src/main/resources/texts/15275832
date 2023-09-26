@@ -1,0 +1,14 @@
+SDカードに直接アクセスするには次のような感じに書くと、SDカードがマウントされているディレクトリをFileオブジェクトとし取得できます。
+File file = Environment.getExternalStorageDirectory();
+ちなみに、ここで、file.getPath()をすると /sdcard が取得できます。なので、次のような感じで書いてもSDカードをFileオブジェクトとして取得できます。
+File file = File("/sdcard");
+ただ、この /sdcard というパス文字列がずっとマウント先として保障されているわけでもないので、通常SDカードにアクセスするような場合は、Environment.getExternalStorageDirectory() を使用した方が安全っぽいです。
+カテゴリー: 技術メモ | 
+トラックバック URL
+※言及リンクのないトラックバックは削除されます。 
+※書き込まれてから公開されるまで時間がかかる場合があります。
+コメントをどうぞ
+お名前 
+メールアドレス (公開されません) 
+ウェブサイト
+Spam protection by WP Captcha-Free

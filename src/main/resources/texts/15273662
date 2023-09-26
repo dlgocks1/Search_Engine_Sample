@@ -1,0 +1,36 @@
+These days InnoDB is the “gold standard” for storage engines in MySQL–both in terms of performance and durability. InnoDB has been around long enough that we kind of take it for granted. It’s been years since arguments like “MySQL doesn’t even have real transactions!” held any water. While I’ve written about some of InnoDB’s shortcomings, the reality is that it works remarkably well for the vast majority of users. And InnoDB’s early design was modeled after Oracle, so its success is hardly shocking.
+But can we do better? What if someone decided to build a new transactional storage engine from the ground up, using the lessons learned from InnoDB (and other databases) over the last decade and taking modern hardware architecture into account?
+That’s exactly what Primebase Technologies is doing with PBXT.
+PrimeBase XT (PBXT) is a pluggable, transactional storage engine for MySQL. It uses a unique “write-once”, log-based update strategy and MVCC (multi-version concurrency control) to provide optimal performance over a wide range of tasks.
+There’s a white paper available that describes the basic architecture and design goals of the PBXT engine. Of course, you’re welcome to read the whole paper, but I’m going to assume you’re busy and are mainly interested in the highlights and how it differs from InnoDB.
+High-Level Similarities and Differences
+All of the high-level features we’ve come to expect from a modern transactional storage engine, like InnoDB, are also present in PBXT:
+MVCC: multiple readers and writers, readers do not lock
+Transactional: BEGIN, ROLLBACK, and COMMIT
+ACID-Compliant: committed data is durable
+Row-Level Locking: good concurrency for mixed read/write applications
+Deadlock Detection: smart and fast handling of contention
+Referential Integrity: foreign keys
+In other words, applications designed around InnoDB are likely to work well using PBXT as well. But there are also some noteworthy features that are unique to PBXT.
+Write-Once: unlike InooDB, PBXT writes all data to disk a single time (more on this shortly) which means a lot less I/O on write-heavy workloads
+BLOB Streaming: using the Primebase Media Streaming (PBMS) add-on, PBXT can efficiently handle streaming of BLOB data to the client without blowing out the main database cache
+The similarities between InnoDB and PBXT aren’t terribly interesting for most purposes, so let’s dig a little deeper into what’s truly unique to PBXT.
+Log-Oriented
+The most important design choice that Paul McCullagh (PBXT’s lead developer–see his PBXT blog) made was to use a log-oriented storage system instead of the more traditional tablespaces. I referred to this above as a “write-once” strategy that’s different from what InnoDB does. InnoDB writes all changes to a transaction log on disk (as well as the in-memory version of the affected pages from the modified table(s)) and eventually writes those changed pages back out to the tablespace file(s) on disk too.
+PBXT does not separate the data storage from the logs. They are one in the same. That leads to some very interesting consequences, some of which are quite beneficial:
+Table size is essentially unlimited since filesystem per-file restrictions are not a factor
+Logs are written sequentially, so random I/O operations are reduced and you can get more throughput out of your disks
+Log entries are written at commit, so there are no “dirty buffers” to manage in the server
+Log entries are never updated–an update to a record means writing a new log entry
+Rollbacks require no changes to the data (since records are never modified)
+Recovery from a crash does not require an extensive replaying of logs, so recovery time is minimal
+Now there’s a bit more to the picture than this. Logs alone don’t provide enough information to represent a table. There actually is a file on disk for each table stored in PBXT. But that file is really just a collection of references to the rows it the table. In PBXT lingo, those references are called “handles” and they act as pointers to the information necessary to construct a given row in a given table–the log entries.
+Some of PBXT’s performance comes from the fact that the heavy-duty I/O is all written to log files in serial fashion. The handles are relatively compact in size, so as new row data is written to the logs, updating the handle references is a fairly inexpensive operation.
+Early Results
+PBXT has been in development for several years and has all the necessary features to put it on par with InnoDB and other engines. Most recent work has been performance optimization and finishing off small bug fixes. That performance work has paid off well. In some benchmarks PBXT performs as well as or even better than InnoDB.
+From a stability point of view, PBXT has a growing user base using it for more and more important tasks. That’s the single best endorsement for the stability of any piece of software. I fully expect to see adoption of PBXT really accelerate in the next twelve months. As of this writing, the second PBXT release candidate (RC) is available for testing.
+Taking it for a Spin
+Testing out PBXT is easy, thanks to MySQL’s storage engine architecture. You simply using a pre-compiled binary for your platform or build you own. Binary downloads are available on the PBXT web site and source code is available on Launchpad.
+Given the likeliehood of a stable release in the near future, now is a great time to try the PBXT storage engine out for your applications. You may find that it performs and fits your needs very well.
+PBXT is also available in MariaDB and Drizzle.
+Jeremy Zawodny is a software engineer at Craigslist where he works on MySQL, Search, and various back-end infrastructure. He's also the co-author of "High Performance MySQL" and blogs at http://jeremy.zawodny.com/blog/

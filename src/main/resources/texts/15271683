@@ -1,0 +1,81 @@
+Now that Where 2.0 and WhereCamp are over, I wanted to get my code and slides posted.
+You can download a zip of the source files, including the Store Locator demo, here
+For demonstration, here is the source of the simple Loki demo:
+<html>
+<head>
+<script type="text/javascript" src="http://loki.com/plugin/files/loki.js"></script>
+<script type="text/javascript">
+function init() {
+// instantiate the LokiAPI object
+var loki = new LokiAPI();
+// setup your success handler. a location object is passed in
+loki.onSuccess = function(location) {
+document.getElementById('address').innerHTML = location.house_number+' '+location.street+'<br/>'+location.city+', '+location.region_code+' '+location.postal_code+'<br/>'+location.latitude+', '+location.longitude;
+};
+// setup your failure handler. error code and string message are passed in
+loki.onFailure = function(error, msg){
+alert('An error has been encountered ('+error+'). '+msg);
+};
+// swap in your own, domain-specific key. http://loki.com/how/register
+loki.setKey('sarver.org');
+// make the location request. Reverse geocoding is requested
+loki.requestLocation(true,loki.FULL_STREET_ADDRESS_LOOKUP);
+}
+window.onload = init;
+</script>
+</head>
+<body>
+<div id="address"></div>
+</body>
+</html>
+Just the other day I was working on a hack project at work where we wanted to pull up geotagged photos of an event purely based on a geo and time filter. I couldn’t find any good source code out there, so I thought I would post this. It uses phpFlickr for the Flickr API calls.
+Please feel free to post any comments / suggestions
+<style>
+label {display:block}
+</style>
+<form action="index.php">
+<h4>Bounding Box</h4>
+<label>Bottom Left - Latitude</label>
+<input type="text" id="bl_lat"/>
+<label>Bottom Left - Longitude</label>
+<input type="text" id="bl_lon"/>
+<label>Top Right - Latitude</label>
+<input type="text" id="tr_lat"/>
+<label>Top Right - Longitude</label>
+<input type="text" id="tr_lon"/>
+<h4>Date Range</h4>
+<label>Start Date/Time (YYYY-MM-DD HH:MM:SS)</label>
+<input type="text" id="date_start"/>
+<label>End Date/Time (YYYY-MM-DD HH:MM:SS)</label>
+<input type="text" id="date_end"/>
+</form>
+<?php
+if (!$_REQUEST['bl_lat'] || !$_REQUEST['bl_lon'] || !$_REQUEST['tr_lat'] || !$_REQUEST['tr_lon'] || !$_REQUEST['date_start'] || !$_REQUEST['date_end']) {
+echo '<span style="color:red">All fields are required</span>';
+}
+else {
+require_once("phpFlickr.php");
+$key = "XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX";
+$secret = "XXXXXXXXXXXX";
+$f = new phpFlickr($key, $secret, true);
+$date['start'] = date("Y-m-d H:i:s", strtotime($_REQUEST['date_start']));
+$date['end'] = date("Y-m-d H:i:s", strtotime($_REQUEST['date_end']));
+print_r($date);
+echo '<br/>';
+$photos = $f->photos_search(array(
+"min_taken_date" => $date['start'],
+"max_taken_date" => $date['end'],
+"sort" => "interestingness-desc",
+"bbox" => $_REQUEST['bl_lon'].','.$_REQUEST['bl_lat'].','.$_REQUEST['tr_lon'].','.$_REQUEST['tr_lat'],
+"extras" => "date_taken,date_upload,geo,tags"
+));
+echo '<!--';
+print_r($photos);
+echo '-->';
+echo "count: ".count($photos['photo']).'<br/>';
+foreach($photos['photo'] as $photo) {
+$owner = $f->people_getInfo($photo['owner']);
+echo '<img src="http://farm'.$photo['farm'].'.static.flickr.com/'.$photo['server'].'/'.$photo['id'].'_'.$photo['secret'].'_m.jpg"/>';
+}
+}
+?>

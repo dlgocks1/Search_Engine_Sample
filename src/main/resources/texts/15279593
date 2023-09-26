@@ -1,0 +1,64 @@
+SalesForce 関連情報メモ
+Posted in SOA (RSS), Web2.0 (RSS)
+SaaS の代名詞的な存在となっている salesforce.com 
+の関連情報をメモ。 日本において 
+CRM（Customer 
+Relationship Management） 
+と呼ばれるサービスの需要がどの程度あるのかは微妙な気もしますが、クラウド環境に SaaS 
+型のアプリケーションを簡単に構築することのできる仕組みには今後ますます注目が集まることになりそうです。基本的なアプリケーションの作成及びカスタマイズはWebブラウザ上で行うことができますが、「Eclipse」 
+プラグインの 「Force.com 
+IDE」 や 「Adobe 
+Flex Builder 3」 向けの Toolkit なども提供されています。
+関連情報 ・salesforce.com、SaaS 
+型 CRM 製品の最新版を発表 - japan.internet.com Webビジネス ・Salesforce.comの2～4月期決算，売上高・EPSともに過去最高：Itpro ・ASCII.jp：総務省がSalesforceにお墨付き
+・Salesforce 
+CRM － SaaSの代名詞ともいえるアプリケーションの営業支援機能を試す：Review － Publickey ・知られざる「マルチテナントアーキテクチャ」（1）～SaaSはみんな同じではない？ 
+－ Blog on Publickey ・知られざる「マルチテナントアーキテクチャ」（2）～スケーラビリティのカギは組織ID 
+－ Blog on Publickey ・知られざる「マルチテナントアーキテクチャ」（3）～スキーマとメタデータの謎 
+－ Blog on Publickey ・3分でクラウドコンピューティングを社長に分かってもらうビデオ 
+－ Blog on Publickey
+・DeveloperForce Japan ・JP 
+Tools - developer.force.com ・Force.com 
+IDEのインストール | Jobweb SystemDev. Blog ・Force.com 
+Workbook（日本語版）を試してみる | Jobweb SystemDev. Blog ・第２回　
+Force.com Workbook Ver.2 Tutorial#3 | Jobweb SystemDev. Blog ・第３回　
+Force.com Workbook Ver.2 Tutorial#4 | Jobweb SystemDev. Blog ・第４回　
+Force.com Workbook Ver.2 Tutorial#6 | Jobweb SystemDev. Blog
+・Jungle 
+Java - SaaS とは ・Jungle 
+Java - Google がエンタープラズにもじわり進出 ・Jungle 
+Java - 『ITアーキテクト Vol.17』 ・Jungle 
+Java - SugarCRM 関連情報メモ ・Jungle 
+Java - 『ITアーキテクト Vol.21』 ・Jungle 
+Java - Google App Engine がついに Java をサポート
+（06/08 追記） ・セールスフォース、NTT 
+ComとSaaS型アプリを提供 - 今後はドコモとも連携 | マイコミジャーナル
+（06/10 追記） ・壮絶な殴り合いに発展か：Google、Salesforce.com 
+vs Microsoft　クラウドコンピューティングバトル2009 - ITmedia エンタープライズ
+（06/11 追記） ・セールスフォース、「Salesforce 
+CRM」ユーザー向けに無償モバイルサービスを提供 ： SaaS最前線 - TECH WORLD ・Salesforce.com，既存ユーザーに簡易版モバイル・サービスを無償提供：ITpro
+（06/17 追記） ・不況に強いSaaS・PaaS市場、2008年度売上は1,569億円と二ケタ成長 
+| マイコミジャーナル ・米Salesforce.com、無料クラウドサービス「Force.com 
+Free Edition」提供へ | マイコミジャーナル ・セールスフォース、「Force.com」の“無料お試し版”を提供 
+: SaaS - Computerworld.jp
+（06/19 追記） ・第1回　
+10年近い実績を持つForce.comの実像：ITpro
+（06/26 追記） ・米Salesforce.com、iPhone 
+OS 3.0対応の「Salesforce Mobile 4.0.2」 | マイコミジャーナル
+（07/04 追記） ・セールスフォースのFree 
+Editionは、あえていえばセールスフォース的Google App Engineだ！ － Blog on Publickey
+（07/15 追記） ・第2回　
+Force.comを触ってみる（パート1）：ITpro
+（07/21 追記） ・第3回　
+Force.comを触ってみる（パート2）：ITpro
+（07/23 追記） ・セールスフォースがシンガポールにデータセンター設置、クラウドは規模の経済だけではない！ 
+－ Blog on Publickey
+（07/28 追記） ・根本からアーキテクチャを変えることでITの世界の変革を目指すセールスフォース・ドットコム
+（07/29 追記） ・セールスフォースとクラウド/SaaSブログ：AppExchange ・Salesforceメモ 
+- livedoor Wiki（ウィキ）
+（08/05 追記） ・Salesforceの質問&回答 
+(Q&A) サイト - 教えて！セールスフォース
+（08/10 追記） ・これまでと何が同じで，何が違うか 
+- Force.com 開発マニュアル：ITpro ・非機能要求はどのように実装すればよいか 
+- Force.com 開発マニュアル：ITpro
+Posted on 2009年06月05日

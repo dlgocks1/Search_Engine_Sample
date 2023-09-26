@@ -1,0 +1,15 @@
+このようにMeCab::Tagger.new.parseToNodeと繋げて書くとSegmentation faultが発生し、rubyのプロセスごと落ちます。 n =このようにMeCab::Tagger.new.parseToNodeと繋げて書くとSegmentation faultが発生し、rubyのプロセスごと落ちます。
+n = MeCab::Tagger.new.parseToNode(text)
+while n
+p n.surface + ", feature:" + n.feature
+n = n.next
+end
+これを回避するには、次のように分けて書くと大丈夫です。
+m = MeCab::Tagger.new
+n = m.parseToNode(text)
+while n
+p n.surface + ", feature:" + n.feature
+n = n.next
+end
+気づくのにけっこう時間かかりました。あーもうなんだかなーって感じ。
+何故落ちるのかといいますと、MeCab::Tagger.new.parseToNodeから返されたオブジェクトが残っているのに、MeCab::Tagger.newが先にGCに回収されてしまうからでしょう。きっと、多分。

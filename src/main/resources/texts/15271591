@@ -1,0 +1,24 @@
+チート・改造 †
+用量、用法を守って正しく使いましょう。つまらなくなってもしりません。 
+ファイルの場所はAppLinksがあると便利。
+↑
+Defender Chronicles †
+自分用に解析しただけなので間違ってたらすまん。.appにはキャラ絵データがそのまま入っているっぽいので差し替えれば萌えキャラを登場させたり出来るかも。
+token 9999 
+private/var/mobile/Applications/xxx/Library/Preferences/com.chillingo.defenderchronicles.plist
+のバイナリを以下に書き換え。
+00000046 0f
+00000047 27
+↑
+その他 †
+1. Touchgrind 
+2. Fieldrunners 
+3. Imaginepoker 
+4. Tap Tap Revenge 
+5. Dactyl 2 
+6. Garf 
+7. Lumen 
+8. Bugdom 2 
+9. Crash Bandicoot 
+http://www.xsellize.com/showthread.php?t=13016
+↑

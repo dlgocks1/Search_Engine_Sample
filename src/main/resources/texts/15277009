@@ -1,0 +1,7 @@
+To hide the status bar in your iPhone app, add the UIStatusBarHidden Boolean key to the Info.plist file and set it’s value to YES.
+First select the Info.plist file from Resources, then click the plus button next to the last line and type UIStatusBarHidden for the key name:
+hide iphone status bar step 1
+Then right click in the value field and set the type to Boolean:
+hide iphone status bar step 2
+Click on the check box, and you are set!
+hide iphone status bar step 3

@@ -1,0 +1,2 @@
+phpListインストール
+環境：Windows Server 2008 & IIS 7 ダウンロード - 日本PHPLISTユーザグループから日本語版をダウンロードします。 解凍します。 public_htmlを仮想ディレクトリにします。 DBを作成します。 public_html\lists\config\config.phpを修正します。 ブラウザでアクセスします。 DBの初期化をクリックし完了

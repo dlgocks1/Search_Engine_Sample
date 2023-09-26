@@ -1,0 +1,57 @@
+今日はカテゴリって何？というわけで、手元に書籍がないので「カテゴリ – 動的なメソッドの追加によるクラスの拡張」を読んでみました。
+カテゴリを使うと、直接的には「クラスが持つメソッドをカテゴリに分けて管理することができる」、仕組み的には「Objective-C が提供する、動的に既存のクラスにメソッドを追加する機能により実現している」とのこと。
+早速試してみます。そのままやると上記の例のままになっちゃうので、異なるカテゴリ名で、同名のメソッドを追加してみます。
+#import <Foundation/Foundation.h>
+@interface NSString (Greetings1)
+- (void)hello;
+@end
+@implementation NSString (Greetings1)
+- (void)hello {
+NSLog(@"Hello! in Greetings1");
+}
+@end
+@interface NSString (Greetings2)
+- (void)hello;
+@end
+@implementation NSString (Greetings2)
+- (void)hello {
+NSLog(@"Hello! in Greetings2");
+}
+@end
+int main (int argc, const char * argv[]) {
+NSAutoreleasePool* pool = [[NSAutoreleasePool alloc] init];
+//
+// NSString の拡張メソッド hello を呼び出す
+//
+NSString* myNSString = [[[NSString alloc] initWithUTF8String:"hoge"] autorelease];
+[myNSString hello];
+[pool drain];
+return 0;
+}
+Greetings1 と Greetings2 カテゴリで hello メソッドを追加してみました。ビルドして実行すると、”Hello! in Greetings2″ と、後ろで定義した方が呼び出されている模様。
+nm でオブジェクトファイルに含まれるシンボルを見てみるとこんな感じ。-[NSString(Greetings1) hello] と -[NSString(Greetings2) hello] が存在しています。
+1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+[maihara@B-2008-202.local:~/Documents/ObjC Test] $ nm build/ObjC\ Test.build/Debug/ObjC\ Test.build/Objects-normal/i386/ObjC\ Test.o
+00000000 t -[NSString(Greetings1) hello]
+00000027 t -[NSString(Greetings2) hello]
+00000000 A .objc_category_name_NSString_Greetings1
+00000000 A .objc_category_name_NSString_Greetings2
+U .objc_class_name_NSAutoreleasePool
+U .objc_class_name_NSString
+U _NSLog
+U ___CFConstantStringClassReference
+0000004e T _main
+U _objc_msgSend
+シンボルは異なるので同名のメソッドは存在することができて、呼び出すと最後に定義されたものが呼び出されるのか。同じクラスの異なるカテゴリで同じメソッド名のものを提供するとどれが呼び出されるかわからないからいかんヨ、ということですかね。
+[2009/02/28 追記] 
+「詳解 Objective-C 2.0」の「09-02 既存クラスへのカテゴリの追加」の「既存メソッドの上書き」を読んでみると、同名のメソッドが複数のカテゴリで定義されていると、どの定義が有効になるかは保証されていない、とのことでした。なるほど。

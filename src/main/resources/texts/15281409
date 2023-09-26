@@ -1,0 +1,151 @@
+Hello. I am trying to create an updated version of Fedora 10 with revisor and getting strange error: 
+Fatal Error: Unable to retrieve software information. 
+This could be caused by one of the following: 
+- not having a network connection available, 
+- Server refusing connections, 
+- Using a mirror that isn't fully synchronized, 
+- Misconfigured repositories. 
+My revisor-fedora10.conf is next one: 
+[main] 
+cachedir=-yumcache 
+reposdir= 
+keepcache=1 
+debuglevel=1 
+logfile=-yum.log 
+pkgpolicy=newest 
+distroverpkg=redhat-release 
+tolerant=1 
+exactarch=1 
+obsoletes=1 
+gpgcheck=1 
+plugins=1 
+metadata_expire=1800 
+installroot=/var/tmp/revisor 
+failovermethod=priority 
+[fedora] 
+name=Fedora 10 - i386 
+baseurl=http://localrepo/fedora/releases/10/Everything/i386/os/ 
+mirrorlist=http://mirrors.fedoraproject.org/mirrorlist?repo=fedora-10&arch=i386 
+enabled=1 
+gpgcheck=1 
+[fedora-debuginfo] 
+name=Fedora 10 - Werewolf - Debug - i386 
+baseurl=http://localrepo/fedora/releases/10/Everything/i386/debug/ 
+mirrorlist=http://mirrors.fedoraproject.org/mirrorlist?repo=fedora-debug-10&arch=i386 
+enabled=0 
+gpgcheck=1 
+[fedora-source] 
+name=Fedora 10 - Source 
+baseurl=http://localrepo/fedora/releases/10/Everything/source/SRPMS/ 
+mirrorlist=http://mirrors.fedoraproject.org/mirrorlist?repo=fedora-source-10&arch=src 
+enabled=0 
+gpgcheck=1 
+[updates] 
+name=Fedora 10 - i386 - Updates 
+baseurl=http://localrepo/fedora/updates/10/i386/ 
+mirrorlist=http://mirrors.fedoraproject.org/mirrorlist?repo=updates-released-f10&arch=i386 
+enabled=1 
+gpgcheck=1 
+gpgkey=file:///etc/pki/rpm-gpg/RPM-GPG-KEY-fedora 
+[updates-debuginfo] 
+name=Fedora 10 - i386 - Updates - Debug 
+baseurl=http://localrepo/fedora/updates/10/i386/debug/ 
+mirrorlist=http://mirrors.fedoraproject.org/mirrorlist?repo=updates-released-debug-f10&arch=i386 
+enabled=0 
+gpgcheck=1 
+gpgkey=file:///etc/pki/rpm-gpg/RPM-GPG-KEY-fedora 
+[updates-source] 
+name=Fedora 10 - Source - Updates 
+baseurl=http://localrepo/fedora/updates/10/SRPMS/ 
+mirrorlist=http://mirrors.fedoraproject.org/mirrorlist?repo=updates-released-source-f10&arch=src 
+enabled=0 
+gpgcheck=1 
+gpgkey=file:///etc/pki/rpm-gpg/RPM-GPG-KEY-fedora 
+[updates-newkey] 
+name=Fedora 10 - i386 - Updates Newkey 
+baseurl=http://localrepo/fedora/updates/10/i386.newkey/ 
+mirrorlist=http://mirrors.fedoraproject.org/mirrorlist?repo=updates-released-f10.newkey&arch=i386 
+enabled=1 
+gpgcheck=1 
+gpgkey=file:///etc/pki/rpm-gpg/RPM-GPG-KEY-fedora-8-and-10-i386 
+[updates-newkey-debuginfo] 
+name=Fedora 10 - i386 - Updates - Debug Newkey 
+baseurl=http://localrepo/fedora/updates/10/i386.newkey/debug/ 
+mirrorlist=http://mirrors.fedoraproject.org/mirrorlist?repo=updates-released-debug-f10.newkey&arch=i386 
+enabled=0 
+gpgcheck=1 
+gpgkey=file:///etc/pki/rpm-gpg/RPM-GPG-KEY-fedora-8-and-10-i386 
+[updates-newkey-source] 
+name=Fedora 10 - Updates Source Newkey 
+baseurl=http://localrepo/fedora/updates/10/SRPMS.newkey/ 
+mirrorlist=http://mirrors.fedoraproject.org/mirrorlist?repo=updates-released-source-f10.newkey&arch=i386 
+enabled=0 
+gpgcheck=1 
+gpgkey=file:///etc/pki/rpm-gpg/RPM-GPG-KEY-fedora-8-and-10-i386 
+[updates-testing] 
+name=Fedora 10 - i386 - Test Updates 
+baseurl=http://localrepo/fedora/updates/testing/10/i386/ 
+mirrorlist=http://mirrors.fedoraproject.org/mirrorlist?repo=updates-testing-f10&arch=i386 
+enabled=0 
+includepkgs= 
+gpgcheck=1 
+gpgkey=file:///etc/pki/rpm-gpg/RPM-GPG-KEY-fedora-test 
+[updates-testing-debuginfo] 
+name=Fedora 10 - i386 - Test Updates Debug 
+baseurl=http://localrepo/fedora/updates/testing/10/i386/debug/ 
+mirrorlist=http://mirrors.fedoraproject.org/mirrorlist?repo=updates-testing-debug-f10&arch=i386 
+enabled=0 
+gpgcheck=1 
+gpgkey=file:///etc/pki/rpm-gpg/RPM-GPG-KEY-fedora-test 
+[updates-testing-source] 
+name=Fedora 10 - Source - Test Updates 
+baseurl=http://localrepo/fedora/updates/testing/10/SRPMS/ 
+mirrorlist=http://mirrors.fedoraproject.org/mirrorlist?repo=updates-testing-source-f10&arch=src 
+enabled=0 
+includepkgs= 
+gpgcheck=1 
+gpgkey=file:///etc/pki/rpm-gpg/RPM-GPG-KEY-fedora-test 
+[updates-testing-newkey] 
+name=Fedora 10 - i386 - Test Updates Newkey 
+failovermethod=priority 
+baseurl=http://localrepo/fedora/updates/testing/10/i386.newkey/ 
+mirrorlist=http://mirrors.fedoraproject.org/mirrorlist?repo=updates-testing-f10.newkey&arch=i386 
+enabled=0 
+gpgcheck=1 
+gpgkey=file:///etc/pki/rpm-gpg/RPM-GPG-KEY-fedora-test-8-and-10-i386 
+[updates-testing-newkey-debuginfo] 
+name=Fedora 10 - i386 - Test Updates Debug Newkey 
+failovermethod=priority 
+baseurl=http://localrepo/fedora/updates/testing/10/i386.newkey/debug/ 
+mirrorlist=http://mirrors.fedoraproject.org/mirrorlist?repo=updates-testing-debug-f10.newkey&arch=i386 
+enabled=0 
+gpgcheck=1 
+gpgkey=file:///etc/pki/rpm-gpg/RPM-GPG-KEY-fedora-test-8-and-10-i386 
+[updates-testing-newkey-source] 
+name=Fedora 10 - Test Updates Source Newkey 
+failovermethod=priority 
+baseurl=http://localrepo/fedora/updates/testing/10/SRPMS.newkey/ 
+mirrorlist=http://mirrors.fedoraproject.org/mirrorlist?repo=updates-testing-source-f10.newkey&arch=i386 
+enabled=0 
+gpgcheck=1 
+gpgkey=file:///etc/pki/rpm-gpg/RPM-GPG-KEY-fedora-test-8-and-10-i386 
+[koji] 
+name=Fedora 10 - i386 - Just Born 
+baseurl=http://koji.fedoraproject.org/static-repos/dist-fc10-build-current/i386/ 
+enabled=0 
+includepkgs= 
+[koji-source] 
+name=Fedora 10 - Source - Just Born 
+baseurl=http://koji.fedoraproject.org/static-repos/dist-fc10-build-current/i386/SRPMS/ 
+enabled=0 
+includepkgs= 
+[anaconda-updates] 
+name=Fedora Unity Anaconda Updates for Fedora 10 
+baseurl=http://www.kanarip.com/anaconda/f10/i386/ 
+enabled=1 
+[anaconda-updates-source] 
+name=Fedora Unity Anaconda Updates for Fedora 10 - Sources 
+baseurl=http://www.kanarip.com/anaconda/f10/SRPMS/ 
+enabled=0 
+At the same time I'm able to play with Fedora 9 
+any help would be appreciated!!!!!!!!!!!!!!!!!!!!!!!!!!!!

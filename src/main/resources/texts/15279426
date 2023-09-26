@@ -1,0 +1,42 @@
+「うれげ」とはー広島弁で何かを見せたり、 自慢する時のさぞ嬉しそうな表情のことを皮肉をこめて表す。 
+日々、買ったものや試したもの、事を紹介しまくるブログ。 
+そう、うれげを追求することが生き様。生き様はうれげを追求することなのだ！
+Click to enlarge 
+写真：XP mode running on Windows 7 RC on VAIO Type P VGN-P90S 
+ここ数日感、こちらのサイト：VAIO Type P hack：So-net blogでVaio PでVTを有効にさせようという動きが出ていたのだけれど、ついに有効になったみたいなので私も早速乗っかって試してみました。
+こちらのサイトを参考にすることで実現できました。これでVTが使用可能となります。 
+そしてWindows7でXPモードをやっと使うことができます！これは大きい！
+There were few people trying to enable VT on Sony Vaio P series, and this guy finally got it enabled! I also tried, and got it worked well. So here's how to do it.
+****　警告/WARNING **** 
+この作業をすることでどうなっても私は一切関知しませんし、壊れても文句いわんでくださいね！ご自身の選択でどうぞ。
+DO IT AT YOUR OWN RISK! IT IS UP TO YOU TO TRY OR NOT, SO DON'T EVER NEVER BLAME ME IF YOU TRY IT AND BRICK IT!
+始める前に/Before getting started: 
+以下を用意する必要があります。/ prepare 5 items listed below;
+1. USB Stick to boot DOS 
+-> required to dump original BIOS & flashing modified bios
+2. another USB stick to boot Linux (or fedora live CD, some way to boot linux) 
+-> required to enable VT functions to dumped bios by patching it. 
+-> Fedora 11 live USB Stickを作って実施しました。/I tried with Fedora11 Live USB
+3. HP USB Disk Storage Format Tool 
+->required to make bootable dos USB stick. 
+->日本の方はDOS bootable usb-key（DOS 起動 USBメモリ） 作り方－俺の技術メモを参考にするとよいかと。/Find the way to make DOS bootable stick by googling it
+4. FLASH TOOL for H2O BIOS 
+(get it from http://www2.acer.co.jp/one/file/ZG5_v3114b.zip)
+5. Python script to patch 
+http://marcansoft.com/blog/2009/06/enabling-intel-vt-on-the-aspire-8930g 
+-> GO THERE AND GET vtenable.py beforehand. 
+-> MODIFY vtenable.py FILE AS FOLLOWS 
+VSS_OFFSET = 0x000a0048 
+PATCH_OFFSET = 0x138 
+手順/Procedure 
+(FOLLOW ALL PROCEDURE BY USING VAIO P)
+1. DOS USBスティックでをブート/BOOT WITH DOS BOOTABLE 
+-> ここで現在のType PのBIOSをダンプする/DUMP current bios to a file 
+# flashit /G to generate bios file
+2. Linux USBスティックでブートの後にBIOSをいじる/BOOT LINUX AND execute python to patch original bios 
+# python ./vtenable.py bios_orig.fd new_bios.fd
+3. 再度DOSで起動、いじったBIOSファイルを書き換える/BOOT WITH DOS AGAIN, AND FLASH TO THE MODIFIED BIOS 
+# flashit new_bios.fd
+4. 完了！/DONE!
+これでType　PでのWindows7対策は万全となりました！後は発売を待つばかり！ 
+早くでろ～＞Win7

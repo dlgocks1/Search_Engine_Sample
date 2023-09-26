@@ -1,0 +1,27 @@
+Java Tar Package
+Tar Release 2.5
+The package com.ice.tar implements a tar
+archive io package. This package allows you to create,
+and extract tar archives. Since the package uses
+InputStream and OutputStream, it is possible to combine
+this package with the java.util.zip package
+to handle .tar.gz files. Thus, it is.
+This is release 2.5. This was released on June 18, 2003.
+TarTool Release 1.4
+The new TarTool application provides you with a Tar archive tool
+that is very similar to WinZip. It provides a simple GUI for viewing
+the contents of Tar archives. Not only can you extract an entire
+archive's contents, but you can also extract a single file or a
+the contents of a single directory. Thus, you can extract a 10KB
+file without having to untar a 20MB archive! See the download
+link below. 
+View The Source Code
+Java Tar source code
+and
+source code documentation.
+Java TarTool source code
+and
+source code documentation.
+The source and javadocs are hosted compliments of the
+Giant Java Tree.
+Downloads

@@ -1,0 +1,16 @@
+TwitterFon Pro 
+Twittelator Pro 
+Twinkle Premium 
+Twitterrific Premium 
+Ｑｕｉｃｋｓｃｒｏｌｌ、Ｓａｆａｒｉでこんなスクロール方法も実現できることが想像していなかった。昨日まで指のフリック（ｆｌｉｃｋ）アクションで通常のスクロールをやってましたが今日ＱｕｉｃｋＳｃｒｏｌｌを導入してからもう元のスクロール方法に戻れないぞ！ 
+ＤＬはfunkyspacemonkey.comのこちらから行ってください　：　http://www.funkyspacemonkey.com/quickscroll-safari-plugin 
+−−インストールするには先ず上のURLからdebパッケージをDLする 
+−−iPhoneをUSBでPCと接続して（hk.kennytm.quickscroll-0.1-12a.deb）debパッケージをiPhoneBrowserやSSH経由で/var/mobileにコピーする 
+−−iPhoneにTerminalアプリを起動する。 
+スーパーユーザーログインを行う 
+su root 
+alpine 
+dpkg -i hk.kennytm.quickscroll-0.1-12a.deb 
+−−dpkgコマンドを実行後iPhoneを再起動・Ｒｅｓｐｒｉｎｇを行う。 
+−−試すにはiPhoneのSafariを起動する。ページを表示されたらスクロールするには３回タップする（triple-tap）。スクロールポップアップを以下のとおり表示されます。 
+指でスクロールしたい箇所を選べられます。指のストレスを大分解消できますよ！

@@ -1,0 +1,60 @@
+SSISなんて、もうやらないと思っていましたが、くだらないことでハマったのでメモ。
+現象
+SQL Server Integration Service (SSIS) に保存されている定義済みパッケージを独自で作成した外部プログラムから
+実行指示をかける際、LoadFromSQLServerを使ってSSISに接続するのですが、
+そのLoadFromSQLServerの接続定義を誤まると、下記の例外が発生することがあります。
+SSISに接続できなかった場合に発生する例外：
+System.Runtime.InteropServices.COMException (0xC0014062): LoadFromSQLServer メソッドで OLE DB エラー コード 0x80004005 (ログイン タイムアウトが時間切れになりました) が検出されました。 発行された SQL ステートメントは失敗しました。 場所 Microsoft.SqlServer.Dts.Runtime.Wrapper.ApplicationClass.LoadFromSQLServer(String bstrPackagePath, String bstrServerName, String bstrServerUserName, String bstrServerPassword, Boolean bLoadNeutral, IDTSEvents90 pEvents) 場所 Microsoft.SqlServer.Dts.Runtime.Application.LoadFromSqlServer(String packagePath, String serverName, String serverUserName, String serverPassword, IDTSEvents events) 場所 Microsoft.SqlServer.Dts.Runtime.Application.LoadFromSqlServer(String packagePath, String serverName, String serverUserName, String serverPassword, IDTSEvents events) 
+解決策
+その１：LoadFromSQLServerの接続引数に、「SSISの接続サーバー」を指定するのですが、
+そのサーバー名に「tcp:SSISサーバー名」とプロトコル名付きでサーバーを指定してやる
+その２：実行したいSSISパッケージが、SSISのどこに保存されているかにもよりますが、MSDBやファイルシステムの直下に保存しているのであれば、
+「\\実行したいパッケージ名」を指定します。
+（SSISのパッケージ内部から見るPATHと外側から見るPATHで表現方法が違うことを失念してました）
+解決策コード例：
+VBの場合：Imports Microsoft.SqlServer.Dts.Runtime
+Public Class Class1
+Public Sub ExecuteSSIS()
+' SSIS(DTS)用インスタンス生成
+Dim app As Application = New Application()
+' SSIS接続＆SSISパッケージの読み込み(下記は、Windows認証の場合の接続例です)
+' ※SQL Server認証の場合は、第三引数と第四引数に接続ユーザIDとパスワードを指定してください
+Dim pkgIn As Package = New Package()
+pkgIn = app.LoadFromSqlServer("\\CustomPackage", "tcp:SSISサーバ名またはIPアドレス", Nothing, Nothing, Nothing)
+' SSIS実行
+Dim ret As DTSExecResult = pkgIn.Execute()
+' SSISの実行結果が正常または完了の場合
+If ret = DTSExecResult.Success Or ret = DTSExecResult.Completion Then
+Console.WriteLine("大成功")
+' SSISの実行結果が異常の場合
+Else
+Console.WriteLine("大失敗")
+End If
+End Sub
+End Class
+C#の場合：using Microsoft.SqlServer.Dts.Runtime; 
+public class Class1
+{
+public static void ExecuteSSIS()
+{
+Application app = new Application(); 
+// SSIS接続＆SSISパッケージの読み込み(下記は、Windows認証の場合の接続例です) 
+// ※SQL Server認証の場合は、第三引数と第四引数に接続ユーザIDとパスワードを指定してください 
+Package pkgIn = new Package(); 
+pkgIn = app.LoadFromSqlServer("\\CustomPackage", "tcp:SSISサーバ名またはIPアドレス", null, null, null); 
+// SSIS実行 
+DTSExecResult ret = pkgIn.Execute(); 
+// SSISの実行結果が正常または完了の場合 
+if (ret == DTSExecResult.Success || ret == DTSExecResult.Completion) { 
+Console.WriteLine("大成功"); 
+} 
+else
+{
+// SSISの実行結果が異常の場合 
+Console.WriteLine("大失敗"); 
+}
+}
+}
+MSDNに掲載されているLoadFromSQLServerのサンプルやマニュアルにも、tcp: など、プロトコル名を添えて指定するとは記載されていないので、
+（インスタンス名を指定するとしか書かれていないので）SSISに接続できなくて悩まれた方は、是非、ご参考下さい。
+参考MSDN：Application.LoadFromSqlServer Method

@@ -1,0 +1,95 @@
+このページは、ベータ版用に機械翻訳されたものです。翻訳者による翻訳は、製品の正規版で提供される予定です。 詳細については、よくある質問 を参照してください。またぜひアンケート にもご協力ください。
+[This documentation is for preview only, and is subject to change in later releases. Blank topics are included as placeholders.]
+The information in this topic applies only to the specified project types and versions of Microsoft Office.
+Project type
+Document-level projects
+Application-level projects
+Microsoft Office version
+Word 2007
+For more information, see 
+Features Available by Office Application and Project Type.
+When you develop Word solutions in Visual Studio, you interact with the Word object model.
+This object model consists of classes and interfaces that are provided in the primary interop assembly for Word, and are defined in the 
+Microsoft.Office.Interop.Word namespace.
+This topic describes the following aspects of using the Word object model:
+Understanding the Word object model
+Using the Word Object Model Documentation
+For information about using the Word object model to perform specific tasks, see the following topics:
+Working with Documents
+Working with Text in Documents
+Working with Tables
+Word provides hundreds of objects with which you can interact.
+These objects are organized in a hierarchy that closely follows the user interface.
+At the top of the hierarchy is the 
+Application object.
+This object represents the current instance of Word.
+The 
+Application object contains the 
+Document, 
+Selection, 
+Bookmark, and 
+Range objects.
+Each of these objects has many methods and properties that you can access to manipulate and interact with it.
+The following illustration shows one view of these objects in the hierarchy of the Word object model.
+At first glance, there appears to be a lot of overlap.
+For example, the 
+Document and 
+Selection objects are both members of the 
+Application object, but the 
+Document object is also a member of the 
+Selection object.
+Both the 
+Document and 
+Selection objects contain 
+Bookmark and 
+Range objects.
+The overlap exists because there are multiple ways you can access the same type of object.
+For example, you apply formatting to a 
+Range object; but you may want to access the range of the current selection, of a particular paragraph, of a section, or of the entire document.
+The following sections briefly describe the top-level objects and how they interact with each other.
+These objects include the following five:
+Application object
+Document object
+Selection object
+Range object
+Bookmark object
+In addition to the Word object model, Office projects in Visual Studio provide host items and host controls that extend some objects in the Word object model.
+Host items and host controls behave like the Word objects they extend, but they also have additional functionality such as data-binding capabilities and extra events.
+For more information, see 
+Automating Word by Using Extended Objects and 
+Host Items and Host Controls Overview.
+Application Object
+The 
+Application object represents the Word application, and is the parent of all of the other objects.
+Its members usually apply to Word as a whole.
+You can use its properties and methods to control the Word environment.
+In application-level add-in projects, you can access the 
+Application object by using the Application field of the ThisAddIn class.
+For more information, see 
+Programming Application-Level Add-Ins.
+In document-level projects, you can access the 
+Application object by using the 
+Application property of the ThisDocument class.
+The Microsoft.Office.Interop.Word..::.Document 
+object is central to programming Word.
+It represents a document and all of its contents.
+When you open a document or create a new document, you create a new Microsoft.Office.Interop.Word..::.Document 
+object, which is added to the 
+Documents collection of the 
+Application object.
+The document that has the focus is called the active document.
+It is represented by the 
+ActiveDocument property of the 
+Application object.
+Visual Studio extends the Microsoft.Office.Interop.Word..::.Document 
+object by providing the Microsoft.Office.Tools.Word..::.Document 
+class.
+This class is a host item that gives you access to all members of the native Microsoft.Office.Interop.Word..::.Document 
+class, and adds additional events and the ability to add managed controls and smart tags.
+For more information, see 
+Document Host Item.
+When you create a document-level project, Visual Studio generates a class named ThisDocument, which derives from the Microsoft.Office.Tools.Word..::.Document 
+class.
+You can access members of the Microsoft.Office.Tools.Word..::.Document 
+class by using the Me or this keywords from code in the ThisDocument class, or by using Globals.ThisDocument from code outside the ThisDocument class.
+For example, to select the first paragraph in the document, use the following code.

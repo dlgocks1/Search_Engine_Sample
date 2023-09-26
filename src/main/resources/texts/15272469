@@ -1,0 +1,177 @@
+The purpose of this article is to give you a straight-forward, Debian-friendly way of installing and configuring Viper, a system for completely automated installation and configuration of Debian GNU based systems.
+Introduction
+Viper is a system for completely automated installation and
+configuration of Debian GNU based systems. 
+It is a newly developed system that had the first public release in 
+August 2009. This article should serve as an early introduction,
+focusing on the results. For more on the underlying logic and in-depth
+treatment of various topics, refer to official Viper documentation.
+Viper uses a modern approach (debian-installer, Puppet etc.), works
+with existing Debian packages, and does not require any custom patching
+of
+either install media, client or server. 
+The basis of the whole system is a LDAP server, containing all configuration data. 
+If you are not familiar with LDAP and related terminology, glance over my
+other article, OpenLDAP installation on Debian, found here or here.
+LDAP has the potential to be enormously successful in configuration
+management, but its flat data structure, absence of any kind of dynamic
+behavior, and heaps of duplicated data make it a mediocre tool. 
+To
+build on LDAP's great strengths while solving its deficiencies, a
+custom OpenLDAP backend has been implemented. 
+The setup explained here will get you to a point that you can perform
+an automatic installation of a Debian host.
+The configuration part is done using Puppet, but is not covered here;
+expect it soon as another article on debian-administration.org and
+the official website.
+Viper download and setup
+The instructions shown should quickly set you up with a Viper install server,
+using fully-working example configuration shipped with Viper, that you can
+test with and without actual client hosts. Then, after that, you should
+be able to start with writing your own site and hosts configuration.
+It would be best if you can install Viper on a clean system without important
+data. However, the install script will only modify OpenLDAP and DHCP server
+config
+so you should be able to install it on any system that does not already use
+one of those.
+That said, let's move onto the setup.
+Download Viper:
+apt-get install git-core
+mkdir -p /etc/ldap
+cd /etc/ldap
+git clone git://github.com/docelic/Viper.git viper 
+Now, to set things up, you should just have to run scripts/viper-setup.sh.
+It should do everything
+automatically. 
+However, for the first time, I suggest you read the script (it contains
+comments) and execute commands manually. 
+Before running the script, you should do just one thing related to the
+DHCP server -- you should create a network interface with IP address 10.0.1.1,
+to fit in the example subnet used by our default config. Then, you can run
+the install script with the name of the physical interface. Here's the session
+transcript:
+ifconfig eth0:1 inet 10.0.1.1 netmask 255.255.255.0
+sh scripts/viper-setup.sh eth0
+To configure eth0:1 on every boot, add it to /etc/network/interfaces
+with a stanza like this:
+allow-hotplug eth0:1
+iface eth0:1 inet static
+address 10.0.1.1
+netmask 255.255.255.0
+Net::LDAP::FilterMatch fix
+Net::LDAP's FilterMatch module contains a bug that you have to patch manually, at least until it is
+fixed in the official distribution.
+Save the following patch as /tmp/ldap-fm.patch and apply with
+patch -p0 < /tmp/ldap-fm.patch:
+/usr/share/perl5/Net/LDAP/FilterMatch.pm
+--- /usr/share/perl5/Net/LDAP/FilterMatch.pm.old 2009-08-10 19:05:15.000000000 +0200
++++ /usr/share/perl5/Net/LDAP/FilterMatch.pm 2009-08-10 19:05:39.000000000 +0200
+@@ -245,7 +245,7 @@
+my $regex=shift;
+my $op=shift;
+return 1 if ($regex =~ /^$/);
+- return grep(/\Q$regex\E/i, @_) ? 1 : 0;
++ return grep(/$regex/i, @_) ? 1 : 0;
+}
+sub _exact_substrings($@)
+And then re-start slapd with LD_PRELOAD=/usr/lib/libperl.so.5.10 invoke-rc.d slapd restart
+.
+Testing the installation
+The above simple procedure should have set you up with a working
+Viper-enabled LDAP server, DHCP server, and default configuration data
+you can query from the command line.
+Tests you can run: 
+With ldapsearch
+ldapsearch -x -b ou=dhcp 
+ldapsearch -x -b ou=defaults 
+ldapsearch -x -b ou=clients 
+ldapsearch -x -b cn=h2,ou=hosts,o=c1.com,ou=clients 
+ldapsearch -x -b cn=popularity-contest/participate,ou=hosts,ou=defaults 
+ldapsearch -x -b cn=debian-installer/locale,cn=h2,ou=hosts,o=c1.com,ou=clients 
+ldapsearch -x -b cn=ntp/servers,cn=h2,ou=hosts,o=c1.com,ou=clients 
+Test results
+Ldapsearch query for cn=h2,ou=hosts,o=c1.com,ou=clients is a pretty good
+way of determining if everything is working alright. Here's how the output
+from the command should look like:
+$ ldapsearch -x -b cn=h2,ou=hosts,o=c1.com,ou=clients
+# extended LDIF
+#
+# LDAPv3
+# base with scope subtree
+# filter: (objectclass=*)
+# requesting: ALL
+#
+# h2, hosts, c1.com, clients
+dn: cn=h2,ou=hosts,o=c1.com,ou=clients
+objectClass: top
+objectClass: device
+objectClass: dhcpHost
+objectClass: ipHost
+objectClass: ieee802Device
+objectClass: puppetClient
+cn: h2
+ipHostNumber: 10.0.1.8
+macAddress: 00:11:6b:34:ae:8d
+puppetclass: test
+puppetclass: ntp::server
+dhcpHWAddress: ethernet 00:11:6b:34:ae:8d
+dhcpOption: host-name "h2"
+dhcpOption: routers 10.0.1.1
+dhcpOption: domain-name-servers 192.168.1.254
+dhcpOption: nis-domain "c1.com"
+dhcpOption: domain-name "c1.com"
+dhcpOption: subnet-mask 255.255.255.0
+dhcpOption: broadcast-address 10.0.1.255
+dhcpStatements: fixed-address 10.0.1.8
+hostName: h2
+ipNetmaskNumber: 255.255.255.0
+clientName: c1.com
+ipNetworkNumber: 10.0.1.0
+ipBroadcastNumber: 10.0.1.255
+domainName: c1.com
+# search result
+search: 2
+result: 0 Success
+# numResponses: 2
+# numEntries: 1
+With scripts/node_data
+perl scripts/node_data h2.c1.com 
+With scripts/preseed
+QUERY_STRING=ip=10.0.1.8 perl scripts/preseed 
+Installing a client host
+Adjust defaults and host's macAddress
+After you've got the Viper server running and the tests are successful, you
+can attempt installing a host.
+To do so, go to /etc/ldap/viper/ldifs/ and edit two LDIF files,
+0-defaults.ldif amd c1.com.ldif.
+In the defaults file,
+you should go over all the values (search for occurences of "value:")
+and adjust them if any need change in your setup.
+In the c1.com.ldif file, you should basically just modify the 
+macAddress of host h1, and set it to the MAC address of the host you 
+want to install.
+Then, you should run 'make' in the current directory to load all
+.ldif files into LDAP.
+Set up Apache to handle requests for preseed.cgi
+Add the following to /etc/apache2/sites-enabled/000-default:
+ScriptAlias /d-i/squeeze/ /usr/lib/cgi-bin/
+ScriptAlias /d-i/lenny/ /usr/lib/cgi-bin/
+Then reload apache with invoke-rc.d apache2 reload.
+On the client host
+To install the client, boot from official boot media, select the 
+automatic install option, and instead of pressing Enter, press TAB to
+open the selected entry's command line, then add the following before
+the "--" mark:
+url=http://10.0.1.1
+If your host has multiple network interfaces, either also add interface=ethX on the boot line, or asnwer that question manually when asked by the installer.
+The results
+The client host should install automatically and reboot into the newly installed system.
+Comments, questions and requests for clarification welcome here as the article followup, or on the Viper mailing list.
+For more about Viper and further documentation, refer to Viper resources: 
+Viper homepage 
+Viper mailing list 
+Viper @ GitHub 
+Davor Ocelic 
+http://www.spinlocksolutions.com/ 
+Copyright (C) 2007,2008 Davor Ocelic, <docelic@spinlocksolutions.com> 
+Spinlock Solutions, http://www.spinlocksolutions.com/

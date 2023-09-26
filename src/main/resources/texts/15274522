@@ -1,0 +1,69 @@
+It is always interesting to watch something grow, and SimplyTweet users have a unique experience right now. SimplyTweet is an app in rapid development. I wrote my first review based on a beta of 2.0 when 1.7 was current in the App Store. 2.1 came out last week with major new features and refinements, and 2.2 has been submitted, with even more features and refinements. The author of the program has been unusually responsive to user feedback, and really seems to try to program in any truly useful feature or refinement his users ask for.
+And yet, he maintains a solid vision of the operating  simplicity and essential responsiveness and speed needed for a useful twitter client. Added features have not added to the complexity of the program, or slowed it down. They have fit unobtrusively into the existing framework. New users will still find the basic, surface functions of maintaining a twitter account and a twitter correspondence fast and easy. Experienced users, and those who put a higher demand on their twitter client, will find the enriched feature set of SimplyTweet easily and logically accessible.
+A note: new users often compare load times for SimplyTweet with an existing client on their iPhone, and think that SimTweet is slower. They do not realize that, unlike other clients which load a limited (often user selected) number of tweets on startup, SimTweet, by default, loads all the tweets since the one you last read (you can shut this off in the Settings App). That might be as many as 1000 tweets. In the morning, for me, following 500 plus tweeps, SimTweet often loads 700 tweets. That takes a few seconds. However, during the day when I am checking tweets on a regular basis, and SimTweet is loading 100 or less tweets since my last read, it is as fast or faster than any client loading a similar number. (Most clients for the iPhone max out at a 200 tweet load.)
+If you want to see how fast it can be, start SimTweet, read all your tweets, hit refresh and read those very quickly, then close SimTweet and restart. If it loads less than 20 tweets it practically jumps to life.
+Rapid development? Take a look at the new features and refinements added since 2.0 hit the App store with Push and Themes.
+New in 2.1
+- Block/Unblock support 
+- Update icons 
+- Allow account switching by tapping on navigation bar of timelines 
+- The current account used is now displayed on the navigation bar of Favorites 
+- Choice to have the friends timeline refresh after sending a new tweet 
+- Add support to update user profile image 
+- Add support to view large profile pictures 
+- Add support for reposting tweets 
+- Add support for copying text/links in tweet/DM view 
+- When receiving a push notification while SimplyTweet is running, the 
+affected timeline (Mentions or DM) is reloaded immediately if it is 
+visible, otherwise it is reloaded automatically when the user tabs to 
+it
+Coming in 2.2
+- Add support for uploading video (single video, optionally with 
+multiple photos) to Posterous and yfrog 
+- Built-in photo viewer now allows you to view the video (button in 
+toolbar) in a Posterous post 
+- Built-in photo viewer now supports MobyPicture 
+- Add support to view a user’s favorites from the account view 
+- Add support for search for replies (@whoever) to a user from the account view 
+- After picking/taking a photo for updating the user profile picture, 
+you are now asked to crop it to a square (since Twitter crops it 
+anyway, might as well do it yourself) 
+- If you take a photo while drafting a tweet/DM, the photo is 
+automatically saved to your camera roll 
+- Add option for larger text size 
+- Add option to display Real name in addition to Account name in timelines 
+- Add “Conversation between us” function in Account view 
+- Upon a push while SimplyTweet is running, but screen is locked, the 
+DM and mentions timeline will now autorefresh when the screen is 
+unlocked to reveal the new mention/DM (with badge count) 
+- You can now post media (picture/video) without typing any text 
+- If you are in the drafting window (DM or Tweet) and SimplyTweet is 
+quit by pressing the home button, the draft is automatically saved 
+- Change default theme to Silver
+I have said it before: SimplyTweet is simply the best Twitter client currently available on the iPhone/iPod Touch platform.
+When Apple announced Push Notifications as part of the OS 3.0 upgrade for the iPhone and iPod Touch, I was really uncertain of the value. I don’t do SMS so I am not used to my phone alerting me to incoming anything.
+On the other hand I use Twitter fairly heavily (as maybe you guessed from all the Twitter client reviews on CDNNs), and when the first Twitter clients with Push for Mentions and Direct Messages began to appear, of course I had to try a few.
+And I can say that I like it. I have three Twitter accounts and a total of maybe 500 friends and followers. I get a fair volume of @s and the occasional DM. For me push works. I like getting that audible alert on the phone when I am working on the computer to let me know of new mentions or messages. It is nice to be able to quickly look at the phone screen to see what’s up. It is nice not to have to load the @s and DMs every time I open my client (makes for faster opens on any client).
+You should realize that none of these Push options is real time. The client server has to check Twitter for your @s and DMs, then send a push notification to the servers at Apple, who then sent it out to you. There appear to be time limits too. This can happen every 10 minutes, every 5, or every 3. Each developer who uses push has to determine the balance between practical and prompt, between timely and annoying.
+That said, though, twitter push, for me, is good.
+If you want it on your phone your current options are:
+Single service Twitter Push apps which you buy separately and use in conjunction with your favorite Twitter client.
+or
+Twitter Clients with built in Push.
+To my knowledge there are three Twitter Push apps currently in the store.
+Tweet Push: $.99, supports Twitterific, Tweetie, Twittelator, TwitterFon, and SimplyTweet Pro (that last is a puzzler since SimplyTweet Pro (see below) does its own pushing). Note: this is paid service. You pay so much per day, per Twitter account.
+Boxcar: $2.99, supports Tweetie, Twitterific, TwitterFon, Twittelator, and Twinkle. Opens @s and DMs in the client of your choice. I bought this before I realized that it does not do multiple Twitter accounts. For me that is a killer. Of no use to me.
+iTweetReply $1.99, current version opens Pushed @s and DMs in its own conversation view with limited Twitter features. Coming version will open both in Tweetie, Twitterific, TwitterFon, Twittelator Pro, or Twinkle. The app store description does not say it supports multiple accounts so I am assuming that is a NO.
+There are currently three Twitter clients with built in Push.
+iTwitter $2.99  was the first, but it only does Push between iTwitter users. Not very practical. Save your $2.99 until they get that worked out.
+Twitbit $4.99, came next (by a hair), and is at least a competent Twitter client for the casual user. It lacks power features, and any unread counts or indications, but for most folks it will be fine. Version 1.0.1 is pending in the app store and will add the missing (???) Retweet and DM functions. It does multiple accounts.
+SimplyTweet 2.0 $4.99, as previously reviewed, is a power Twitter client with a full feature set, and some features found no where else (easily reply to multiple tweets for one, and attach multiple pics to a single tweet for another). It does multiple accounts, has an elegant unread count, is fairly fast, and has a better than average UI. Push works well, and the author is tweeking the Push rate to make it even more responsive. (SimplyTweet is a one man show, and Hwee-Boon Yar has perhaps the most open and responsive development process I have seen. He responds to suggestions, often with new features,  and attempts to fix every issue brought to his attention.) The only features it lacks are 1) video upload, 2) audio upload, and 3) ping.fm or Facebook integration.
+Now, if you are patient, TwitterFon has already promised Push by late summer, and I suspect both Tweetie and Twitterific will be forced to follow or they will begin to lose market share.
+In the meantime, the only real option as far as I am concerned is SimplyTweet 2.0: great client with push…what more could you ask.
+[This was written while v2.0 was still pending in the App Store. 2.1 is the current version in the Store, and 2.2 has been submitted. This is an app in rapid development. See update]
+If I were to tell you that there is a Twitter client  for the iPhone out there that has the speed, ease of use, and attractiveness (including choice of themes, and multiple accounts) of an app like Tweetie or Twitterfon Pro; as deep a feature set as Twittelator Pro or TweetDeck (including unread counts and the equivalent of groups, bookmarks, and saved searches); and…drum roll…the first ever, full fledged, any Twitter client, push notifications!…you might say (as I did), “Okay, then why haven’t I heard of it?”
+Did I say Push Notifications…push notifications that work the way you always expected push to function. I did!
+First reason so few have heard of SimplyTweet might be the unassuming and wildly modest (not to say totally  inappropriate) name. SimplyTweet sounds like it might be one of those single function quick status updators that proliferated in the early days of the iPhone app store. Instead, it is, as hinted above, a mature (v1.7 current, 2.0 under review at the app store as I write), intelligently designed and implemented client that equals, and exceeds,  the features of much better known apps.
+The second reason is a rather unique design that, until now, has emphasized one feature above all others: the ability to view tweets and replies as a conversation, going back as far as the chain goes. SimTweet (for brevity) used, through current version 1.7, a single uncustomizable timeline view modeled on chat bubbles (still an option in apps like Tweetie), but from any open tweet, or from the timeline contols themselves, you could also select a conversation view in a similar chat bubble format (the only other app that I know of that has this ability is Twittelator Pro).  Still, the lack of themes, along with some people’s aversion to chat bubbles (even Tweetie had to give in to users who didn’t like them), and the one feature to rule all others (Twitter is about conversations) way the program has been presented, may well have served to keep it low on Twitterati’s radar.
+I am not saying that conversation tracking and conversation view is a trivial or an unimportant feature. It is what I like best about Twittelator Pro, and, until SimTweet 2.0 hits the app store with functional Push Notifications and essentially changes the nature of the game, it is still, among a host of strong features, SimTweet’s strongest feature.
+My review is based on the still pending v2.0, but somewhere along the line another killer feature crept into SimTweet. I don’t have a change log for the various versions before 1.7 so I don’t know when it arrived, but Saved Views (in SimTweetese) is the kind of functional advance that only a few other iPhone clients have yet managed. In more common terms, Saved Views are subgroups, as in Twittelator Pro, or groups, as in TweetDeck (or Seesmic on the desktop). You can select a group of the tweeps you follow (from an indexed list of followers that SmTweet presents for you), name the group (or view), and save it. It then appears on the More page along with all the other options. Tap it, and SmTweet assembles the tweets from each of the tweeps on your list and presents them (and only them) as a timeline. So slick.

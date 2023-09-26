@@ -1,0 +1,75 @@
+お気軽なパフォーマンス計測のためにも、経過時間計測は重要....時間計自体は簡単なんだけれども、自動開放プールの働きがよく分かっていなくてはまりました.この辺は慣れの問題だよな... NSDate時間オブジェクト.以下のように利用することで、二つの時間オブジェクトの経過時間を計測できる.>|objcpp] NSDate* a_dateStart = [NSDate date]; ... //何からのコード NSDate* a_dateEnd = [NSDate date]; NSTimeInterval a_time = [a_dateEnd timeIntervalSinceDate:a_dateStart];||NSTimeInterval は、double の typedef になっていて、1秒単位での時間の取得が可能.ミリ秒/マイクロ秒は小数部に入る.他には、 timeIntervalSinceReferenceDate // 2001.1.1 GTM からの経過秒数 timeIntervalSince1970 // 1970.1.1 GTM からの経過病数 timeIntervalSinceNow // 現在時刻からの経過秒数などの取得が行える 精度の検証は行っていないが、パフォーマンスカウンタとして利用できる可能性がある NSTimerインターバルタイマーを提供するインターバル単位で、指定メッセージの呼び出しが行えるため、メインループの作成に利用することができる. NSCalender今は必要ないので、そのうち調べる 自動開放プールと retain について(NSDate に限った話ではないが...) 次のようなコードで経過時間を計ることはできない.
+@interface MyView : NSView
+{
+NSTimer* m_timerLoop; ///
+NSDate* m_start; ///
+}
+- (void) onTick;
+@end
+@implementation MyView
+/// 初期化処理
+- (id)initWithFrame:(CGRect)frame {
+if (self = [super initWithFrame:frame]) {
+[self setupView];
+m_timerLoop = [NSTimer scheduledTimerWithTimeInterval:(1.0 / 30.0f) target:self selector:@selector(onTick) userInfo:nil repeats:YES];
+m_start = [NSDate date];
+}
+return self;
+}
+/// 解放処理
+- (void)dealloc
+{
+[m_start release];
+[m_timerLoop release];
+}
+/// フレーム処理
+- (void)onTickn
+{
+NSTimeInterval a_interval = [[NSDate date] timeIntervalSinceDate:m_start];
+}
+@end
+NSDate の m_start は、初期化時に生成されているが、メッセージ interval に到達するときにはオブジェクトが破棄されている.正しくは、次のように retain を用いて参照の所有権を移す必要がある.
+/// 初期化処理
+- (id)initWithFrame:(CGRect)frame {
+if (self = [super initWithFrame:frame]) {
+[self setupView];
+m_timerLoop = [NSTimer scheduledTimerWithTimeInterval:(1.0 / 30.0f) target:self selector:@selector(onTick) userInfo:nil repeats:YES];
+m_start = [NSDate date];
+[m_start retain];
+}
+return self;
+}
+おそらく、NSDate がオブジェクト生成時に、autorelease したオブジェクトを渡しているからだと思われる.エントリーでは、
+int main(int argc, char *argv[]) {
+NSAutoreleasePool * pool = [[NSAutoreleasePool alloc] init];
+int retVal = UIApplicationMain(argc, argv, nil, nil);
+[pool release];
+return retVal;
+}
+上記の用にメモリプールの作成を行っているが、このメモリプールに登録されているとすれば、プログラム終了時まではオブジェクトの解放が行われないはずである。そこで次のような実験を行ってみた.
+/// 初期化処理
+- (id)initWithFrame:(CGRect)frame {
+if (self = [super initWithFrame:frame]) {
+[self setupView];
+m_timerLoop = [NSTimer scheduledTimerWithTimeInterval:(1.0 / 30.0f) target:self selector:@selector(onTick) userInfo:nil repeats:YES];
+int a_refCount00;
+int a_refCount01;
+int a_refCount02;
+{
+m_start = [NSDate date];
+a_refCount00 = [m_start reainCount]; // 結果は 1
+[m_start retain];
+a_refCount01 = [m_start reainCount]; // 結果は 2
+}
+a_refCount02 = [m_start reainCount]; // 結果は 2
+}
+return self;
+}
+/// フレーム処理
+- (void)onTickn
+{
+int a_refCount03;
+a_refCount03 = [m_start retainCount]; // 結果は 1
+NSTimeInterval a_interval = [[NSDate date] timeIntervalSinceDate:m_start];
+}
+a_refCount02 の部分で参照カウントをはかっているのは、(分かってはいるけれども)スマートポインタのような形で参照回数を計測しているわけではないことの確認のため.a_refCount03 を見れば、initWithFrame 終了後に参照カウントが落ちていることがわかる.ここから、フレームワークがハンドラを呼び出す前に自動開放プールを作成して、呼び出し後に自動開放プールの開放を行っていると思われる. 注意点自動開放プールは複数個作成できる.複数の自動開放プールが作成された場合、もっとも新しく作られたプールにオブジェクトが格納される.

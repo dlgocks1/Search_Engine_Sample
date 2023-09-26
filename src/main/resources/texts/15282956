@@ -1,0 +1,36 @@
+My main desktop is 7 or 8 years old and has never been
+reinstalled. dpkg
+has become so slow that I started to shy away from using it, e.g.
+to purge packages. Not good.
+I always suspected that it was due to
+/var/lib/dpkg/status, the ever-growing
+dpkg status “database”^W plain-text file,
+which the programme had to scan multiple times per run, and I
+sought a means to compact it, and by that I meant:
+dpkg --compact
+or similar to remove the stanzas for purged packages. There is
+--forget-old-unavail, but that only cleans out
+uninstalled packages that are no longer available (I
+think), whereas I’d really rather get rid of knowledge of
+all uninstalled packages. Who needs that information if you don’t
+use --get-selections and
+--set-selections?
+While I was still huffing about the absence of such a
+command-line option, and inspecting a bug report about auto-cleaning
+the status database of purged packages, Gerfried Fuchs got to the matter
+and suggested to run (needs grep-dctrl, sudo and moreutils
+installed):
+grep-status -! -FStatus 'purge ok not-installed' \
+| sudo sponge /var/lib/dpkg/status
+That shrunk the file by about 10%, which didn’t impress me, and
+so I continued to complain…
+… until it struck me that the speed increase from removing what
+must have amounted to hundreds of purged package stanzas was
+enormous.
+Highly recommended — until dpkg does better
+housekeeping. Looks like 
+that will be the case with the next version. Then the above
+method will be good for a one-time spring-cleaning before
+dpkg starts living a tidier life.
+NP: 
+Riverside: Anno Domini High Definition

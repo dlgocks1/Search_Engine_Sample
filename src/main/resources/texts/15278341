@@ -1,0 +1,22 @@
+環境設定
+MVAPICH2のコマンドを利用するために、PATHの設定をする必要があります。
+以下では
+Intelコンパイラ用のMVAPICH2を例として紹介します。IntelやPGIコンパイラでMVAPICH2を使用する際は、別途コンパイラのPATHを設定する必要があります。
+(1)
+setenvまたはexportコマンドでPATHの設定を行います。必要に応じて、.cshrcや.bashrc
+に記述してください。
+# sh/bashの場合
+$ export PATH=/thin/local/mvapich/mvapich2-1.2p1+intel-11.0/bin:$PATH
+# csh/tcshの場合
+$ setenv PATH /thin/local/mvapich/mvapich2-1.2p1+intel-11.0/bin:$PATH
+(2)
+whichコマンドでコマンドの絶対PATHを確認できます。
+$ which mpicc mpif90 mpirun_rsh
+/thin/local/mvapich/mvapich2-1.2p1+intel-11.0/bin/bin/mpicc
+/thin/local/mvapich/mvapich2-1.2p1+intel-11.0/bin/bin/mpif90
+/thin/local/mvapich/mvapich2-1.2p1+intel-11.0/bin/bin/mpirun_rsh
+MPIのコマンド
+MPI用コンパイルコマンド
+プログラムのコンパイルには以下のコマンドを利用します。使い方は、基本的にオリジナルのコンパイラと同様に扱うことができます。
+言語
+コマンド名

@@ -1,0 +1,43 @@
+うたらぼ（アメブロ）ColdFusionを中心として、その他もろもろ、気が向いたときに書いていきます。ヘテムルのcronでphp経由のcfm実行ＩTメモ
+ColdFusionにはスケジューリング機能がありますが、 
+ヘテムルでは制限されています。 
+そのかわり、cronが使えます。 
+どうやってもヘテムルのヘルプに書いてある方法では、 
+cronの実行もまともにできませんでした。 
+かなり悩みました。 
+サイトをいろいろ調べたところ、 
+Windows上でのエディタでの改行のCR+LFに問題があるらしい。 
+たしか、さくらインターネットのcronの設定では、１行で書くようなことを 
+どこかのブログに書いてあった。 
+それができれば改行問題はクリア。 
+●cron.sh 
+cd /home/sites/heteml/[userの部分]/web/ ; /usr/local/bin/php ./cron_test.php ; exit; 
+●cron_test.php 
+#!/usr/local/bin/php 
+<?php 
+ini_set('user_agent', "PHP\r\nX-MyCustomHeader: Foo"); 
+$fp = fopen('http://www.utalab.net/cron_test.cfm', 'r'); 
+?> 
+<img src="http://www.utalab.net/cron_test.cfm"> 
+test cron php 
+●cron_test.cfm 
+cfmailでメール送信のソース 
+ちゃんと動いたようだ。 
+明日はもう一度検証して、確実に動くようなら、ちゃんとしたファイル名でプログラムを書き直そう。 
+CFプランでColdFusion利用可能 
+個人で利用している例 
+cfDL 
+cfAlbumView 
+cfBook(demo) 
+cfMemo(demo) 
+---------------------------- 
+■utalab.com 
+メイン 
+アマゾン検索 
+---------------------------- 
+Flashで作られたCMです。 
+作ってみたい！ 
+---------------------------- 
+ネット、ＩＴ系の濃い情報を 
+毎週得られます。 
+関連書籍

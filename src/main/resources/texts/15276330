@@ -1,0 +1,67 @@
+Figure 1:
+A suggest tree with suggestions (city names) and associated scores (city populations 2007)
+Figure 2:
+Suggest tree nodes, storing the length of the longest common prefix
+with the lexicographic predecessor and successor
+on the path from the root to the node
+Many web sites and applications include an autocompletion feature
+that suggests the best ranking completions only.
+But assuming a large pool of suggestions
+and a ranking independent from the lexicographic order of the suggestions,
+which data structure provides fast access to the
+best ranking completions for a given prefix?
+One answer is an inverted index
+with a top-k list of completions for each prefix.
+Another answer is a suggest tree as presented in this paper.
+It is fine in terms of both time and space efficiency.
+Structure
+In a suggest tree, each node contains a suggestion and an associated score (Figure 1).
+The nodes are ordered so that the suggestions form a binary search tree
+and the scores satisfy the max-heap property:
+The left subtree of a node contains only suggestions lexicographically less than the node's suggestion.
+The right subtree of a node contains only suggestions lexicographically greater than the node's suggestion.
+Each node has a score less than or equal to the score of its parent.
+In other words, a suggest tree is a treap ("tree heap").
+Each new entry is initially inserted as a leaf just like in a simple binary search tree,
+after that tree rotations are employed to restore the heap order.
+The suggest tree for an entry set X is exactly
+the simple binary search tree that results from inserting the elements
+of X in descending order of score.
+Suggest trees are self-balancing (always assuming that the
+scores are independent from the lexicographic order of the suggestions).
+They are self-balancing even if the scores are non-distinct
+because the heap order of suggest trees is determined not only by the score
+but also by a random number that is generated for each node
+and that breaks ties between nodes of equal score.
+Algorithm
+The suggestion algorithm for suggest trees uses a priority queue
+to return the k highest scored completions for a given prefix
+in descending order of score:
+Search from the root for the first completion and put it in the queue (if found).
+If the queue is empty, terminate;
+otherwise get the highest scored element off the queue and return it.
+If k suggestions have been returned, terminate;
+otherwise search both the left and right subtree of the last suggestion returned
+for the next completion and put both completions in the queue (if found).
+Repeat from step 2.
+Note that all nodes between the leftmost and rightmost path explored
+contain a completion.
+Optimization
+String comparisons in a binary search tree can be slow due to long common prefixes.
+Therefore suggest tree nodes should have two additional attributes,
+lcpPred and lcpSucc,
+that keep the length of the longest common prefix
+with the lexicographic predecessor and successor on the access path from the
+root to the node (Figure 2).
+The two attributes allow the search algorithm to skip known common prefixes.
+For example, if searching the tree of Figure 2 for "Santa Cruz",
+the initial string comparison with "Santa Clara" gives not only that
+"Santa Cruz" is lexicographically greater than "Santa Clara" 
+but also that the two strings have a longest common prefix of length 7.
+So, going to "Santa Fe",
+a simple integer comparison with lcpPred
+(the length of the longest common prefix of "Santa Fe" and "Santa Clara")
+suffices for knowing that "Santa Cruz" is lexicographically less than "Santa Fe".
+References
+Aragon, Seidel, "Randomized Search Trees"
+Crescenzi, Grossi, Italiano, "Search Data Structures for Skewed Strings"

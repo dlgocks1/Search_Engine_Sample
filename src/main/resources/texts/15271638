@@ -1,0 +1,376 @@
+Papervision 3D Video Training (WIP)
+Contents::..
+PV3D "Setting Up" : View
+About Papervision 3D (PV3D)
+How to get PV3D
+How to Access Custom Classes within Flash
+PV3D Intro - Hello World (I) : View
+PV3D Material Basics (II) : View
+Color Materials
+Wireframe Materials
+Movie Asset Materials
+Bitmap File Materials
+PV3D Primitives (III) : View
+Plane
+Cube
+Sphere
+Cylinder
+Cone
+Particle Field
+Swift 3D & PV3D (IV) : View
+PV3D Collada (DAE Files (V) : View
+PV3D Object Properties & Interactivity (VI) : View
+Interactive Basics
+Clickable Objects
+Animation using Tweener (VII) : View
+Setting Up - Video
+About Papervision 3D (PV3D)
+How to get PV3D
+Accessing PV3D 2.0 (codename - Great White) with TortoiseSVN
+What is SVN?
+Download and Install TortoiseSVN
+http://tortoisesvn.net/downloads
+Where to get PV3D
+Download PV3D 2.0 with TortoiseSVN
+http://blog.papervision3d.org
+How to access Custom Classes (from Flash)
+What are Custom Classes?
+In my own words. Custom Classes are user defined constructs of code, formatted in an Object Oriented Fashion.
+Connecting to the Custom Classes (aka connecting to PV3D)
+From within Flash select Edit > Preferences. The Preferences dialog window will appear, select ActionScript. Then click on the ActionScript 3.0 Settings button. From here we will need to add a new class path by hitting the "+" symbol. Paste in the path where the PV3D API is located and then hit ok and also hit ok on the Preferences window. Now we will have access to the PV3D API library. All that is needed is to "import" the code in via ActionScript.
+Now you're ready to begin!
+PV3D Intro - Hello World (I) - Preview / Video
+Set up basic Class & PV3D code skeleton
+Create a new .as file. Title it "PV3D.as".
+Build the Class construct and import the basic Flash & PV3D library assets
+package 
+{
+import flash.display.Sprite;
+import flash.events.Event;
+import org.papervision3d.view.Viewport3D;
+import org.papervision3d.scenes.Scene3D;
+import org.papervision3d.cameras.Camera3D;
+import org.papervision3d.materials.ColorMaterial;
+import org.papervision3d.objects.primitives.Plane;
+import org.papervision3d.render.BasicRenderEngine;
+public class PV3D extends Sprite
+{
+public function PV3D():void
+{
+}
+}
+}
+Create an object / animate it / render it to the stage
+Declare initial variables and datatype them
+private var viewport: Viewport3D;
+private var scene: Scene3D;
+private var camera: Camera3D;
+private var material: 
+ColorMaterial;
+private var primitive: Plane;
+private var renderer: BasicRenderEngine;
+Assign parameters to PV3D vars
+//viewport = new Viewport3D(w, h, scaleToStage, interactive);
+viewport = new Viewport3D(550, 400, false, true);
+addChild(viewport);
+//instantiates a Scene3D instance
+scene = new Scene3D();
+//instantiates a Camera3D instance
+camera = new Camera3D();
+//renderer draws the scene to the stage
+renderer = new BasicRenderEngine();
+//ColorMaterial, doubleSided draws the color on both sides of the geometry normals
+material = new ColorMaterial(0x333333);
+material.doubleSided = true;
+//primitive = new Plane(material, w, h, wSegments, hSegments);
+primitive = new Plane(material, 200, 200, 3, 3);
+scene.addChild(primitive);
+Render Scene and Animate
+//set up enterFrame event
+addEventListener(Event.ENTER_FRAME, onEnterFrame);
+//define enterFrame Method, render the PV3D Scene and animate the primitive
+function onEnterFrame(e:Event):void
+{
+primitive.rotationY += 2;
+renderer.renderScene(scene, camera, viewport);
+}
+Final Code - FILES: .fla, .as & preview .swf
+PV3D Material Basics (II) - Preview
+Color Materials - Preview / Video
+Import Papervision 3D material libraries (for this example import ColorMaterial)
+import org.papervision3d.materials.ColorMaterial;
+Declare colorMaterial var and datatype it to ColorMaterial
+private var colorMaterial: ColorMaterial;
+Establish colorMaterial parameters
+//ColorMaterial, doubleSided draws the color on both sides of the geometry normals
+colorMaterial = new ColorMaterial(0x333333);
+colorMaterial.doubleSided = true;
+Assign colorMaterial to the primitive1 Plane Primitive
+primitive1 = new Plane(colorMaterial, 200, 200, 3, 3);
+Final Code / Example - FILE: .fla, .as & preview swf
+Wireframe Materials - Preview / Video
+Import Papervision 3D material libraries (for this example import WireframeMaterial)
+import org.papervision3d.materials.WireframeMaterial;
+Declare wireframeMaterial var and datatype it to WireframeMaterial
+private var wireframeMaterial: WireframeMaterial;
+Establish wireframeMaterial parameters
+//WireframeMaterial, doubleSided draws the color on both sides of the geometry normals
+wireframeMaterial = new WireframeMaterial(0x333333);
+wireframeMaterial.doubleSided = true;
+Assign wireframeMaterial to the primitive1 Plane Primitive
+primitive1 = new Plane(wireframeMaterial , 200, 200, 3, 3);
+Final Code / Example - FILE: .fla, .as & preview swf
+Movie Asset Materials - Preview / Video
+Import Papervision 3D material libraries (for this example import MovieAssetMaterial)
+import org.papervision3d.materials.MovieAssetMaterial;
+Declare movieAssetMaterial var and datatype it to MovieAssetMaterial
+private var movieAssetMaterial: MovieAssetMaterial;
+Establish movieAssetMaterial parameters
+//MovieAssetMaterial, doubleSided draws the color on both sides of the geometry normals
+//movieAssetMaterial = new MovieAssetMaterial(Linkage ID, Transparent);
+movieAssetMaterial = new MovieAssetMaterial("myMaterial", false);
+movieAssetMaterial.animated = true;
+movieAssetMaterial.doubleSided = true;
+Assign movieAssetMaterial to the primitive1 Plane Primitive
+primitive1 = new Plane(movieAssetMaterial, 200, 200, 3, 3);
+Final Code / Example - FILE: .fla, .as & preview swf
+Bitmap File Materials - Preview / Video
+Import Papervision 3D material libraries (for this example import BitmapFileMaterial)
+import org.papervision3d.materials.BitpmapFileMaterial;
+Declare bitpmapFileMaterial var and datatype it to BitpmapFileMaterial
+private var bitpmapFileMaterial: BitpmapFileMaterial;
+Establish bitpmapFileMaterial parameters
+//BitmapFileMaterial, doubleSided draws the color on both sides of the geometry normals
+bitmapFileMaterial = new BitmapFileMaterial("PV3D.png");
+bitmapFileMaterial.doubleSided = true;
+Assign bitmapFileMaterial to the primitive1 Plane Primitive
+primitive1 = new Plane(bitmapFileMaterial, 200, 200, 3, 3);
+Final Code / Example - FILE: .fla, .as, .png & preview swf
+PV3D Primitives (III) - Preview
+For these primitives exercises I'll be using the WireframeMaterial material. Please note that the WireframeMaterial assets are imported for each of the following examples. Also, this will make it easier to see the segmentation of the geometry as the primitives are instantiated.
+Plane - Preview / Video
+Import Papervision 3D primitives libraries (for this example import Plane)
+import org.papervision3d.objects.primitives.Plane;
+Declare plane var and datatype it to Plane
+private var plane:Plane;
+Establish plane parameters
+//plane = new Plane(material applied to object, width, height, wSegments, hSegments);
+plane = new Plane(wireframeMaterial, 200, 200, 3, 3);
+scene.addChild(plane);
+Final Code / Example - FILE: .fla, .as & preview swf
+Cube - Preview / Video
+Import Papervision 3D primitives libraries (for this example import Cube)
+import org.papervision3d.objects.primitives.Cube;
+Declare cube var and datatype it to Cube
+private var cube:Cube;
+In order to apply materials to a cube you must filter your materials through a MaterialsList Object. In the MaterialsList Object you will define the material that will be applied to each face of the cube and each material you apply with be flagged with "front", "bottom", "left", etc...
+Set up a MaterialsList Object
+var materialsList:MaterialsList = new MaterialsList(); 
+materialsList.addMaterial( wireframeMaterial, "front" ); 
+materialsList.addMaterial( wireframeMaterial, "back" ); 
+materialsList.addMaterial( wireframeMaterial, "left" ); 
+materialsList.addMaterial( wireframeMaterial, "right" ); 
+materialsList.addMaterial( wireframeMaterial, "top" ); 
+materialsList.addMaterial( wireframeMaterial, "bottom" );
+Establish cube parameters
+//cube = new Plane(MaterialList applied to object, width, depth, height, wSeg, dSeg, hSeg);
+cube = new Cube(materialsList, 200, 200, 200, 3, 3, 3);
+scene.addChild(cube);
+Final Code / Example - FILE: .fla, .as & preview swf
+Sphere - Preview / Video
+Import Papervision 3D primitives libraries (for this example import Sphere)
+import org.papervision3d.objects.primitives.Sphere;
+Declare sphere var and datatype it to Sphere
+private var sphere:Sphere;
+Establish sphere parameters
+//sphere = new Sphere(material applied to object, radius, wSegments, hSegments);
+sphere = new Sphere(wireframeMaterial, 150, 6, 6);
+scene.addChild(sphere);
+Final Code / Example - FILE: .fla, .as & preview swf
+Cylinder - Preview / Video
+Import Papervision 3D primitives libraries (for this example import Cylinder)
+import org.papervision3d.objects.primitives.Cylinder;
+Declare cylinder var and datatype it to Cylinder
+private var cylinder:Cylinder;
+Establish cylinder parameters
+//cylinder = new Cylinder(material applied to object, radius, height, wSegments, hSegments, topRadius);
+cylinder = new Cylinder(wireframeMaterial, 120, 250, 8, 3, 120);
+scene.addChild(cylinder);
+Final Code / Example - FILE: .fla, .as & preview swf
+Cone - Preview / Video
+Import Papervision 3D primitives libraries (for this example import Cone)
+import org.papervision3d.objects.primitives.Cone;
+Declare cone var and datatype it to Cone
+private var cone:Cone;
+Establish cone parameters
+//cone = new Cone(material applied to object, radius, height, wSegments, hSegments, topRadius);
+cone = new Cone(wireframeMaterial, 120, 250, 8, 3);
+scene.addChild(cone);
+Final Code / Example - FILE: .fla, .as & preview swf
+Particle Field - Preview / Video
+Import Papervision 3D primitives libraries (for this example import ParticleField under "special"). Also, the material type that is required for a ParticleField is ParticleMaterial. The ParticleMaterial asset will need to be imported as well.
+import org.papervision3d.materials.special.ParticleMaterial;
+import org.papervision3d.objects.special.ParticleField;
+Declare particleField var and datatype it to ParticleField. Declare particleMaterial var and data type it to ParticleMaterial
+private var particleField:ParticleField;
+private var particleMaterial:ParticleMaterial;
+Establish particleMaterial parameters
+//ParticleMaterial, doubleSided draws the color on both sides of the geometry normals
+//particleMaterial = new ParticleMaterial(hex color, alpha);
+particleMaterial = new ParticleMaterial(0x000000, 1);
+particleMaterial.doubleSided = true;
+Establish particleField parameters
+//particleField = new ParticleField(particle material applied to object, particle quantity, width, height, depth); 
+particleField = new ParticleField(particleMaterial, 6000, 500, 500, 500);
+scene.addChild(particleField);
+Final Code / Example - FILE: .fla, .as & preview swf
+Swift 3D & PV3D (IV) - Preview / Source Files
+Export Swift 3D models to PV3D
+Open your Swift 3D .t3d file.
+Select File > Export Scene to Papervision3DOR...Select File > Export Selected Object to Papervision3D
+Open Flash and then open the .fla that was generated by Swift 3D.
+Preview the file (control+enter)
+The resulting code & files
+(x) number of images - each image is loaded into your .swf file at runtime. Required for final pubished application...
+.fla File - Flash file that calls ERMain.as and executes the ERMain class. This file also contains the UI elements within the library (which you can reskin).
+ERMain.as - Contains the ERMain class. The ERMain class imports your DAE (Collada) file, renders it with Papervision 3D, applies event listeners to the stage that establish user control.
+.DAE File - This file contains the 3D Scene geometry & material information.
+Swift 3D PV3D Export Tips and Facts
+Exports a pre-packaged / coded .fla/.as file that is ready to be served up to the internet. It comes complete with user controls (can be reskinned) and the object(s) are also able to be controlled with a custom coded trackball/arc rotation control.
+Flash 9 is required. You could download the Flex 3 beta and publish the files that way (don't quote me though, I'm not a Flex expert and I haven't tried it myself).
+Exports to Papervision 3D 1.5 (will be updated to 2.0 in the near future - don't ask me when, I don't know)
+Every "instance" of a material used within your 3D scene will generate a unique image when exported to PV3D
+Want to set up your model to Auto-Rotate? Follow the steps below. Preview
+Open the ERMain.as file.
+Locate the "EROnEnterFrame" method/function.
+Paste the following code into the "EROnEnterFrame" method:
+mCollada.yaw(2);
+Save the file.
+Open the .fla that was generated by Swift 3D and preview the movie (control+enter).
+The Trackball/Arc Rotation features that sit on the stage can be confusing to a non-technical, non-3D savy person. You may want to disable that feature and force users to use the UI controls. Follow the steps below to disable the event listener that is applied to the stage.
+Open the ERMain.as file.
+Locate the following code and comment it out.
+stage.addEventListener(MouseEvent.MOUSE_DOWN, ERMouseDownHandler);
+stage.addEventListener(MouseEvent.MOUSE_UP, ERMouseUpHandler);
+stage.addEventListener(MouseEvent.MOUSE_WHEEL, ERMouseWheelHandler); 
+Save the file.
+Open the .fla that was generated by Swift 3D and preview the movie (control+enter).
+If you zoom into your model to far the controls will be sitting below the model itself. The steps below illustrate how to fix this.
+Open the .fla file that was generated by Swift 3D.
+Delete the controls that are sitting on the stage (delete the ER logo and About text if you wish).
+Locate "ERControlButtons" in the library, right click on it and give it a linkage name of "ERControlButtons".
+Open the ERMain.as file.
+Locate the "ERInitialize" method (function) and paste the following code at the very end of it (within the {} brackets).
+var erControls:ERControlButtons = new ERControlButtons();
+addChild(erControls);
+Save the file and return to the .fla
+Save and then preview the file (control+enter)
+Final Code / Example - FILE: .t3d, .fla, .as, .jpg, .dae & preview swf
+PV3D Collada (DAE) Files (V)
+What is Collada?
+In my own words: Its a 3D file in an xml format that contains 3D geometry data, material (UVW) data, animation data, skinning data, morphing data & lighting data. This is the file that Papervision 3D will read and render to your Flash project. More details on Collada file format
+Collada file export for other 3D apps
+3ds max (3rd party plug-in - More info / Download)
+Maya (3rd party plug-in - More info / Download)
+Softimage|XSI (I'm not sure of the workflow)
+Side Effect's Houdini (I'm not sure of the workflow)
+MeshLab (I'm not sure of the workflow)
+SketchUp (I'm not sure of the workflow)
+Blender (I'm not sure of the workflow)
+Loading a Collada file into your project 
+Collada - Preview / Source Files
+Import Papervision 3D Collada assets
+import org.papervision3d.objects.parsers.Collada;
+Declare collada var and datatype it to Collada
+private var collada:Collada;
+In order to apply materials to a Collada you must filter your materials through a MaterialsList Object. In the MaterialsList Object you will define the material that will be applied to each surface group of the Collada and each material you apply with be flagged with the correlating name of the material in Swift 3D. To find the name of the material you applied in Swift 3D select your model in the viewport, select Material in the properties panel, double click on the color swatch and then you will see the name of the material in the "name" field of the Edit Material window.
+Set up a MaterialsList Object
+//MaterialsList acts as an object array that holds all the related materials
+var materialsList:MaterialsList = new MaterialsList(); 
+//In this example I use a BitmapFileMaterial to load in the clock face
+materialsList.addMaterial( bitmapFileMaterial, "clockFace" ); 
+//The remaining colors that are applied to the clock are simply ColorMaterials. 
+I Made three of them 
+//(colorMaterial1, colorMaterial2, colorMaterial3) and then applied them to various areas of my clock model.
+materialsList.addMaterial( colorMaterial1, "color1" ); 
+materialsList.addMaterial( colorMaterial2, "color2" ); 
+materialsList.addMaterial( colorMaterial2, "color3" ); 
+materialsList.addMaterial( colorMaterial1, "color4" ); 
+materialsList.addMaterial( colorMaterial1, "color5" ); 
+materialsList.addMaterial( colorMaterial2, "color6" ); 
+materialsList.addMaterial( colorMaterial2, "color7" ); 
+materialsList.addMaterial( colorMaterial3, "hourArm" ); 
+materialsList.addMaterial( colorMaterial3, "minuteArm" );
+Establish collada parameters
+//collada = new Collada(.dae file, MaterialsList applied to object, scale);
+collada = new Collada("clock.dae", materialsList, .1);
+scene.addChild(collada);
+Final Code / Example - FILE: .t3d, .fla, .as, .jpg, .dae & preview swf
+PV3D Object Properties & Interactivity (VI)
+Interactive Basics - Preview
+Controlling properties with mouse movement
+Assuming that we have our PV3D scene set up and rendering, we can then make very simple adjustments to add interactivity to the scene. Add the following line of code to the onEnterFrame handler to animate the camera on the Y axis.
+function onEnterFrame(e:Event):void
+{
+camera.y = (mouseY * 4)-800;
+cube.rotationY += 2;
+renderer.renderScene(scene, camera, viewport); 
+}
+Final Code / Example - FILE: .fla, .as & preview swf
+Clickable objects - Preview
+Again, assuming that we have our PV3D scene set up and rendering, we can then add the InteractiveScene3DEvent and a PV3D handler to an object to make it interactive. For this example we will make a sphere clickable. When clicked it will relocate to random x, y and z coords.
+Import the InteractiveScene3DEvent assets
+import org.papervision3d.events.InteractiveScene3DEvent;
+Set the interactive property for the material to true
+colorMaterial.interactive = true;
+Add the OBJECT_PRESS event handler to the sphere using the InteractiveScene3DEvent
+sphere.addEventListener(InteractiveScene3DEvent.OBJECT_PRESS, onPress);
+Set up the onPress method to be called when the object is pressed. In this example we will randomly relocate the object on its x, y and z axis
+function onPress(e:InteractiveScene3DEvent):void
+{
+sphere.x = (Math.random()*550 - 275)*2;
+sphere.y = (Math.random()*400 - 200)*2;
+sphere.z = (Math.random()*2000)*2;
+}
+Final Code / Example - FILE: .fla, .as & preview swf
+Animation using Tweener (VII)
+What is Tweener?
+In my own words. Tweener is just cool. Thats really all you need to know. Its the easiest way to animate object properties via code. More info on Tweener
+Where do I get it? Download the Tweener class - Don't forget to download the cheatsheet as well! The syntax highlighter is handy to!
+Animate with Tweener (no PV3D) - Preview
+Create a shape on the stage and convert it to a MovieClip symbol (I made a star)
+Give your MovieClip an instance name of "star"
+Open the actions panel and import the Tweener Transition assets
+import caurina.transitions.*;
+Add a CLICK mouse event listener to the star instance
+star.addEventListener(MouseEvent.CLICK, onClick);
+Set up the onClick method/function and then use the Tweener class to animate the star when it is clicked
+function onClick(e:MouseEvent):void
+{
+Tweener.addTween(star, {x:Math.random()*550, time:1, transition:"easeInOutQuint" }); 
+Tweener.addTween(star, {y:Math.random()*400, time:1, transition:"easeInOutQuint"});
+}
+OR... write in short hand like this
+function onClick(e:MouseEvent):void
+{
+Tweener.addTween(star, {x:Math.random()*550, y:Math.random()*400, time:1, transition:"easeInOutQuint"});
+}
+Final Code / Example - FILE: .fla & preview swf
+Animate PV3D Objects with Tweener - Preview
+For this example I'm assuming that we have the PV3D scene set up and rendering a sphere with a clickable material applied and a corresponding event listener and method/function applied (lots of stuff!)
+Import the Tweener transition assets
+import caurina.transitions.*;
+Use Tweener to animate the object when it is clicked on
+function onPress(e:InteractiveScene3DEvent):void
+{
+Tweener.addTween(sphere, {x:Math.random()*2000 - 1000, time:.5, transition:"easeInOutQuint"});
+Tweener.addTween(sphere, {y:Math.random()*2000 - 1000, time:.5, transition:"easeInOutQuint"});
+Tweener.addTween(sphere, {z:Math.random()*2000, time:.5, transition:"easeInOutQuint"});
+}
+OR... write in short hand like this
+function onPress(e:InteractiveScene3DEvent):void
+{
+Tweener.addTween(sphere, {x:Math.random()*2000 - 1000, y:Math.random()*2000 - 1000, z:Math.random()*2000, time:.5, transition:"easeInOutQuint"});
+}
+Final Code / Example - FILE: .fla & preview swf
+Report an error. Email jim.foley at madvertices dot com

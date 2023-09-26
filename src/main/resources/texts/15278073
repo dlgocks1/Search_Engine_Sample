@@ -1,0 +1,34 @@
+それからお前の前に道がいくつもひらけて、どれを行っていいかわからないときには、気まぐれにどれかをえらばずに、そこにすわって待ってごらん。おまえがこの世に生まれてきたときと同じように、たくましく深い息をして、どんなことにも気をそらされずに、ただ待ちつづけてごらん。黙ってじっとすわったまま、心の声を聞いてごらん。そして声が聞こえたら、立ちあがって、おまえの心のおもむくままに行くがいい。
+Media Pickerの件は、どういうわけか、その後、動くようになりました。Appleからも再現しないとのメールが。とりあえず、Pendingにしていたアプリの登録を行いました。SDKをインストールしてすぐにデバッグして出た現象だったので、クリーンしてビルドするか、マシンを再起動するかしてみればよかったです。
+「iCollage」は、既にアプリ名が登録済みだったので、「MyCollage」と変更。なおかつ、テキストと画像に角度をつけられるように、また画像のアルファ値を変更できるようにしてから登録しました。
+「Wakeup Tunes」は登録後、Appleから連絡があって、リストから「編集・削除」で削除できないとのこと。これは、3.0から動作が変わっているのですよね。エリカ本の3.0以前のコードは次のようになっています。
+// Initialize and set up the table title array
+- (HelloController *) init
+{
+if (![self = [super init]]) return self;
+self.title = @"Table Edits";
+tableTitles = [[NSMutableArray alloc] init];
+ithTitle = NCELLS;
+for (int i = 1; i 
+3.0以降は次のようになります。
+// Initialize and set up the table title array
+- (HelloController *) init
+{
+if (![self = [super init]]) return self;
+self.title = @"Table Edits";
+tableTitles = [[NSMutableArray alloc] init];
+ithTitle = NCELLS;
+for (int i = 1; i <= NCELLS; i++)
+[tableTitles addObject:[NSString stringWithFormat:@"Table Cell #%d", i]];
+return self;
+}
+// Finished with edit mode, so restore the buttons and commit changes
+-(void)leaveEditMode
+{
+// Add the edit button
+self.navigationItem.rightBarButtonItem = [[[UIBarButtonItem alloc]
+initWithTitle:@"Edit"
+style:UIBarButtonItemStylePlain
+target:self
+action:@selector(enterEditMode)]
+autorelease];

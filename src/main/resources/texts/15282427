@@ -1,0 +1,13 @@
+『VirtualBox用Ubuntu 導入時の記録』
+VirtualBoxにUbuntuをインストール後、初期に設定した項目 １、Windows と Ubuntu でファイルの共有（共有フォルダの設定） 1-1、Windowsで共有フォルダを新規作成 1-2、ubuntuで共有フォルダを新規作成 1-3、VirtualBoxで共有フォルダの利用設定 1-4、ubuntuで共有フォルダのマウント 1-A、ubuntuのシステム起動時に自動でマウントし、共有フォルダを利用。 2、日本語入力　SCIM + Anthy の点滅 (半角/全角キーの反応無視) 動作環境 　 　ホストOS：Microsoft Windows XP SP3 　　仮想化ソフトウェア：Sun xVM VirtualBox 3.0 　　ゲストOS：Ubuntu 8.04 LTS －－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－ １、Windows と Ubuntu でファイルの共有（共有フォルダの設定） ※UbuntuにVirtualBoxの『Guest Additionsのインストール』を実行後 1-1、Windowsで共有フォルダを新規作成 例） 　フォルダ名：wu_share 　フォルダパス：E:\wu_share 1-2、ubuntuで共有フォルダを新規作成 例） 　フォルダ名：uw_share 　フォルダパス：/home/user(ユーザー名)/uw_share or /media/uw_share 参考コマンド====================== root権限で作成する場合 ・フォルダ（ディレクトリ）作成 sudo mkdir /media/uw_share ・アクセス権限（パーミッション）を設定します。 sudo chmod 766 /media/uw_share ====================== 1-3、VirtualBoxで共有フォルダの利用設定 『共有フォルダ』- アイコン『新規共有フォルダを追加』 フォルダのパス：Ⅰ-1のフォルダパスを指定（E:\wu_share） フォルダ名：任意の名前（share） 「永続化する」にチェック 1-4、ubuntuで共有フォルダのマウント コマンド構文 sudo mount -t vboxsf [-o OPTIONS] sharename(Ⅰ- Ⅲでのフォルダ名) mountpoint（Ⅰ- Ⅱでのフォルダパス） コマンド sudo mount -t vboxsf share /media/uw_share or sudo mount -t vboxsf share /home/user(ユーザー名)/uw_share ※ /sbin/mount.vboxsf:mounting failed with the error:Protocol error ※ で、上記のエラーが帰ってくる場合は下記のコマンドで コマンド sudo mount.vboxsf share /media/uw_share or sudo mount.vboxsf share /home/user(ユーザー名)/uw_share GOAL:フォルダ共有（同期）が出来、ファイルの共有完了 1-A、ubuntuのシステム起動時に自動でマウントし、共有フォルダを利用。 コマンド sudo gedit /etc/rc.local 最終行の"exit 0"の上にⅠ-4で成功したコマンドを追加記述。保存して、完了。 ※ファイル【rc.local】のアクセス権が実行可能でないと自動的に設定は反映されない。 ※ファイル【rc.local】の編集は、慎重に！！ MEMO====================== ヘルプ - 4.6. Folder sharing を参照 ほかの共有方法、SambaやFTPなどでも共有は可能 －－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－ 2、日本語入力　SCIM + Anthy の点滅 (半角/全角キーの反応無視) SCIM と Anthy のデフォルト設定で、「Zenkaku_hankaku」を削除 SCIM のON/OFFは、[Control] + [Space] 日本語入力 のON/OFFは、[Control] + [ j ] GOAL:即席だが、また不具合が出るまでこれで対応。 MEMO====================== 半角/全角キーを押すと、全体的にCPUの負荷が上がる。 [Control] + [Space]で退避？？ NOTE====================== *ゲストOSでLinuxが起動しない場合、VirutualBoxの設定で 「IO APICを有効にする」にチェックする。 
+This entry was posted
+on Wednesday, July 15, 2009
+and is filed under 
+PC,
+ubuntu,
+VirtualBox
+.
+Filed under 
+PC,
+ubuntu,
+VirtualBox

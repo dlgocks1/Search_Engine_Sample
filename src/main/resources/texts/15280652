@@ -1,0 +1,20 @@
+multimedia design, Actionscript, Lingo, PHP, Perl, SQL
+TheFlashBlog の Lee Brimelow さんが Flash CS4 で追加された F4Vビデオについて興味深いエントリーしていたのでメモ。
+What is the F4V format for? 
+F4Vフォーマットの中身はH.264らしい、じゃぁなんでAdobeはわざわざ新たにフォーマットを追加したかっていうことがテーマ。 
+ご存知の通りH.264フォーマットはOn2VP6よりもよりも遥かに高画質だけど、アルファチャンネルとキューポイントが使えないのが残念な点。 
+F4Vもキューポイントはサポートしていない。 
+Adobe TechNote 
+F4V-format video exported from Adobe Media Encoder CS4 does not contain cue points 
+Brooks Andrus’s blog : F4V Does Not Support Cue Points
+Lee Brimelow さんもF4Vでキューポイントが使えないことで悩んでたらしいけどRich Shupe さんが「悩み」を書いてたTwitterを見て送ってくれたメールで解決したんだって。
+XMP data のイベントを NetStream Class を使って処理するらしいんだけど、まだ環境が無いので試せない。 
+コードを見るとズイブン不思議な解決方法みたい。 
+良くこんな方法を思いつくなぁ！
+ブログへのレスポンスも多く、参考になるものもあった。 
+H.264 エンコード設定 
+Leif’s blog : ENCODING H.264 FOR FLASH USING QUICKTIME AND COMPRESSOR
+update 
+Flash Player と H.264 ビデオデータと onMetaData と onXMPData 
+XMPを使えばF4Vでもキューポイントは使える、が正解みたい。 
+F4VにXMPを埋め込めれば後は Actionscript で処理するだけ。

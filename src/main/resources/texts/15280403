@@ -1,0 +1,5 @@
+.gitignoreを作ってaddするのが定石らしい。もー。
+$ mkdir kana1
+$ touch kana1/.gitignore
+$ git add kana1
+@basix、@kana1ありがとうー。

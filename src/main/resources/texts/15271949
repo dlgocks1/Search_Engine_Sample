@@ -1,0 +1,180 @@
+[Click to print this article]
+Back in September, I discovered a subtle bug in my node reuse code for
+my lock-free data structures. The bug has a name, 
+the ABA problem, and I 
+kind of promised to come back and solve it at some point. Well, it's a
+New Year, that was then and this is now, so let's go ahead and solve
+the problem. It helps that my January 2006 article for 
+The Delphi Magazine solves 
+the ABA problem for Delphi, and that implementation was the hardest,
+at least in theory. Anyway, unlike my thinking at the time, we're
+going to use hazard pointers to implement a lock free node reuse
+algorithm in C#. Pointers? C#? A contradiction, or just nasty unsafe
+code?
+I'm going to guess this is going to take at least a couple of posts to
+explain and implement to my satisfaction, with this first article
+being "chatty", so settle back with some chips and a drink and read
+on. 
+First off, you really should review what I've had to say about 
+lock-free data structures to date. It'll help once I start explaining
+what hazard pointers are that you understand the basic methodology
+behind lock-free programming. Here's a bunch of links that'll help you
+recap, though you should really skip the free list one...
+Lock-free data structures: the stack
+Lock-free data structures: the queue
+Lock-free data structures: the free list
+Lock-free data structures: the limited-priority queue
+Lock-free data structures: redux
+Lock-free data structures: the code
+Lock-free data structures: the linked list (Part 1)
+Lock-free data structures: the linked list (Part 2)
+Lock-free data structures: the linked list (Part 3)
+Lock-free data structures: the ABA problem
+At the end of the final post in that list, I'd thrown away the free
+list, relying instead on the garbage collector for memory management.
+That's not too bad in a managed environment since the .NET memory
+manager is very fast at allocating memory (it's essentially an
+addition operation on a pointer, and it's probably implemented in a
+lock-free manner anyway) and it freezes all threads when it's time to
+collect the garbage. Nevertheless we can do better if we do the memory
+management ourselves by implementing a free list for the nodes we'll
+be using. As stated elsewhere, the obvious data structure to use is
+the lock free stack.
+However, there's a problem when we turn to doing memory management
+ourselves. Let's have a look at the stack's Pop() method
+(a little simplified so that we don't obfuscate what's going on) in
+order to illustrate it.
+01 public T Pop() {
+02 Node<T> node;
+03 do {
+04 node = head.Next;
+05 if (node == null)
+06 return default(T);
+07 } while (!CAS(ref head.Next, node, node.Next));
+08 return node.Item;
+09 }
+(I've numbered the lines so that I can easily refer to individual
+statements in the argument that follows.)
+Line 4 is the first real statement that does something. It copies the
+Next node from the head node and puts it
+into a local variable. Actually let's be much more precise: it makes a
+copy of the reference to the Next node. It does not read
+the data in the node object itself, it just makes a note of the
+address of the node. .NET guarantees for us that the reading of the
+reference is an atomic operation, so there's no issue with the read in
+a multithreaded environment.
+Lines 5 and 6 form a simple Get-out-of-jail-free check should the node
+be null. Since the variable being used is local (and therefore on the
+stack or in a register) there can be no multithreaded problem.
+Line 7 is the really interesting one. In it, we CAS (compare-and-swap)
+the head's Next reference to the Next
+reference from the node we copied. To do that we have to dereference
+the node object reference; in other words we have to go read that
+block of memory pointed to by our copied reference and read the
+Next value. (And of course in line 8 we again have to
+read part of that object on the heap through a dereference operation.)
+That is a real problem when we're reusing nodes. In between line 4 and
+7, our reference may no longer be what we think it is. Certainly it's
+still pointing to a node on the heap, but the data in that memory
+block may not have the same meaning to us that we expected. If you
+like, after line 4 we're assuming that the node has a particular
+state, say A, but another thread may have changed that state into
+something else, say B, by the time we reach line 7. And then we get
+there and assume (because we have to) that it is still in state A.
+Hence the name: A-B-A, or ABA problem.
+In a paper by 
+Dr Maged M Michael of the IBM Thomas J Watson Research Center, he
+called the dereferencing of the copied node reference a hazard that we
+have to guard against. The pointer being dereferenced (in C# that
+would be the object reference rather than a pointer) is known as a
+hazard pointer.
+What we have to try and do is to say to all the other threads, once we
+have copied the node reference in line 4, that we are interested in
+this node and in no way can anyone recycle it. If we invoke the use of
+a couple of magic methods (that still have to be written), we'd write
+this:
+01 public T Pop() {
+02 Node<T> node;
+03 do {
+04 node = head.Next;
+05 if (node == null)
+06 return default(T);
+06a MagicMemoryManager.MarkAsHazardPointer(node);
+07 } while (!CAS(ref head.Next, node, node.Next));
+07a T result = node.Item;
+07b MagicMemoryManager.Recycle(node);
+08 return result;
+09 }
+But that still contains a race condition. What if we're not fast
+enough in marking the node as a hazard pointer? In other words,
+between lines 04 and 06a, what happens if some other thread comes
+along and recycles the node? Well, we're in a mess that's what: we'll
+fall into exactly the same problem as we had before.
+So we must check that our node is still valid after marking it as a
+hazard pointer and, if it isn't, we should just throw it away and try
+again, much as the CAS loop does.
+01 public T Pop() {
+02 Node<T> node;
+03 do {
+04 node = head.Next;
+05 if (node == null)
+06 return default(T);
+06a MagicMemoryManager.MarkAsHazardPointer(node);
+06b if (node != head.Next)
+06c continue; 
+07 } while (!CAS(ref head.Next, node, node.Next));
+07a T result = node.Item;
+07b MagicMemoryManager.Recycle(node);
+08 return result;
+09 }
+Let's take a breather here and look at what we have. We copy the
+head's Next reference. If it's null, we get out and
+return the default value. If not, we mark this reference as a hazard
+pointer to ensure that no other thread tries to recycle it. Having
+done that, we check to see whether the head's Next
+reference is still the same as the reference we copied. If it isn't,
+we just have to assume that either someone recycled our node before we
+could mark it, or equally possible, someone has pushed an item onto
+the stack (or popped one off). If either of these conditions has
+happened, we just go round the loop again immediately, throwing away
+the reference we copied. (For the moment, don't worry about unmarking
+the reference as a hazard pointer). 
+Once we get to line 7, what we can now guarantee (providing that all
+the threads understand hazard pointers and cooperate) that the data
+pointed to by the reference we have will not have been changed. We
+can't guarantee that the head's Next reference won't be
+changed, after all that's what our CAS call is going to check for us
+in a moment, just that the data in the node whose reference we have
+will remain static.
+After we exit the loop on a successful CAS operation, we can copy the
+item out of the node (remember we can dereference the node with
+impunity since it's marked as a hazard pointer), recycle the node
+(using another magic method), and return the item.
+Of course, the magic recycle method presumably has to do some kind of
+work (large? small?) to ensure that it doesn't recycle a hazard
+pointer (since many threads may have marked this reference as such).
+And if it can't recycle this node, we need to ensure that someone
+somewhere does it later on. 
+So, with the help of a couple of magic methods we've illustrated the
+use of hazard pointers to ensure that the Pop() method
+can be made safe. Notice that, at any one time, we only really need
+one hazard pointer per thread (again, I'm glossing over the fact that
+we don't seem to "unmark" a reference as a hazard pointer).
+What about the Push() method? Here's the simplified code:
+In line 2, we create a new node, and set its Item in line
+3. Note that the node we create is a local variable; no other thread
+has access to it, so there's no multithreaded issue at all yet.
+In line 5, we copy the Next reference from the head node.
+Again no multithreaded issue: the read is an atomic operation. 
+Finally in line 6, providing that the head.Next reference
+has not changed, we replace it with the new node. Notice that there
+are no hazardous dereferences like there were in the
+Pop() case. The node we created stays local throughout,
+right up to the point that the CAS operation is successful. Note though 
+that we should probably use another magic method to allocate a new node
+from our free list (once we have one).
+So, all in all, the stack isn't too difficult a problem. Providing, of
+course, that we have our mysterious MagicMemoryManager
+class all written. Next time we'll look 
+at the queue, and start to think about how to implement the hazard 
+pointers and supporting code.

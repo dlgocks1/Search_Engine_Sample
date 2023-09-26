@@ -1,0 +1,40 @@
+$ telnet localhost 25 <== telnet localhost 25 
+と入力し、[Enter] 
+Trying 127.0.0.1... 
+Connected to localhost. 
+Escape character is '^]'. 
+220 www.miloweb.net ESMTP Postfix 
+EHLO localhost <== EHLO localhostと入力 
+250-zdnet.hoge.org 
+250-PIPELINING 
+250-SIZE 10240000 
+250-ETRN 
+250-AUTH PLAIN LOGIN DIGEST-MD5 CRAM-MD5 <== 
+この行があるのを確認します 
+250 8BITMIME 
+QUIT <==QUIT と入力して終了 
+$ 
+パスワード認証の確認
+パスワードをエンコードします。 
+コマンドは「perl -MMIME::Base64 -e 'print encode_base64("ユーザー名\0ユーザー名\0パスワード");'」です。 
+例：ユーザー名 rabbit 
+、パスワード hogehogehoge の場合。 
+$ perl -MMIME::Base64 -e 'print encode_base64("rabbit\0rabbit\0hogehogehoge");'
+cmFiYml0AHJhYmJpdABob2dlaG9nZWhvZ2U=　<==エンコードされた
+$ telnet localhost 25 <== 入力し、エンター 
+Trying 127.0.0.1... 
+Connected to localhost. 
+Escape character is '^]'. 
+220 www.miloweb.net ESMTP Postfix 
+EHLO localhost <==EHLO localhostと入力 
+250-zdnet.hoge.org 
+250-PIPELINING 
+250-SIZE 10240000 
+250-ETRN 
+250-AUTH PLAIN LOGIN DIGEST-MD5 CRAM-MD5 
+250 8BITMIME 
+AUTH PLAIN cmFiYml0AHJhYmJpdABob2dlaG9nZWhvZ2U= <== 「AUTH 
+PLAIN エンコードしたパスワード」を入力 
+235 Authentication successful <==認証成功 
+QUIT <== 確認できたので、QUITコマンドで切断します 
+$

@@ -1,0 +1,30 @@
+Unfortunately right now there is no reliable way to receive a broadcast event after your applicaiton has been installed, the ACTION_PACKAGE_ADDED Intent does not broadcast to the newly installed package.
+You will have to have a broadcast receiver class as well as your service in order to receive the ACTION_BOOT_COMPLETED event. I would also recommend adding the ACTION_USER_PRESENT intent to be caught by that broadcast receiver, this requires Android 1.5 (minSDK=3), this will call your broadcast receiver whenever the user unlocks their phone. The last thing that you can do to try to keep your service running without having it easily be shut down automatically is to call Service.setForeground() in your service onCreate to tell Android that your service shouldn't be stopped, this was added mainly for mp3 player type services that have to keep running but can be used by any service.
+Make sure you add the proper permissions for the boot_complete and user_present events in you manifest.
+Here is a simple class that you can use as a broadcast receiver for the events.
+package com.snctln.util.WeatherStatus;
+import android.content.BroadcastReceiver;
+import android.content.Context;
+import android.content.Intent;
+public class WeatherStatusServiceReceiver extends BroadcastReceiver
+{
+@Override
+public void onReceive(Context context, Intent intent)
+{
+if(intent.getAction() != null)
+{
+if(intent.getAction().equals(Intent.ACTION_BOOT_COMPLETED) ||
+intent.getAction().equals(Intent.ACTION_USER_PRESENT))
+{
+context.startService(new Intent(context, WeatherStatusService.class));
+}
+}
+}
+};
+Good luck.
+"which keeps on running in background (basically a proxy server) but I am not able to find a way how to start that service"
+Bear in mind that services can be terminated as needed at will by Android.
+"Broadcast receiver can listen to BOOT broadcast but how do I start service first time when it is installed and how can I keep it running?"
+Have the BroadcastReceiver call startService() on the service. That will start it running. Eventually, the phone will fall asleep (CPU stops by service is still in RAM), and eventually Android will terminate your process for one reason or another (e.g., low on RAM).
+If you can find a way to get by with a scheduled task, AlarmManager is a better answer:
+http://androidguys.com/?p=4411

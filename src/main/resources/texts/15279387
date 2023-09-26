@@ -1,0 +1,6 @@
+Sources List Generator for Debian. It features the official Debian repositories as well as other 3rd party repos.Main - Free Packages ? 
+Main Sources Repository 
+Contrib - Free software that has non-free dependencies ? 
+Contrib Sources Repository 
+Non-free - Non Free software ? 
+Non-free Sources Repository

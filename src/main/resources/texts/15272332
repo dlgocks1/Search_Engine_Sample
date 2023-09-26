@@ -1,0 +1,35 @@
+Tethering en Argentina con el iPhone OS 3.0 / Usar iPhone como módem bajo OS 3.0
+Las operadoras argentinas han deshabilitado la opción de Internet Tethering o Compartir Internet en el OS 3.0 del iPhone lanzado al mercado el miércoles pasado. No podía ser de otra manera, tanto Mov… como Cla… nos tienen acostumbrados a desiciones de este tipo, deshabilitando un servicio que está disponible en teléfonos de gama mucho más baja como los Nokia N7x.
+Cuando corría la versión 2.x del software del iPhone había hecho el jailbreak para poder hacer Tethering, usando PDAnet, funcionaba bastante bien, aunque tenía un problema con la batería del teléfono, que no se cargaba aún estando enchufado. Luego de la actualización del OS de mi notebook a Leopard 10.5.7 por alguna razón el PDAnet dejó de poder conectarse a la notebook y nunca pude volver a usarlo.
+Si bien ya está liberada la versión jailbreak del iPhone OS 3.0 había bastantes indicios para creer que podría ser fácilmente activado el tethering “oficial” sin tener que hacer todo el proceso de Jailbreak.
+Realmente el sistema es muy sencillo, todo comienza aquí:
+http://www.iphone-notes.de/mobileconfig/
+En esta página podemos ingresar los datos de nuestro prestador, manualmente en el caso de Movistar.
+Son los siguientes:
+- Name: AR – Movistar 
+- APN: internet.gprs.unifon.com.ar 
+- User: internet 
+- Password: internet
+Esto nos enviará a nuestro correo un email con un archivo de cofiguración, que deberemos recibir en el cliente de correo de nuestro teléfono.
+Haciendo click sobre el adjunto recibido el teléfono abre las preferencias y nos pregunta si queremos instalar el “Profile” advirtiéndonos que no está firmado digitalmente.
+Poniendo OK a esta advertencia, se instalará el perfil nuevo y ahora tendremos una pestaña “Activate internet tethering” en el apartado Network de las Preferences/General.
+Al hacer click allí puede aparecer un cartel diciendo que contactemos con el proveedor para activar, pero luego de dar Cancel a ese cartel la opción aparece igual. El teléfono nos lleva a una pantalla donde podemos encender la opción Internet Tethering.
+Lo he probado con USB enchufando por USB el teléfono con una MacBook.
+Mientras el teléfono esté haciendo Tethering la pantalla nos lo indicará así:
+Estando en Network Preferences de la Mac aparecerá un nuevo dispositivo como “Ethernet-adapter”, marcando este como dispositivo de conexión estaremos conectados  a internet 3G.
+La configuración es por DHCP por lo cual es muy sencilla y automática:
+Como siempre: pruébenlo bajo su propio riesgo, no hay garantías de nada. Por otro lado tengan en cuenta que si no tienen contratado un plan de datos el prestador les cobrará los datos por separado y suelen ser muy caros. En mi caso tengo contratado un plan de datos y ya con el PDAnet el Tethering me funcionaba bien sin cargos extra.
+Dejen sus comentarios con sus experiencias personales o instrucciones para hacerlo en PC-Windows.
+Update:
+El perfil instalado puede borrarse fácilmente si no funciona y todo vuelve a la normalidad, queda grabado en Settings/General/profile:
+Update 2: @efedoce nos pasa esta información importante para usuarios Claro en Argentina:
+Update: tethering funcionando en Claro!
+Con los siguientes datos:
+APN: igprs.claro.com.ar 
+Usuario: clarogprs 
+Contraseña: clarogprs999
+Que obtuve de: 
+http://www.celularis.com/tips/configuracion-gprs-y-3g-para-claro-argentina.php
+Gracias @efedoce !
+This entry was posted on Thursday, June 18th, 2009 at 7:10 pmand is filed under Geek World, Mac World, iPhone. You can follow any responses to this entry through the RSS 2.0 feed.
+You can leave a response, or trackback from your own site.

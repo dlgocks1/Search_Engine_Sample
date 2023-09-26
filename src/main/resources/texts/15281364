@@ -1,0 +1,94 @@
+package
+{
+import flash.display.Sprite;
+import flash.display.Bitmap;
+import flash.display.BitmapData;
+import flash.display.Loader;
+import flash.events.Event;
+import flash.net.URLRequest;
+import flash.geom.Matrix;
+import flash.system.Security;
+import flash.system.LoaderContext;
+[SWF(width="465", height="465", frameRate="60", backgroundColor="0x0")]
+public class Main extends Sprite
+{
+private var masks:Vector.<Light> = new Vector.<Light>();
+public function Main()
+{
+Wonderfl.capture_delay(10);
+Security.loadPolicyFile("http://farm3.static.flickr.com/crossdomain.xml");
+var loader:Loader = new Loader();
+loader.contentLoaderInfo.addEventListener(Event.INIT, init);
+loader.load(new URLRequest("http://farm3.static.flickr.com/2434/3594484966_4c09291f5c.jpg"), new LoaderContext(true));
+}
+private function init(event:Event):void
+{
+var loader:Loader = event.currentTarget.loader;
+var matrix:Matrix = new Matrix();
+matrix.scale(465 / loader.width, 465 / loader.height);
+var bd:BitmapData = new BitmapData(465, 465, false);
+bd.draw(loader, matrix);
+var bitmap:Bitmap = new Bitmap(bd);
+addChild(bitmap);
+var maskcontainer:Sprite = new Sprite();
+maskcontainer = new Sprite();
+addChild(maskcontainer);
+for (var i:int = 0; i < 1; i++)
+{
+var mask:Light = new Light();
+masks.push(mask);
+maskcontainer.addChild(masks[i]);
+}
+bitmap.mask = maskcontainer;
+bitmap.cacheAsBitmap = maskcontainer.cacheAsBitmap = true;
+addEventListener(Event.ENTER_FRAME, onEnterFrame);
+}
+private function onEnterFrame(event:Event):void
+{
+for (var i:int = 0; i < masks.length; i++)
+{
+masks[i].move();
+}
+}
+}
+}
+import flash.display.Sprite;
+import flash.display.GradientType;
+import flash.geom.Matrix;
+class Light extends Sprite
+{
+private var speed:Number;
+private var xplus:Boolean;
+private var yplus:Boolean;
+private var RADIUS:int = 80;
+public function Light()
+{        
+var matrix:Matrix = new Matrix();
+matrix.createGradientBox(RADIUS * 2, RADIUS * 2, 0, -RADIUS, -RADIUS);
+var obj:Sprite = new Sprite();
+obj.graphics.beginGradientFill(GradientType.RADIAL, [0x0, 0xFFFFFF], [1.0, 0.0], [0, 255], matrix); 
+obj.graphics.drawCircle(0, 0, RADIUS);
+obj.graphics.endFill();
+addChild(obj);
+init();
+}
+public function init():void
+{
+this.x = Math.random() * 200;
+this.y = Math.random() * 200;
+xplus = (Math.random() > 0.5) ? true : false;
+yplus = (Math.random() > 0.5) ? true : false;
+speed = 1.5;
+}
+public function move():void
+{
+if (xplus) x += speed;
+else x -= speed;
+if (yplus) y += speed;
+else y -= speed;
+if (x - RADIUS <= 0) xplus = true;
+else if (465 <= x + RADIUS) xplus = false;
+if (y - RADIUS <= 0) yplus = true;
+else if (465 <= y + RADIUS) yplus = false;
+}
+}

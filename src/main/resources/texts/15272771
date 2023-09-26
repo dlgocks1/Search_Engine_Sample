@@ -1,0 +1,31 @@
+iPhoneアプリをおすすめするAppBank
+twitlonger : 140字制限を取っ払え！言いたいことが思いっきり書けるtwitter連携サービスだ！
+140字制限？なにそれ？twitlongerはつぶやきを超えてしまった。テキストとリンクだけならどこまでも書き込み可能なtwitterのサービスが表れてしまったのです。
+Twitlongerのaboutページより、これは何？を訳しました。
+Twitlonger は140文字じゃ足りない！って投稿をする際の手段の一つです。 
+Twitlongerの投稿はtwitlongerの発言へのリンクも含んだまま自動的にtwitterアカウントに自動投稿されます。twitpic のテキスト版とお思いください。
+こういうことが可能になります。
+twitter上の発言はこちら 
+Twitter / appbank: twitlonger の test
+Twitlongerだとこうなります。 
+Twitlonger: twitlonger の test
+twitterって本当にすごいサービスなんだなと驚きでぶるっときました。
+と、いうことでとりあえず使ってみました。
+まず、twitterのOAuthのインテグレーションをallowをしました。
+そしてTwitlonger のトップページより発言します。フォームがでかいのが最高です。
+投稿されました！ 
+それでは、発言内容を確認しましょう。 
+投稿された発言はこれですね。
+twitlongerを使って気付いた点
+改行が反映されている。
+twitlonger ページからもreplyができる！
+tweetタップでRTに
+iPhone用ページもある。
+テキストURLの文字列が、自動でリンクになる。
+@ユーザー名リンクも自動でリンクになる。
+iPhone ページはこれ 
+これはかなり使い勝手が良いですね。またAPIを用意していて、こちらのリンク内にあるサービスは公式に連携をアナウンスしていますね。iPhoneアプリだとiTwitterやTweetieやtwittelator proなど、iPhoneクライアントは140文字投稿の手段としてtwitlongerとの連携を導入していますね。tweetdeckにも対応要請中とのこと。ぜひ実現してもらいたい。
+こうやってアイディアを納得のいく形でアイディアの投稿ができる。
+twittelonger、これからは気兼ねなく長文打つぞ！140字、そんなの関係ねぇ！！！ってことでよろしくお願いします！！
+twitlongerはここから。 
+Twitlonger - When you talk too much for Twitter

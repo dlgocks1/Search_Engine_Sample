@@ -1,0 +1,59 @@
+はじめに
+変転の激しいWeb開発の世界の中で、PHPテクノロジはその汎用性と実用性が高く評価されています。PHPは、もともとは1995年にRasmus Lerdorfが作成した単純なスクリプト言語です。それが今では、膨大なサードパーティモジュール、拡張APIライブラリ、オブジェクト指向開発のサポート、名前空間、堅牢なデータベースアクセス、およびその他の機能を伴う、本格的なエンタープライズグレードのWebテクノロジプラットフォームへと進化を遂げました。本稿では、PHPを使ったWebサービスの開発に焦点を当てます。利用できる各種ツールキットの概要や、PHPアプリケーションでWebサービスを作成するのに最適な方法について説明します。 
+PHPの簡単な歴史
+90年代末以降、PHP（ハイパーテキストプロセッサ）は、その単純さとWeb開発向けの仕様で人気を博しました。PHPは現在、2000万を超えるWebサイト（資料：『PHP: PHP Usage Stats』）やWeb製品で使われています。Facebookなどの人気のサイトや、JoomlaやWordpressなどのコンテンツ管理ツールでもPHPが使われています。PHPはフリーソフトウェアで、PHPライセンス（GNUライセンスとは異なる）のもとでリリースされています。 
+PHPテクノロジはオープンソース構造のため、多くの新規企業や中小企業がそのWebプレゼンスやオンラインビジネスの構築・維持に使用する各種のオープンソーステクノロジやフリーテクノロジに無理なく適合します。多くのサイトは、LAMP（Linux、Apache、MySQL、PHP）で動作します。これは、OSはLinuxベース、WebサーバはApache、データベースはMySQL、そしてアプリケーションサーバロジックまたはサイトの動的部分はPHPによって処理されることを意味します。この組み合わせは、Webビジネスの開発とホスティングを最小限の直接的なコストで実現できる最高のフリーソースソリューションです。PHPテクノロジはスケーラブルであり、数百万ものトランザクションやリクエストを処理できます。しかし、オープンソースという特性と正式なサポートの欠如から、大企業では依然としてあまり人気がありません。 
+PHPは当初の機能から飛躍的に進化し、エディション5では完全なオブジェクト指向言語になっています。PHPは、非常に活発な開発者コミュニティを持つPHPグループによってサポート、管理、およびメンテナンスが行われており、ほとんどのオンラインホスティングプロバイダにとって事実上の標準になっています（以前は大多数のプロバイダがHTMLの動的レンダリングを主にCGIで行っていました）。 
+オブジェクト指向であることに加えて、この言語には、ありとあらゆるWeb開発タスクを支援するための多くの関数、モジュール、およびライブラリがあらかじめ組み込まれています。PHPは、ビルドインのデータベースサポート、エラー／例外処理、高度な文字列処理ライブラリ、および強力な正規式エンジンを装備しています。ネットワーキングと電子メールサポート、セッション処理、Webサービスツールキットなども、標準機能として装備しています。 
+Webサービス標準 ― SOAP、XML RPC、およびREST
+Webサービスについて書かれた書籍や記事は数多くあり、私も「Enterprise Java Contract-First vs. Contract-Last Web Services」という記事でこのテクノロジを解説しました。PHPを使ったWebサービスの開発と利用について特に詳しく説明している書籍もいくつかあります。本稿の目的上、Webサービス開発の各種標準についてまず簡単に触れ、その後で、PHPでの実際の実装について詳しく説明します。 
+PHP（他の言語でも同様）でのWebサービスの開発には、SOAP、XML RPC、およびRESTという主に3つの方法があります。 
+SOAP（Simple Object Access Protocol）
+SOAP（Simple Object Access Protocol）はw3c標準であり、現代のエンタープライズの世界で人気の高いWebサービス開発方法です。SOAPでは、クライアント-サーバ通信のためのXMLドキュメントとXMLスキーマが規定され、サービスは複雑なXMLドキュメントのマーシャリングおよびアンマーシャリング（通常は、サービスコンシューマ側およびサービスプロバイダ側のネイティブなオブジェクト構造に対して行う）に基づきます。SOAPは最新のWebサービス（WS）方法で、SOAPによる開発では、通常、「コントラクトファースト（Contract First）」方式を前提とします。これは、スキーマと通信用のXMLドキュメントが最初に処理され、ネイティブコードとロジック開発が最後に処理される方式です。 
+XML RPC
+XML RPCもXMLに基づきますが、SOAPより比較的単純なWebサービスの開発方法です。RPC（Remote Procedure Call）では、特定のメソッドがクライアントからサーバ上で呼び出され、結果は一般に関数の戻り変数です。RPC WSは、通常、Webサービスを従来のアプリケーションにすばやく簡単に追加でき（実行するロジックが既に開発されているため）、コントラクトラスト（Contract Last）サービスを行います。 
+REST（REpresentational State Transfer）
+Webサービスを開発する3番目の方法はREST（REpresentational State Transfer）です。RESTはSOAPと同様、サーバへのHTTPリクエストと、レスポンスで返されるXMLドキュメントの処理を伴います。ただし、SOAPとは異なり、RESTでのデータの使用方法について、具体的な標準や定義はありません。RESTとRPCは、SOAPに比べると古い方法です。SOAPのサポートはPHPのバージョン5で追加されましたが、RESTとRPCのサポートは、サードパーティのツールキットで以前から存在していました。 
+PHP Webサービスの開発
+標準のPHPディストリビューションには、Webサービスの作成および利用を促進するための各種ツールキットがあり、中には最近追加されたばかりのものもあります。ある程度歴史のあるサードパーティのツールキットは、本稿の執筆時点（2009年4月）では、非常に安定しているか、更新が止まっています。例えば、SOAPベースの開発で人気の高いNuSOAツールキットは、現在は安定していますが、2005年7月以降は更新されていません。NuSOAP（0.7.1）プロジェクトは現在sourceforge.netによってホストされており、ここしばらくは更新されていません。また、XMLRPCサービスの開発で使われるphpxmlrpc（バージョン2.2.2）ツールキットもsourceforge.netでホストされていますが、最新の更新は2009年3月16日です。Zend Frameworkにはさらに別のサードパーティツールキットが付属しており、クライアントとサーバの両方を含むXML-RPC実装を提供します。 
+最新のPHPディストリビューションには、WS開発用に設計された2つのネイティブの拡張モジュール（ext/php_xmlrpc、ext/php_soap）が付属しています。これらの拡張モジュール（またはいずれか1つ）をインストールして、php.iniの中で有効にする必要があります。 
+SOAP PHP Webサービスの作成
+本稿の例は、PHP 5およびApache 2 Webサーバを使って作成されています。そこで、実際の実装に進む前に、Apache WebサーバとPHPをインストールしてください。PHPのインストール時に、Apacheの使用を指定し、xml-rpcおよびxml-soap拡張モジュールを有効にします。 
+本稿の例では、ネイティブの拡張モジュールを使用しました。XML-RPCおよびSOAP用のネイティブの拡張モジュールの使い方は単純です。コントラクトファーストサービスの作成方法がわかっていて、WSDLを理解しているのであれば、WSDLファイルを作成し、SOAPサーバを構築し、WSDLのURLを渡すことができます。SOAPサーバは非WSDLモードで構築することもできます。その場合は、nullおよび名前空間で使用するURLを渡します。SOAPの概念に精通していない場合は、後述のXML-RPC方式を使用できます。 
+以下の例では、数値配列をパラメータとして取り、すべての要素の合計を返すWebサーバを作成します。最初はSOAP方式で作成し、次にXML-RPC方式で作成します。 
+SOAP実装
+SOAP方式でサービスサーバを作成するには、通信構造を定義するWSDLファイルを作成し、次に、サーバとクライアントのPHPコードファイルを作成する必要があります。 
+WSDLファイルの例を次に示します。太字部分で、サーバは配列を受け取り、文字列を返すことに注意してください。また、末尾部分では、着信リクエストと有効なオペレーション名（getHW）に対してサーバのエンドポイントが指定されていることにも注意してください。 
+<?xml version ='1.0' encoding ='UTF-8' ?> 
+<message name='getHWRequest'> 
+<part name='id' type='xsd:array'/> 
+</message> 
+<message name='getHWResponse'> 
+<part name='Result' type='xsd:string'/> 
+</message> 
+<portType name='HWPortType'> 
+<operation name='getHW'> 
+<input message='tns:getHWRequest'/> 
+<output message='tns:getHWResponse'/> 
+</operation> 
+</portType> 
+<binding name='HWBinding' type='tns:HWPortType'> 
+<soap:binding style='rpc' transport='http://schemas.xmlsoap.org/soap/http' /> 
+<operation name='getHW'> 
+<soap:operation soapAction='urn:localhost-hw#getHW'/> 
+<input> 
+<soap:body use='encoded' namespace='urn:localhost-hw'
+encodingStyle='http://schemas.xmlsoap.org/soap/encoding/'/> 
+</input> 
+<output> 
+<soap:body use='encoded' namespace='urn:localhost-hw'
+encodingStyle='http://schemas.xmlsoap.org/soap/encoding/'/> 
+</output> 
+</operation> 
+</binding> 
+<service name='HWService'> 
+<port name='HWPort' binding='HWBinding'>
+<soap:address location='http://localhost/soap-server.php'/>
+</port> 
+</service>
+</definitions>

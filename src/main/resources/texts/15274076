@@ -1,0 +1,116 @@
+ActiveRecord::Base.establish_connection(
+:adapter => 'mysql',
+:host => 'collet',
+:database => 'hoge_development',
+:username => 'minase',
+:password => 'password_string'
+)
+基本
+1 Class <-> 1 Table でマッピング
+Ruby :: ActiveRecord::Base を継承するとマッピングが適用される
+クラス名 + 's' という名称のテーブルとマッピングされる
+↑ActiveSupport? の Inflector#pluralize で単数形 -> 複数形の変換を行っているので、そんなに単純ではなかった。"man" が "men" になったり "child" が "children" になったりもする*1。
+例えば…
+-- グループテーブル 
+DROP TABLE IF EXISTS groups;
+CREATE TABLE IF NOT EXISTS groups (
+id INTEGER UNSIGNED NOT NULL,
+name CHAR(128) NOT NULL,
+PRIMARY KEY(id),
+UNIQUE (name),
+INDEX groups_idx_id (id)
+) TYPE=MyISAM DEFAULT CHARACTER SET ujis;
+-- ユーザテーブル
+DROP TABLE IF EXISTS users;
+CREATE TABLE IF NOT EXISTS users (
+id INTEGER UNSIGNED NOT NULL AUTO_INCREMENT,
+group_id INTEGER UNSIGNED NOT NULL, -- FOREIGN KEY groups(id)
+name CHAR(128) NOT NULL,
+PRIMARY KEY(id),
+UNIQUE (name),
+INDEX users_idx_id (id)
+) TYPE=MyISAM DEFAULT CHARACTER SET ujis;
+INSERT INTO groups(id, name) VALUES
+(0, 'root'), (100, 'ferret'), (200, 'turtle');
+INSERT INTO users(name, group_id) VALUES
+('minase', 0), ('jill', 100), ('kotaro', 100), ('ichiro', 200);
+というテーブルを定義してあるとして…
+class User < ActiveRecord::Base; end
+と記述する事で、User クラスは users テーブルと自動的にマッピングされる。
+値の取得/格納を行うには、カラム名をメソッドとして投げれば良い。*2
+res = User.find(1) # id = 1 のレコードを取得
+puts res.name #=> minase
+ID指定
+User.find(1) # ID 指定で一レコード取得する(User オブジェクトを単体で返す)
+User.find(1, 2) # ID 指定で複数レコードを取得する(User オブジェクト群を Array で返す)
+全レコード抽出
+User.find(:all) # 全レコードを取得する(User オブジェクト群が Array で返る)
+先頭レコードのみ抽出
+# 全レコードを取得し、先頭レコードのみ Pref オブジェクトで返す
+User.find(:first)
+# id > 2 のレコードを検索し、先頭レコードのみ Pref オブジェクトで返す
+res = User.find(:first, :conditions => ["id > 2"])
+puts res.name #=> kotaro
+オプション指定
+カラム指定 SELECT
+res = User.find(:first, :select => "name AS username")
+puts res.username #=> minase
+WHERE 埋め込み/プレースホルダ
+User.find(:all, :conditions => ["name = 'minase' AND group_id = 0"])
+User.find(:all, :conditions => ["name = ? AND group_id = ?", "minase", 0])
+WHERE 埋め込み＠横着版
+メソッド名を [find_by_ + カラム名] とし、引数に検索文字列を渡すと :conditions を使わずに WHERE 出来る。[find_by_ + カラム名1 + _and_ + カラム名2] という使い方も可。
+User.find_by_name("minase")
+User.find_by_name_and_deleted("minase", 0)
+ORDER BY
+res = User.find(:first, :order => "name ASC")
+puts res.name #=> ichiro
+LIMIT
+rres = User.find(:all, :limit => 2)
+puts res.size #=> 2
+OFFSET
+res = User.find(:first, :offset => 1)
+puts res.name #=> jill
+JOIN
+# JOIN 句を埋め込む
+User.find(:all, :joins => "LEFT JOIN groups ON group_id = groups.id")
+大抵は :select と合わせて使う事になります。ここまでする位なら find_by_sql を使ったほうが良いと思いますが。プレースホルダも使えんし。
+ちなみに、JOIN して取得したオブジェクトは自動的に :readonly => true される為、修正を加えたい場合は find 時に :readonly => false をセットする必要があります。
+Ruby :: ActiveRecord のキモと言える機能で、クラス定義時にリレーション表現を記述しておく事で、Ruby :: ActiveRecord::Base#find に :include オプションを渡すだけで、外部参照先テーブルと自動的に JOIN してくれる。結合対象レコードは、インスタンス変数にオブジェクトとして格納され、クラス定義時に指定したシンボル名でアクセス出来る。
+また、関連付けさえ出来ていれば Ruby :: ActiveRecord 側で ON DELETE CASCADE や ON DELETE SET NULL 相当の処理を行う事も可能。
+[1:1] has_one, belongs_to
+class User < ActiveRecord::Base
+has_one :user_detail
+end
+class UserDetail < ActiveRecord::Base
+belongs_to :user
+end
+res = User.find_by_name("kotaro", :include => [:user_detail])
+puts res.user_detail.phone #=> 00-0000-0000
+[1:n] has_many
+class User < ActiveRecord::Base
+has_many :item
+end
+class Item < ActiveRecord::Base
+belongs_to :user
+end
+User.find_by_name("kotaro", :include => [:item]).item.each {|i| puts i.name}
+#=> hammock
+#=> petbottle
+[n:n] has_and_belongs_to_many
+class User < ActiveRecord::Base
+has_and_belongs_to_many :books
+end
+class Book < ActiveRecord::Base
+has_and_belongs_to_many :users
+end
+# minase's books
+minase = User.find_by_name("minase")
+minase.books.each {|b| puts b.title}
+#=> Rubyアプリケーションプログラミング
+#=> MySQL全機能リファレンス
+#=> 実践ハイパフォーマンスMySQL
+# users who has this isbn[4791611101]
+ferret = Book.find_by_isbn("4791611101")
+ferret.users.each {|u| puts u.name}
+#=> kotaro

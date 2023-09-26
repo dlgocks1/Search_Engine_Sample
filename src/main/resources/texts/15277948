@@ -1,0 +1,11 @@
+Subject:
+[becky-ml:25876] 〔再送〕GmailをIMAPで受信するとフリーズ
+From:
+ghoti <iintltl.2015@...>
+Date:
+Fri, 27 Feb 2009 10:43:10 +0900
+X-Mailer:
+Becky! ver. 2.50.01 [ja]
+Message-Id:
+<20090227103736.1CF5.DE577DDB‐at‐gmail.com>
+申し訳ありません。 Gmailからのメールが文字化けしてるとの指摘をいただきましたので、 POPに変更し再度投稿させていただきます。 ご迷惑をおかけし申し訳ありません。 ----ここから 今まではPOP受信をしていましたので、バージョンアップが影響しているのかど うか不明なのですが、 GmailをIMAP接続すると、Becky!がフリーズ（暴走）してしまいます。 プロトコルログを見る限り >>> Connecting to "imap.gmail.com" (SSL/TLS) [2009/02/27 8:54:10] <<< * OK Gimap ready for requests from xxx.xxx.xxx.xxx 4if39376fge.54 0000 CAPABILITY * CAPABILITY IMAP4rev1 UNSELECT IDLE NAMESPACE QUOTA XLIST CHILDREN XYZZY 0000 OK Thats all she wrote! 4if39376fge.54 0001 LOGIN ******** ******** 0001 OK iintltl.2015@... authenticated (Success) 0002 NAMESPACE * NAMESPACE (("" "/")) NIL NIL 0002 OK Success 0003 LIST "" "INBOX" * LIST (\HasNoChildren) "/" "INBOX" 0003 OK Success 0004 LIST "" * * LIST (\HasChildren) "/" "IMAP" * LIST (\HasNoChildren) "/" "IMAP/B2" * LIST (\HasNoChildren) "/" "INBOX" * LIST (\HasNoChildren) "/" "Trash" * LIST (\Noselect \HasChildren) "/" "[Gmail]" * LIST (\HasNoChildren) "/" "[Gmail]/&MFkweTBmMG4w4TD8MOs-" * LIST (\HasNoChildren) "/" "[Gmail]/&MLQw33ux-" * LIST (\HasNoChildren) "/" "[Gmail]/&MLkwvzD8TtgwTQ-" * LIST (\HasNoChildren) "/" "[Gmail]/&Tgtm+DBN-" * LIST (\HasNoChildren) "/" "[Gmail]/&j,dg0TDhMPww6w-" * LIST (\HasNoChildren) "/" "[Gmail]/&kAFP4W4IMH8w4TD8MOs-" 0004 OK Success 0005 STATUS "INBOX" (MESSAGES UNSEEN UIDNEXT) * STATUS "INBOX" (MESSAGES 48 UIDNEXT 49 UNSEEN 0) 0005 OK Success と正常接続されるのですが、受信箱をクリックしたとたん、暴走状態にはいります。 プロトコルログにあるように"IMAP/B2"というフォルダを作成し、becky-ml@rimarts 宛てのメールを振り分ける設定を行った後からこのような状況になっている感じです。 振り分け条件を削除しても状況は変わりません。 どなたかお分かりになる方はいらっしゃるでしょうか？ -- ghoti <iintltl.2015@...>

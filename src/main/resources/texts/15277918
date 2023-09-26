@@ -1,0 +1,10 @@
+またしてもIE。
+ラジオボタンを動的に生成する場合、デフォルトとか以前の結果とかをチェックした状態で表示するために
+var myRadio = document.createElement('input'); 
+myRadio.type = 'radio';
+myRadio.value = 'hoge';
+myRadio.checked = true;
+とかやるじゃないですか。
+IEの場合、これではチェックが付かない。
+ドキュメントにappendした後に変更する必要があるんだって。
+いい加減にしてくれよIE

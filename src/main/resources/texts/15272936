@@ -1,0 +1,41 @@
+ひとつのDIVボックス内に複数のボックス要素があり、それらをまとめてセンタリングしたい時ってありますよね。実は今までやり方知らなくて、外側のDIVボックスにmargin-left付けたりして力業で対応してたんですが、方法を探してみたところちゃんとしたやり方があるようです。2つの方法を見つけたのですが、その内の1つを実際にソースを書く機会があったので、せっかくなのでダウンロードできるようにしておきました。そんなに面倒なプロセスでもないですが、よければ使ってください。
+デモページとソースのダウンロード
+上記“View”よりデモページを見れます。んで“Download”よりソースをまとめてダウンロードできます。圧縮ファイル内にはいつも使い回すCSSリセットやフォント系のCSSファイルも入ってますが、このへんは必須項目ではありません。サクっと書いただけなので色々と保証はできませんが、多分IEでも大丈夫です。
+センタリングの手法について
+複数のブロックをどうまとめてセンタリングしているかというと、詳細は下記参考記事でも書かれていますが、基本的には“display: inline-block;”という記述によって実現しています。ようするにインライン要素のままブロック要素としての性質を持たせるというもの。こんなプロパティ知りませんでした。ただしFireFoxでは3からの実装であるため、FireFox2以前のヴァージョンととIE対策のために数行増えてます。大事な部分だけ下記に抜粋しておきます。
+.next-btn { 
+width:700px; 
+background:#7bafe0 url(../images/boxcenter_btn_area_bg.gif); 
+margin:10px auto; 
+clear:both; 
+text-align:center; 
+padding:3px 0; 
+}
+.next-btn li { 
+display: -moz-inline-box; 
+display: inline-block; 
+/display: inline; 
+/zoom: 1; 
+background:url(../images/boxcenter_btn.gif) repeat-x; 
+margin:3px 10px; 
+padding:3px; 
+font-family: “Lucida Grande”, “Hiragino Kaku Gothic Pro”, “ヒラギノ角ゴ Pro W3″, “メイリオ”, Meiryo, “ＭＳ Ｐゴシック”, Geneva, Arial, Verdana, sans-serif; 
+font-size: 12px; 
+line-height: 150%; 
+} 
+.next-btn li a { 
+display:block; 
+width:100px; 
+text-shadow: 1px 1px 2px #FFF; 
+} 
+.next-btn a:hover { 
+background:url(../images/boxcenter_btn_hov.gif) repeat-x; 
+color:#FFF; 
+text-shadow: 1px 1px 2px #000; 
+}
+大事な部分は前述の通り“display: inline-block;”です。ただしこれだけではSafariとFireFox3以降にしか対応できないので（Operaは分かりません）、FireFox2に対応させるために“display: -moz-inline-box;”を、IEに対応させるために“/display: inline;”と“/zoom: 1;”を記述しています。
+備考
+とはいうものの、実はSafari4とFireFox3.5、IE6でしか実際には確認していません。「ウチの環境だと崩れるぞこの××××！」とかなっちゃった人は、ご一報頂けるとうれしゅうございます。
+参考記事
+不特定の数の横に並ぶブロック要素をセンタリングさせる | CSS-EBLOG・・・この記事の参考となった記事。
+floatで並べたリストのセンタリン | hail2u.net・・・こちらは別の手法による複数ボックスセンタリング。

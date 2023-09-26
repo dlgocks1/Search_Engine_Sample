@@ -1,0 +1,13 @@
+プラグイン †
+Tracの標準機能を拡張するために、多くのプラグインが提供されています。
+いろいろ便利なものがあるので整理しておきます。
+↑
+Trac Web Admin †
+ブラウザ上からTracの設定を行うためのツールです。
+trac-adminコマンドでできることがブラウザからできるようになります
+↑
+インストール †
+ダウンロードしてきたファイルを、setuptoolsを使ってインストールします 
+mv TracWebAdmin-0.1.2dev_r4240-py2.4.egg.zip TracWebAdmin-0.1.2dev_r4240-py2.4.egg
+easy_install --always-unzip TracWebAdmin-0.1.2dev_r4240-py2.4.egg
+↑

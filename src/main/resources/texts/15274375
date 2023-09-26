@@ -1,0 +1,218 @@
+概要
+（注：
+.NET Framework 3.0 では、
+Windows.Forms よりも高機能な GUI 構築基盤
+Windows Presentation Foundation が追加されました。
+.NET Framework 3.0 をインストールしている場合には、そちらを使う方が幸せになれるかも。
+ここで説明するのは、.NET Framework 3.0 以前に主流だった話になります。
+）
+System.Windows.Forms 名前空間以下に、
+Windows の GUI （graphical user interface）アプリケーション（要するに、マウスを使ってグラフィカルに操作するアプリケーション）を作成するためのクラス群が用意されています。
+C 言語や C++ 等では、
+GUI アプリケーションの作成は少々敷居が高かったのですが、
+C# や Java ではずいぶんと敷居が下がっています。
+これは、GUI アプリケーション開発とオブジェクト指向の親和性が非常に高いためで、
+一般に、オブジェクト指向言語を用いると GUI アプリケーション開発が容易になります。
+というか、むしろ、
+オブジェクト指向の歴史は GUI アプリ開発の歴史とともに進歩してきた面も強いです。
+なので、
+「C# で学ぶオブジェクト指向」
+や
+「C# の特徴的な機能」
+で C# とオブジェクト指向を勉強した後ならば、
+難しい話はもはや何も残っていません。
+また、Visual Studio 等の統合開発環境を利用すれば、
+ボタンやリストボックス等の GUI 部品の配置をマウスを使ってグラフィカルに行うことができ、
+プログラミングの作業としてはイベントハンドラの中身を実装するだけで GUI アプリケーションを開発できます。
+（ちなみに、System.Windows 以下にあるクラスは、Windows 環境に依存するもので、
+.NET Framework の標準化仕様には含まれていません。）
+GUI 部品
+今、皆様がお使いであろうウェブブラウザを見てください。
+メニューやツールバーがありますね。
+さらに、インターネットオプションなんかを開けば、
+ボタンやチェックボックス等が並んでいます。
+これら、メニューやボタン等、それに、ウィンドウそのものも全てオブジェクトです。
+System.Windows.Forms 名前空間以下には、
+Form や Menu、Button といった名前のクラスがあり、
+そのインスタンスを作ることで GUI アプリケーションを構築していきます。
+Form
+まず、GUI アプリケーションのウィンドウそのもの（.NET Framework ではフォームと呼びます）について説明します。
+.NET Framework では、Form というクラスがそれにあたります。
+ボタンも何もないただのフォームが1枚現れるだけなのであまり意味はありませんが、
+最小の GUI アプリケーションは以下のようなものになります。
+using System;
+using System.Drawing;
+using System.Windows.Forms;
+class Program
+{
+public static void Main()
+{
+Application.Run(new Form());
+}
+}
+これを実行すると、
+何一つ設定をいじっていないので、図1のようなデフォルトのサイズのフォームが1枚表示されます。
+（300×300ドットが標準みたい。）
+ちなみに、
+これをコマンドプロンプトから
+「C# コンパイラ」
+を使ってコンパイルする場合には、
+/target:winexe というオプションを付けてください。
+（そうしないと、プログラムを実行するたびにコマンドプロンプトが表示されてしまいます。）
+csc /target:winexe Program.cs
+それでは、次に、フォームのサイズを変えたり、
+タイトルバーにテキストを表示させたりしてみましょう。
+フォームのサイズやタイトル文字は、全てプロパティになっています。
+Width プロパティがフォームの幅、
+Height が高さ、
+Text がタイトル文字になります。
+これらを設定し、以下のようなプログラム作成・コンパイルし、実行すると、
+図2のようなフォームが表示されるはずです。
+using System;
+using System.Drawing;
+using System.Windows.Forms;
+class Program
+{
+public static void Main()
+{
+Form f = new Form();
+f.Width = 200;
+f.Height = 200;
+f.Text = "サンプルプログラム";
+Application.Run(f);
+}
+}
+ただし、上述のようなプログラミングスタイルは、説明の取っ掛かりとしては分かりやすいのですが、
+通常はこのスタイルでは GUI アプリケーションを作りません。
+以下のコードに示すように、
+フォームごとに Form クラスを継承した派生クラスを作るスタイルが一般的です。
+using System;
+using System.Drawing;
+using System.Windows.Forms;
+class Program
+{
+public static void Main()
+{
+Application.Run(new Form1());
+}
+}
+class Form1 : Form
+{
+public Form1()
+{
+this.Width = 200;
+this.Height = 200;
+this.Text = "サンプルプログラム";
+}
+}
+GUI 部品を Form に追加
+前節のままだと、単にフォームが表示されただけで、あとできることというと、
+最小化・最大化・終了くらいのものです。
+まともな GUI アプリケーションにするためには、
+ボタン等の部品を追加していく必要があります。
+GUI 部品の作成
+ここではボタンを例にして説明しましょう。
+ボタンは Button クラスのインスタンスとして作成できます。
+幅や高さ、ボタンに表示される文字を、
+ぞれぞれ Width, Height, Text プロパティで設定できるあたりは Form クラスと全く同じです。
+あるいは、Size プロパティを使えば、幅と高さを同時に指定できます。
+また、ボタンを置く位置は Location プロパティを使って指定します。
+Button button1;
+button1 = new Button();
+button1.Location = new Point(10, 10);
+button1.Size = new Size(170, 30);
+button1.Text = "ここを押して";
+Form に追加
+これだけでは、ボタンを1つ作っただけで、まだフォーム上に表示されません。
+フォームにボタンを登録する必要があります。
+.NET Framework では、
+フォーム上に表示すべき部品のことをコントロールと呼び、
+Form クラスはこのコントロールの一覧である Controls というプロパティを持っています。
+そして、Controls に対して、Add メソッドを呼び出すことで、
+コントロール（ここでの例の場合、ボタン）を追加することができます。
+using System;
+using System.Drawing;
+using System.Windows.Forms;
+class Program
+{
+public static void Main()
+{
+Application.Run(new Form1());
+}
+}
+class Form1 : Form
+{
+Button button1;
+public Form1()
+{
+this.Width = 200;
+this.Height = 80;
+this.Text = "サンプルプログラム";
+this.button1 = new Button();
+this.button1.Location = new Point(10, 10);
+this.button1.Size = new Size(170, 30);
+this.button1.Text = "ここを押して";
+this.Controls.Add(this.button1);
+}
+}
+これをコンパイル・実行すると図3のようなフォームが表示されるはずです。
+イベントハンドラの設定
+前節の段階でもまだあまり意味のある GUI アプリケーションではありません。
+なんせ、ボタンを押しても何も起こりません。
+ここで、
+「イベント」
+で説明した事が生きてきます。
+「ボタンが押された」というのはイベントであり、
+「ボタンが押されたときになにか処理をしたい」というのはまさにイベントドリブン型のプログラムになります。
+実際、.NET Framework の Button クラスには Click という名前のイベントがあり、
+これに対してイベントハンドラを登録することで、
+ボタン押下時の処理を指定します。
+例として、ボタンが押されるたびに、押した回数をボタン上に表示するプログラムを作ってみましょう。
+以下にソースを示します。
+先ほどから追加したのは、背景色を変えて強調してある部分だけです。
+using System;
+using System.Drawing;
+using System.Windows.Forms;
+class Program
+{
+public static void Main()
+{
+Application.Run(new Form1());
+}
+}
+class Form1 : Form
+{
+Button button1;
+int count = 0;
+public Form1()
+{
+this.Width = 200;
+this.Height = 80;
+this.Text = "サンプルプログラム";
+this.button1 = new Button();
+this.button1.Location = new Point(10, 10);
+this.button1.Size = new Size(170, 30);
+this.button1.Text = "ここを押して";
+this.button1.Click += new EventHandler(this.Button1_Click);
+this.Controls.Add(this.button1);
+}
+void Button1_Click(object sender, EventArgs e)
+{
+this.count++;
+this.button1.Text = this.count.ToString();
+}
+}
+これでようやく、（ぎりぎりなんとか）胸を張って GUI アプリケーションといえる物が完成しました。
+見ての通り、かなりシンプルな作りになっています。
+（C# での GUI アプリケーション開発は非常に簡単！）
+ここではボタンしか使いませんでしたが、
+System.Windows.Forms 名前空間以下には、さまざまなコントロール（GUI 部品）が用意されています。
+（詳細は MSDN 等のリファレンスページを参照。）
+また、コントロールを自作することも可能です。
+まとめ
+フォームにコントロール（ボタン等の GUI 部品）を作るには、
+以下のような手順を踏みます。
+コントロールの作成（button1 = new Button();）
+コントロールの設定変更（button1.Location = new Point(10, 10);）
+イベントハンドラの作成・登録（button1.Click += new EventHandler(Button1_Click);）
+コントロールをフォームに追加（Controls.Add(button1);）

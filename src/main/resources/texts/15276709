@@ -1,0 +1,20 @@
+新はてなブックマーク件数取得 API を使って自分のページに件数を埋め込む最も簡単な方法 
+はてなブックマークから新しい件数取得 API が提供されているようです！
+(開発者さま向け)はてなブックマーク件数取得APIに新しいAPIを追加 - はてなブックマーク日記 - 機能変更、お知らせなど
+この API のいいところは
+JSONP に対応しているところでしょうね！
+すばらしい！
+というわけで、
+HTML だけで、件数を埋め込む例を書いてみたよ！
+やり方は簡単
+callback パラメータに document.write を指定するだけ！
+<script src="http://api.b.st-hatena.com/entry.count?url=http%3A%2F%2Fwww.example.com%2F&callback=document.write"></script>件のブックマークがあります。
+あとは、適当にリンクとか張って
+<a href="http://b.hatena.ne.jp/entry/www.example.com/">
+<script src="http://api.b.st-hatena.com/entry.count?url=http%3A%2F%2Fwww.example.com%2F&callback=document.write"></script>件のブックマークがあります。
+</a>
+完成です！
+わお
+これなら JavaScript を書けない人でも HTML の知識あがあれば OK ですね！
+ラクチンですね！
+Permalink | コメント(0) | トラックバック(1) | 13:05

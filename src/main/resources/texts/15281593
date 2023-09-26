@@ -1,0 +1,15 @@
+Fun with SourceForge.net updates
+Recently, SourceForge.net has updated their release system. The
+change does not seem to be that bad (besides the fact that people
+got used to the old system and need to learn something new), but
+the change completely broke their RSS exports for file
+releases.
+But hey, you have freedom of choice! You can either use old RSS
+feeds, which are not
+being updated or new RSS feeds, which duplicate
+same data for all entries. Sorry, these links require
+login.
+At the end I've found a way - you can download whole
+project RSS, where you ignore most content, but get just the
+file names and then download separately 
+RSS for each file. And now you have complete data!

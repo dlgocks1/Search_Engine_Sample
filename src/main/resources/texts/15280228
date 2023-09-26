@@ -1,0 +1,21 @@
+OpenSolaris 2009.06 がリリースされました。 
+以下が新機能でしょうかね。私はあまり詳しくないので、詳しい人にどんどん日本語で書いてほしいです ^^;) 
+Network Virtualization with Crossbow 
+Turn any host into a SCSI target with COMSTAR 
+Host virtual guests using xVM Hypervisor or LDoms 
+SPARC® support for Distro
+Constructor, Auto
+Install, and Snap
+Intel Xeon 5500 processor
+support with deep power management 
+MySQL and PHP DTrace Probes in the WebStack 
+Improved usability of the package management system
+ZFS Time Slider Snapshot
+Management 
+Contribute new applications with SourceJuicer
+いつものように VirtualBox にインストールしてみます。いつもと同じ手順でインストールできます。 
+Mac
+OS X で VirtualBox に挑戦
+インストール後の起動画面です。 
+起動後に Guest Additions のインストールを行ないます。デバイス>Guest Additions
+のインストールを選択します。

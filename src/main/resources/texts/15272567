@@ -1,0 +1,5 @@
+The problem of void calls, or null pointer dereferencing, plagues programs written in any language using pointers or references with a "null" or "void" value. Tony Hoare recently described it as his "one-billion dollar mistake". The problem is very simple to state: in the typical object-oriented call
+x.f (args)
+x, a reference, should normally denote an object but can be void, in which case the call will fail and produce an exception, often leading to a crash. This is one of the main sources of instability in today's software.
+The void-safety mechanism of Eiffel, as defined in the ISO/ECMA standard (2006), is now fully implemented in EiffelStudio and guarantees the absence of void calls. With version 6.4, beyond the mechanism itself, all libraries have been updated to be void safe.
+With Alexander Kogtenkov and Emmanuel Stapf I wrote an article describing not only the principles but also the delicate engineering issues that we have encountered and tried to address in making Eiffel void-safe. An abstract, and a link to the PDF of the article, can be found at http://bertrandmeyer.com/tag/void-safety/.

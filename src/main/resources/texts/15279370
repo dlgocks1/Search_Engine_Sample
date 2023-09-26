@@ -1,0 +1,13 @@
+2009年8月11日
+sakuraインターネットにrailsを入れる
+rails2.3.3 だとpublic/dispatch.cgiが作成されないようなので、rails2.2.2で行います。 rails2.3.3をインストールしちゃったので、一旦アンインストールして 2.2.2をインストール gem uninstall rails gem install rails --version 2.2.2 railsアプリ用のディレクトリを作成。 mkdir rails-apl rails-aplにrailsを生成する。 cd rails-apl rails todo -d mysql config/environment.rbを設定。 ↓を追加 # Be sure to restart your server when you modify this file $LOAD_PATH.push("/home/XXX/lib/") $LOAD_PATH.push("/home/XXX/lib/ruby") ENV['GEM_HOME'] ||= '/home/XXX/lib/ruby/gem' ENV['RAILS_RELATIVE_URL_ROOT']="/Todo" さらに↓を追加 # config.gem "aws-s3", :lib => "aws/s3" config.gem "mysql", :version => "2.7" public/.htaccessを設定と思ってたら、 生成されてないのでREADMEの 「== Apache .htaccess example for FCGI/CGI」部分をコピって .htaccessをpublic/に作成。 その後、以下のように修正。 # General Apache options #AddHandler fastcgi-script .fcgi #AddHandler cgi-script .cgi #Options +FollowSymLinks +ExecCGI # If you don't want Rails to look in certain directories, # use the following rewrite rules so that Apache won't rewrite certain requests # # Example: # RewriteCond %{REQUEST_URI} ^/notrails.* # RewriteRule .* - [L] # Redirect all requests not available on the filesystem to Rails # By default the cgi dispatcher is used which is very slow # # For better performance replace the dispatcher with the fastcgi one # # Example: # RewriteRule ^(.*)$ dispatch.fcgi [QSA,L] RewriteEngine On # If your Rails application is accessed via an Alias directive, # then you MUST also set the RewriteBase in this htaccess file. # # Example: # Alias /myrailsapp /path/to/myrailsapp/public # RewriteBase /myrailsapp RewriteRule ^$ index.html [QSA] RewriteRule ^([^.]+)$ $1.html [QSA] RewriteCond %{REQUEST_FILENAME} !-f RewriteRule ^(.*)$ dispatch.cgi [QSA,L] # In case Rails experiences terminal errors # Instead of displaying this message you can supply a file here which will be rendered instead # # Example: # ErrorDocument 500 /500.html ErrorDocument 500 "Application errorRails application failed to start properly" 改行に気をつける。。。 tmpとlogのパーミッションを変更 cd rails-apl/Todo chmod -R o+w log tmp ls -l config/database.ymlの設定 development: adapter: mysql encoding: utf8 database: xxxxx pool: 5 username: xxxxx password: password host: mysqlXX.db.sakura.ne.jp シンボリックリンクを張る ln -s $HOME/rails-apl/todo/public $HOME/www/todo これで、http://xxxxx.sakura.ne.jp/Todo/にアクセスすると 「Welcome aboard」が出てればOK♪ そこで「About your application’s environment」をクリック！ ↓ランキング参加中！ポチッとお願いします。 
+投稿者
+mirai
+時刻:
+12:25
+ラベル:
+Rails,
+Ruby
+0
+コメント:
+コメントを投稿

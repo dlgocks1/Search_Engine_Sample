@@ -1,0 +1,12 @@
+前回の記事「Android] 「初めてのAndroid」（オライリー・ジャパン）を読みました - adakoda」の続編です。
+「初めてのAndroid」（オライリー・ジャパン）のサンプルソースコードは、以下にあります（ftp）。
+サンプルコード（本編） ftp://ftp.oreilly.co.jp/9784873114095/hAndroidSampleCodeJP.zip 
+サンプルコード（付録C） ftp://ftp.oreilly.co.jp/9784873114095/hAndroidSampleCodeJP-furokuC.zip
+サンプルソースコード（zip）ファイル内には、Eclipse形式のプロジェクトファイルが収録されているため、 Eclipseユーザーは、プロジェクトをインポートすることで、すぐに試すことができます。
+インポート方法は、Eclipseメニューの、「File」 > 「Import」で、「Existing Projects into Workspace」を選択して、「Next」。 「Import Projects」画面で、「Select archive file」でダウンロードしてきたzipファイルを選択すると、 一括、もしくは一部のみをインポートできます。
+サンプルソースコードを試す際の注意点
+Android1.0ベースのサンプルコードのため、Android1.0/1.1SDKで試すのが無難
+Android1.5SDKを使用する場合には、エラーとなりますので、 こちらの記事「[Android] 続Android 1.5 SDK への更新方法（プロジェクト編） - adakoda」 を参考に更新してみてください ※私は、1.5SDKで確認しました
+サンプルソースコードは、日本語のコメントで書かれているが、ソースコードを見て文字化けしている場合には、 改行位置が誤判定されるためビルドエラーとなります 回避（エンコードを変更）するには、 Eclipseメニューの、「Window」 > 「Preferences」 > 「General」 > 「Workspcae」 > Text file encoding 「Other」を選択し、「UTF-8」などを選択します
+例えば、サンプルコード（本編）に収録されている「OpenGL」を実行してみると、 以下のように、Droid君を透明描画したキューブが回転するデモを確認することができます。 ※このサンプルは、起動時間がかかります
+サンプルソースコードは、本を購入していなくても試すことができるので、 本を購入しようかどうか迷っている方は、サンプルソースコードを試してみて、検討するのも良いかもしれません。

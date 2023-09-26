@@ -1,0 +1,10 @@
+Posted: May 7th, 2008 | Author: Trevor Orsztynowicz | Filed under: Geek, howto, opensolaris, sysadmin | 25 Comments »
+OpenSolaris 2008.05 came out the other day, and its pretty nice as far as OS’s go. One of the things that’s great about OpenSolaris is by coupling Xen with ZFS you can get a really powerful virtualization system.
+Unfortunately because of space constraints in a liveCD, you can’t squeeze all those ‘nice to have’ packages into one spot, so you have to download and setup xVM manually. A few things are broken, too so some minor tweaking is required. Here’s a list of steps required to get xVM setup as a Dom0 in OpenSolaris
+1) Become root and install the required packages. This will install the xen.gz kernel, as well as all the other utilities and services necessary for running a Dom0
+pkg install SUNWxvmhvm
+pkg install SUNWvirtinst
+pkg install SUNWlibvirt
+pkg install SUNWurlgrabber
+2) The package installation doesn’t support adding xvm to the default boot.lst in grub. Additionally, OpenSolaris 2008.05 has ZFS as the default filesystem, so a few things have been moved around. Specifically, the boot.lst file used by grub and bootadm has been placed on its own zfs filesystem. Unfortunately it seems that bootadm has been compiled, or at least the distribution has been put together, without the ability to gracefully handle having the boot.lst on a separate partition.
+A workaround is to move the /boot/grub/menu.lst file (which has some explanatory text in it) to  /boot/grub/menu.lst-old, and to symlink the /rpool/boot/grub/menu.lst file to /boot/grub/menu.lst.

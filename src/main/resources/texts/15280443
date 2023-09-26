@@ -1,0 +1,13 @@
+Open-MGLプロジェクトではDirectXを利用した2D、3Dグラフィクスゲーム開発向けのC++ライブラリ、及びその上位フレームワークを作成しています。
+最も短いステップ数で、ゲーム開発が行える事を目指しています。 
+ver 0.7.8 では、August Framework 2.0 のサポートを開始しました。本バージョンにてサポートされる機能は以下の通りです。
+ウインドウの表示
+画像の表示
+キーボードからの入力
+マウス入力
+プロジェクト/フレームワーク概要：
+http://sourceforge.jp/projects/open-mgl/wiki/FrontPage
+リファレンス：
+http://sourceforge.jp/projects/open-mgl/wiki/August_Framework_2.0
+ダウンロード：
+http://sourceforge.jp/projects/open-mgl/releases/43043

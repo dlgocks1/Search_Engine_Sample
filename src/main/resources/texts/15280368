@@ -1,0 +1,17 @@
+Apple , MacOS , iPod
+iTunesでWMA/OGG/FLAC形式のファイルを再生・管理する方法
+掲載日時：2009.08.11 22:00  
+コメント [0]
+, トラックバック [0]
+オーディオファンに人気の高い、FLACファイルやOggやWMAフォーマット。でも、サポートされてないことが多々あることが玉に瑕。そんなユーザ向けに作られたフリープラグインがあるんです。これを使うと、前述した3つの形式がiTunesでも再生／管理できるように。 
+ネタ元の「MacWorld」から、フリーのiTunesプラグインへのリンクが貼られているのですが（正規版「Windows Media for QuickTime」や第三者によるもの含む）、それらを活用するとMWA／Ogg／FLACファイルが、WindowsまたはMac上でのiTunesライブラリに対応となります。FLACファイルの場合は.flacファイルから.movファイルへの変換作業が必要となりますが、記事によるとMacの『Automator』を使えばその作業も楽々出来るとのこと。Windows上では『Bulk Rename Utility』などがおすすめです。
+外国語が苦手な、アップルのメディアプレーヤーに異なるファイル形式をうまく対応させる方法を他にもご存知な方はコメントで教えて下さい！
+Play .wma, Ogg, and FLAC Files in ITunes [PC World/MacWorld]
+Kevin Purdy（原文／まいるす・ゑびす） 
+イエロー・マジック・オーケストラ(US版) [Limited Edition] 
+【関連記事】 
+・「Project Playlist」で音楽検索そして音楽発掘 
+・聞き取れた歌詞の一部から曲が検索できる「LyricRat」 
+・『SweetFM』でLastFMをデスクトップからiTunesへ保存 
+・1000曲の音楽ファイルが無料ダウンロードできるサイト 
+・「Album Spotter」でお気に入りバンドの新作情報をまとめて検索

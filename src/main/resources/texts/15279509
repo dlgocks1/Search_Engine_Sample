@@ -1,0 +1,69 @@
+前回、CSSのみでロールオーバー効果のメニューを作る方法を紹介しましたが、カーソルを合わせたときの画像を、カーソルを合わせた瞬間に呼び出しているので、一瞬ですが読み込みのためちらつきが発生します。
+それを回避するために、カーソルを合わせてたときに表示される画像を、ページが表示されたときにあらかじめ呼び出しておく方法があります。
+使用する画像は以下のものです。メニューで使用する画像がすべてくっついています。
+それでは、サンプルとソースコードを見ていきましょう。
+サンプル
+(X)HTMLコード
+<ul class="menu">
+<li class="menu1"><a href="">メニュー1</a></li>
+<li class="menu2"><a href="">メニュー2</a></li>
+<li class="menu3"><a href="">メニュー3</a></li>
+</ul>
+CSSコード
+ul.menu {
+margin:0;
+padding:0;
+}
+ul.menu li {
+float:left;
+text-indent:-9999px;
+overflow:hidden;
+list-style:none;
+}
+ul.menu li a {
+display:block;
+width:150px;
+height:30px;
+}
+li.menu1 a {
+background:url(menu.gif) 0 0 no-repeat;
+}
+li.menu1 a:hover {
+background:url(menu.gif) 0 -30px no-repeat;
+}
+li.menu2 a {
+background:url(menu.gif) -150px 0 no-repeat;
+}
+li.menu2 a:hover {
+background:url(menu.gif) -150px -30px no-repeat;
+}
+li.menu3 a {
+background:url(menu.gif) -300px 0 no-repeat;
+}
+li.menu3 a:hover {
+background:url(menu.gif) -300px -30px no-repeat;
+}
+/* モダンブラウザ（Firefox Opera Safari）対策 */
+ul.menu:after {
+content:".";
+display:block;
+height:0;
+clear:both;
+visibility:hidden;
+font-size:0;
+}
+/* Win版IE7とMac版IE5対策 */
+ul.menu {
+display:inline-block;
+}
+/* Win版IE5および6対策 */
+/* Hides from IE-mac \*/
+* html ul.menu {
+height:1px;
+}
+ul.menu {
+display:block;
+}
+/* End hide from IE-mac */
+backgroundプロパティで、表示する画像をずらしています。右や下にずらす場合はマイナス表示をしないといけないので注意です。
+メニューを横並びにするのにfloatを使用している都合上、リスト以降の要素の回り込みを解除するためにclearfixハックを使っています。CSSソースコードの後半部分です。

@@ -1,0 +1,7 @@
+■ ブラウザアプリ 18:20 
+証明書の確認とか EV SSL 対応とか、SSL なのがもっと目立つようになってたりとか、セキュアなのをウリにしたアプリは出てこないのかねえ。
+あと個人的に、オレオレ証明書のサイトが見れるように認証局の追加とか対応してくれると嬉しかったりするわけだが、サードパーティアプリじゃ無理か。
+■ UIViewController と UIScrollView 22:32 
+UIViewController の直下の view を UIScrollView にすると UIViewController の touchesBegan が動かなくなるんだけど、どうすればいいんだこれはー！ずっと前にやって駄目だったから放っておいたわけで、今回また挑戦してみようと思ったけどやっぱ出来ないのかなー。UIScrollView#touchesShouldBegin を使うのかねー。
+KishikawaKatsumi2009/02/04 00:41UIViewControllerのViewにUIScrollViewが乗っているという状態でしょうか。 UIScrollViewを継承したクラスを作ってそこのtouchesBegan:withEvent:で、 nextResponderの処理を呼んだらどうでしょうか。 @interface MyScrollView : UIScrollView @end - (void)touchesBegan:(NSSet *)touches withEvent:(UIEvent *)event { [[self nextResponder] touchesBegan:touches withEvent:event]; }
+ktakayama2009/02/04 11:48ありがとうございます。 やっぱそれしか無さそうですね。 nextResponder は気付きませんでした。

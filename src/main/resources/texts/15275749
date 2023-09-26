@@ -1,0 +1,14 @@
+2009年8月11日 (火曜日)
+13:37:53
+#
+Life
+なんかHTTPリクエストをなげてうけるところまでできた。
+GET / HTTP/1.1
+X-WSSE: UsernameToken Username="xxx@xxxx.jp", PasswordDigest="SOrLWGL7Njj5yl04epVhVAYbL6U=", Nonce="IAPAbiDtzH0=", Created="2009-08-11T04:36:15Z"
+Host: 192.168.3.3:50318
+Connection: Keep-Alive
+User-Agent: Apache-HttpClient/UNAVAILABLE (java 1.4)
+んでもって、エントリーひろってくるところまでやってみた。
+DOMとかを使いまくっていて富豪だからか、なんだかメモリー消費量が多い。RSS 16MBなんてあんたそんな贅沢な。
+PID CPU% S #THR VSS RSS UID Name
+12772 0% S 7 106724K 16712K app_52 jp.gr.netfort.dancer.mixi

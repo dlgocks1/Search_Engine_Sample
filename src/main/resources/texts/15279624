@@ -1,0 +1,190 @@
+\n');
+parent.left.document.write('\n');
+parent.left.document.write('
+\n');
+// 項目内容メニュー作成処理
+i1=list.length;
+for(i=0; i\n')
+if(list[i][0].flg1==0){
+parent.left.document.write('\n')
+}
+else{
+parent.left.document.write('\n')
+}
+parent.left.document.write(list[i][0].name + ' \n')
+parent.left.document.write('\n')
+if(list[i][0].flg1==1){
+j1 = list[i].length
+for(j=1; j\n")
+parent.left.document.write('\n')
+parent.left.document.write(list[i][j].name + ' \n')
+parent.left.document.write('\n')
+}
+// 項目内容メニュー作成処理(画像)
+if(listG[i][0].flg2==1){
+parent.left.document.write(' ');
+parent.left.document.write('\n')
+if(listG[i][0].flg1==0){
+parent.left.document.write('\n')
+}
+else{
+parent.left.document.write('\n')
+}
+parent.left.document.write(listG[i][0].name + ' \n')
+parent.left.document.write('\n')
+if(listG[i][0].flg1==1){
+j1 = listG[i].length
+for(j=1; j\n")
+parent.left.document.write('\n')
+parent.left.document.write(listG[i][j].name + ' \n')
+parent.left.document.write('\n')
+}
+}
+}
+// 項目内容メニュー作成処理(問題)
+if(listM[i][0].flg2==1){
+parent.left.document.write(' ');
+parent.left.document.write('\n')
+if(listM[i][0].flg1==0){
+parent.left.document.write('\n')
+}
+else{
+parent.left.document.write('\n')
+}
+parent.left.document.write(listM[i][0].name + ' \n')
+parent.left.document.write('\n')
+if(listM[i][0].flg1==1){
+j1 = listM[i].length
+for(j=1; j\n")
+parent.left.document.write('\n')
+parent.left.document.write(listM[i][j].name + ' \n')
+parent.left.document.write('\n')
+}
+}
+}
+}
+}
+// 体験プログラムメニュー作成処理
+parent.left.document.write('\n');
+parent.left.document.write('\n')
+if(list_P[0][0].flg1==0){
+parent.left.document.write('\n')
+}
+else{
+parent.left.document.write('\n')
+}
+parent.left.document.write(list_P[0][0].name + ' \n')
+parent.left.document.write('\n')
+// 体験プログラムメニュー作成処理(項目内容)
+if(list_P[0][0].flg1==1){
+i1=listP.length
+for(i=0; i\n');
+if(listP[i][0].flg1==0){
+parent.left.document.write('\n');
+}
+else{
+parent.left.document.write('\n');
+}
+parent.left.document.write(listP[i][0].name + ' \n');
+parent.left.document.write('\n')
+}
+// 体験プログラムメニュー作成処理(プログラム項目)
+if(listP[i][0].flg1==1){
+j1 = listP[i].length
+for(j=1; j\n")
+parent.left.document.write('\n')
+parent.left.document.write(listP[i][j].name + ' \n')
+parent.left.document.write('\n')
+}
+}
+}
+}
+// ダウンロード(体験プログラム&その他)
+parent.left.document.write("\n")
+parent.left.document.write('\n')
+parent.left.document.write(listP_S[0][0].name + ' \n')
+parent.left.document.write('\n')
+// 参考文献メニュー
+parent.left.document.write('\n')
+parent.left.document.write("\n")
+parent.left.document.write('\n')
+parent.left.document.write(list_S[0][0].name + ' \n')
+parent.left.document.write('\n')
+parent.left.document.write('\n')
+parent.left.document.write('\n
+\n\n')
+parent.left.document.write('\n')
+parent.left.document.write('\n')
+parent.left.document.close();
+}
+// チェック処理
+function check(i){
+ANAME=list[i][0].a_name;
+if(list[i][0].flg1==1){
+list[i][0].flg1=0;
+listM[i][0].flg1=0;
+listG[i][0].flg1=0;
+}
+else{
+list[i][0].flg1=1;
+}
+hyouji()
+}
+// チェック処理(画像)
+function checkG(i){
+ANAME=listG[i][0].a_name;
+if(listG[i][0].flg1==1){
+listG[i][0].flg1=0
+}
+else{
+listG[i][0].flg1=1
+}
+hyouji()
+}
+// チェック処理(問題)
+function checkM(i){
+ANAME=listM[i][0].a_name;
+if(listM[i][0].flg1==1){
+listM[i][0].flg1=0
+}
+else{
+listM[i][0].flg1=1
+}
+hyouji()
+}
+// チェック処理(体験プログラム)
+function checkP(i){
+ANAME=list_P[i][0].a_name;
+if(list_P[i][0].flg1==1){
+list_P[i][0].flg1=0
+listP[1][0].flg1=0;
+listP[2][0].flg1=0;
+listP[4][0].flg1=0;
+listP[6][0].flg1=0;
+listP[7][0].flg1=0;
+listP[8][0].flg1=0;
+}
+else{
+list_P[i][0].flg1=1
+}
+hyouji()
+}
+// チェック処理(体験プログラ)
+function checkPS(i){
+ANAME=listP[i][0].a_name;
+if(listP[i][0].flg1==1){
+listP[i][0].flg1=0
+}
+else{
+listP[i][0].flg1=1
+}
+hyouji()
+}
+// メニューのリセット処理
+function MRest(){
+n1=list.length
+n2=listG.length
+n3=listM.length
+n4=list_P.length
+n5=listP.length
+for(i=0;i

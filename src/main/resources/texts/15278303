@@ -1,0 +1,4 @@
+pubsub: A library for Google/SixApart pubsub hub interactionA package for setting up, sending and receiving PubSub requests to pubsub hubs,
+http://pubsubhubbub.googlecode.com/svn/trunk/pubsubhubbub-core-0.1.html
+Git repository available at git://coming.soon/
+Versions

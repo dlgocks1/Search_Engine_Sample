@@ -1,0 +1,28 @@
+サーバ構築時とかにリモートのサーバを制御する必要があるとき、xhostを使うと便利なのでメモ。 というかUbuntuはセキュリティ上少し設定しないとリモートからのXを許可しないっぽい。 環境 Xサーバ リモートのXアプリケーションを表示する側 Ubuntu8.10IP:192.168.1,10 Xクライアント リモートでXアプリケーションを起動する側Red HatIP:192.168.1.21 Xサーバ側の設定X11のポートフォワーディングを許可しているか確認X11Forwardingがyesになっているかどうか
+$ less /etc/ssh/sshd_config
+...
+X11Forwarding yes
+...
+Xサーバの6000番ポートを開ける
+$ sudo vi /etc/X11/xinit/xserverrc
+...
+exec /usr/bin/X11/X -nolisten tcp をコメントアウト
+...
+gdmの起動時に6000番ポートが無効にならないように
+$ sudo vi /etc/gdm/gdm.conf
+DisallowTCP=true をコメントアウト
+DisallowTCP=false を追加
+Xの再起動Ctrl + Alt + F2とかで他の仮想コンソールに入って、gdm再起動
+$ sudo /etc/init.d/gdm stop
+$ sudo /etc/init.d/gdm start
+600番ポートが空いていることを確認
+$ netstat -an | grep 6000
+tcp 0 0 0.0.0.0:6000 0.0.0.0:* LISTEN 
+tcp6 0 0 :::6000 :::* LISTEN
+Xサーバ側にてXクライアントのIPを許可
+$ xhost +192.168.1.21
+XサーバでXクライアントのアプリを実行する
+$ ssh -l hoge -X 192.168.1.21
+ssh $ export DISPLAY="IP:192.168.1,10:0.0"
+ssh $ xeyes
+これでxeyxsが表示されればOK.ほんとはxhostは使うべきじゃなくてxauthを使ったほうがいいっぽいですが、今回は時間なかったので勘弁...

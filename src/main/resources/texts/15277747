@@ -1,0 +1,42 @@
+2009-06-18
+OpenSolaris Live USB Creator (Windows/.NET) by Chonan-san
+GENUNIX OpenSolaris News 
+Mon May 11 2009  Hiroshi Chonan has released a new version of his utility that allows creation of an OpenSolaris Live USB image on a Windows platform. 
+The new versions are OsolLiveUSB003.zip and OsolLiveUSB003-src.zip. Don't forget to check the MD5 checksums. 
+For more details, go directly to Hiroshi Chonans Live USB project site. 
+About OpenSolaris Live USB Creator (Windows/.NET) 
+Officially, if you would like to create OpenSolaris LiveUSB memory stick, you should have to execute the usbcopy script on a Solaris/OpenSolaris platform. 
+Using this utility, you can create an OpenSolaris LiveUSB image with a USB Memory Stick on a Windows platform . 
+Procedure to create an OpenSolaris 2009.06 x86 LiveUSB. 
+1. Requiremants:
+Windows 2000/XP/Vista ( require Administrator priviledges )
+.NET Framework later than v2.0 : if necessary, download here please. 
+USB Flash Memory Stick > 1GB Capacity 
+OpenSolaris USB Image file : (ex) USB Universal, x86  osol-0906-x86.usb  
+2. Download the OpenSolaris Live USB Creator: Latest OsolLiveUSB003.zip 
+Download this binary file from genunix.org mirror to your saving directory. 
+Binary file: OsolLiveUSB003.zip (202,970Byte/md5sum:e0b2813844f1ee639805fa060aede16e ) 
+3. Extract the downloaded binary file.
+With some archiver, for example, 7-Zip or Lacha+, extract the downloaded file into the OsolLiveUSB003 folder on the admin user's Desktop. 
+Fig-01: Extracted OsolLiveUSB003 Folder
+4. Execute the file OsolLiveUSB.exe of the OsolLiveUSB003 folder, then start up the OpenSolaris Live USB Creator.
+Select the OpenSolaris USB Image of your saved folder.
+Target Device is your USB Flash memory stick to create an OpenSolaris liveUSB.
+Then click with your mouse "Start" button, the Live USB Creator begin to write image to your plugged-in USB Stick. 
+Wait for several minutes, then Writing completed and click with your mouse "Close" button on the Live USB Creator. 
+All done, will be succeeded to create a OpenSolaris LiveUSB.
+Fig-02: Live USB Creator is writing image 
+5. Reboot your Windows.
+6. Setting BIOS or Boot Menu to boot from the created LiveUSB stick.
+7. Then it will be able to startup OpenSolaris with the OpenSolaris LiveUSB.
+投稿者
+baian
+時刻:
+10:30:00 PM
+ラベル:
+LiveUSB,
+opensolaris,
+x86
+0
+コメント:
+Post a Comment

@@ -1,0 +1,16 @@
+セルを右クリックしたときに表示されるショートカットメニューに、独自のコマンドを追加するには次のようにします。 
+Sub AddMenu()
+Dim Newb
+Set Newb = Application.CommandBars("Cell").Controls.Add()
+With Newb
+.Caption = "独自のコマンド"
+.OnAction = "Sample"
+.BeginGroup = False
+End With
+End Sub
+Sub Sample()
+MsgBox Now
+End Sub
+セルのショートカットメニューはCommandBars("Cell")で表されます。OnActionプロパティに指定したプロシージャが、クリックされたときに実行されます。OnActionプロパティに指定するプロシージャは、標準モジュールに作成してください。BeginGroupプロパティにTrueを設定すると、コマンド名の直前に区切線が追加されます。 
+上記のサンプルを実行すると、次のようになります。一番下が追加したコマンドです。 
+追加したメニューを削除するには、次のようにします。

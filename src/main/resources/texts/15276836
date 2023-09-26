@@ -1,0 +1,59 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="ja" lang="ja">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta http-equiv="Content-Language" content="ja" />
+<meta http-equiv="Content-Script-Type" content="text/javascript" />
+<meta http-equiv="Content-Style-Type" content="text/css" />
+<meta http-equiv="imagetoolbar" content="no" />
+<title>Simple Controls Gallery | 設置サンプル</title>
+<link rel="stylesheet" type="text/css" href="lib/global.css" />
+<script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.3.2/jquery.min.js" ></script>
+<script type="text/javascript" src="lib/jquery/simplegallery.js"></script>
+<script type="text/javascript">
+$(function() {
+var mygallery=new simpleGallery({
+wrapperid: "simplegallery1", /* ギャラリーを表示する要素のID名 */
+dimensions: [240, 180], /* 画像の幅、高さ（単位：ピクセル） */
+imagearray: [
+/* [画像URL、リンク先URL、_new] */
+["http://farm4.static.flickr.com/3222/2974008614_736e2d5b50_m.jpg", "http://www.flickr.com/photos/22559849@N06/2974008614/", ""],
+["http://farm4.static.flickr.com/3141/2973155055_4cf4370939_m.jpg","http://www.flickr.com/photos/22559849@N06/2973155055/", ""],
+["http://farm4.static.flickr.com/3113/3104684709_6911f58648_m.jpg", "http://www.flickr.com/photos/22559849@N06/3104684709/", ""],
+["http://farm4.static.flickr.com/3023/3055162547_cde4e8921e_m.jpg","http://www.flickr.com/photos/22559849@N06/3055162547/",""],
+["http://farm4.static.flickr.com/3174/2973352946_d3589b717e_m.jpg","http://www.flickr.com/photos/22559849@N06/2973352946/",""]
+],
+autoplay: true, /* 自動再生の有無 */
+persist: false,
+pause: 3500, /* スライドする間隔（ミリ秒） */
+fadeduration: 2000, /* フェードする移行時間（ミリ秒） */
+oninit:function(){
+//event that fires when gallery has initialized/ ready to run
+},
+onslide:function(curslide, i){ //event that fires after each slide is shown
+//curslide: returns DOM reference to current slide's DIV (ie: try alert(curslide.innerHTML)
+//i: integer reflecting current image within collection being shown (0=1st image, 1=2nd etc)
+}
+})
+});
+</script>
+<!-- CSS -->
+<style type="text/css">
+#simplegallery1 {
+position:relative; /*keep this intact*/
+visibility:hidden; /*keep this intact*/
+border:10px solid #5e3a16;
+width:320px;
+}
+</style>
+</head>
+<body>
+<div id="wrap">
+<h1><a href='http://www.dynamicdrive.com/dynamicindex4/simplegallery.htm'>Simple Controls Gallery - Dynamic Drive DHTML Scripts</a> | 設置サンプル</h1>
+<p>画像にマウスオーバーすると、半透明のコントロールパネルが表示されます。</p>
+<!-- CODE -->
+<div id="simplegallery1"></div>
+<!-- / CODE -->
+</div>
+</body>
+</html>

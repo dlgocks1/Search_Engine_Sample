@@ -1,0 +1,73 @@
+※この記事は、「Ext JSでGoogleマップを表示するチュートリアル」の続きです。前回の記事も合わせてご覧ください。
+JavaScript/Ajaxフレームワーク「Ext JS」を使えば、使い勝手のいいユーザーインターフェイス（UI）を、短いコードを書くだけで実装できます。前回の記事では、Ext JSのウィンドウ内にGoogleマップを利用した地図を表示する方法を紹介しました。今回は同じウィンドウに、地図の種類（航空写真や地形など）を選択できるオリジナルのメニューを組み込んでみましょう。
+ウィンドウ内にメニューバーを表示する
+Ext JSでは、ページ全体またはExt JSで開いたウィンドウに対して、デスクトップアプリケーションのようなメニューバーを表示できます。メニューバーは自由度が高く、上部／下部のいずれか、または両方に設置でき、階層型のサブメニューやアイコン付きメニューも作成できます。
+今回は、Googleマップに用意されている以下の4種類の地図を切り替えるメニューをウィンドウに表示します。
+通常の地図
+航空写真
+通常＋航空写真
+地形
+ウィンドウ内にメニューバーを表示するには、ウィンドウのtbarプロパティに、メニュー表示に必要なデータを設定します。tbarは配列で、配列の要素がメニュー項目に対応しています。要素にはメニューに必要なxtype, text, menuのオプションを設定します。
+xtypeには、tbbuttonを指定します。メニューバーに表示される項目名の部分がボタンになり、以後にmenu配列があればプルダウンメニューが表示されます。
+textには、メニューバーに表示される文字列（項目名）を指定します。menuには、プルダウンメニューに表示される項目を定義します。項目は{ text : 項目文字 }を配列要素として定義し、表示したい数だけ列記します。
+以上をまとめると、次のようになります。
+tbar : [
+{ xtype : 'tbbutton',
+text : '地図の種類',
+menu : [
+{ text : '通常の地図' },
+{ text : '航空写真' },
+{ text : '通常＋航空写真' },
+{ text : '地形' }
+]
+}
+]
+実際にウィンドウにメニューバーを表示させたのが、サンプル01です。メニューバーの「地図の種類」をクリックするとプルダウンメニューが表示されます。ちなみに、ウィンドウの下部にメニューバーを表示したい場合は、tbar を bbar に変更すればOKです (tbarは「top bar」、bbarは「bottom bar」の略）。
+ウィンドウ内にメニューバーが表示されます
+bbarにするとウィンドウの下部にメニューバー表示できます
+●サンプル01のソースコード
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html lang="ja">
+<head>
+<meta http-equiv="content-type" content="text/html;charset=utf-8">
+<title>Sample</title>
+<link rel="stylesheet" href="resources/css/ext-all.css" type="text/css" media="all">
+<link rel="stylesheet" href="css/main.css" type="text/css" media="all">
+<script type="text/javascript" src="http://maps.google.com/maps/api/js?sensor=false"></script>
+<script type="text/javascript" src="js/ext-base.js"></script>
+<script type="text/javascript" src="js/ext-all.js"></script>
+<script type="text/javascript"><!--
+Ext.BLANK_IMAGE_URL = 'resources/images/default/s.gif';
+Ext.onReady(function(){
+var win = new Ext.Window({
+title: 'Ext JSメニューサンプル',
+width: 520,
+height: 480,
+layout: 'fit',
+items: {
+html : 'Ext JSを使ってウィンドウとメニューを表示します。'
+},
+tbar : [
+{ xtype : 'tbbutton',
+text : '地図の種類',
+menu : [
+{ text : '通常の地図' },
+{ text : '航空写真' },
+{ text : '通常＋航空写真' },
+{ text : '地形' }
+]
+}
+]
+});
+win.show();
+});
+function menuProc(obj){
+Ext.Msg.alert('形式', obj.mapType);
+}
+// --></script>
+</head>
+<body>
+<h1>Ext JSウィンドウ+メニューサンプル</h1>
+<p>ページが読み込まれるとウィンドウ内にメニューが表示されます。</p>
+</body>
+</html>

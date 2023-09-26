@@ -1,0 +1,91 @@
+フォームが開く前、開いた後、印刷がはじまる前、始まった後など、特定の処理の前後に独自の処理をいれたいケースがあります。 
+シリアライズの前後で独自の処理がいれられないか調べていたところ、以下の記事が見つけられました。 
+OnDeserializedAttribute クラス (System.Runtime.Serialization) 
+http://msdn.microsoft.com/ja-jp/library/system.runtime.serialization.ondeserializedattribute.aspx 
+これについて、コードスクラップ的なメモをします。 
+public class Sample
+{
+public static void Main()
+{
+//シリアライズ対象のオブジェクトの生成
+SerializeObject target = new SerializeObject();
+//シリアライズ方法はバイナリ形式
+BinaryFormatter formatter = new BinaryFormatter();
+//シリアライズ後のファイル
+Stream stream = File.Open("DataFile.dat", FileMode.Create);
+//シリアライズ処理
+formatter.Serialize(stream, target);
+//一度ストリームをクローズ
+stream.Close();
+//シリアライズされたオブジェクトをストリームに読み込み
+stream = File.Open("DataFile.dat", FileMode.Open);
+//デシリアライズ
+//target.moziretuの値は"OnSerializingMethod OnDeserializedMethod "になります。
+target = (SerializeObject)formatter.Deserialize(stream);
+}
+}
+/// 
+/// シリアライズ対象のクラス
+/// 
+/// 
+/// [Serializable()]を付与して明示的にシリアライズできることを知らせておいて
+/// あげないと、formatter.Serialize(stream, target);の箇所で以下のエラーが発生します。
+/// System.Runtime.Serialization.SerializationException はハンドルされませんでした。
+/// Message="アセンブリ 'ConsoleApplication1, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null' の型 
+/// 'SerializeObject' はシリアル化可能として設定されていません。"
+/// 
+[Serializable()]
+public class SerializeObject
+{
+public string moziretu;
+public SerializeObject()
+{
+this.moziretu = "";
+}
+/// 
+/// シリアライズの直前に呼び出されるメソッド
+/// 
+/// 
+/// 
+/// 呼び出されるタイミングに沿った属性をメソッドに付与します。
+/// メソッド名は自由ですが、パラメータはStreamingContext型だけに決まっています。
+/// パラメータを与えなかったり、他のパラメータを追加すると以下のようなエラーが起動時に発生します。
+/// System.TypeLoadException はハンドルされませんでした。
+/// Message="修飾に使用されるシリアル化属性に対する不適切なシグネチャを含むメソッド 'OnSerializingMethod' が
+/// アセンブリ 'ConsoleApplication1, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null' の型 'SerializeObject' にあります。"
+/// 
+[OnSerializing()]
+internal void OnSerializingMethod(StreamingContext context)
+{
+//メソッド名を変数に追加
+this.moziretu += MethodBase.GetCurrentMethod().Name + " ";
+}
+/// 
+/// シリアライズの直後に呼び出されるメソッド
+/// 
+/// 
+[OnSerialized()]
+internal void OnSerializedMethod(StreamingContext context)
+{
+this.moziretu += MethodBase.GetCurrentMethod().Name + " ";
+}
+/// 
+/// デシリアライズの直前に呼び出されるメソッド
+/// 
+/// 
+[OnDeserializing()]
+internal void OnDeserializingMethod(StreamingContext context)
+{
+this.moziretu += MethodBase.GetCurrentMethod().Name + " ";
+}
+/// 
+/// デシリアライズの直後に呼び出されるメソッド
+/// 
+/// 
+[OnDeserialized()]
+internal void OnDeserializedMethod(StreamingContext context)
+{
+this.moziretu += MethodBase.GetCurrentMethod().Name + " ";
+}
+}
+OnSerializedMethodメソッドとOnDeserializingMethodメソッド内の処理は、最終的なmoziretuの値に含まれません。前者はシリアライズが終わってしまっているので、その処理はシリアライズ後のファイルには含まれてきません。後者は、デシリアライズの直前にメモリ上の変更は入りますが、その後デシリアライズの過程で上書きされます。

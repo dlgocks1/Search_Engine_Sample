@@ -1,0 +1,36 @@
+Introduction
+Yet Another (remote) Process Monitor (YAPM) is a powerful application that allows to view and manage your running tasks, processes, threads, modules, windows, handles, network connections and your services on a local or on a remote machine. YAPM offers lots of features to manipulate them, such as privilege management, memory management, a complete history of statistics, a dependency viewer... etc.
+It is the first and only open source software to offer all these features.
+It's totally free and open source (GNU GPL 3.0).
+You are also able to monitor all Windows perfmon counters (local or remote machine) with an advanced time scale. YAPM also can save advanced reports of your system (HTML or TXT files).
+YAPM offers an user-friendly GUI with Microsoft Office Ribbon style, or a classical menu-based GUI if you don't like the Ribbon style :-) 
+Main features
+In addition to all basic features available with the standard Windows Task Manager, YAPM offers lots of other useful features :
+Local and remote monitoring
+Module and thread management
+Handle management (keys, files...)
+View of TCP/UDP connections opened by the processes
+Windows management (opacity, position, show, hide...)
+Window' find' process feature : allows to find the process associated to a window via a drag & drop over the screen
+Emergency Hotkeys feature : allows to associate a custom shortcut to a custom action (for example : Ctrl+Shift+Suppr to close the window which is on foreground)
+Privilege management : allows to view and modify the privileges of processes
+Build-in hex editor to view memory of processes
+"Log mode" to monitor all actions made by a specific process
+Hidden Processes feature to detect basic rootkits
+Local and remote shutdown
+Dependency viewer
+... And lots & lots of other features !
+Requirements 
+.NET Framework 2.0 .
+Operating system : Microsoft Windows XP, Windows Vista or Windows Seven (32 bits only).
+Administrator rights, if you want to access to system processes and some other informations.
+For remote monitoring, WMI (Windows Management Instrumentation) must be installed and available on both machines if you use WMI method, or the YAPM Server application must be started on the remote machine if you use the client-server method.
+News
+YAPM v2.0.3 has been released !
+Downloads
+The latest available version of Yet Another Process Monitor is the version 2.0.3 (build date : 2009-09-08).
+Binaries 
+Source code
+License (RTF format)
+Copyright (c) 2008-2009 violent_ken
+Last update of this page : 2009-09-08 20:00

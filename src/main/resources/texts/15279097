@@ -1,0 +1,16 @@
+.NET Framework 2.0/3.5 インストールエラーのトラブルシューティング
+オリジナル：SQL Server Setup : Troubleshooting .NET 2.0/3.5 Installation errors
+.NET Framework 3.5のインストールは様々な理由で失敗することがあります。 
+.NET Framework 3.5のインストールに失敗し、SQL Serverのセットアップが失敗することがあります。
+NET Framework 3.5のインストール失敗か、既存のインストール済み.NET Frameworkの不具合による失敗を%temp%\sqlsetup.logで見ることがあります。
+.NET Framework 3.5 SP1 のインストール失敗例
+05/21/2008 07:32:55.750 ====================================================================== 05/21/2008 07:32:55.765 Setup launched 05/21/2008 07:32:55.765 Attempting to determine media source 05/21/2008 07:32:55.765 Media source value not specified on command line argument. 05/21/2008 07:32:55.765 Setup is launched from media directly so default the value to the current folder. 05/21/2008 07:32:55.765 Media source: \\sqlbuilds\Improvements\clusterRefresh\10.00.1441.12\retail\SQLFULL_ENU\ 05/21/2008 07:32:55.765 Attempt to determine media layout based on file '\\sqlbuilds\Improvements\clusterRefresh\10.00.1441.12\retail\SQLFULL_ENU\mediainfo.xml'. 05/21/2008 07:32:55.796 Media layout is detected as: Full 05/21/2008 07:32:55.796 Local setup.exe not found, so continuing to run setup.exe from media. 05/21/2008 07:32:55.796 /? or /HELP or /ACTION=HELP specified: false 05/21/2008 07:32:55.796 Help display: false 05/21/2008 07:32:55.796 Checking to see if we need to install .Net version 3.5 05/21/2008 07:32:55.796 .Net version 3.5 needs to be installed from media: \\sqlbuilds\Improvements\clusterRefresh\10.00.1441.12\retail\SQLFULL_ENU\ 05/21/2008 07:32:55.796 Attempting to find media for .Net version 3.5 05/21/2008 07:32:55.796 Attempting to install .Net version 3.5 05/21/2008 07:35:36.725 Received exit code -1073741818 from installing .Net version 3.5 05/21/2008 07:35:36.725 .Net version 3.5 installation failed, so setup will close. Error code: -1073741818 05/21/2008 07:35:36.725 Setup closed with exit code: 0x84C40013 05/21/2008 07:35:36.725 ====================================================================== 
+.NET Framework のインストールに失敗しているときは、.NET Framework のログファイルを見ます。.NET Framework 3.5のセットアップラッパーによってログが提供されます。
+%temp%\dd_dotnetfx35install.txt 
+%temp%\dd_dotnetfx35error.txt 
+%temp%\dd_depcheck_netfx*.txt 
+参考情報
+http://blogs.msdn.com/astebner/archive/2007/07/31/4156781.aspx 
+Post the error to http://social.msdn.microsoft.com/Forums/en-US/netfxsetup/threads 
+How to: View SQL Server Setup Log Files: http://msdn.microsoft.com/en-us/library/ms143702.aspx 
+Troubleshooting an Installation of SQL Server: http://msdn.microsoft.com/en-us/library/ms143698.aspx

@@ -1,0 +1,33 @@
+If you have ever used Maven to any extent, you will probably know about the settings.xml file. The settings.xml
+file contains environment-specific details such as proxy
+configurations, repositories, server usernames and passwords, and so
+on.
+An example of what typically might go into a settings.xml file is shown here:
+<settings xmlns="http://maven.apache.org/SETTINGS/1.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/SETTINGS/1.0.0 http://maven.apache.org/xsd/settings-1.0.0.xsd"> <localRepository>C:/maven/repository</localRepository> <proxies> <proxy> <id>localproxy</id> <active>true</active> <protocol>http</protocol> <host>proxy.acme.com</host> <port>8080</port> <username>scott</username> <password>t0ps3cr3t</password> <nonProxyHosts>*.acme.com</nonProxyHosts> </proxy> </proxies> ... <servers> <server> <id>dbserver</id> <username>scott</username> <password>tiger</password> </server> </servers> ... </settings> 
+The localRepository element, for example, is very useful if
+you are using a corporate environment where your home directory is sent
+over the network each morning when you log on. Placing the local
+repository in a different directory on your local hard disk will, in
+this case, save a lot of band width.
+You can also define repositories, mirrors, profiles and properties your the settings.xml. I don't want to cover configuring these here, as it is fairly well documented elsewhere.
+What is less well-known, or at least less frequently used, is the ability to use other data defined in the settings.xml file from within your pom.xml file. In fact, you can use any element of the settings.xml, though some are more useful than others.
+One common, and easy, example is to use the localRepository
+variable. You might need to pass this variable to a script, or use it
+to refer to a particular JAR file in the repository (though there are
+usually more elegant solutions for that particular problem). You can
+use the localRepository property simply by referring to ${settings.localRepository}.
+For example, in the following code, we invoke an Ant script and pass it
+the local repository path in a property called "localRepository":
+<plugin> <groupId>org.apache.maven.plugins</groupId> <artifactId>maven-antrun-plugin</artifactId> <executions> <execution> <id>generate-stuff</id> <phase>pre-comile</phase> <goals> <goal>run</goal> </goals> <configuration> <tasks> <ant target="generate"> <property name="localRepository" value="${settings.localRepository}"/> </ant> </tasks> </configuration> </execution> </executions> </plugin>
+However, you can do much more interesting things, particularly when you also integrate Groovy
+into your build. For example, suppose that during the integration tests
+phase, we need to ensure that certain SQL scripts have been run on the
+database. We have a Groovy script called update-scripts.groovy
+that does just this, but it needs a username and password to be
+provided as command-line parameters. How could you run this script
+before the integration test phase, using the username and password that
+you defined in the settings.xml? Well, with a bit of Groovy magic, nothing is easier! The settings object is available to any Groovy scripting you integrate into your pom.xml, so you can simply use it like a normal object, as in the following example:
+<plugin> <groupId>org.codehaus.groovy.maven</groupId> <artifactId>gmaven-plugin</artifactId> <version>1.0-rc-5</version> <executions> <execution> <id>process-db-scripts</id> <phase>pre-integration-test</phase> <goals> <goal>execute</goal> </goals> <configuration> <source> def server = settings.servers.find{ it.id.equals('dbserver') } """groovy update-scripts.groovy -Ddb.username=${server.username} -Ddb.password=${server.password}""".execute() </source> </configuration> </execution> </executions> </plugin>
+Easy as! In fact, once you know how to access not only the top-level variables, but also the collections within your settings.xml,
+the sky's the limit! Just be sure to remember to make sure that your
+builds stay portable - for example, don't define any properties in the settings.xml that don't have sensible default values in the pom.xml file. From http://weblogs.java.net/blog/johnsmart

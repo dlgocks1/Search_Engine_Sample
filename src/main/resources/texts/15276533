@@ -1,0 +1,42 @@
+Use RDF models in your Java applications with the Jena Semantic Web Framework
+Philip McCarthy is a Web Developer specialising in J2EE and front end technologies. He has four years' Java programming experience, including work on Consumer Internet Applications at Orange. He is currently developing financial Web applications at SmartStream Technologies.
+Summary:  RDF is increasingly recognized as an excellent choice for representing and processing semi-structured data. In this article, Web Developer Philip McCarthy shows you how to use the Jena Semantic Web Toolkit to exploit RDF data models in your Java applications.
+The Resource Description Framework (RDF) recently became a W3C recommendation, taking its place alongside other Web standards such as XML and SOAP. RDF can be applied in fields that deal with ad-hoc incoming data, such as CRM, and is already being widely used in social networking and self-publishing software like LiveJournal and TypePad.
+Java programmers will increasingly benefit from having the skills to work with RDF models. In this article, I'll take you through some of the features of HP Labs' open source Jena Semantic Web Framework (see Resources). You'll learn how to create and populate RDF models, how to persist them to a database, and how to query them programmatically using the RDQL query language. Finally, I'll demonstrate how Jena's reasoning capabilities can be used to infer knowledge about models from an ontology.
+This article assumes you have some familiarity with RDF -- in terms of concepts such as graphs, triples, and schemas -- as well as a basic knowledge of Java programming. 
+Creating a simple RDF model
+Let's start with the basics: creating a model from scratch and adding RDF statements to it. For this section, I'll show how to create a model describing the relationships between a group of fictional family members, as illustrated in Figure 1:
+Figure 1. A fictional family tree 
+You'll describe the different relationship types using the properties siblingOf, spouseOf, parentOf, and childOf, taken from the "Relationship" vocabulary (see Resources). For simplicity, the family members are identified with URIs from a made-up namespace, http://family/. Vocabulary URIs are frequently used in Jena code, so it's useful to declare them as Java constants, reducing the risk of mistyping them.
+When you're working with a model using Jena's API, it's useful to define constants for each property in the model's vocabulary. If you have an RDFS, a DAML, or an OWL representation of the vocabulary, Jena's Schemagen tool can make your life easier by generating these constants automatically.
+Schemagen is run on the command line, and takes parameters including the location of the schema or ontology file, and the name and Java package of the class to output. The generated Java class can then be imported and its Property constants used to access the model.
+It's also possible to run Schemagen as part of a build process with Ant, keeping the Java constants class in sync with an evolving vocabulary.
+Jena's ModelFactory class is the preferred means of creating different types of models. In this case, you want an empty, in-memory model, so ModelFactory.createDefaultModel() is the method to call. This method returns an instance of Model, which you'll use to create a Resource representing each person in the family. After the resources are created, statements can be made about them and added the model.
+In Jena, the subject of a statement is always a Resource, the predicate is represented by a Property, and the object is either another Resource or a literal value. Literals are represented in Jena by the Literal type. All of these types share a common interface, RDFNode. You'll need four different Property instances to represent the relationships in the family tree. These instances are created with Model.createProperty().
+The simplest way to add statements to a model is by calling Resource.addProperty(). This method creates a statement in the model with the Resource as its subject. The method takes two parameters, a Property representing the predicate of the statement, and the statement's object. The addProperty() method is overloaded: One overload takes an RDFNode as the object, so a Resource or Literal can be used. There are also convenience overloads that take a literal represented by a Java primitive or a String. In the example, the objects of the statements are Resources representing other family members.
+Statements can also be created directly on the model by calling Model.createStatement() with the subject, predicate, and object of the triple. Note that creating a Statement in this way doesn't add it into the model. If you want to add it into the model, call Model.add() with the created Statement, as shown in Listing 1:
+Listing 1. Creating a model to represent the fictional family 
+// URI declarations
+String familyUri = "http://family/";
+String relationshipUri = "http://purl.org/vocab/relationship/";
+// Create an empty Model
+Model model = ModelFactory.createDefaultModel();
+// Create a Resource for each family member, identified by their URI
+Resource adam = model.createResource(familyUri+"adam");
+Resource beth = model.createResource(familyUri+"beth");
+Resource chuck = model.createResource(familyUri+"chuck");
+Resource dotty = model.createResource(familyUri+"dotty");
+// and so on for other family members
+// Create properties for the different types of relationship to represent
+Property childOf = model.createProperty(relationshipUri,"childOf");
+Property parentOf = model.createProperty(relationshipUri,"parentOf");
+Property siblingOf = model.createProperty(relationshipUri,"siblingOf");
+Property spouseOf = model.createProperty(relationshipUri,"spouseOf");
+// Add properties to adam describing relationships to other family members
+adam.addProperty(siblingOf,beth);
+adam.addProperty(spouseOf,dotty);
+adam.addProperty(parentOf,edward);
+// Can also create statements directly . . .
+Statement statement = model.createStatement(adam,parentOf,fran);
+// but remember to add the created statement to the model
+model.add(statement);

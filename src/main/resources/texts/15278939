@@ -1,0 +1,56 @@
+さくらインターネットでPython環境を整える
+PythonとかPythonで書かれたものとかそうでないものとか。 bashを想定してます。 chshで /usr/local/bin/bash にシェルを変更するよろし。 
+setuptools
+$ mkdir -p ~/lib/python2.5/site-packages
+$ export PYTHONPATH=~/lib/python2.5/site-packages
+$ cat > ~/.pydistutils.cfg 
+[install]
+install_lib = ~/lib/python$py_version_short/site-packages
+install_scripts = ~/bin
+^D
+wget http://peak.telecommunity.com/dist/ez_setup.py
+python ez_setup.py
+Mercurial
+setuptools をまずインストール $ easy_install mercurial
+pysqlite2
+さくらではpython2.5.2なのにsqlite3モジュールが使えないので。 require: setuptools $ export C_INCLUDE_PATH=/usr/local/include
+$ export LIBRARY_PATH=/usr/local/lib
+$ easy_install pysqlite
+xapian
+wget http://oligarchy.co.uk/xapian/1.0.13/xapian-core-1.0.13.tar.gz
+tar xf xapian-core-1.0.13.tar.gz
+cd xapian-core-1.0.13
+./configure --prefix=$HOME
+make
+make install
+cd ..
+wget http://oligarchy.co.uk/xapian/1.0.13/xapian-bindings-1.0.13.tar.gz
+tar xf xapian-bindings-1.0.13.tar.gz
+cd xapian-bindings-1.0.13
+./configure --with-python --prefix=$HOME PYTHON_LIB=$HOME/lib/python2.5/site-packages
+make CXXFLAGS=-g
+make install
+moinmoin
+require: setuptools recommend: xapian wget http://static.moinmo.in/files/moin-1.8.3.tar.gz
+tar xf moin-1.8.3.tar.gz
+python setup.py install --prefix=$HOME
+subversion
+wget http://subversion.tigris.org/downloads/subversion-1.6.2.tar.bz2
+wget http://subversion.tigris.org/downloads/subversion-deps-1.6.2.tar.bz2
+tar xf subversion-1.6.2.tar.bz2
+tar xf subversion-deps-1.6.2.tar.bz2
+cd subversion-1.6.2
+rm -rf zlib sqlite-amalgamation serf
+./configure --prefix=$HOME --with-ssl --without-serf
+make
+make install
+make swig-py
+make install-swig-py
+echo $HOME/lib/svn-python > ~/lib/python2.5/site-packages/subversion.pth
+Genshi
+require: setuptools easy_install Genshi
+trac-ja
+require: setuptools, genshi, pysqlite2, subversion http://www.i-act.co.jp/project/products/downloads/Trac-0.11.4.ja1.zip
+tar xf Trac-0.11.4.ja1.zip
+cd Trac-0.11.4.ja1.zip
+python setup.py install

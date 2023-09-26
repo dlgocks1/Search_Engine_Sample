@@ -1,0 +1,65 @@
+By Lindsay Mullen, Assistant Editor 
+07 Mar 2005 | SearchWindowsSecurity.com
+The following is the ITKnowledge Exchange Tip of the Week for March 7, 2005.
+Question #1 
+"Jmalik" writes: 
+I have a Windows 2003-based network, and I want a certain user to be local administrator for all computers in an organizational unit without making him domain administrator (so that he's able to install/uninstall software on the client PCs).
+Responses 
+"slesh20" writes: On the local computer, do the following: 
+1. Right click on My Computer 
+2. Select Manage 
+3. Scroll to Local User and Groups 
+4. Under Groups, double click on Administrators 
+5. Search for the Account (from your AD) you want to enable as a local Administrator 
+6. Click Add -- that's it!
+Also, you can simply add 'Domain Users' to avoid adding a user in the administrative group each time.
+Question #2 
+"Jmalik" responds: 
+Thanks for your reply "slesh20." The problem is that I will have to add the user to the local administrators group one by one for all 60 PCs. The domain admin is automatically local admin for all PCs in the domain. Is there any way I can make a user/group local administrator for all computers in a domain by default (or in one go) without making him a domain admin? 
+Responses 
+"TexasBoy" writes: You want to structure AD for administrative purposes. In this case you will need an OU container that has these 60 computers in it. Once you have done so, right click the OU name and choose 'Delegate control.' This should launch the Delegate Control Wizard. You can specify just the type of administrative control you want to give for this OU to an individual. You can specify administering user accounts, adding computer accounts to domain, deleting computers, etc.
+"rjournitz574" writes: From your original question it sounds to me like what you want is to have a user whose account is domain based be a local administrator on all the PCs in that same domain but not make that user a domain admin or delegate any domain privileges. If that is correct then I would suggest the following: 
+1. Write a VB script that: 
+a. Gets the domain-based user record. 
+b. Adds this user to the Local Administrators group on the PC. 
+2.Add this script to an existing Computer Startup script in your AD Group Policy. If you do not have this policy script then create one.
+Once the above runs on all you PCs, you can delete that portion of the GPO.
+"amigus" writes: This VBS script should do what you want. It will require some customization for your site and you'll need to run it from a domain controller or some computer trusted for delegation, as a domain administrator. 
+' -- BEGIN --
+' Add user to local group for all domain computers.
+strDomainSuffix = "DC=example,DC=com"
+strDomain = "EXAMPLE"
+strUser = "Adam"
+strDstGroup = "Administrators"
+Const ADS_SCOPE_SUBTREE = 2
+Set objConnection = CreateObject("ADODB.Connection")
+Set objCommand = CreateObject("ADODB.Command")
+objConnection.Provider = "ADsDSOObject"
+objConnection.Open "Active Directory Provider"
+Set objCommand.ActiveConnection = objConnection
+' Taylor this search to return the computers you want.
+objCommand.CommandText = "" _
+& "select Name " _
+& "from 'LDAP://" & strDomainSuffix & "' " _
+& "where objectClass='computer' " _
+& "and operatingSystem='Windows XP Professional' " _
+& ""
+objCommand.Properties("SearchScope") = ADS_SCOPE_SUBTREE 
+objCommand.Properties("Cache Results") = False 
+objCommand.Properties("Timeout") = 300
+Set objRecordSet = objCommand.Execute
+objRecordSet.MoveFirst
+Do Until objRecordSet.EOF
+strComputer = objRecordSet.Fields("Name").Value
+Set objGroup = GetObject("WinNT://" & strComputer & "/" & strDstGroup & ",group")
+Set objUser = GetObject("WinNT://" & strDomain & "/" & strUser & ",user")
+WScript.Echo objUser.ADsPath & " -> " & objGroup.ADsPath
+objGroup.Add(objUser.ADsPath)
+objRecordSet.MoveNext
+Loop
+' -- END --
+Get additional recommendations here.
+Start your own discussion 
+Do you have a Windows security dilemma that needs quick attention? Talk about it in ITKE.
+About the ITKnowledge Exchange 
+ITKnowledge Exchange is a place where IT pros can share ideas, expertise and get answers to their technical and strategic questions. It provides direct access between groups or individuals who are grappling with similar IT issues in a safe and seamless environment. Click to start participating today or go to the Tip of the Week archives.

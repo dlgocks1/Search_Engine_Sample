@@ -1,0 +1,12 @@
+BlazeDSとは？ †
+Flexデータサービスを実現するサーバーサイドアプリケーション。上位機能を持つLiveCycleDataServiceは有償であり、そのサブセットという位置づけ。オープンソースプロジェクトとしてソースは公開されている。
+http://opensource.adobe.com/wiki/display/blazeds/BlazeDS
+↑
+ダウンロード＆動作環境 †
+BlazeDS自体はJava Web Applicationであり、warファイル形式で配布される。ダウンロードは「BlazeDSのwarファイルのみのBinary Distribution」と「ドキュメント、実行コンテナであるTomcatおよびサンプルを含むTurnkey」がある。
+http://opensource.adobe.com/wiki/display/blazeds/Release+Builds
+Tomcatベースで必要な動作環境は以下。
+JRE5以上
+Tomcat6.0（Turnkeyに含む）
+もちろんJBoss,JRun,Weblogic,WebSphere上で動作させることも可能。
+↑

@@ -1,0 +1,99 @@
+What if you had a nickle for every time you heard: "I have the perfect idea for a great application!"? It’s the buzz on the street. The iPhone has created unprecedented excitement and innovation from people both inside and outside the software development community. Still for those outside the development world, the process is a bit of a mystery.
+This how-to guide is supposed to walk you through the steps to make your idea for an iPhone app a reality. This post presents various ideas, techniques, tips, and resources that may come in handy if you are planning on creating your first iPhone application.
+We also discuss UI design and marketing techniques in our upcoming Smashing Book ($23.90 $29.90, available worldwide). Pre-order now and save 20% off the price!
+1. Have an idea – a Good Idea
+How do you know if your idea is a good one? The first step is to even care if your idea is solid; and the second step is to answer the question does it have at least one of the indicators of success?
+Does your app solve a unique problem? Before the light bulb was invented, somebody had to shout out “Man, reading by candlelight sucks!” Figure out what sucks, and how your app can make the life of its user more comfortable.
+Does the app serve a specific niche? Though there aren’t any stats on the App Store search, the usage of applications is certainly growing with the explosion of App Store inventory. Find a niche with ardent fans (pet lovers, for example) and create an app that caters to a specific audience.
+Does it make people laugh? This is a no-brainer. If you can come up with something funny, you are definitely on the right track and your idea may be the golden one. Heck, I hit a red “do not press” button for 5 minutes yesterday.
+Are you building a better wheel? Are there existing successful apps that lack significant feature enhancements? Don’t be satisfied with just a wine list, give sommeliers a way to talk to their fans!
+Will the app be highly interactive? Let’s face it, most of us have the attention span of a flea. Successful games and utilities engage the user by requiring action!
+Action: Does your app fall in to one of these categories? If yes, it’s just about time to prepare the necessary tools.
+2. Tools Checklist
+Below is a list of items you’ll need (*starred items are required, the rest are nice-to-have’s):
+join the Apple iPhone Developer Program ($99) *
+get iPhone or iPod Touch *
+get an Intel-based Mac computer with Mac OS X 10.5.5,
+prepare a Non-Disclosure Agreement (here’s a sample) *
+download and install the latest version of the iPhone SDK if you don’t already have it.
+a spiral bound notebook*
+Action: Load up on your required supplies.
+3. What Are You Really Good At?
+What skills do you bring to the table? Are you a designer whose brain objects to Objective C? A developer who can’t design their way out of a paper sack? Or maybe you are neither, but an individual with an idea you’d like to take to the market? Designing a successful iPhone application is a lot like starting a small business. You play the role of Researcher, Project Manager, Accountant, Information Architect, Designer, Developer, Marketer and Advertiser – all rolled into one.
+Remember what all good entrepreneurs know – it takes a team to make a product successful. Don’t get me wrong, you certainly can do it all. But you can also waste a lot of time, energy and sanity in the process. Don’t go crazy, reference the checklist below and ask yourself: What roles are the best fit for you to lead? Then find other talented people to fill in the gaps. The infusion of additional ideas can only enrich the product!
+Skills Checklist
+Ability to Discern what works/doesn’t work in existing iPhone Apps
+Market research
+Outlining App Functionality (Sitemap Creation)
+Sketching
+GUI Design
+Programming (Objective C, Cocoa) (we assume here that we are creating a native application)
+App Promotion and Marketing
+Remember to have contractors sign your non-disclosure agreement. Having a contract in place tells your contractor "I’m a professional that takes my business and this project seriously. Now don’t go runnin’ off with this idea."
+Action: Select skills that are a good fit for you to lead. For those roles where you cannot lead, hire professionals.
+4. Do Your Homework: Market Research
+Market research is a fancy way of saying "Look at what other people are doing and don’t make the same mistakes." Learn from the good, bad and ugly in the App Store. Coming up with creative solutions in the app concept development and design starts with analyzing other (maybe similar) applications. Even if you encounter a lot of poorly designed apps, your mind will reference these examples of what not to do.
+Action: Answer these questions:
+What problem does your app solve?
+What products have you seen that perform a similar task?
+How do successful apps present information to users?
+How can you build on what works and make it unique?
+What value does your app bring to your audience?
+5. Know the iPhone/iPod Touch UI
+If you want to create an iPhone app, you need to understand the capabilities of the iPhone and its interface. Can you shoot a .45 caliber bullet out of your iPhone? No. Can you shoot videos? Yes!
+The good news is that you don’t have to memorize the encyclopedic Apple User Interface Guidelines to get a feel for what works and what doesn’t in iPhone Apps. Download and play with as many apps as you can, and think about what functionality you want to include in your product.
+Take note of:
+How do well-designed apps navigate from screen to screen?
+How do they organize information?
+How MUCH information do they present to the user?
+How do they take advantage of the iPhone’s unique characteristics: the accelerometer, swiping features, pinch, expand and rotate functions?
+Action: Download the Top 10 apps in every category and play with all of them. Review the Apple Guidelines for UI design and list at least 5 features you’d like to incorporate into your app.
+6. Determine "Who will use your app?"
+We assume here that you’ve already determined that your app will bring value and that you will have a raging audience for your app. Well, fine, they are raging fans, but who are they really? What actions will they take to achieve their goals within the app?
+If it’s a game, maybe they want to beat their high score. Or perhaps they are a first time player – how will their experience differ from someone who is getting a nice case of brain-rot playing your game all day?
+If it’s a utility app, and your audience wants to find a coffee shop quickly, what actions will they take within the app to find that coffee shop? Where are they when they’re looking for coffee? Usually in the car! Do present an interface that requires multiple taps, reading and referencing a lot? Probably not! This is how thinking about how real-life intersects design.
+Action: Line item out the different types of people who will use your app. You can even name them if you want to make the scenarios you draw out as real as possible.
+7. Sketch Out Your Idea
+And by "sketch" I mean literally sketch. Line out a 9-rectangle grid on an 8.5 x 11 sheet of paper and get to sketching!
+Ask yourself:
+What information does each screen need to present?
+How can we take the user from point A to point B to point C?
+How should elements on the screen be proportioned or sized in relation to each other (i.e. is this thing even tap-able?)
+Image credit: Zhdk.ch
+Thumbnailing your ideas on paper can push your creativity far beyond where your imagination might stagnate working in an sketching application! You can also buy the iPhone Stencil Kit to quickly sketch out iPhone UI prototypes on paper.
+Action: Create at least one thumbnail page of your application per screen. Experiment with various navigational schemes, the text you put on buttons, and how screens connect. If you want to transfer your sketches into digital format, iPlotz is a good tool to check out.
+8. Time for Design
+If you are a designer, download the iPhone GUI Photoshop template or our iPhone PSD Vector Kit. Both are collections of iPhone GUI elements that will save you a lot of time in getting started. If you’ve solidified your layout during sketching, drawing up the screens will be less of a layout exercise and more about the actual design of the app.
+If you are not a designer, hire one! It’s like hiring an electrician to do electrical work. You can go to Home Depot and buy tools to try it yourself, but who wants to risk getting zapped? If you’ve followed steps 1–3, you’ll have everything you need for a designer to get started.
+When looking for a designer, try to find someone who has experience designing for mobile devices. They may have some good feedback and suggested improvements for your sketches. A few places to look for designers: Coroflot, Crowdspring, eLance. When posting your job offer, be very specific about your requirements, and also be ready to review a lot of portfolios.
+Action: If you are a designer, get started in Photoshop. If you are not a designer, start interviewing designers for your job.
+9. Programming
+Even though this how-to is sequential, it’s a good idea to get a developer on board at the same time when you line up design resources. Talking with a developer sooner than later will help you scope out a project that is technically feasible and within your budget.
+If you are a Objective C/Cocoa developer crack, open Xcode and get started! A few forums to join if you haven’t already:
+Apple Dev Forum
+iPhoneSDK (moderated by Erica Sadun)
+iPhoneSDKForum
+iPhoneDev Forums
+iPhoneSB
+If you are not a developer, you know what to do – find one! Specify the type of app you want to produce – whether it is a game, utility or anything else. Each type usually requires a different coding skill set. A few places to look for developers: Odesk, iPhoneFreelancer, eLance and any of the forums listed above.
+10. Submit your application to Apple Store
+OK, so how do you submit your application to Apple Store now? The process of compiling your application and publishing the binary for iTunes Connect can be difficult for anyone unfamiliar with XCode. If you are working with a developer, ask them to help you:
+Create your Certificates
+Define your App ID’s
+Create your Distribution Provisioning Profile
+Compile the application
+Upload to iTunes Connect
+Action: If you are a developer, map out a development timeline and get started. If you are not a developer, start interviewing devs for your job.
+11. Promote Your App
+If a tree falls in the middle of the woods and nobody was around to hear it does it make a sound? Apps can sit in the store unnoticed very easily. Don’t let this happen to you. Be ready with a plan to market your app. In fact, be ready with many plans to market your app. Be ready to experiment, some ideas will work, others won’t.
+Strategies for maintaining/boosting app sales:
+Incorporating social media. If your users make the high score on his or her favorite game, it is a good idea to make it easy for the user to post it to Facebook or Twitter. Think about how your app can incorporate social media and build that functionality into your app. At a minimum, set up a fan page for your app on Facebook and Twitter and use them as platforms to communicate with your users and get feedback on your app.
+Pre-launch promotion. Start building buzz about your app before it has launched. E-mail people who write about things that relate to your app and see if they will talk up the upcoming release of your app.
+Plan for multiple releases. Don’t pack your app with every single feature you want to offer in the very first release. Make your dream list for the app and make sure that the app is designed to incorporate all of the features at some time in the future. Then periodically drop new versions of the app to boost app store sales.
+Action: Make a list of 20 promotional strategies that target the audience for your app. Take action on them yourself or hire someone who can!
+11. Stay Focused and Don’t Give Up!
+It’s easy when you are working on your first app to get all AppHappy, dreaming up a zillion new app-ideas. Dream, but don’t get sidetracked by new ideas. Your first app needs to make a big splash and getting involved in too many projects at once can dilute your passion for making your first application a success.
+Action: Get out there and go kick some app!
+About the Author
+Jen Gordon is the owner of Atlanta-based iPhone app design studio Clever Twist. She specializes in usable interfaces, beautiful design and straight talk. She loves her family, the iPhone and periodically dreams that she’s close friends with Dolly Parton. Follow her on Twitter or drop her a line to say hi!
+We also discuss UI design and marketing techniques in our upcoming Smashing Book ($23.90 $29.90, available worldwide). Pre-order now and save 20% off the price!

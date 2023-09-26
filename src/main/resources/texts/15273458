@@ -1,0 +1,23 @@
+org.apache.commons.io
+Class FileUtils
+java.lang.Object
+org.apache.commons.io.FileUtils
+public class FileUtilsextends java.lang.Object
+General file manipulation utilities.
+Facilities are provided in the following areas:
+writing to a file
+reading from a file
+make a directory including parent directories
+copying files and directories
+deleting files and directories
+converting to and from a URL
+listing files and directories by filter and extension
+comparing file content
+file last changed date
+calculating a checksum
+Origin of code: Excalibur, Alexandria, Commons-Utils
+Version:
+$Id: FileUtils.java 619188 2008-02-06 22:33:04Z niallp $
+Author:
+Kevin A. Burton, Scott Sanders, Daniel Rall, Christoph.Reck, Peter Donald, Jeff Turner, Matthew Hawthorne, Jeremias Maerki, Stephen Colebourne, Ian Springer, Chris Eldredge, Jim Harrington, Niall Pemberton, Sandy McArthur
+Field Summary

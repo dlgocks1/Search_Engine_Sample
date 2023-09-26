@@ -1,0 +1,33 @@
+ＷＥＢ相談室
+Webページ作成に関しての何でも掲示板です。
+タイトル：<FONT size="x">に対するCSSのフォントサイ
+0:[投稿] マンタ [WriteDate : Thu Nov 8 19:25:07 2001]
+<FONT size="x">に対するCSSのフォントサイズはなにですか？ 
+何か規則性があるのですか？ 
+例えば<FONT size="2">に対するCSSのフォントサイズは“8pt”とか？ 
+できれば、<FONT size="1">〜<FONT size="5">に対するCSSでのフォントサイズを教えていただければありがたいのですが。
+それとも、size="x"はそのままfont-size="x"とか？ 
+本で調べたんですが良くわからないので教えてください。
+1:[回答] 相対指定 [WriteDate : Thu Nov 8 20:55:11 2001]
+font size="1" -> font-size:xx-small; 
+font size="2" -> font-size:x-small; 
+font size="3" -> font-size:small; 
+font size="4" -> font-size:medium; 
+font size="5" -> font-size:large; 
+font size="6" -> font-size:x-large; 
+font size="7" -> font-size:xx-large;
+2:[完了] マンタ [WriteDate : Thu Nov 8 20:56:32 2001]
+ありがとうございました。
+3:[回答] ほげら [WriteDate : Thu Nov 8 21:10:31 2001]
+http://www2.portland.ne.jp/~sigekazu/css/font.htm#fontsize 
+にあるように、ブラウザ・バージョンによりまちまちです。
+4:[完了] ほげら [WriteDate : Thu Nov 8 21:11:11 2001]
+ありゃ、完了になってたな。。。
+5:[完了] マンタ [WriteDate : Thu Nov 8 21:24:25 2001]
+ぼけらさん＞＞どうも、ごていねいに・・・。
+回答(必須)：
+状態：
+お名前(必須)： 
+e-mail： 
+ＵＲＬ： 
+[戻る]

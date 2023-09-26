@@ -1,0 +1,137 @@
+SheevaPlugが起動しなくなった。たぶんU-Boot 1.1.4 (Mar 19 2009 - 16:06:59) Marvell version: 3.4.16
+の祟りである。u-bootを更新しなければならない。SheevaPlugが起動できないので、SheevaPlug自身で行う更新の道は閉ざされている。母艦からJTAG経由で更新する以外に手段はない。しかし、母艦のセットアップ、不具合解消で既に２週末を費やしている。
+母艦スペック
+SONY PCG-R505/ABW(PCG-612G)2001年6月発売
+モバイルIntel Celeronプロセッサー650MHz
+SDRAM 128MB-64MB+256MB=320MB
+15GB(Ultra ATA) ---> 120GB(Ultra ATA)に換装
+Microsoft Windows Millennium Edition ---> debian5.02(lenny)
+参考
+日経Linux 2009/07
+Category:HowTo
+日経Linux2009/7通りにやってもうまくゆかない。
+libftdi-develなんてパッケージはaptitude出来ない。libftdi-devならaptitude出来るが、だめっぽい。
+debian:/home/nitobe# openocd -f /usr/local/lib/openocd/borad/sheevaplug.cfg
+Open On-Chip Debugger 0.3.0-in-development (2009-07-18-19:25) svn:2549M
+$URL: svn://svn.berlios.de/openocd/trunk/src/openocd.c $ For bug reports, read http://svn.berlios.de/svnroot/repos/openocd/trunk/BUGS
+Can't find /usr/local/lib/openocd/borad/sheevaplug.cfg
+debian:/home/nitobe# 
+後述のオリジナルcfgを呼び出しても、
+debian:/home/nitobe# openocd -f ./openocd-2549/tcl/board/sheevaplug.cfg
+Open On-Chip Debugger 0.3.0-in-development (2009-07-18-19:25) svn:2549M
+$URL: svn://svn.berlios.de/openocd/trunk/src/openocd.c $ For bug reports, read http://svn.berlios.de/svnroot/repos/openocd/trunk/BUGS
+2000 kHz
+jtag_nsrst_delay: 200
+jtag_ntrst_delay: 200
+dcc downloads are enabled
+Error: unable to open ftdi device: device not found
+Runtime error, file "command.c", line 469:
+debian:/home/nitobe#
+JTAGが認識されていない様だ。
+どうする？しゃぁないなぁ・・・ってな訳で、
+aptitude install したパッケージたち
+screen 4.0.3-11+lenny
+gcc 4.3
+g++ 4.3
+make 3.81-5
+m4 1.4.11-1
+autoconf 2.61-8
+automake 1:1.10.1-3
+flex 2.5.35-6
+git-core 1:1.5.6.5-3+lenny1
+subversion 1.5.1dfsg1-2
+libusb-dev 2.0.1.12-13
+libftdi-dev 0.13-2
+libboost-dev 1.34.1-14
+libtool 1.5.26-4
+※aptitude なので依存パッケージは自動的にインストールされる。
+./configure;make;make install したパッケージたち
+libusb
+http://sourceforge.net/projects/libusb/files/libusb-0.1%20%28LEGACY%29/libusb-0.1.12.tar.gz/download
+※実は、この子はmakeエラーで断念。上の標準パッケージのまま。
+libconfuse
+http://bzero.se/confuse/confuse-2.6.tar.gz
+libftdi-0.16.tar.gz
+http://www.intra2net.com/en/developer/libftdi/download/libftdi-0.16.tar.gz
+※./configure と make の間に
+vi Makefile
+from: SUBDIRS = src doc
+to: SUBDIRS = src
+Openocd をインストール
+debian:/home/nitobe# svn checkout svn://svn.berlios.de/openocd/trunk oenocd
+2549らしい。
+debian:/home/nitobe# mv openocd openocd-2549
+debian:/home/nitobe# cd openocd-2549
+debian:/home/nitobe/openocd-2549# ./bootstrap
+debian:/home/nitobe/openocd-2549# ./configure --enable-ft2232_libftdi
+debian:/home/nitobe/openocd-2549# vi Makefile
+from: SUBDIRS = src bindings $(LIBFTDI_MODULES) examples doc
+to: SUBDIRS = src bindings $(LIBFTDI_MODULES)
+debian:/home/nitobe/openocd-2549# make
+debian:/home/nitobe/openocd-2549# make install
+debian:/home/nitobe# ls /usr/local/lib/openocd
+ecos xscale
+？？？board がない！orz　※注：下記「追記2009/07/23」参照
+debian:/home/nitobe# find . -name sheevaplu.cfg -print
+./openocd-2549/tcl/board/sheevaplug.cfg
+./openocd-2549/tcl/interface/sheevaplug.cfg
+make install が完璧じゃないのかな？直接呼んじゃえ。
+ちょっと様子見
+debian:/home/nitobe# openocd -f ./openocd-2549/tcl/board/sheevaplug.cfg
+Open On-Chip Debugger 0.3.0-in-development (2009-07-19-18:04) svn:2549
+$URL: svn://svn.berlios.de/openocd/trunk/src/openocd.c $ For bug reports, read http://svn.berlios.de/svnroot/repos/openocd/trunk/BUGS
+2000 kHz
+jtag_nsrst_delay: 200
+jtag_ntrst_delay: 200
+dcc downloads are enabled
+Info : JTAG tap: feroceon.cpu tap/device found: 0x20a023d3 (mfg: 0x1e9, part: 0x0a02, ver: 0x2)
+Info : JTAG Tap/device matched
+^C
+おっ、JTAGを認識するようになった！
+大至急、uboot.binを用意して、
+debian:/home/nitobe# cd 'SheevaPlug_U-Boot/U-Boot - Image'
+debian:/home/nitobe/SheevaPlug_U-Boot/U-Boot - Image# cp u-boot-rd88f6281Sheevaplug_400db_nand.bin ../../uboot.bin
+debian:/home/nitobe/SheevaPlug_U-Boot/U-Boot - Image# cd ../..
+debian:/home/nitobe# openocd -f ./openocd-2549/tcl/board/sheevaplug.cfg -c init -c sheevaplug_reflash_uboot
+Open On-Chip Debugger 0.3.0-in-development (2009-07-19-18:04) svn:2549
+$URL: svn://svn.berlios.de/openocd/trunk/src/openocd.c $ For bug reports, read http://svn.berlios.de/svnroot/repos/openocd/trunk/BUGS
+2000 kHz
+jtag_nsrst_delay: 200
+jtag_ntrst_delay: 200
+dcc downloads are enabled
+Error: couldn't read the requested number of bytes from FT2232 device (19 < 81)
+Error: couldn't read from FT2232
+Error: number of discovered devices in JTAG chain (0) does not match (enabled) configuration (1), total taps: 1
+Error: check the config file and ensure proper JTAG communication (connections, speed, ...)
+Error: trying to validate configured JTAG chain anyway...
+target state: halted
+target halted in ARM state due to debug-request, current mode: Supervisor
+cpsr: 0x000000d3 pc: 0xffff0000
+MMU: disabled, D-Cache: disabled, I-Cache: disabled 0 0 1 0: 00052078
+NAND flash device 'NAND 512MiB 3,3V 8-bit' found successfully erased blocks 0 to 4 on NAND flash device 'NAND 512MiB 3,3V 8-bit'
+wrote file uboot.bin to NAND flash 0 up to offset 0x00073000 in 131.040161s
+^C
+エラーは出ているが、書き換えは出来ているみたいだ。
+どれどれ、SheevaPlugの再起動。
+debian:/ome/nitobe# modprobe ftdi_sio vendor=0x9e88 product=0c9e8f
+debian:/ome/nitobe# ls -al /dev/ttyU*
+crw-rw---- 1 root dialot 188, 0 2009-07-20 12:29 /dev/ttyUSB0
+？？？ttyUSB0とttyUSB1があるはずなんだが・・・。何故か端末がttyUSB0で動いている。何故なんだ？んが、動いてしまえばこっちのもの。わかちこわかちこ。
+debian:/home/nitobe# screen /dev/ttyUSB0 115200
+:
+Marvell>> version
+U-Boot 1.1.4 (Mar 9 2009 - 12:23:12) Marvell version: 3.4.16 
+Marvell>> boot
+:
+SheevaPlug login:
+めでたしめでたし。起動しました。
+追記2009/07/23
+debian:/usr# find . -name sheevaplu.cfg -print
+./local/share/openocd/scripts/interface/sheevaplug.cfg
+./local/share/openocd/scripts/board/sheevaplug.cfg
+何で、こんなところに居る？
+BerliOS Developer: File Release Notes and Changelog Release Name: 0.2.0
+Board, Interface, and Target Configuration Scripts: の項目を見て頂戴。
+・・・だとさ。くそ。故に、openocdの正しい起動方法は、
+debian:/home/nitobe# openocd -f /usr/local/share/openocd/scripts/board/sheevaplug.cfg -c init -c sheevaplug_reflash_uboot
+である。

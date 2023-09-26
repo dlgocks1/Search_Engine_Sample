@@ -1,0 +1,101 @@
+forked from : 
+beinteractive's
+forked from: 関数のオーバーヘッドありすぎない？
+[diff(60)]
+forked : 0
+favorite : 6
+lines : 87
+license : 
+MIT License
+modified : 2009/08/11 17:57:45
+// bkzenさんのつぶやきを受けてテスト
+// forked from beinteractive's forked from: 関数のオーバーヘッドありすぎない？
+// forked from keno42's 関数のオーバーヘッドありすぎない？
+package {
+import flash.display.Sprite;
+import flash.text.*;
+import flash.utils.*;
+public class FlashTest extends Sprite {
+private static const COUNT:uint = 20000;
+private var array:Array = [];
+private var tf:TextField = new TextField();
+public function FlashTest() {
+// write as3 code here..
+addChild(tf);
+tf.autoSize = "left";
+testReverse();
+testPush();
+testReverse();
+testPush();
+testReverse();
+testPush();
+testReverse();
+testPop();
+testPop();
+testPop();
+testUnshift();
+testUnshift();
+testUnshift();
+testShift();
+testShift();
+testShift();
+testOriginalUnshift();
+}
+private function testPush():void
+{
+var time:uint = getTimer();
+var i:Number, j:Number;
+for( i=0; i < COUNT; i++ ){
+array.push(i);
+}
+tf.appendText("push(配列長" + (array.length-COUNT) +"->"+ array.length+ "): " + String(getTimer()-time) + "\n");
+}
+private function testPop():void
+{
+var time:uint = getTimer();
+var i:Number, j:Number;
+for( i=0; i < COUNT; i++ ){
+array.pop();
+}
+tf.appendText("pop(配列長" + (array.length+COUNT) +"->"+ array.length+ "): " + String(getTimer()-time) + "\n");
+}
+private function testReverse():void
+{
+var time:uint = getTimer();
+var i:Number, j:Number;
+for( i=0; i < (COUNT/100); i++ ){
+array.reverse();
+}
+tf.appendText("reverse(配列長" + array.length+ "を"+(COUNT/100)+"回): " + String(getTimer()-time) + "\n");
+}
+private function testShift():void
+{
+var time:uint = getTimer();
+var i:Number, j:Number;
+for( i=0; i < COUNT; i++ ){
+array.shift();
+}
+tf.appendText("shift(配列長"+ (array.length+COUNT) +"->" + array.length+ "): " + String(getTimer()-time) + "\n");
+}
+private function testUnshift():void
+{
+var time:uint = getTimer();
+var i:Number, j:Number;
+for( i=0; i < COUNT; i++ ){
+array.unshift(1);
+}
+tf.appendText("unshift(配列長"+ (array.length-COUNT) +"->" + array.length+ "): " + String(getTimer()-time) + "\n");
+}
+private function testOriginalUnshift():void
+{
+var time:uint = getTimer();
+var i:Number, j:Number;
+array.reverse();
+for( i=0; i < COUNT; i++ ){
+array.push(i);
+}
+array.reverse();
+tf.appendText("自作unshift(配列長"+ (array.length-COUNT) +"->" + array.length+ "): " + String(getTimer()-time) + "\n");
+}
+}
+}

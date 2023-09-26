@@ -1,0 +1,43 @@
+Sequel::Model Plugins
+Sequel::Model has a very flexible and standardized plugin architecture, see the RDoc. Here is a list of plugins that members of the Sequel community have developed:
+Built-in Plugins
+association_proxies: Changes the *_to_many association method to return a proxy instead of an array of objects.
+caching: Supports caching primary key lookups of model objects to any object that supports the Ruby-Memcache API.
+hook_class_methods: Adds backwards compatiblity for the legacy class-level hook methods (e.g. before_save :do_something).
+identity_map: Allows you to create temporary identity maps which ensure a 1-1 correspondence of model objects to database rows.
+lazy_attributes: Allows you to set some attributes that should not be loaded by default, but only loaded when an object requests them.
+many_through_many: Allow you to create an association to multiple objects through multiple join tables.
+schema: Adds backwards compatibility for Model.set_schema and Model.create_table.
+serialization: Supports serializing column values and storing them as either marshal or yaml in the database.
+single_table_inheritance: Sets up STI by making subclasses of this model only load rows that match the class, and returning instances of the subclasses.
+tactical_eager_loading: Allows you to eagerly load an association for all objects retreived from the same dataset when calling the association method on any of the objects in the dataset.
+validation_class_methods: Adds backwards compatibility for the legacy class-level validation methods (e.g. validates_presence_of :column).
+validation_helpers: The preferred default validations plugin, which uses instance-level methods.
+External Plugins
+sequel_cascading: Destroy associated records, nullify foreign keys or raise an exception when destroying a record.
+sequel_container: Contained documents (i.e. attachments) for models.
+sequel_nested_set: Nested set implementation, ported from the Awesome Nested Set Active Record plugin.
+sequel_notnaughty: Port of the NotNaughty validation framework.
+sequel_polymorphic: Lets you easily create polymorphic associations.
+sequel_taggable: Allows easily adding tags to any model.
+sequel_timestamped: Adds support for autotimestamped created_at and updated_at columns if they exist.
+sequel_timestamped (2): Another take on timestamping.
+Sequel Extensions
+Extensions are modification or additions to Sequel that affect core Sequel, not just Sequel::Model.
+Built-in Extensions
+blank: Adds blank? instance methods to all objects.
+inflector: Adds instance-level inflection methods to String.
+migration: Adds Migration and Migrator classes for easily migrating the database schema forward or reverting to a previous version.
+pagination: Adds Dataset#paginate for easier pagination of datasets.
+pretty_table: Adds Dataset#print for printing a dataset as a simple plain-text table.
+query: Adds Dataset#query for a different interface to creating queries that doesn't use method chaining.
+schema_dumper: Adds Database#dump_schema_migration and related methods for dumping the schema of the database as a migration that can be restored on other databases.
+string_date_time: Adds instance methods to String for converting the string into a Date/Time/DateTime.
+External Extensions
+fixture_dependencies: YAML fixture loader that handles dependencies/associated objects, respecting foreign key constraints.
+rails-sequel: Rails plugin that allows you to use Sequel instead of ActiveRecord.
+sequel_extjs: Generates JSON from datasets that is consumable by the ExtJS JsonStore.
+sequel_postgresql_triggers: Database enforced timestamps, immutable columns, and counter/sum caches.
+sequel_vectorized: Allows Sequel::Dataset to be exported as an Hash of Arrays and NArrays.
+Submitting Your Plugin/Extension
+If you have created a Sequel plugin/extension and would like to list it here, please submit a request to code AT jeremyevans DOT net, or send a pull request via github.

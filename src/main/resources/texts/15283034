@@ -1,0 +1,16 @@
+Scala, Vim俺はVimのファイルタイプは
+" ftpluginディレクトリ作るのめんどい
+autocmd FileType * call s:LoadWhenFileType()
+とか書いて全ての設定をs:LoadWhenFileType()に書いてるわけですがその中のScala用の設定をここに晒しておきます。 .vimrcの876行目より。だいたいこんな感じ。
+if &filetype == 'scala'
+setlocal ts=4 sw=4
+" for javadoc
+setlocal iskeyword+=@-@
+setlocal includeexpr=substitute(v:fname,'\\.','/','g')
+setlocal suffixesadd=.scala
+setlocal suffixes+=.class
+setlocal comments& comments^=sO:*\ -,mO:*\ \ ,exO:*/
+setlocal commentstring=//%s
+setlocal formatoptions-=t formatoptions+=croql
+setlocal dict=$HOME/.vim/dict/java.dict,$HOME/.vim/dict/scala.dict
+endif

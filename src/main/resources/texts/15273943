@@ -1,0 +1,12 @@
+Plagger::Plugin::Filter::FeedBurnerPermalink は RSS がお嫌い？
+Plagger の P::P::Filter::FeedBurnerPermalink ですが、どうも自分のフィードや他の人で permalink がフィルタされないなぁと思って調べてみたら、feedburner の設定でフィードが RSS1.0 だったりするとだめなようです。
+そもそも XML::Feed::Entry の id になにが入るかが調べきれてないのですが…、おそらく Atom1.0 の <guid> が入ってくるんだと思いますが、RSS1.0 にはその要素がないので permalink が見付けられない罠。
+plagger.org の wiki の FAQ に書こうと思ったけど権限がないっぽいのであとで書いてもらう。
+ちなみに RSS2.0 にしたら
+Plagger [info] plugin Plagger::Plugin::Subscription::Config loaded.
+Plagger [info] plugin Plagger::Plugin::Aggregator::Simple loaded.
+Plagger [info] plugin Plagger::Plugin::Filter::FeedBurnerPermalink loaded.
+Plagger [info] plugin Plagger::Plugin::Publish::Gmail loaded.
+Plagger::Plugin::Aggregator::Simple [info] Fetch http://feeds.feedburner.com/clouder
+Plagger::Plugin::Aggregator::Simple [error] Parsing http://feeds.feedburner.com/clouder failed. Can't locate object method "getValue" via package "XML::LibXML::Namespace" at /usr/local/share/perl/5.8.7/XML/RSS/LibXML/MagicElement.pm line 25.
+こけちゃった。。。定義されてないエレメントがあるのかも。

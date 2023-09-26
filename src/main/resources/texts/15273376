@@ -1,0 +1,9 @@
+『IE6 の透過 PNG 対策。』の続きになります。
+先月のブラウザ・マーケットシェアで、Microsoft Internet Explorer 6.0(以下IE6)のシェアは26.38%と減少傾向とはいえ、Safari全体のシェアより多いのに悲しくなります。なので、まだIE6ハックを施さなければならないことに涙が出ます。
+この「IE6 の透過 PNG 対策。」は、当ブログ人気アクセスページで上位にランキングしています。調べてみると検索ワードに「ie6 透過png wordpress」とあるのが多いのでWordPressテーマに実装する手順とかも書いておくといいかなと思いついたのでした。
+左図は、現在使っているWordPressテーマのファイル配置を示したものです。JavaScriptファイルは、わかりやすいようにjsディレクトリを作ってまとめています。ファイル配置は、ご自身の好きなところに置いて結構ですので自由に配置してください。
+Webページを開いた際に、JavaScriptが読み込まれるようにhead要素内に記述します。header.phpファイルを開いて、<head>...</head>のどこかに以下のScript要素を書き入れてください。リンクアドレスに bloginfo()関数を使っていますが、フルパスで書かれても結構です。
+<script src="<?php bloginfo('template_url'); ?>/js/iepngfix.js" type="text/javascript"></script>
+次に、style.cssを開き、セレクタを書き入れます。
+.ie6 img {behavior: expression(IEPNGFIX.fix(this));}
+どうかマイクロソフト様、今からでもいいので透過PNG画像がちゃんと表示されるパッチを配布してくださいませ。

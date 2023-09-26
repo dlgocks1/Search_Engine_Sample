@@ -1,0 +1,4 @@
+When search strings include Kanji and Kana, 
+DL2 seems to pass wild-card string to Amazon Japan like '????' 
+As a result, I always get incorrect books. Does DL2 have 
+a problem around URL encoding from multi-byte strings?

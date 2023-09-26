@@ -1,0 +1,30 @@
+コーデック説明
+Apple社のQuickTime動画ファイルを再生するためのコーデックです。
+重要機能
+QuickTime Movie(*.mov,*.qt)再生 
+インストール方法
+1.最初の画面では[Next]ボタンを押す 
+※QuickTime Player(iTunes)がインストールされているPCでは、QuickTime(iTunes)のアンインストールが確認されます。 
+アンインストールしない設定の[いいえ]を選択してください。 
+2.次の画面では[Next]ボタンを押す 
+3.インストール場所の設定画面では必要な設定がなければそのまま[Next]を押す 
+4.Select Componentsの画面では、 
+[QuickTime DirectShow splitter] 
+[MOV parser] 
+[HDMOV parser] 
+[QuickTime Decoder wrapper] 
+[CoreAVC] 
+にチェックを入れ[Next]を押す 
+※QuickTime Player(iTunes)がインストールされてない場合には、 
+[Player] 
+[Media Player Classic] 
+のみチェックを外して[Next]を押す 
+5.Start Menu Folderの設定画面では必要な設定がなければそのまま[Next]を押す 
+6.Select Additional Tasksの画面ではそのまま[Next]を押す 
+7.次の画面では[Install]を押す 
+8.IE,FireFox,WMPなどを起動している場合には終了するよう警告が表示されるので、起動中の場合には終了する 
+9.インストール後[Finish]を押してインストールの完了です。 
+関連ウェブサイト
+http://www.apple.com/quicktime/
+コーデックのダウンロード
+[ quicktimealt180.exe ]

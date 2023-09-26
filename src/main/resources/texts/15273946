@@ -1,0 +1,37 @@
+■ Plagger::Plugin::Filter::TwitterFeed を書いた
+tokuhirom さんから、「wassr で先頭に hsbt: つきで発言するのはなんなんだろう」と質問されたのでちょっと調べてみた。
+オレの場合、Twitter が一次情報でそこから wassr や frepa に転送してたりするので、 Publish::Twitter(Net::Twitter) や twitter.tt あたりで挿入しているのかなあと思って調べてみたけど、特にそれらしいものをわざわざくっつけているような動きは無し。処理の途中でくっつけていないとしたら元データということで Twitter の Atom を調べてみたら案の定 Feed の title や content の先頭に UserID をくっつけてくれている。
+そんなわけで Twitter の Feed から先頭の UserID を取り除く Filter::TwitterFeed を書いてみた。
+package Plagger::Plugin::Filter::TwitterFeed;
+use strict;
+use base qw( Plagger::Plugin );
+our $VERSION = '0.01';
+sub register {
+my($self, $context) = @_;
+$context->register_hook(
+$self,
+'update.entry.fixup' => \&filter,
+);
+}
+sub filter {
+my($self, $context, $args) = @_;
+return unless $args->{feed}->url =~ m!^http://twitter\.com/!;
+if ($args->{entry}->title =~ /^(.*)?:\ (.*)?$/) {
+my $strip_title = $args->{entry}->title;
+$strip_title =~ s/^(.*)?:\ //g;
+$args->{entry}->title($strip_title);
+$context->log(info => "Strip username in title: " . $args->{entry}->title);
+}
+if ($args->{entry}->body =~ /^(.*)?:\ (.*)?$/) {
+my $strip_body = $args->{entry}->body;
+$strip_body =~ s/^(.*)?:\ //g;
+$args->{entry}->body($strip_body);
+$context->log(info => "Strip username in body: " . $args->{entry}->body);
+}
+}
+1;
+__END__
+かなりアレな臭いがするので誰か添削してください。
+例えば、register_fook の所で update.entry.fixup と update.feed.fixup の違いを最初わかってなくて何度やっても
+$args->{entry}->title
+にアクセスできなくて困ったり、参照とか置換とかよくわからなくてわざわざ strip_title なんて変数を作って{entry}->title に再設定しているあたりが perl レベルのしょぼさを醸し出している。

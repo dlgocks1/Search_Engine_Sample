@@ -1,0 +1,96 @@
+News
+Omer has been professionally developing applications over the past 8 years, both at the IDF’s IT corps and later at the Sela Technology Center, but has had the programming bug ever since he can remember himself. 
+As a senior developer at NuConomy, a leading web analytics and advertising startup, he leads a wide range of technologies for its flagship products.
+How To: Create a Component Conscious UITypeEditor
+Many a time do I find Design-Time support in Visual Studio.NET to be a no-man's land, be it because no one in my surroundings knows how to do something I have to do and I have to resort to an hour or more of internet research, at times in vain, or be it because I have to look into and touch Microsoft's internal/private classes.
+This time I encountered a problem which required me to create a UITypeEditor that is on an Extender Provider's provided property. Easy enough, but it doesn't stop at that. I had to use reflection to scan the component this provided property was applied to, to find all public boolean properties with get/set accessors. Now we're in that no-man's land I was talking about earlier.
+Point of Interest: If you want to apply Design-Time support attributes to properties supplied by an Extender Provider, you must apply them to both the Get and Set methods you create.
+The following is the solution to this problem. I tried documenting it as best I can:
+using System;
+using System.ComponentModel;
+using System.Globalization;
+using System.Collections;
+using System.Drawing.Design;
+using System.Windows.Forms;
+using System.Windows.Forms.Design;
+using System.Reflection;
+/// <summary>
+/// Written by Omer van Kloeten. All rights reserved.
+/// </summary>
+namespace HowTo
+{
+/// <summary>
+/// Provides a user interface for selecting a state property.
+/// </summary>
+public class ConsciousTypeEditor : UITypeEditor
+{
+// This class is the list that will pop up when we click
+// on the down arrow of the mock-combo box in the designer.
+private class PropertiesList : ListBox
+{
+public PropertiesList(Component component)
+{
+// Go over all properties, filtering out the ones we need (public/get/set/boolean).
+// None is a reserved type for a case where no property is selected.
+foreach (PropertyInfo info in component.GetType().GetProperties())
+{
+if (info.GetGetMethod(false) != null &&
+info.GetSetMethod(false) != null &&
+info.PropertyType == typeof(bool) &&
+info.Name != "None")
+{
+this.Items.Add(info.Name);
+}
+}
+this.Items.Add("None");
+this.Sorted = true;
+// Not setting the border to none just doesn't look good.
+this.BorderStyle = BorderStyle.None;
+}
+}
+/// <summary>
+/// Displays a list of available values for the specified component than sets the value.
+/// </summary>
+/// <param name="context">An ITypeDescriptorContext that can be used to gain additional context information.</param>
+/// <param name="provider">A service provider object through which editing services may be obtained.</param>
+/// <param name="value">An instance of the value being edited.</param>
+/// <returns>The new value of the object. If the value of the object hasn't changed, this method should return the same object it was passed.</returns>
+public override object EditValue(ITypeDescriptorContext context, IServiceProvider provider, object value)
+{
+if (provider != null)
+{
+// This service is in charge of popping our ListBox.
+IWindowsFormsEditorService service1 = ((IWindowsFormsEditorService) provider.GetService(typeof(IWindowsFormsEditorService)));
+if (service1 != null)
+{
+// This is an internal Microsoft class representing the PropertyGrid entry for our component.
+if (provider.GetType().FullName == "System.Windows.Forms.PropertyGridInternal.PropertyDescriptorGridEntry")
+{
+// Get the component we're working on via reflection.
+Component comp = ((Component)(provider.GetType().GetProperty("Component").GetGetMethod().Invoke(provider, new object[0])));
+PropertiesList list = new PropertiesList(comp);
+// Drop the list control.
+service1.DropDownControl(list);
+if (list.SelectedIndices.Count == 1)
+{
+value = list.SelectedItem.ToString();
+}
+// Close the list control after selection.
+service1.CloseDropDown();
+}
+}
+}
+return value;
+}
+/// <summary>
+/// Gets the editing style of the <see cref="EditValue"/> method.
+/// </summary>
+/// <param name="context">An ITypeDescriptorContext that can be used to gain additional context information.</param>
+/// <returns>Returns the DropDown style, since this editor uses a drop down list.</returns>
+public override UITypeEditorEditStyle GetEditStyle(ITypeDescriptorContext context)
+{
+// We're using a drop down style UITypeEditor.
+return UITypeEditorEditStyle.DropDown;
+}
+}
+}

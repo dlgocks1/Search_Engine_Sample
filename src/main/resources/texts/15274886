@@ -1,0 +1,35 @@
+OSS EXPO
+yasuma(OSSテクノロジ http://www.osstech.co.jp)によるOpen Source Softwareに関する記録、その他です。
+Home
+Archives
+RSS
+Linux使って10年ぐらいになるけど、vmstatの-sオプションを初めて知った。
+# vmstat -s 
+125388 total memory 
+121616 used memory 
+105004 active memory 
+3432 inactive memory 
+3772 free memory 
+776 buffer memory 
+42884 swap cache 
+524280 total swap 
+92 used swap 
+524188 free swap 
+185237 non-nice user cpu ticks 
+1710 nice user cpu ticks 
+77584 system cpu ticks 
+4911999 idle cpu ticks 
+14583 IO-wait cpu ticks 
+9918 IRQ cpu ticks 
+904 softirq cpu ticks 
+0 stolen cpu ticks 
+228949 pages paged in 
+298110 pages paged out 
+0 pages swapped in 
+23 pages swapped out 
+14052768 interrupts 
+2072332 CPU context switches 
+1190342519 boot time 
+4731 forks
+まだまだ知らないことがたくさんだ。
+数年前に受験したLPIC 1のときにでてきたtacコマンドにも驚愕したけど...。

@@ -1,0 +1,91 @@
+かなり前の記事Android SDカードをFAT32に変更に使用したコマンドのまとめ
+Android OSの/system/binに存在する、以下のコマンドについて解説
+sdutil
+mkdosfs
+reboot
+mount
+SDカードをマウント、アンマウント、PCからUSBストレージとして認識させる、させない等を切り替えます。
+フォーマットも可能。
+マウント
+#sdutil mount /sdcard
+# mount
+rootfs / rootfs ro 0 0
+tmpfs /dev tmpfs rw,mode=755 0 0
+devpts /dev/pts devpts rw,mode=600 0 0
+proc /proc proc rw 0 0
+sysfs /sys sysfs rw 0 0
+tmpfs /sqlite_stmt_journals tmpfs rw,size=4096k 0 0
+/dev/block/mtdblock3 /system yaffs2 ro 0 0
+/dev/block/mtdblock5 /data yaffs2 rw,nosuid,nodev 0 0
+/dev/block/mtdblock4 /cache yaffs2 rw,nosuid,nodev 0 0
+/dev/block//vold/179:1 /sdcard vfat rw,dirsync,nosuid,nodev,noexec,uid=1000,gid=1000,fmask=0711,
+dmask=0700,allow_utime=0022,codepage=cp437,iocharset=iso8859-1,shortname=mixed,utf8 0 0
+アンマウント
+#sdutil umount /sdcard
+# mount
+rootfs / rootfs ro 0 0
+tmpfs /dev tmpfs rw,mode=755 0 0
+devpts /dev/pts devpts rw,mode=600 0 0
+proc /proc proc rw 0 0
+sysfs /sys sysfs rw 0 0
+tmpfs /sqlite_stmt_journals tmpfs rw,size=4096k 0 0
+/dev/block/mtdblock3 /system yaffs2 ro 0 0
+/dev/block/mtdblock5 /data yaffs2 rw,nosuid,nodev 0 0
+/dev/block/mtdblock4 /cache yaffs2 rw,nosuid,nodev 0 0
+引数
+#sdutil
+usage:
+sdutil mount <mount path> - mounts the SD card at the given mount point
+sdutil unmount <mount path> - unmounts the SD card at the given mount point
+sdutil format <mount path> - formats the SD card at the given mount point
+sdutil ums enable - enables USB mass storage
+sdutil ums disable - disnables USB mass storage
+DOSファイルシステムの作成、SDカードをFAT32でフォーマットする時など使用
+#mkdosfs
+usage: mkdosfs [ -options ] special [disktype]
+where the options are:
+-N don't create file system: just print out parameters
+-B get bootstrap from file
+-F FAT type (12, 16, or 32)
+-I volume ID
+-L volume label
+-O OEM string
+-S bytes/sector
+-a sectors/FAT
+-b block size
+-c sectors/cluster
+-e root directory entries
+-h drive heads
+-i file system info sector
+-k backup boot sector
+-m media descriptor
+-n number of FATs
+-o hidden sectors
+-r reserved sectors
+-s file system size (sectors)
+-u sectors/track
+例
+# mkdosfs -F 32 /dev/block/mmcblk0p1
+デバイスをマウントしたりするソフト
+引数なしで現在のマウントしている物を表示
+# mount h
+Usage: mount [-r] [-w] [-o options] [-t type] device directory
+以下はAndroid OS1.5素のマウント出力
+# mount
+rootfs / rootfs ro 0 0
+tmpfs /dev tmpfs rw,mode=755 0 0
+devpts /dev/pts devpts rw,mode=600 0 0
+proc /proc proc rw 0 0
+sysfs /sys sysfs rw 0 0
+tmpfs /sqlite_stmt_journals tmpfs rw,size=4096k 0 0
+/dev/block/mtdblock3 /system yaffs2 ro 0 0
+/dev/block/mtdblock5 /data yaffs2 rw,nosuid,nodev 0 0
+/dev/block/mtdblock4 /cache yaffs2 rw,nosuid,nodev 0 0
+/dev/block//vold/179:1 /sdcard vfat rw,dirsync,nosuid,nodev,noexec,uid=1000,gid=1000,fmask=0711,
+dmask=0700,allow_utime=0022,codepage=cp437,iocharset=iso8859-1,shortname=mixed,utf8 0 0
+ブログ内の関連する記事
+Android SDカードをFAT32に変更
+Android sdcardディレクトリの取得
+Android USB driver vista 64bit版
+Android に音楽を転送してみる
+Android Dev PhoneをUSB接続してみる

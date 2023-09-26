@@ -1,0 +1,39 @@
+そういうアプリを作った。
+Twitter で一時期 (調べてみたら4月23日ぐらいだった) 話題になっていて、Google App Engine で集計してみたいなーと思っていた。手が開いたのでやってみた。 
+まだベータ版以前なので、人柱になりたい人だけ試してください
+ブラウザ側でやることは一つ、この UserJS をインストールするだけ。
+// ==UserScript==
+// @name SITEINFO Stats
+// @namespace http://d.hatena.ne.jp/edvakf/
+// @description Collect statistics for AutoPagerize SITEINFO
+// ==/UserScript==
+(function(fun){
+if (window.AutoPagerize) fun();
+else window.addEventListener('GM_AutoPagerizeLoaded',fun,false);
+})(function(){
+var flag = false;
+window.AutoPagerize.addDocumentFilter(function(doc,url,info){
+if (flag) return;
+var api = [
+'http://atsushuu.appspot.com/siteinfo/vote?',
+'url=', encodeURIComponent(info.url), '&',
+'nextLink=', encodeURIComponent(info.nextLink), '&',
+'pageElement=', encodeURIComponent(info.pageElement)
+].join('');
+new Image().src = api;
+flag = true;
+})
+})
+Greasemonkey 用インストールリンク。
+http://gist.github.com/165566.txt#SITEINFOstats.user.js
+あとはこのサイトで、今日使われた SITEINFO を確認できる。
+SITEINFO Stats
+?period=weekly
+?period=monthly
+というパラメータもあるけど、今日作ったアプリなのでまだ見ても意味ないと思う。 
+将来的には
+SITEINFO を全部表示するのをやめる。
+長期に渡って使われてない SITEINFO をわかりやすくする。
+キャッシュが切れた時にデータベース側から読み込む作業がかなり負荷が高いのでなんとかする。(なんとか出来るのか?)
+ぐらいを目標にしている。
+とりあえず運用してみて、けっこう使えそうだったら swdyh さんと os0x さんに標準搭載にしてもらえないか頼んでみようと思う。

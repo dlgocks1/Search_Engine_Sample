@@ -1,0 +1,238 @@
+Tuesday, May 05, 2009
+ImageMagickとPHPで画像に3D枠をつける
+ImageMagickとPHPで画像に3D枠をつけるには、以下のコードを実行します。 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"> <html xmlns="http://www.w3.org/1999/xhtml" lang="ja" xml:lang="ja" dir="ltr"> <head> <title>sample1103(ImageMagick6.5.2)</title> </head> <body> <?php $im = new Imagick("sf.jpg"); $im->raiseImage(10,10,10,0,true); $im->writeImage('sample1103a.png'); $im->destroy(); ?> <img src="sample1103a.png" /><br /> </body> </html> 元画像(sf.jpg) 出力画像(sample1103a.png) 関連項目 WindowsでImageMagickをPHPから使用するための設定
+投稿者
+kyle
+場所
+7:28 AM
+0
+コメント
+ラベル:
+PHP,
+修飾
+Monday, May 04, 2009
+ImageMagickとPHPで画像を扇形に変形させる
+ImageMagickとPHPで画像を扇形に変形させるには、以下のコードを実行します。 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"> <html xmlns="http://www.w3.org/1999/xhtml" lang="ja" xml:lang="ja" dir="ltr"> <head> <title>sample1093(ImageMagick6.5.2)</title> </head> <body> <?php $im = new Imagick('sf2.jpg'); $im->setImageVirtualPixelMethod( Imagick::VIRTUALPIXELMETHOD_TRANSPARENT); $im->setImageMatte(true); $points = array(100,0,200,50); //$im->distortImage(Imagick::DISTORTION_ARC, //$points, false); // ArcDistortion in distort.h $im->distortImage(9, $points, true); $im->writeImage('sample1093a.png'); $im->destroy(); ?> <img src="sample1093a.png" /> </body> </html> 元画像(sf2.jpg) 出力画像(sample1093a.png) 関連項目 ImageMagickで画像を扇形に変形させる (convertコマンドでの同様の処理) ImageMagickとPHPで画像を変形させる
+投稿者
+kyle
+場所
+7:17 AM
+0
+コメント
+ラベル:
+PHP,
+変形
+Friday, April 17, 2009
+ImageMagickとPHPで不規則な筋状の画像を生成する
+ImageMagickとPHPで不規則な筋状の画像を生成するには、以下のコードを実行します。 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"> <html xmlns="http://www.w3.org/1999/xhtml" lang="ja" xml:lang="ja" dir="ltr"> <head> <title>sample928(ImageMagick6.4.8)</title> </head> <body> <?php /* 不規則な筋状の画像を生成する */ /* 画像サイズ */ $width = 150; $height = 150; $im = new Imagick(); $im->newPseudoImage($width, $height, "plasma:fractal"); $im2 = $im->fxImage("intensity"); $im3 = new Imagick(); $im3->newImage(1,1,"#3070A0FF"); $im3->newImage(1,1,"#FFFFFFFF"); $im3->setImageIndex(0); $im4 = $im3->appendImages(true); $im2->addImage($im4); $im2->setImageIndex(0); $im5 = $im2->fxImage("v.p{0,p}"); $im5->spreadImage(2); $im5->motionBlurImage(0,100,270); $im5->writeImage('sample928a.png'); $im5->destroy(); $im4->destroy(); $im3->destroy(); $im2->destroy(); $im->destroy(); ?> <img src="sample928a.png" /><br /> </body> </html> 出力画像(sample928a.png) 関連項目 ImageMagickで不規則な筋状の画像を生成する (convertコマンドによる同様の処理)
+投稿者
+kyle
+場所
+6:57 PM
+0
+コメント
+ラベル:
+PHP,
+背景画像
+Tuesday, April 14, 2009
+ImageMagickとPHPで斜線グラデーション画像を生成する
+Imagickで斜線グラデーション画像を生成するには、以下のコードを実行します。 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"> <html xmlns="http://www.w3.org/1999/xhtml" lang="ja" xml:lang="ja" dir="ltr"> <head> <title>sample927(ImageMagick6.4.8)</title> </head> <body> <?php /* 斜線グラデーションの背景を作成する */ /* 画像サイズ */ $width = 300; $height = 20; /* 斜線の距離 */ $dl = 5; /* 明るさ */ $br = 0.6; $im = new Imagick(); $im->newImage($width, $height, "black"); $im2 = $im->fxImage("(i+j)%" . $dl . "==0?0:(sin(pi*i/w))*" . $br); $im2->writeImage('sample927a.png'); $im2->destroy(); $im->destroy(); ?> <img src="sample927a.png" /><br /> </body> </html> 出力画像(sample927a.png) 関連項目 ImageMagickで斜線グラデーションの背景画像を生成する
+投稿者
+kyle
+場所
+8:57 AM
+0
+コメント
+ラベル:
+PHP,
+グラデーション
+Friday, April 10, 2009
+ImageMagickとPHPで文字ごとに背景色が異なる文字列を描画する
+Imagickで文字ごとに背景色が異なる文字列を描画するには、以下のコードを実行します。 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"> <html xmlns="http://www.w3.org/1999/xhtml" lang="ja" xml:lang="ja" dir="ltr"> <head> <title>sample926(ImageMagick6.4.8)</title> </head> <body> <?php /* 文字ごとに背景色が異なる文字列を描画する */ /* 表示文字列 */ $message_string = "ImageMagick"; /* 描画色 */ $color1 = "#703020"; $color2 = "white"; /* ブロック幅・高さ */ $bw = 20; $bh = 20; /* 文字サイズ */ $ps = 15; $images = new Imagick(); for($sl=0;$sl<strlen($message_string);$sl++){ $dc1 = $sl%2==0?$color1:$color2; $dc2 = $sl%2==0?$color2:$color1; $im = new Imagick(); $im->newImage($bw, $bh, $dc1); $idraw = new ImagickDraw(); /* 塗りつぶし色設定 */ $idraw->setFillColor($dc2); $im->drawImage($idraw); /* フォント設定 */ $idraw->setFont('Tahoma-Bold'); /* フォントサイズ設定 */ $idraw->setFontSize($ps); $idraw->setGravity(Imagick::GRAVITY_CENTER); $im->annotateImage($idraw, 0, 0, 0, substr($message_string,$sl,1)); $images->addImage($im); $idraw->destroy(); $im->destroy(); } $images->setImageIndex(0); $im2 = $images->appendImages(false); $im2->writeImage('sample926a.png'); $images->destroy(); $im2->destroy(); ?> <img src="sample926a.png" /><br /> </body> </html> 出力画像(sample926a.png) 
+投稿者
+kyle
+場所
+3:38 AM
+0
+コメント
+ラベル:
+PHP,
+文字列
+Monday, April 06, 2009
+ImageMagickとPHPで、２値化した画像を半透明グラデーションにする
+Imagickで、２値化した画像を半透明グラデーションにするには、以下のコードを実行します。 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"> <html xmlns="http://www.w3.org/1999/xhtml" lang="ja" xml:lang="ja" dir="ltr"> <head> <title>sample925(ImageMagick6.4.8)</title> </head> <body> <?php /* ２値化した画像を半透明グラデーションにする */ $im = new Imagick("tree1.jpg"); $im->setImageMatte(true); $im->blackThresholdImage('#808080'); $im->whiteThresholdImage('#808080'); $im->paintTransparentImage("white", 0, 0); $im->paintOpaqueImage("black", "white", 0); /* 半透明グラデーション */ $im2 = new Imagick(); $im2->newPseudoImage($im->getImageWidth(), $im->getImageHeight(), "gradient:#ffffffff-#00000000"); /* 切り取り */ $im2->compositeImage($im, Imagick::COMPOSITE_IN, 0, 0, Imagick::CHANNEL_ALL); $im2->writeImage('sample925a.png'); /* 市松模様と重ね合わせ */ $im3 = new Imagick(); $im3->newPseudoImage($im->getImageWidth(), $im->getImageHeight(), "pattern:CHECKERBOARD"); $im3->compositeImage($im2, Imagick::COMPOSITE_OVER, 0, 0, Imagick::CHANNEL_ALL); $im3->writeImage('sample925b.png'); $im3->destroy(); $im2->destroy(); $im->destroy(); ?> <img src="sample925a.png" /><br /> <img src="sample925b.png" /><br /> </body> </html> 出力画像(sample925b.png) 関連項目 ImageMagickで、２値化した画像を半透明グラデーションにする (convertコマンドによる同様の処理) ImageMagickとPHPで、画像の２値化を行う
+投稿者
+kyle
+場所
+6:07 AM
+0
+コメント
+ラベル:
+2値化,
+PHP,
+グラデーション
+Thursday, April 02, 2009
+ImageMagickとPHPで画像をグレースケールと反転させたグレースケールを交互に配置した画像に変換する
+Imagickで画像をグレースケールと反転させたグレースケールを交互に配置した画像に変換するには、以下のコードを実行します。 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"> <html xmlns="http://www.w3.org/1999/xhtml" lang="ja" xml:lang="ja" dir="ltr"> <head> <title>sample924(ImageMagick6.4.8)</title> </head> <body> <?php /* 画像をグレースケールと反転させたグレースケールを交互に配置した画像に変換 */ /* グレースケール画像 */ $im = new Imagick("sample3b.jpg"); $im->setImageColorspace(Imagick::COLORSPACE_GRAY); /* 反転させたグレースケール画像 */ $im2 = new Imagick("sample3b.jpg"); $im2->setImageColorspace(Imagick::COLORSPACE_GRAY); $im2->negateImage(false); /* 横方向に画像を連結 */ $im3 = new Imagick(); $im3->addImage($im); $im3->addImage($im2); $im3->setImageIndex(0); $im4 = $im3->appendImages(false); /* 横方向に画像を連結 */ $im5 = new Imagick(); $im5->addImage($im2); $im5->addImage($im); $im5->setImageIndex(0); $im6 = $im5->appendImages(false); /* 縦方向に画像を連結 */ $im7 = new Imagick(); $im7->addImage($im4); $im7->addImage($im6); $im7->setImageIndex(0); $im8 = $im7->appendImages(true); $im8->writeImage('sample924a.png'); $im8->destroy(); $im7->destroy(); $im6->destroy(); $im5->destroy(); $im4->destroy(); $im3->destroy(); $im2->destroy(); $im->destroy(); ?> <img src="sample924a.png" /><br /> </body> </html> 元画像(sample3b.jpg) 出力画像(sample924a.png) 関連項目 ImageMagickでグレースケール画像と反転したグレースケール画像が交互に配置された画像を生成する
+投稿者
+kyle
+場所
+5:20 AM
+0
+コメント
+ラベル:
+PHP
+Wednesday, April 01, 2009
+ImageMagickとPHPで、画像を２値化して任意の色と透明色にかえる
+Imagickで、画像を２値化して任意の色と透明色にかえるには、以下のコードを実行します。 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"> <html xmlns="http://www.w3.org/1999/xhtml" lang="ja" xml:lang="ja" dir="ltr"> <head> <title>sample911(ImageMagick6.4.8)</title> </head> <body> <?php /* 画像を２値化して、任意の色と透明色にかえる */ $im = new Imagick("tree1.jpg"); $im->setImageMatte(true); $im->blackThresholdImage('#808080'); $im->whiteThresholdImage('#808080'); $im->paintTransparentImage("white", 0, 0); $im->paintOpaqueImage("black", "#88aaff", 0); $im->writeImage('sample911a.png'); /* 他の画像と重ね合わせ */ $im2 = new Imagick(); $im2->newPseudoImage($im->getImageWidth(), $im->getImageHeight(), "pattern:CHECKERBOARD"); /* 重ね合わせ */ $im2->compositeImage($im, Imagick::COMPOSITE_OVER, 0, 0, Imagick::CHANNEL_ALL); $im2->writeImage('sample911b.png'); $im2->destroy(); $im->destroy(); ?> <img src="sample911a.png" /><br /> <img src="sample911b.png" /><br /> </body> </html> 元画像(tree1.jpg) 出力画像1(sample911a.png) 出力画像2(sample911a.png) 関連項目 ImageMagickで、２値化した画像を透明に設定したり、色を変える ImageMagickとPHPで２値化して光が溢れるような画像に変換する ImageMagickとPHPで画像の輪郭を影で浮かび上がらせた画像を生成する
+投稿者
+kyle
+場所
+4:56 AM
+0
+コメント
+ラベル:
+2値化,
+PHP
+Wednesday, March 25, 2009
+ImageMagickとPHPで画像に半透明の濃淡をつける
+Imagickで画像に半透明の濃淡をつけるには、以下のコードを実行します。 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"> <html xmlns="http://www.w3.org/1999/xhtml" lang="ja" xml:lang="ja" dir="ltr"> <head> <title>sample910(ImageMagick6.4.8)</title> </head> <body> <?php /* 画像に半透明の濃淡をつける */ $im = new Imagick("sf.jpg"); /* プラズマフラクタル画像 */ $im2 = new Imagick(); $im2->newPseudoImage($im->getImageWidth(), $im->getImageHeight(), 'plasma:fractal'); $im2->setImageColorspace(Imagick::COLORSPACE_GRAY); $im2->setImageMatte(true); $im3 = $im2->fxImage("r", Imagick::CHANNEL_ALPHA); /* 切り取り */ $im3->compositeImage($im, Imagick::COMPOSITE_IN, 0, 0, Imagick::CHANNEL_ALL); $im3->writeImage('sample910a.png'); /* 他の画像と重ね合わせ */ $im4 = new Imagick(); $im4->newPseudoImage($im->getImageWidth(), $im->getImageHeight(), "pattern:CHECKERBOARD"); /* 重ね合わせ */ $im4->compositeImage($im3, Imagick::COMPOSITE_OVER, 0, 0, Imagick::CHANNEL_ALL); $im4->writeImage('sample910b.png'); $im4->destroy(); $im3->destroy(); $im2->destroy(); $im->destroy(); ?> <img src="sample910a.png" /><br /> <img src="sample910b.png" /><br /> </body> </html> 元画像(sf.jpg) 出力画像1(sample910a.png) 出力画像2(sample910b.png) 関連項目 ImageMagickで、画像に半透明の濃淡をつけて重ね合わせる (convertコマンドによる同様の処理) ImageMagickとPHPを使用して画像に濃淡をつける
+投稿者
+kyle
+場所
+1:00 AM
+0
+コメント
+ラベル:
+PHP,
+半透明
+Thursday, March 19, 2009
+ImageMagickとPHPで画像の端をグラデーションで着色する
+ImageMagickとPHPで画像の端をグラデーションで着色するには、以下のコードを実行します。 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"> <html xmlns="http://www.w3.org/1999/xhtml" lang="ja" xml:lang="ja" dir="ltr"> <head> <title>sample909(ImageMagick6.4.8)</title> </head> <body> <?php /* 画像の端をグラデーションで着色する */ /* 余白 */ $padx = 10; $pady = 10; $im = new Imagick("sf.jpg"); $w = $im->getImageWidth(); $h = $im->getImageHeight(); $im2 = new Imagick(); $im2->newPseudoImage($w, $h, "xc:none"); /* 余白を残して円描画 */ $idraw = new ImagickDraw(); $idraw->ellipse($w/2, $h/2, $w/2-$padx, $h/2-$pady, 0, 360); $im2->drawImage($idraw); $im2->blurImage(0,30); $im2->compositeImage($im, Imagick::COMPOSITE_IN, 0, 0, Imagick::CHANNEL_ALL); /* 着色 */ $im->tintImage(new ImagickPixel("#ddee33"), new ImagickPixel("#f0f0f0")); /* 重ね合わせ */ $im->compositeImage($im2, Imagick::COMPOSITE_OVER, 0, 0, Imagick::CHANNEL_ALL); $im->writeImage('sample909a.png'); $im2->destroy(); $im->destroy(); ?> <img src="sample909a.png" /><br /> </body> </html> 元画像(sf.jpg) 出力画像(sample909a.png) 関連項目 ImageMagickで画像の端をグラデーションで着色する
+投稿者
+kyle
+場所
+10:45 AM
+0
+コメント
+ラベル:
+PHP,
+グラデーション
+Sunday, March 15, 2009
+ImageMagickとPHPで画像をタイル配置した角丸四角で切り取る
+Imagickで画像をタイル配置した角丸四角で切り取るには、以下のコードを実行します。 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"> <html xmlns="http://www.w3.org/1999/xhtml" lang="ja" xml:lang="ja" dir="ltr"> <head> <title>sample908(ImageMagick6.4.8)</title> </head> <body> <?php /* 画像をタイル配置した角丸四角で切り取る */ /* 角丸四角サイズ */ $rw = 30; $rh = 20; /* 余白 */ $padx = 1; $pady = 1; /* 角丸サイズ */ $rx = 5; $ry = 5; /* 角丸四角イメージ作成 */ $idraw = new ImagickDraw(); $idraw->pushPattern('tile', 0, 0, $rw, $rh); $idraw->roundrectangle($padx,$pady, $rw-$padx-1, $rh-$pady-1, $rx, $ry); $idraw->popPattern(); $im = new Imagick("sf.jpg"); /* タイルパターンにして配置 */ $idraw->setFillPatternURL('#tile'); $im2 = new Imagick(); $im2->newPseudoImage($im->getImageWidth(), $im->getImageHeight(), "xc:none"); $idraw->rectangle(0, 0, $im->getImageWidth(), $im->getImageHeight()); $im2->drawImage($idraw); $im2->compositeImage($im, Imagick::COMPOSITE_IN, 0, 0, Imagick::CHANNEL_ALL); $im2->writeImage('sample908a.png'); $im2->destroy(); $im->destroy(); ?> <img src="sample908a.png" /><br /> </body> </html> 元画像(sf.jpg) 出力画像(sample908a.png) 関連項目 ImageMagickで画像を角丸四角タイルパターンで切り取る (convertコマンドでの同様の処理) ImageMagickとPHPで画像をタイル配置する
+投稿者
+kyle
+場所
+7:30 AM
+0
+コメント
+ラベル:
+PHP,
+切り取り
+Tuesday, March 10, 2009
+ImageMagickとPHPで画像を荒いドットを交互に配置したモザイク画像に変換する
+Imagickで画像を荒いドットを交互に配置したモザイク画像に変換するには、以下のコードを実行します。 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"> <html xmlns="http://www.w3.org/1999/xhtml" lang="ja" xml:lang="ja" dir="ltr"> <head> <title>sample907(ImageMagick6.4.8)</title> </head> <body> <?php /* 画像を荒いドットを交互に配置したモザイク画像に変換する */ $dx=10; $dy=10; $fn="sf.jpg"; $im = new Imagick($fn); $w=$im->getImageWidth(); $h=$im->getImageHeight(); /* 左端の余白イメージを作成 */ $im2 = new Imagick($fn); $im2->cropImage(1, $h, 0, 0); $im2->resizeImage($dx/2, $h, Imagick::FILTER_POINT, 1); /* 右端の余白イメージを作成 */ $im3 = new Imagick($fn); $im3->cropImage(1, $h, $w-1, 0); $im3->resizeImage($dx/2, $h, Imagick::FILTER_POINT, 1); /* 横方向に連結 */ $im2->addImage($im); $im2->addImage($im3); $im2->setImageIndex(0); $im4 = $im2->appendImages(false); /* 縮小 */ $im4->resizeImage($w/$dx+1, $h/$dy, Imagick::FILTER_MITCHELL, 1); /* 偶数ラインを透明に */ $im4->setImageMatte(true); $it = $im4->getPixelIterator(); foreach($it as $py => $line){ foreach($line as $px => $pixel){ if( $py%2 == 0 ){ $pixel->setColorValue(Imagick::COLOR_ALPHA, 0); } } $it->syncIterator(); } /* 拡大＆余白の切り取り */ $im4->resizeImage($w+$dx, $im->getImageHeight(), Imagick::FILTER_POINT, 0); $im4->cropImage($w, $h, $dx/2, 0); /* 元画像を縮小＆拡大 */ $im->resizeImage($w/$dx, $h/$dy, Imagick::FILTER_MITCHELL, 1); $im->resizeImage($w, $h, Imagick::FILTER_POINT, 1); /* 重ね合わせ */ $im->compositeImage($im4, Imagick::COMPOSITE_OVER, 0, 0, Imagick::CHANNEL_ALL); $im->writeImage('sample907a.png'); $im4->destroy(); $im3->destroy(); $im2->destroy(); $im->destroy(); ?> <img src="sample907a.png" /><br /> </body> </html> 元画像(sf.jpg) 出力画像(sample907a.png) 関連項目 ImageMagickとPHPで、画像を荒いドット画像に変換する
+投稿者
+kyle
+場所
+6:26 AM
+0
+コメント
+ラベル:
+PHP
+Thursday, March 05, 2009
+ImageMagickとPHPで画像を正多角形で切り取る
+Imagickで画像を正多角形で切り取るには、以下のコードを実行します。 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"> <html xmlns="http://www.w3.org/1999/xhtml" lang="ja" xml:lang="ja" dir="ltr"> <head> <title>sample896(ImageMagick6.4.8)</title> </head> <body> <?php /* 画像をn角形で切り取る */ $numpoints = 5; /* 半径 */ $rad = 90; /* 中心 */ $cx = 100; $cy = 100; /* n角形をポリゴンで描画 */ $angle = 270; for($li=0;$li<$numpoints;$li++){ $points[] = array('x' => $cx+cos(deg2rad($angle))*$rad, 'y' => $cy+sin(deg2rad($angle))*$rad); $angle += 360/$numpoints; } $im = new Imagick("sf.jpg"); $im2 = new Imagick(); $im2->newImage($im->getImageWidth(), $im->getImageHeight(), "none"); $im2->setImageMatte(true); $idraw = new ImagickDraw(); $idraw->polygon($points); $im2->drawImage($idraw); $im2->compositeImage($im, Imagick::COMPOSITE_IN, 0, 0, Imagick::CHANNEL_ALL); $im2->writeImage('sample896a.png'); $idraw->destroy(); $im2->destroy(); $im->destroy(); ?> <img src="sample896a.png" /><br /> </body> </html> 元画像(sf.jpg) 出力画像(sample896a.png) 関連項目 ImageMagickとPHPで凹んだ角丸四角形に画像を切り取る
+投稿者
+kyle
+場所
+6:58 AM
+0
+コメント
+ラベル:
+PHP,
+切り取り
+Saturday, February 28, 2009
+ImageMagickとPHPで画像を彩度の異なるボーダー画像にする
+ImageMagickとPHPで画像を彩度の異なるボーダー画像にするには、以下のコードを実行します。 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"> <html xmlns="http://www.w3.org/1999/xhtml" lang="ja" xml:lang="ja" dir="ltr"> <head> <title>sample889(ImageMagick6.4.8)</title> </head> <body> <?php /* 画像を彩度の異なるボーダー画像にする */ $im = new Imagick("sf.jpg"); /* 最小ボーダー高さ */ $minh = 5; /* 最大ボーダー高さ */ $maxh = 20; /* 最小彩度 */ $minsat = 30; /* 細大彩度 */ $maxsat = 130; $ly = 0; while($ly<$im->getImageHeight()){ $height = rand($minh,$maxh); if( ($height+$ly) > $im->getImageHeight() ){ $height = $im->getImageHeight() - $ly; } /* イメージを切り取り */ $imt = $im->getImageRegion($im->getImageWidth(), $height, 0, $ly); $imt->modulateImage(100, rand($minsat, $maxsat), 100); $im->compositeImage($imt, Imagick::COMPOSITE_DEFAULT, 0, $ly, Imagick::CHANNEL_ALL); $ly += $height; $imt->destroy(); } $im->writeImage('sample889a.png'); $im->destroy(); ?> <img src="sample889a.png" /><br /> </body> </html> 元画像(sf.jpg) 出力画像(sample889a.png) 関連項目 ImageMagickとPHPで青色っぽい部分とそれ以外の部分を色付けする
+投稿者
+kyle
+場所
+3:13 AM
+0
+コメント
+ラベル:
+PHP,
+彩度
+Tuesday, February 24, 2009
+ImageMagickとPHPで画像を４色グレースケールに変換する
+Imagickで画像を４色グレースケールに変換するには、以下のコードを実行します。 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"> <html xmlns="http://www.w3.org/1999/xhtml" lang="ja" xml:lang="ja" dir="ltr"> <head> <title>sample888(ImageMagick6.4.8)</title> </head> <body> <?php /* 画像をグレースケール４色画像に変換する */ $im = new Imagick("sf.jpg"); $im->setImageColorspace(Imagick::COLORSPACE_GRAY); $im->quantizeImage(4, Imagick::COLORSPACE_GRAY, 0, true , false); $im->writeImage('sample888a.png'); $im->destroy(); ?> <img src="sample888a.png" /><br /> </body> </html> 元画像(sf.jpg) 出力画像(sample888a.png) 関連項目 ImageMagickで画像を４色グレースケールの画像に減色する (convertコマンドによる同様の処理)
+投稿者
+kyle
+場所
+6:05 AM
+0
+コメント
+ラベル:
+PHP
+Wednesday, February 18, 2009
+ImageMagickとPHPで立体的な角丸四角の枠をつける
+ImageMagickとPHPで立体的な角丸四角の枠をつけるには、以下のコードを実行します。 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"> <html xmlns="http://www.w3.org/1999/xhtml" lang="ja" xml:lang="ja" dir="ltr"> <head> <title>sample887(ImageMagick6.4.8)</title> </head> <body> <?php /* 立体的な角丸四角の枠をつける */ /* 余白 */ $padx = 10; $pady = 10; /* 角丸 */ $rx = 20; $ry = 20; /* 線の太さ */ $sw = 8; $im = new Imagick("sf.jpg"); /* 枠部分を作成 */ $im2 = new Imagick(); $im2->newPseudoImage( $im->getImageWidth(), $im->getImageHeight(), "xc:none"); $idraw = new ImagickDraw(); $idraw->setFillColor("none"); $idraw->setStrokeColor("white"); $idraw->setStrokeWidth($sw); $idraw->roundrectangle($padx,$pady, $im->getImageWidth()-$padx-1, $im->getImageHeight()-$pady-1, $rx, $ry); $im2->drawImage($idraw); $im3 = $im2->clone(); $im3->blurImage(0,3,Imagick::CHANNEL_RED + Imagick::CHANNEL_GREEN + Imagick::CHANNEL_BLUE); $im3->shadeImage(false, 135, 23); $im2->compositeImage($im3, Imagick::COMPOSITE_HARDLIGHT, 0, 0); /* 角丸四角で切り取り */ $im4 = new Imagick(); $im4->newPseudoImage( $im->getImageWidth(), $im->getImageHeight(), "xc:none"); $idraw2 = new ImagickDraw(); $idraw2->setFillColor("white"); $idraw2->setStrokeColor("white"); $idraw2->setStrokeWidth($sw); $idraw2->roundrectangle($padx,$pady, $im->getImageWidth()-$padx-1, $im->getImageHeight()-$pady-1, $rx, $ry); $im4->drawImage($idraw2); $im4->compositeImage($im, Imagick::COMPOSITE_IN, 0, 0, Imagick::CHANNEL_ALL); $im4->compositeImage($im2, Imagick::COMPOSITE_DEFAULT, 0, 0, Imagick::CHANNEL_ALL); $im4->writeImage('sample887a.png'); $idraw2->destroy(); $idraw->destroy(); $im4->destroy(); $im3->destroy(); $im2->destroy(); $im->destroy(); ?> <img src="sample887a.png" /><br /> </body> </html> 元画像(sf.jpg) 出力画像(sample887a.png) 関連項目 ImageMagickで画像に立体的な角丸四角の枠をつける
+投稿者
+kyle
+場所
+5:57 AM
+0
+コメント
+ラベル:
+PHP,
+修飾
+Friday, February 13, 2009
+ImageMagickとPHPで青色っぽい部分とそれ以外の部分を色付けする
+ImageMagickとPHPで青色っぽい部分とそれ以外の部分を色付けするには、以下のコードを実行します。 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"> <html xmlns="http://www.w3.org/1999/xhtml" lang="ja" xml:lang="ja" dir="ltr"> <head> <title>sample784(ImageMagick6.4.4)</title> </head> <body> <?php /* 青色っぽい部分とそれ以外の部分を色付けする */ $im = new Imagick("sf.jpg"); $im->setImageMatte(true); /* 青色っぽい部分に色つけ */ $im2 = $im->fxImage("(hue>0.47&&hue<0.69&&lightness>0.45)?1:0", Imagick::CHANNEL_ALPHA); $im3 = $im2->fxImage("luminance", Imagick::CHANNEL_RED | Imagick::CHANNEL_GREEN | Imagick::CHANNEL_BLUE); $im3->tintImage(new ImagickPixel("#aaccff"),new ImagickPixel("#f0f0f0")); /* 青色っぽい部分以外に色つけ */ $im4 = $im->fxImage("luminance", Imagick::CHANNEL_RED | Imagick::CHANNEL_GREEN | Imagick::CHANNEL_BLUE); $im4->tintImage(new ImagickPixel("#f8c749"),new ImagickPixel("#f0f0f0")); /* 重ね合わせ */ $im4->compositeImage($im3, Imagick::COMPOSITE_DEFAULT, 0, 0); $im4->writeImage('sample784a.png'); $im4->destroy(); $im3->destroy(); $im2->destroy(); $im->destroy(); ?> <img src="sample784a.png" /><br /> </body> </html> 元画像(sf.jpg) 出力画像(sample784a.png) 関連項目 ImageMagickで、青色っぽい部分とそれ以外の部分を色付けする (convertコマンドでの同様の処理) ImageMagickで青色っぽい部分だけ他の画像と半透明に重ねあわせる
+投稿者
+kyle
+場所
+4:17 AM
+0
+コメント
+ラベル:
+PHP,
+色相
+Monday, February 09, 2009
+ImageMagickとPHPで、画像の色数を減色する
+Imagickで、画像の色数を減色するには、以下のコードを実行します。 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"> <html xmlns="http://www.w3.org/1999/xhtml" lang="ja" xml:lang="ja" dir="ltr"> <head> <title>sample771(ImageMagick6.4.4)</title> </head> <body> <?php /* 画像を32色に減色する */ $im = new Imagick("sf.jpg"); $im->quantizeImage(32, Imagick::COLORSPACE_RGB, 0, true , false); $im->writeImage('sample771a.gif'); $im->destroy(); ?> <img src="sample771a.gif" /><br /> </body> </html> 元画像(sf.jpg) 出力画像(sample771a.gif) 関連項目 ImageMagickで画像を減色する (convertコマンドによる同様の処理) ImageMagickで画像を４色グレースケールの画像に減色する
+投稿者
+kyle
+場所
+6:29 AM
+0
+コメント
+ラベル:
+PHP
+Sunday, February 08, 2009
+ImageMagickとPHPで凹んだ角丸四角形に画像を切り取る
+Imagickで凹んだ角丸四角形に画像を切り取るには、以下のコードを実行します。 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"> <html xmlns="http://www.w3.org/1999/xhtml" lang="ja" xml:lang="ja" dir="ltr"> <head> <title>sample770(ImageMagick6.4.4)</title> </head> <body> <?php /* ImageMagickとPHPで凹んだ影付き角丸四角を描画する */ /* 余白 */ $padx = 10; $pady = 10; /* 角丸半径 */ $rx = 20; $ry = 20; $im = new Imagick("sf.jpg"); $im2 = new Imagick(); $im2->newPseudoImage( $im->getImageWidth(), $im->getImageHeight(), "xc:white"); /* 白黒で角丸四角を描画 */ $idraw = new ImagickDraw(); $idraw->setFillColor("#000000"); $idraw->roundrectangle($padx,$pady, $im->getImageWidth()-$padx-1, $im->getImageHeight()-$pady-1, $rx, $ry); $im2->drawImage($idraw); /* redの値をalphaにして、青白い色をrgbに指定 */ $it = $im2->getPixelIterator(); foreach($it as $py => $line){ foreach($line as $px => $pixel){ $rv = $pixel->getColorValue(Imagick::COLOR_RED); $pixel->setColorValue(Imagick::COLOR_RED, 0xe8/0xff); $pixel->setColorValue(Imagick::COLOR_GREEN, 0xf0/0xff); $pixel->setColorValue(Imagick::COLOR_BLUE, 0xf8/0xff); $pixel->setColorValue(Imagick::COLOR_ALPHA, $rv); } $it->syncIterator(); } /* 影つけ */ $im3=$im2->clone(); $im3->setImageBackgroundColor('black'); $im3->shadowImage(70,3,5,5); /* 重ね合わせ */ $im->addImage($im3); $im->addImage($im2); $im4=$im->mosaicImages(); /* 切り取り */ $im4->cropImage($im->getImageWidth(), $im->getImageHeight(), 0, 0); $im4->writeImage('sample770a.png'); $idraw->destroy(); $im4->destroy(); $im3->destroy(); $im2->destroy(); $im->destroy(); ?> <img src="sample770a.png" /><br /> </body> </html> 元画像(sf.jpg) 出力画像(sample770a.png) 関連項目 ImageMagickで凹んだ影付き角丸四角を描画する (convertコマンドによる同様の処理)
+投稿者
+kyle
+場所
+1:54 AM
+0
+コメント
+ラベル:
+PHP,
+修飾,
+影付け
+Wednesday, February 04, 2009
+ImageMagickとPHPで不規則な波線を描画する
+ImagickでPで不規則な波線を描画するには、以下のコードを実行します。 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"> <html xmlns="http://www.w3.org/1999/xhtml" lang="ja" xml:lang="ja" dir="ltr"> <head> <title>sample765(ImageMagick6.4.4)</title> </head> <body> <?php /* 座標を少しずつずらして、複数のベジェ曲線を描画 */ /* 中央y座標 */ $cy = 25; /* 繰り返し数 */ $ct=4; /* 線の色 */ $sc='#88bbff'; /* x座標の揺らぎ最小値 */ $mindx = -5; /* y座標の揺らぎ最大値 */ $maxdx = 5; /* y座標の揺らぎ最小値 */ $mindy = -5; /* y座標の揺らぎ最大値 */ $maxdy = 5; /* 振幅 */ $dy = 15; $dx = 20; $im = new Imagick(); $im->newPseudoImage(300, 50, "xc:none"); $idraw = new ImagickDraw(); $idraw->setStrokeColor($sc); $idraw->setStrokeWidth(3); $idraw->setFillColor('none'); $lx = 0; for($ind=0;$ind<$ct;$ind++){ $points[] = array( 'x' => $lx, 'y' => $cy ); $lx += $dx; $points[] = array( 'x' => $lx, 'y' => $cy-$dy ); $points[] = array( 'x' => $lx+rand($mindx,$maxdx), 'y' => $cy-$dy+rand($mindy, $maxdy) ); $lx += $dx; $points[] = array( 'x' => $lx, 'y' => $cy ); $idraw->bezier($points); $points = null; $points[] = array( 'x' => $lx, 'y' => $cy ); $lx += $dx; $points[] = array( 'x' => $lx, 'y' => $cy+$dy ); $points[] = array( 'x' => $lx+rand($mindx,$maxdx), 'y' => $cy+$dy+rand($mindy, $maxdy) ); $lx += $dx; $points[] = array( 'x' => $lx, 'y' => $cy ); $idraw->bezier($points); $points = null; } $im->drawImage($idraw); $im->blurImage(0,3); $im->writeImage('sample765a.png'); $im->destroy(); ?> <img src="sample765a.png" /><br /> </body> </html> 出力画像(sample765a.png) 関連項目 ImageMagickとPHPで３色モノトーンの角丸四角画像に変換する ImageMagickとPHPで複数の画像の境界をぼかして連結する
+投稿者
+kyle
+場所
+5:50 AM
+0
+コメント
+ラベル:
+PHP,
+図形描画

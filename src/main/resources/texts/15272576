@@ -1,0 +1,151 @@
+A small, cheap, and easy device that provides your computers and servers
+with extra performance, security, and reliability.
+Introduction
+The Entropy Key, or eKey, is a small, unobtrusive and easily installed
+USB stick that generates high-quality random numbers, or entropy, which
+can improve the performance, security and reliability of servers. It can
+also be used with scientific, gambling and lottery applications, or
+anywhere where good random numbers are needed. It has been developed by
+UK-based Simtec Electronics, a design consultancy and manufacturing
+partner with 20 years of experience in designing and building high-speed,
+high-performance electronics with a speciality in embedded ARM-based
+designs. It is currently undergoing testing with the help of selected
+customers.
+The eKey contains two high-quality quantum noise generators, and an
+ARM Cortex CPU that actively measures, checks and confirms all generated
+random numbers, before encrypting them and sending them to the server.
+It also actively detects attempts to corrupt or sway the device. It aims
+towards FIPS-140-2 Level 3 compliance with some elements of Level 4,
+including tamper-evidence, tamper-proofing, role-based authentication,
+and environmental attacks. If it detects that one of its two generators
+has failed, may be about to fail, or if it detects a physical attack, it
+will automatically shut down.
+How the eKey helps your security
+The eKey generates a constant stream of very high-quality random numbers,
+ready to be mixed into the entropy already collected by your computer.
+The quality of the numbers passes randomness tests such as Diehard and
+Dieharder, chi and est. This means that when your computer requires
+random numbers, which is usually for very security-sensitive tasks such
+as certificate and key creation, administration, VPN access, and even
+customer-facing web requests, the data used to secure them is even
+stronger. The eKey also makes it extremely difficult for any attacker
+to discover what random data has been used, even if they have physical
+access to the eKey.
+How the eKey helps performance and reliability
+Operating systems such as Linux have a built-in pool of random data that
+they top up from devices like the eKey and other such sources.
+Applications that require random data, such as web servers, VPN servers
+and clients, administration tools and such, then read from this pool.
+The problem is that the pool is of fixed size; just 4kB. If an
+application tries to read from the pool, and there is not enough data
+to satisfy its request, the application is frozen in limbo until
+enough entropy has been collected to fill the pool to the point of
+being able to satisfy the request, leading to delays in the delivery
+of services. Worse, this frozen state reduces the ability of the
+operating system to generate its own random data, as their collectors
+are based on the timings of activity. The eKey keeps this pool topped
+up, meaning even at busy times for your server, the pool is full or
+very nearly full, leading to faster response times and fewer
+difficult-to-diagnose service pauses. And if a single eKey doesn't
+provide enough to keep your busy server stoked with entropy, then
+you can just plug another in.
+Below are two graphs from live servers. The left shows a server running
+several virtual machines, a web proxy, and firewalling for around 300
+users to gigabit ethernet. The right a similar server, handling mostly
+TLS-encrypted email and HTTP transactions.
+The first graph shows a server using a single eKey keeping its entropy
+topped up. The rapid drop in available entropy was caused by the eKey
+being unplugged in order to plug in a keyboard to do some administration.
+At this point, the performance of the box would have dropped due to
+applications being starved of the data they need to continue.
+The second graph shows a server that is not equiped with an eKey at all.
+As you can see, the available entropy is almost always well below the
+maximum 4kB, and varies greatly. The spikes upward are where the
+server's operating system's own random data gathering techniques have
+managed to top up the pool, but not to the same ability as the server
+with an eKey. Equipping this server with an eKey would greatly reduce
+the latency with which it services requests.
+Where can I get one?
+The eKey is currently undergoing testing having been in development
+for over a year. If you are interested in testing one, or hearing from
+us when the device goes on general sale, please contact
+us at ekey@simtec.co.uk.
+The technical stuff
+The eKey uses P-N semiconductor junctions reverse biassed with a
+high enough voltage to bring them near to, but not beyond,
+breakdown in order to generate noise. In other words, it has a
+pair of devices that are wired up in such a way that as a high
+potential is applied across them, where electrons do not
+normally flow in this direction and would be blocked, the high
+voltage compresses the semiconduction gap sufficiently that the
+occasional stray electron will quantum tunnel through the P-N
+junction. (This is sometimes referred to as avalanche noise.)
+When this happens is unpredictable, and this is what the eKey
+measures.
+These noise generators are then coupled to a 72MHz ARM Cortex-M3
+on the device. This processor samples the generators at a high
+frequency, forming a stream of random bytes. These stream of
+bytes is then analysed using Üli Maurer's universal test
+for random bit generators whereby the amount of entropy in the
+streams is estimated rather conservatively. The streams are also
+exclusive-ORed together and that stream's entropy is estimated
+in the same manner. If the raw streams appear to have severely
+reduced entropy then it indicates a fault in that generator, if
+the third stream has low entropy then it indicates that the
+generators have correlated and are not independently gathering
+entropy. Any of those three states are considered a failure
+mode and will result in the eKey locking itself out of the host,
+returning only an error code instead of generating entropy
+packets.
+The two raw streams are then processed further and their entropy
+estimated after a debiassing process has been performed. Again,
+if the estimated entropy in the stream is seen to vary too
+wildly at this stage, the eKey will lock itself out. The
+processed streams are then mixed into a pool, made with a secure
+hashing function, which once at least 50% more entropy has been
+mixed into the pool than it could possibly hold it is finalised
+and another pool initialised. Once enough pools have been
+processed to fill 20000 bits of pool, the totality is subjected
+to the tests stipulated in FIPS 140-2. These tests produce a
+PASS/FAIL indicator for the block. On its own, this is not
+useful, since a perfectly random block could quite plausibly
+fail the tests. The eKey therefore keeps running statistics on
+the FIPS 140-2 tests and will lock itself out if the ratio of
+failed blocks to passed blocks rises above a conservative
+estimate of the statistical likelyhood of failure. Once the
+block has been analysed, it is chopped up into 32 byte packets
+and this is handed off to the protocol handler in the
+device. Through this process, each 256 bit block of data handed
+to the host was formed from somewhere in the region of 3840 bits
+read from the quantum generators.
+The protocol handler deals with the communication to the host computer.
+The device emulates a standard USB CDC serial port, with out-of-the-box
+driver support for numerous platforms. The eKey encrypts all random
+data it sends to the host using a session key and marking each one with
+a sequence number, stopping when the sequence number gets too high. The
+eKey authenticates all packets it sends using a packet-MAC mechanism
+where the MAC includes the session key generated during communication
+with the host. The session key is routinely regenerated using a shared
+secret, unique to each eKey, which can be changed at will by the owner
+of the eKey. The protocol handler also handles telling the host
+computer about failures and possible attacks, such as the generators
+becoming correlated or failing. The protocol handler periodiclaly
+reports various statistics to the host, such as the current state of the
+stream estimators and the FIPS 140-2 test statistics, as well as
+information from the temperature monitoring parts of the device. An
+open-source daemon on the host side then communicates with the key,
+setting up sessions, receiving random data, checking its authenticity,
+and eventually using it to top up the system's own random number pool.
+The eKey can automatically detect various different physical attacks,
+such as temperature changes (by using a built-in temperature sensor),
+and opening of the case (as the final product will be injected with
+epoxy; opening the case will destroy it).
+Currently, this daemon is available for Linux (and packages suitable
+for Debian and Ubuntu can be provided, as well as source tarballs),
+but other platforms are being investigated.
+Simtec Electronics, Avondale Drive, Tarleton, Lancashire, PR4 6AX,
+UNITED KINGDOM.
+Switchboard: +44 (0)1772 978010 Support: +44 (0)1772 978013
+Fax: +44 (0)1772 816426
+sales@simtec.co.uk |
+www.simtec.co.uk

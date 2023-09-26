@@ -1,0 +1,62 @@
+Sunday, August 9, 2009
+Programming
+I've actually written code lately, although for some reason it's been all these stupid projects. First I needed to fix the kernel tty refcounting, then I got all OCD on the git SHA1 routines. I don't quite know why I wasted that much time on something as trivial as SHA1 hashing, but it was kind of fun in a "let's use the compiler as a glorified assembler" kind of way. Some people seem to think that C is a real programming language, but they are sadly mistaken. It really is about writing almost-portable assembly language, and it turns out that getting good results from SHA1 really is mostly about trying to fight the compilers tendency to try to be clever. So here is the current result of me trying to get gcc (well, arguably of it is mostly the C pre-processor, rather than the compiler proper ) to generate good assembly code. On my Nehalem machine (but not Netburst or Atom - poor fragile micro-architectures that they are), it actually seems to outperform the OpenSSL hand-written assembly language implementation. And once I get rid of libcrypt from openssl, I get rid of two silly runtime loadable libraries that git no longer needs. And that in turn speeds up the test-suite by a couple of seconds. Did I mention that I seem to have some OCD issues?
+Posted by
+Linus
+at
+12:48 PM
+Labels:
+git,
+OCD,
+programming
+12
+comments:
+Adrian Nowak
+said...
+Lots of issues, but what about Your's vacation? ;)
+August 9, 2009 2:04 PM
+alvaro
+said...
+now that the issue with the ttys is resolved, is alan returning as the maintainer?
+August 9, 2009 2:10 PM
+vjt
+said...
+@Adrian nerds never go on vacation. And they're everyday on vacation, as well ;).
+August 9, 2009 3:25 PM
+fynali iladijas
+said...
+That's right @vjt; besides, rest is nothing but change of work! (-;
+August 9, 2009 3:43 PM
+Crispin
+said...
+If someone weren't OCD, nothing would ever get done. ;)
+August 9, 2009 4:16 PM
+Adam
+said...
+Why not do some real good and turn that OCD on the tty layer?
+August 9, 2009 5:16 PM
+Christopher
+said...
+Mr. Torvalds, I'm very curious about something: how much CS do your children know? It's interesting because they're around someone who's extremely well qualified to teach them. Surely, they must ask questions about your work? Does that translate into any real knowledge?
+August 9, 2009 5:30 PM
+bert hubert
+said...
+Linus, You might want to look at http://cr.yp.to/qhasm.html which is more exactly what you discuss, "high level assembly that does not get in the way". It outputs normal assembler. I bet you could write a sha1 that is even faster that way, and with less pain. Cheers, bert
+August 10, 2009 1:14 AM
+Justin
+said...
+Greetings from Cape Town. OCD + Nerd-ism = great success. So keep at it Mr. Juz http://juztick.blogspot.com
+August 10, 2009 3:50 AM
+Aviv
+said...
+Nice work, but I'd refactor and shorten all those rounds to something simpler. Seeing the permutations does help understand what is done, but anyone hacking that code should know how SHA1 works. No need to spend 100 lines repeating the obvious.
+August 10, 2009 4:24 AM
+Jason
+said...
+In programmers, as in airplane mechanics, a little OCD can be a good thing.
+August 10, 2009 7:57 AM
+Chandra Shekhar Tewary
+said...
+Hey..you are right in either way :-).If real implies machine level or more high level english type interpreted one.C is not real :-(.
+August 10, 2009 7:59 PM
+Post a Comment

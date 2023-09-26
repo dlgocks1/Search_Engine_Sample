@@ -1,0 +1,4 @@
+VirtualBox is a powerful x86 virtualization product for enterprise as well as home use
+4日(米国時間)、VirtualBoxの最新版となるVirtualBox 3.0.4が公開された。VirtualBoxはx86に対応したフル仮想化プロダクト。Sun Microsystemsのエンジニアをベースに開発が継続されており、OSSプロダクトの仮想化プロダクトとしては群を抜いて性能がいい。
+VirtualBox 3.0.4はメンテナンスリリースと位置づけられており、変更内容には安定性改善、性能向上、バグ修正などが掲載されている。しかしSecurityFocus - Sun VirtualBox Host Operating System Local Denial Of Service Vulnerabilityで報告されている内容によれば、これ以前のバージョンにはセキュリティ脆弱性があり、VirtualBox仮想マシン内部の非特権ユーザがホストOSを再起動できてしまうと説明されている。
+この脆弱性が存在するのはVirtualBox 3.0.0と3.0.2。VirtualBox 3.0.4で修正されているため、同バージョンへのアップグレードが推奨される。なおSun Microsystemsから同脆弱性に関する詳しい技術情報は提供されていない。

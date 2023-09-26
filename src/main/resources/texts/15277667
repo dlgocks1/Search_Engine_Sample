@@ -1,0 +1,144 @@
+はじめに
+本パッケージには, 行列計算ライブラリインタフェース SILC のソースコード,
+サンプルプログラム, およびドキュメントが含まれています.
+SILC は, 行列計算ライブラリを計算環境やプログラミング言語に依存しない
+方法で利用できるようにする新しいフレームワークです. 従来の関数呼び出し
+によるライブラリの利用法では, ユーザプログラムが特定のライブラリに依存
+するため, 別のライブラリや計算環境を利用するにはソースコードの大幅な書
+き換えが必要です. 一方, SILC のユーザプログラムでは, 行列やベクトルな
+どのデータに名前を付けてサーバに預け, 計算は文字列 (数式) で指示します.
+数式中の演算子は適当なライブラリ関数の呼び出しに翻訳されてサーバ側のメ
+モリ空間で実行されます. そのため, 用いるライブラリや計算環境をユーザプ
+ログラムの修正なしに容易に変更できます. また, 計算指示に数式を用いるの
+で, どのプログラミング言語でも同じ方法でライブラリを利用できます.
+SILC の設計および実現方法については以下の論文をご参照下さい.
+長谷川, 須田, 額田, 梶山, 中島, 高橋, 小武守, 藤井, 西田. 計算環境に
+依存しない行列計算ライブラリインタフェースSILC, 情報処理学会研究報告,
+2004-HPC-100, pp.37-42, 2004年.
+http://www.ssisc.org/HPC100/hasegawa.pdf
+梶山, 額田, 須田, 長谷川, 西田. 共有メモリ並列環境におけるSILCの実現
+と利用, 第34回数値解析シンポジウム講演予稿集, pp.49-52, 2005年.
+http://www.ssisc.org/NAS2005/kajiyama.pdf
+SILC を動かしてみるには
+SILC は Unix/Linux 環境および Windows 環境で動作します. Unix/Linux 環
+境ではソースコードをコンパイルする必要があります. Windows 環境ではコン
+パイル済みのバイナリパッケージが利用できます. バイナリパッケージの詳細
+については README.win32.ja ファイルをご覧下
+さい.
+Unix/Linux 環境および Microsoft Windows 環境で SILC のソースコードをコ
+ンパイルして実行するには以下のソフトウェアが必要です.
+C/Fortran コンパイラ
+GNU Make
+GNU Bison
+GNU Flex
+また, 以下の行列計算ライブラリを SILC サーバに組み込んで利用できます.
+BLAS, LAPACK (http://www.netlib.org/)
+Lis 1.0.2 (http://www.ssisc.org/lis/)
+FFTSS (http://www.ssisc.org/fftss/)
+SILC のソースコード (silc-1.3.tar.gz) は以下の場所から入手できます:
+http://www.ssisc.org/silc/index-ja.html
+silc-1.3.tar.gz からソースコードを取り出すには次のコマンドを実行し
+ます:
+gzip -cd silc-1.3.tar.gz | tar xvf -
+これによりカレントディレクトリの silc-1.3/src/ ディレクトリ内に
+SILC のソースコードが展開されます. このディレクトリに移動して下さい:
+cd silc-1.3/src
+次にコンパイルする環境に合わせて make.inc というファイルを作成しま
+す. inc/ ディレクトリ内にいくつかの計算環境向けの作成例があります.
+これらの例を参考にしてコンパイラオプション, ライブラリファイルの場所等
+を定義して下さい.
+GNU/Linux 環境で GCC を用いる場合は inc/make.gcc が利用できます.
+次のようにコピーして make.inc を作成して下さい:
+cp inc/make.gcc make.inc
+Windows 環境では MinGW (http://www.mingw.org/) に含まれる GCC と GNU
+Make, および GnuWin32 (http://gnuwin32.sourceforge.net/) の GNU Bison
+と GNU Flex が利用できます. 以下のバージョンでの動作を確認しています:
+http://downloads.sourceforge.net/mingw/MSYS-1.0.10.exe
+http://downloads.sourceforge.net/mingw/MinGW-3.1.0-1.exe
+http://downloads.sourceforge.net/gnuwin32/bison-2.1.exe
+http://downloads.sourceforge.net/gnuwin32/flex-2.5.4a-1.exe
+上記のソフトウェアをインストールした上で, inc/make.mingw をコピー
+して make.inc を作成して下さい:
+cp inc/make.mingw make.inc
+他の環境では make.inc ファイルを新規作成する必要があります. 詳しく
+は SILC 利用者マニュアル の2.1 節「SILC サーバ
+のコンパイル」をご覧下さい.
+make.inc ファイルを作成したら, make コマンドを実行して SILC サーバ
+とサンプルプログラムをコンパイルします:
+make
+サンプルプログラムの実行方法は以下の通りです. まず SILC サーバを起動し
+ます (以下の例は Unix/Linux 環境の場合です. Windows 環境では / [ス
+ラッシュ] を \ [円マーク] に読み替えて下さい):
+cd src/server
+./server
+次にサンプルプログラム (例: src/client/demo3.c) を実行します:
+cd src/client
+./demo3
+このプログラムは三重対角行列を係数とする連立一次方程式を解きます.
+||b-Ax|| = 3.784025e-12 のような出力が得られれば正常に動作しています
+(実際の値は計算環境によって変わります).
+また, console プログラム (src/client/console.c) を用いて対話的に計
+算を行なうことができます:
+./console
+2×2行列 A とベクトル b の積 A * b および b' * A を求める例を
+以下に示します (ここで ' [シングルクォート] は転置を表します):
+> A = {1, 2; 3, 4}
+> b = {5, 6}
+> x = A * b
+> pprint x
+column vector, 2 elements of int
+[1] = 23
+[2] = 34
+> x = b' * A
+> pprint x
+row vector, 2 elements of int
+[1] = 17
+[2] = 39
+>
+各行の > 以降がユーザの入力です. 計算を終了するには, Unix/Linux 環
+境では Ctrl-D を, Windows 環境では Ctrl-Z を入力します. console プログ
+ラムの詳細については README.console.ja ファ
+イルをご覧下さい.
+ユーザプログラムの作り方
+SILC の応用プログラム (以下, ユーザプログラム) の作成方法は SILC 利用
+者マニュアル に記載されています. 利用者マニュア
+ルでは, C 言語および Fortran で SILC のユーザプログラムを作成する方法
+を説明しています. また, Microsoft Windows 上でのユーザプログラムの開発
+については README.win32.ja ファイルを合わせ
+てご参照下さい.
+ユーザプログラムの開発には, C と Fortran のほか, オブジェクト指向スク
+リプト言語 Python (http://www.python.org/) が利用できます. ただし,
+Python によるユーザプログラムの開発方法を述べたドキュメントはまだ用意
+されていません. Python によるユーザプログラムの記述方法は C の場合とほ
+ぼ同じです. また, サンプルプログラムが src/client/python/ ディレク
+トリにあります.
+サンプルプログラム
+SILC のユーザプログラムのサンプルが src/client/ ディレクトリ以下に
+あります. 主なユーザプログラムを以下に示します.
+demo3_ssi_cg.c
+demo3.c
+fortran/fdemo3.f
+三重対角行列を係数とする連立一次方程式を解くユーザプログラムです.
+demo3_ssi_cg.c は, 求解に用いるライブラリ関数 ssi_cg() を直
+接 (SILC を介さずに) 呼び出すプログラムの例です. このライブラリ関数
+は連立一次方程式を共役勾配法 (CG 法) で解く関数です. 一方,
+demo3.c と fortran/fdemo3.f は SILC を利用して同じ連立一次方
+程式を解くC言語および Fortran のコード例です. また, demo3.c の
+Python 版が python/demo3.py にあります.
+silc_cg.c
+SILC の命令記述言語で実現した CG 法のプログラムです. demo3.c と
+同じ連立一次方程式を例題として与えています.
+mm_crs.c
+mm_band.c
+Matrix Market (http://math.nist.gov/MatrixMarket/) の行列データファ
+イル (.mtx ファイル) を読み込んで連立一次方程式を解くプログラム
+です. mm_crs.c は行列を CRS 形式で SILC サーバに預けて反復解法
+(CG 法など) で求解します. mm_band.c は行列を LAPACK の banded
+storage 形式でサーバに送り, 直接解法 (LU 分解法など) で解きます. ま
+た, コマンドラインオプションで行列の格納形式を変更できます.
+console.c
+SILC の命令記述言語で書かれた命令文を標準入力から読み込み, SILC サー
+バに送って実行する対話型のユーザプログラムです. サーバを電卓のように
+利用できます. 計算結果を見るには「pprint 変数名」と入力します. この
+プログラムの詳細については README.console.ja
+ファイルをご覧下さい.

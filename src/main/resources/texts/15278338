@@ -1,0 +1,183 @@
+What is Miro Bridge? 
+“In essence Miro Bridge enables Miro to emulate a MythTV recording device” 
+This python script provides an interface between Miro's videos, graphics, meta data and MythTV's "Watch Recordings" screen and MythVideo. Miro Bridge is intended to be used as a cron job which triggers Miro to update it's feeds, expire old videos and auto download new videos.
+Once the Miro updates are complete Miro Bridge:
+adds new videos to MythTV's "Watch Recordings" screen
+moves watched videos to MythVideo
+removes from MythVideo videos that have been expired/removed by Miro
+If you deleted a video in the "Watch Recordings" screen that video will also be deleted from Miro the next time Miro Bridge is run.
+During processing cover art and screen shots may be copied or created but video files by default are symlinks to the Miro's video. This means no redundant video files and no additional disk space used for video files. When a video is removed by either the user or by Miro expiring a video, Miro Bridge will clean up any graphics that were created during processing.
+Miro Bridge fully supports MythTV video and graphics Storage Groups.
+For MythTV the Miro videos, graphics and subdirectories are all renamed to the Miro Channel title and Channel episode names. Within Miro itself Miro video, graphics and directory names are left unaltered.
+This 588k archive contains the following screen shots [1] 
+Watch Recordings screen
+MythVideo Miro Channel subdirectories 
+MythVideo Movie Trailers subdirectory
+MythVideo View Details of a movie trailer
+All examples use the new MythTV theme Graphite “The theme so good it has it's own web site”. 
+If you do not know what Miro is then check their web site at [2]
+Additional Miro Bridge Features 
+#User Configuration File allows a user to override Miro Bridge's default processing
+Force all or selected Miro Channel videos to never be added to MythVideo. This is a watch-and-forget option. The Videos will be removed by Miro according to Miro's own expiry settings (X number of days)
+Force all or selected Miro Channel videos to be copied directly to MythVideo and never displayed in the MythTV's "Watch Recordings" screen. These copied videos are removed from Miro entirely. Miro never expires/removes a copied video which act like any other MythVideo video file. 
+Force all or selected Miro Channel videos to be copied directly to MythVideo AFTER they have been watched in the MythTV "Watch Recordings" screen. This option is a good balance between having new videos highlighted through the MythTV's "Watch Recordings" screen and automatically saving the video in MythVideo once it has been watched. This option is most frequently used for Movie trailers. Miro never expires/removes a copied video which act like any other MythVideo video file.
+Normally cover art for a video is set to the video's Miro Channel's icon. This configuration option allows for the video's Miro screen shot to be used as cover art. This option is specifically valuable for some movie trailer Channels. For example "Timo's HD Movie Trailers" uses movie posters as their "screen shot".
+Multi-Language Support 
+As both Miro and MythTV can display and function with non-English language characters sets, Miro Channels from non-English sources are fully supported. 
+Examples: 
+Japanese and Cantonese: [3]
+Prerequisites 
+Miro Bridge requires a MythTV back end running trunk change set [21138] (06AUG09) or higher
+Miro installed on a MythTV back end 
+The Miro Bridge script works with at least two versions of Miro. Version 2.0.3 being the oldest.
+Miro Bridge has been tested with:
+Miro version 2.0.3 the Ubuntu 9.04 Jaunty's repository Miro version
+Miro version 2.5.2 the Ubuntu 9.04 Jaunty package from Miro's own repository
+The Miro Bridge archive must be extracted on the same MythTV back end that also has Miro installed
+ffmpeg must be installed and functioning
+Testing was done with ffmpeg version "version 0.5-svn17737+3:0.svn20090303-1ubuntu6", from the Ubuntu 9.04 repository
+Imagemagick package must be installed and functioning (specifically the "convert" utility)
+Testing was done with ImageMagick 6.4.5 from the Ubuntu 9.04 repository
+The MythTV back end which runs Miro Bridge must have Internet access so the Channel feed updates and video downloads can occur.
+You'll need the Ubuntu package python-parsing or the equivalent for your distro; otherwise, you'll get an error when trying to run mirobridge.py.
+Getting Started 
+Downloading the Miro Bridge archive 
+Currently Miro Bridge does not ship with MythTV and only works with trunk (v0.22) revision 21138 or higher. 
+Click on the follow link to find the Miro Bridge script archive:
+#6825 make sure to download the latest version (v0.3.1)
+Installing Miro Bridge 
+Miro Bridge can only be run on a MythTV back end. If you have multiple MythTV back ends you only need to run Miro Bridge on the back end where Miro is installed. 
+The Miro Bridge scripts are typically installed in /usr/share/mythtv/mythvideo/scripts/ or /usr/local/share/mythtv/mythvideo/scripts/. 
+With sudo privileges extract the Miro Bridge archive files into your mythvideo scripts directory as described above. You can then delete the Miro Bridge archive file as it is no longer required.
+Configuring your graphics directories 
+Set up the directories for the graphic artwork. In a MythTV front end Utilities/Setup|Setup|Media Settings|Videos Settings|General Settings on page 1/8, enter the directories where the graphic files will be stored. It is essential to use separate directories for each type of graphic file (Posters, Banners, Fan art and Screen shots).
+Test that your installation is properly configured 
+To ensure that all Miro Bridge prerequisites have been met, run the following from the MythTV Back end's command line. Make sure you are logged on with the same user account which will be running the Miro Bridge cron job.
+/the path to mirobridge/mirobridge.py -t
+If you see the text "The environment test passed !" you should be able to run Miro Bridge. 
+If you see the text "The environment test FAILED. See previously displayed error messages!" or Miro Bridge aborts with a critical error message, you will need to correct all issues described in the those error messages.
+Adding a Miro Specific MythTV Channel (optional) 
+This configuration step should ONLY be run once. 
+This is an optional configuration step and only provides cosmetic improvements to the MythTV "Watch Recordings" screen. If you do not perform this step then you will see the "#9999 #9999" text displayed on the Watch Recordings screen If you apply this step that text will be replaced with "999 - Miro" and MythWeb you will also display a Miro channel icon. 
+A Miro Channel icon has been provided see#A few extras for "miro_channel_icon.png"
+Place this icon in a directory on the MythTV back end accessible to the user account that will be running Miro Bridge. Make sure that the icon name is "miro_channel_icon.png"
+/the path to mirobridge/mirobridge.py -C "/path to the Miro channel icon/miro_channel_icon.png"
+Miro Bridge by default will add the channel "999", make sure that this channel number does NOT clash with any of your current channel numbers. You can override the default channel number as shown below. In this example the channel number is changed to "888":
+/the path to mirobridge/mirobridge.py -c "9999:888" -C "/path to the Miro channel icon/miro_channel_icon.png"
+WARNING: Once you change either the channel id "9999" and/or the channel number "999" default numbers, you MUST always add the -c option with your new settings ANYTIME you run Miro Bridge. If you do not you could strand Miro video's in the "Watch Recordings" screen or orphan some MythTV data base records.
+THE MOST IMPORT CONFIGURATION STEPS 
+Before you run Miro Bridge you need to change the Miro channel names to get rid of extraneous characters, brackets and shorten the overall name. The Miro channel names will not harm Miro Bridge but can prevent the "Watch Recordings" screen from displaying cover art for some videos, plus the names will look better in both MythTV and MythVideo.
+In Miro right click on a channel and select "Rename" from the pop-up. Then change the Channel name. Below are examples of good and bad names: 
+Good: "Timo's HD Movie Trailers" 
+Bad: "GeekBrief TV | HD (video)" 
+Good: "GeekBrief TV HD" 
+Bad: "HD-Trailers.net Blog (HD videos)" 
+Good: "HD-Trailers.net Blog HD" 
+Make sure that Miro is configured so that it DOES NOT start automatically on a reboot. The option by default is turned off but should be double checked. When the Miro GUI is running it will block Miro Bridge from performing downloads and updates to the Miro database.
+User Configuration File 
+A user configuration file is only necessary if you want to override Miro Bridge's default processing. If this is the case then copy and rename the example configuration file to the ".mythtv" directory of the user account that will be running Miro Bridge. For example:
+cp "/the path to mirobridge/mirobridge/mirobridge-example.conf" "/path to mythtv/.mythtv/mirobridge.conf"
+Now edit the new "mirobridge.conf" file to override the Miro Bridge default behavior. The configuration file contains documentation on the available options.
+Your first Miro Bridge run 
+Download the Miro Bridge extras archive #A few extras and extract the archive graphics files.
+Copy the "folder.png" file to the directory where your poster graphics are stored. Rename the "folder.png" file to "Miro.png". When your MythVideo "Miro" subdirectory is created copy the "folder.png" file to the Miro subdirectory (no renaming is required). 
+Make sure that the MythTV back end is running.
+It is best that your first Miro Bridge run use the simulation (-s) option. Using that option will: 
+Start Miro update and automatic downloading
+Simulate updates to MythTV and MythVideo. No MythTV data base updates are actually performed. 
+With the accompanying (-V) option you will have a lot of output to analyze if things go wrong. Be aware that with the simulation option the statistics report will mostly display zero's as nothing has actually changed.
+/the path to mirobridge/mirobridge.py -Vs
+If there were no errors and Miro Bridge completed successfully then you are ready to try Miro Bridge live with the following command:
+/the path to mirobridge/mirobridge.py -V
+If that ran to completion without errors then check the statistics report to see if there were any videos added to the Watch Recordings screen and/or MythVideo. Assuming there were some video's added to MythTV then start your MythTV front end and check the "Watch Recordings" and MythVideo in the "Miro" subdirectory.
+Finally adding Miro Bridge as a cron job 
+Miro Bridge is meant to run as a recurring cron job set to the frequency that you would normally have Miro check for video updates (usually every hour or once a day). Add this cron command string:
+/the path to mirobridge/mirobridge.py -V > "/tmp/mirobridge.log" 2>&1
+Note: The option -V is recommended until you have confidence Miro Bridge is running without issue.
+If you see the mirobridge.log error message: 
+GConf Error: Failed to contact configuration server; some possible causes are that you need to enable TCP/IP networking for ORBit, or you have stale NFS locks due to a system crash. See http://www.gnome.org/projects/gconf/ for information. (Details - 1: Not running within active session)
+Then you need to use the following cron command string:
+env `dbus-launch` sh -c 'trap "kill $DBUS_SESSION_BUS_PID" EXIT; /the path to mirobridge/mirobridge.py -V' > "/tmp/mirobridge.log" 2>&1
+See this link for an explanation: [4]
+Additional command line options 
+To display all of Miro Bridge's command line arguments use the command line option (-h):
+/the path to mirobridge/mirobridge.py -h
+This stupid thing does not work! 
+The usual suspects:
+You are running Miro Bridge at the same time you have the Miro GUI open. One locks the other out from updating the Miro data base. Close the Miro GUI and rerun Miro Bridge. This can happen accidentally when a Miro Bridge cron job starts and you have the Miro GUI opened.
+The MythTV back end is not running.
+The MySQL database used by MythTV is not running.
+You are not using a supported Miro version. Versions 2.0.3 or 2.5.2 are the only tested versions. If you try Miro Bridge with other Miro versions and run into problems you are on your own.
+You are running cron with different account privileges then the account you tested Miro Bridge with. Try running within cron the following command string and see what the log messages reveal.
+/path to mirobridge/mirobridge.py -tV > "/tmp/mirobridge.log" 2>&1
+One or more of the Miro feed sites are down or have issues. Ignore these errors Miro's own logs would show the same messages. 
+You have not followed the installation process or set up instructions. The best check of a proper installation is that Miro can update and perform auto downloads on the MythTV back end that you are running Miro Bridge.
+You have Miro configured so that all Channel feeds are set to manual down load only
+You are not running your machine with locale of 'utf-8'. Your configuration should look something like: 
+> locale 
+LANG=en_CA.UTF-8 
+LC_CTYPE="en_CA.UTF-8" 
+LC_NUMERIC="en_CA.UTF-8" 
+LC_TIME="en_CA.UTF-8" 
+LC_COLLATE="en_CA.UTF-8" 
+LC_MONETARY="en_CA.UTF-8" 
+LC_MESSAGES="en_CA.UTF-8" 
+LC_PAPER="en_CA.UTF-8" 
+LC_NAME="en_CA.UTF-8" 
+LC_ADDRESS="en_CA.UTF-8" 
+LC_TELEPHONE="en_CA.UTF-8" 
+LC_MEASUREMENT="en_CA.UTF-8" 
+LC_IDENTIFICATION="en_CA.UTF-8" 
+LC_ALL= 
+If you are running Miro Bridge as a cron job and you see a Unicode error message, but the same command works when run from a command line, most likely your cron environment is not running as UTF8 compliant. This can happen even if root and users run with a locale of UTF8. Please refer to your distribution for instructions on setting cron's locale environment variables. You could also run a script that sets the locale environment variables as part of the cron command line. For example: 
+[ -f /your path/set_to_utf8.sh ] && . /your path/set_to_utf8.sh && /path to mirobridge/mirobridge.py -V 
+If you are running Miro Bridge as a cron job and you see a "! Warning - Creating an instance caused an error for one of: MythTV, MythVideo or MythDB" message, but the same command works when run from a command line, the problem may be that you have two different "mysql.txt" files. One for root and one for your user account. Check to see if they both using the correct settings.
+As with the Miro player some WMV videos do not play with sound "unrecognised codec". You could purchase these priority audio codecs.
+Sometimes videos that have AC3 5.1 surround sound do not play back properly with the MythTV internal player. The audio plays slow and video is slightly choppy. This is not a Miro Bridge issue.
+I got an error that says "no module named pyparsing". This means you didn't install the python-parsing package or equivalent for your distro.
+I want to delete Miro videos from MythVideo 
+Miro Bridge and Miro are both resilient when a user removes video files and/or subdirectories external from either Miro or MythTV. Miro Bridge will remove any orphaned database records, and graphics (cover art and screen shots). This clean up process includes Miro video files that were copied into MythVideo by Miro Bridge. The deleted videos will disappear from MythVideo after you run Miro Bridge and performed a MythVideo "Scan for changes".
+If you delete Miro videos that were copied from Miro to MythVideo they will be permanently deleted. 
+If the Miro video was moved (symlink) to MythVideo after being watched in the "Watch Recordings" screen that video will be automatically removed after the expiry period set in Miro (X number of days). If you just delete the symlink the video will reappear in MythVideo the next time you run Miro Bridge.
+If you want to delete a video prior to Miro's normal expiry time you must use the Miro GUI or remove the actual video file from Miro's video directory (that directory location is set in Miro). The next time Miro Bridge is run both Miro and MythVideo data bases and associated graphics will be automatically cleaned up.
+What are these messages? 
+These messages are not generated by Miro Bridge and hopefully will be eliminated sometime in the future. They do not impact Miro Bridge in any way. 
+/var/lib/python-support/python2.6/miro/eventloop.py:179: DeprecationWarning: socket.ssl() is deprecated. Use ssl.wrap_socket() instead.
+result = func(*args, **kwargs)
+/var/lib/python-support/python2.6/miro/util.py:38: DeprecationWarning: the sha module is deprecated; use the hashlib module 
+instead import sha
+Occasionally you may see the following warning messages. These warnings can safely be ignored.
+WARNING MessageHandler doesn't have a handle_search_complete method to handle the <class 'miro.messages.SearchComplete'> message
+WARNING Error downloading guide:
+Statistics Reports 
+At the end of Miro Bridge processing a statistics report is displayed: 
+-------------------Statistics--------------------
+Number of Watch Recording's deleted...... ( 1)
+Number of Watch Recording's watched...... ( 1)
+Number of Miro videos marked as seen..... ( 1)
+Number of Miro videos deleted............ ( 2)
+Number of New Miro videos downloaded..... ( 0)
+Number of Miro/MythVideo's removed....... ( 0)
+Number of Miro/MythVideo's added......... ( 1)
+Number of Miro videos copies to MythVideo ( 1)
+-------------------------------------------------
+Total Unwatched Miro/Watch Recordings.... ( 1)
+Total Miro/MythVideo videos.............. ( 42)
+-------------------------------------------------
+Miro Bridge limitations 
+Miro Bridge can only be run with a MythTV back end on which a Miro distribution is also installed. In the case where a MythTV back end has no GUI packages installed a Miro distribution may require the missing GUI packages. It would also be difficult to configure Miro (choose channel/feeds, rename and other alter Miro specific settings). Although you could try to import a "miro_subscriptions.opml" file that had been exported from a working Miro installation. Miro Bridge does not require a GUI but the Miro package probably will.
+The MythTV back end which runs Miro Bridge must have Internet access so the Channel feed updates and video downloads can occur.
+Miro Bridge only supports Miro video feeds and ignores audio feeds.
+A few extras 
+The following archive contains a few graphic files:
+A MythVideo Miro subdirectory cover art "folder.png"
+A Miro channel icon "Miro_channel icon.png"
+The Miro Channel "Linux Journal" cover art does not display without alteration. The "Linux Journal.jpg" file is a corrected replacement. Put the jpg file in your MythTV posters directory on the MythTV back end that you will be running Miro Bridge. 
+Graphic extras archive: [5]
+Tips 
+If you do not like the cover art for a Miro Channel you can change the "folder.png/jpg" file to an alternate png or jpg file of your choice. An excellent source of ready made high quality cover art can be found in the free icon collections at Gnome/KDE theme sites like [6]. The large 128x128 high quality scalable icons make the best cover art substitutes. You can also use these icons as posters by coping the icon file to your poster directory and then rename the file to the Channel name. You would have to remove the existing Channel poster graphic file.
+Credits 
+Robert McNamara “alpha tester extraordinaire” assisted in the development of Miro Bridge with insightful suggestions, alpha testing and all the storage group testing. Last but not least Robert created "the theme that inspires": Graphite
+The whole Miro development team that took the hard part out of developing this MythTV enhancement. Miro can be found at Get Miro or from your Linux distribution's repository. Be sure to check that you are installing a Miro version that is compatible with Miro Bridge.
+The Miro developers who created the command line interface which demonstrated how to develop a Miro front end to initiate various Miro functionality. That was Miro Bridge's starting point.
+The Miro channel icon, the Miro poster and folder cover art found in the extras archive come from the Miro Web site. While the Linux Journal jpg file is a Linux Journal Miro Channel icon.

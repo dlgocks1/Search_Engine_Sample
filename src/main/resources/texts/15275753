@@ -1,0 +1,60 @@
+レベル: 中級Michael Galpin, Software architect, eBay 2009年 6月 30日Android オペレーティング・システムは、モバイル・アプリケーションを開発するための強力なオープンソースのプラットフォームです。Android は Java™ プログラミング言語と Eclipse ツール・プラットフォームの強力さを活用しています。その組み合わせの中に、今度は Scala プログラミング言語を追加することができます。この記事では、Android での基本的な開発言語として Scala を使用する方法を説明します。Android で Scala を使用すると、より表現力豊かでありながらタイプ・セーフでもあるプログラミング言語を使ってモバイル・アプリケーションを作成することができます。
+前提条件
+この記事では任意の Android 機器上で実行するモバイル・アプリケーションを作成します。そのためには Android SDK をインストールする必要があります。ここでは Android V1.5 SDK を使用しました。この記事で作成するアプリケーションのコードは Scala プログラミング言語で書かれています。今まで Scala を見たことがない方でも、Scala コードについては説明するので問題ありません。ただし Scala に馴染みがないとしても、少なくとも Java 言語を理解していることが推奨条件です。この記事のコードの作成には Scala V2.7.5 を使用しました。Android と Scala に関しては優れた Eclipse プラグインがあります。ここでは Eclipse V3.4.2、ADT (Android Development Tools) V0.9.1、そして Scala IDE プラグインの V2.7.5 を使用しました。これらのツールに関しては「参考文献」を参照してください。
+セットアップ
+Android アプリケーションの作成と聞くと、厄介な話のように思えるかもしれません。Android アプリケーションは、Dalvik 仮想マシンという独自の仮想マシンの内部で実行されます。ただし Android アプリケーションはさまざまな方法でビルドすることができます。この記事で使用する基本的なビルド手法は下記のとおりです。
+図 1. Android で Scala をビルドする手法 
+考え方としては、最初にすべての Scala コードを Java クラス・ファイルにコンパイルします。これは Scala コンパイラーが行うことなので、あまり複雑なことはありません。次に、Android の dex コンパイラーを使って、これらの Java クラス・ファイルを Android 機器上の Dalvik VM で使われるフォーマットにコンパイルします。これは dexing と呼ばれ、Android アプリケーションでは通常のコンパイル手法です。通常は、.java ファイル群を .class ファイル群にし、さらにその .class ファイル群を 1 つの .dex ファイルにします。この記事でこれと唯一異なるのは、.scala ファイル群から始まる点です。最後に、.dex ファイルと他のアプリケーション・リソースは APK ファイルとして zip され、その APK ファイルを Android 機器にインストールします。
+では、こうしたことをどのようにして実現すればよいのでしょう。面倒な作業の大部分は Eclipse が処理してくれますが、注意が必要なステップが 1 つあります。それは、この記事のコードを実行するためには、標準の Scala ライブラリーのコードも必要であるということです。典型的な Scala のインストールの場合、そのライブラリーは /lib/scala-library.jar の中にある 1 つの JAR です。しかしこの JAR には、Android でサポートされていないコードも一部含まれています。一部のコードには少し調整が必要であり、また一部のコードは削除する必要があります。ここではとりあえず、scala-library.jar をカスタム・ビルドする方法が最も適切です。ここで利用したカスタム・ビルドについては「参考文献」を参照してください。ここではこの JAR を、Android ライブラリー JAR と呼ぶことにします。
+この JAR が用意できると、他の部分は非常に簡単です。あとは Eclipse 用の ADT プラグインを使って Android プロジェクトを作成すればよいだけです。次に、このプロジェクトに Scala の性質を追加します。そして標準の Scala ライブラリーを上記の Android ライブラリーと置き換えます。最後に、出力ディレクトリーをクラスパスに追加します。これで準備完了です。この手順は Scala のメイン・サイトで詳細に説明されています (「参考文献」を参照)。これで基本的なセットアップができたので、これから作成する、Scala を使った Android アプリケーションを調べることにしましょう。
+UnitsConverter
+Android 機器上で実行されるバイナリー・フォーマットに Scala コードを変換する方法は理解できたので、今度は Scala を使ってモバイル・アプリケーションを作成します。ここで作成するアプリケーションは簡単な単位変換アプリケーションです。このアプリケーションを使うと、英国単位からメートル法単位に、あるいはその逆に、容易に変換することができます。これは非常に単純なアプリケーションですが、最も単純なアプリケーションの場合でさえ Scala を使うとメリットがあるのです。まず、UnitsConverter のレイアウト要素を調べてみましょう。
+レイアウトを作成する
+携帯電話上で実行する Scala を作成する、と聞くとワクワクする人もいるかもしれませんが、モバイル・アプリケーション開発のコーディングをすべて Scala (あるいは Java ) 言語で行うわけではありません。Android SDK には、ユーザー・インターフェース・コードとアプリケーション・ロジックとを XML ベースのレイアウト・システムを使って分離する便利な方法が用意されています。このアプリケーションのメインのレイアウト・ファイルを見てみましょう (リスト 1)。
+リスト 1. Converter アプリケーションのメイン・レイアウト 
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+android:layout_width="fill_parent" android:layout_height="fill_parent"
+android:gravity="center_horizontal" android:padding="10px"
+>
+<TextView android:id="@+id/prompt_label" android:layout_width="wrap_content"
+android:layout_height="wrap_content" 
+android:text="@string/prompt_metric"/>
+<EditText android:id="@+id/amount" android:layout_below="@id/prompt_label"
+android:layout_width="fill_parent" 
+android:layout_height="wrap_content"/>
+<TextView android:id="@+id/uom_label" 
+android:layout_below="@id/amount"
+android:layout_width="wrap_content" 
+android:layout_height="wrap_content"
+android:text="@string/uom"/>
+<Spinner android:id="@+id/uom_value"
+android:layout_below="@id/uom_label"
+android:layout_width="wrap_content"
+android:layout_height="wrap_content"/>
+<Button android:id="@+id/convert_button"
+android:layout_below="@id/uom_value"
+android:layout_width="wrap_content"
+android:layout_height="wrap_content"
+android:text="@string/convert_button_label"/>
+<TextView android:id="@+id/result_value"
+android:layout_below="@id/convert_button"
+android:layout_width="fill_parent"
+android:layout_height="fill_parent"/> 
+</RelativeLayout>
+上記のコードによって、このアプリケーションのメインの UI が非常に簡潔に作成されています。この UI のルート・ノードは RelativeLayout というコンテナー要素です。Android SDK にはレイアウトに関するオプションがたくさんあります。RelativeLayout は単純に、さまざまな UI ウィジェットを相対配置でレイアウトするようにランタイムに指示します。相対配置を使うために、目に見える要素 (この場合は TextView 要素) を追加します。TextView はテキストを表示するための単純な要素です。TextView 要素には prompt_label という ID が割り当てられています。この ID は、次の要素である EditText 要素 (テキスト入力ボックス) に使われます。この要素には layout_below 属性があり、この属性の値は prompt_label という ID と同じです。つまり、EditText を prompt_label という要素の下に配置する必要があります。
+それ以外のレイアウト・コードは非常に単純です。全体をまとめて言えば、ラベルの付いたテキスト入力ボックスがあり、ラベルの付いたスピナー (コンボ・ボックスまたはドロップダウン) があり、1 つのボタンがあり、そして出力用に別のテキスト領域があります。図 2 はこのアプリケーションが実行されている様子を示しており、各要素を明示してあります。
+図 2. Android のレイアウトの詳細 
+では、上で表示されている、さまざまなテキスト値はどこから来るのでしょう。リスト 1 のいくつかの要素に text 属性があることに注目してください。例えば、prompt_label 要素には @string/prompt_metric という値を持つ text 属性があります。これは、Android アプリケーションの標準リソース・ファイルの 1 つ、strings.xml ファイルを使っているということです (リスト 2)。
+リスト 2. strings.xml リソース 
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+<string name="prompt_metric">Enter amount (KM, g, L, C)</string>
+<string name="prompt_english">Enter amount (miles, lbs, gallons, 
+F)</string>
+<string name="uom">Units of Measure</string>
+<string name="convert_button_label">Convert</string>
+<string name="app_name">Converter</string>
+<string name="english_units">English</string>
+<string name="metric_units">Metric</string>
+</resources>

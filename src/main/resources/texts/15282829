@@ -1,0 +1,52 @@
+Ease and Wizz is a set of expressions for After Effects that give you more ways to interpolate between values. The obvious use is in motion, but they can be used on animated properties of any kind. They’re applied with an After Effects-ish palette that can be docked, so it’s very easy to use.
+"Name Your Own Price" 
+You can pay anything you want, the amount displayed in the cart is only a suggested amount.
+Version: 2.0
+Announcing Ease and Wizz 2.0 — now with Curvaceous!
+This new version lets you apply the expressions to curved motion paths and mask shapes.
+Introduction
+Ease and Wizz is a set of expressions for After Effects that give you more ways to interpolate between values. The obvious use is in motion, but they can be used on animated properties of any kind. They’re applied with an After Effects-ish palette that can be docked, so it’s very easy to use.
+A while back, Flash guru Robert Penner created a suite of extremely useful easing equations that have been used to build thousands of websites worldwide. I’ve adapted these equations to work as expressions in After Effects (for an introduction to After Effects expressions, check out Dan Ebberts’ excellent site).
+One advantage of using an expression for easing is that the keyframes are editable. You can drag objects in the comp viewer, or move keyframes in the timeline, and the easing will be updated immediately.
+Ease and Wizz has been reviewed by these good folk:
+Alan Shisko on Motion Graphics ‘n’ Such
+Chris Meyer on Provideo Coalition: Creating Motion Graphics
+John Dickinson on Motionworks
+Usage
+Simply select the properties that you wish to add expressions to, choose the type of easing from the popup menu, whether it should be “in”, “out”, or both and click Apply. As of version 1.1 it’s possible to apply the expression to all keyframes instead of just the first two.
+You can choose any number of properties (including different kinds), on any number of layers, and the script will add expressions to everything that’s selected.
+Note: If there are already expressions on the properties that are selected, they’ll be replaced when you click Apply.
+Types of easing
+Regular easing (from most to least dramatic)
+Expo, Circ, Quint, Quart, Quad, Sine
+Special types
+Back, Bounce, Elastic
+FAQ
+How do I get more control over the bounce or elastic expressions?
+These expressions are pretty speedy to apply, but don’t offer too much in terms of customising. For that, I recommend checking out Dan Ebberts’ motionscript.com. The Physical Simulations is a great jumping off point.
+After Effects CS4 crashes every time I quit. Coincidence?
+It’s an After Effects bug that’s been acknowledged by Adobe. But don’t fret, it’s been fixed, all you need to do is upgrade to version 9.0.2 (Mac | Windows)
+Can I use this with After Effects 7?
+I never had any joy getting the palette to work in AE7. However, you can always just copy and paste the expressions directly into the property you’re animating … if, for example you wanted an expo in-out tween on a position property, keyframe it as usual then open the file “inOutExpo-easeandwizz-all.js”. Copy the contents, add an expression to the position property, then paste it in.
+Why do I need to enable “Allow Scripts to Write Files and Access Network”?
+The expressions themselves are separate files in the “easingExpressions” folder. The main script figures out which one you intend to use, opens the relevant file, and the applies the expression to all the properties you’ve got selected. In a pinch, you could also do this manually (but it’s pretty laborious).
+What’s with the name?
+It’s a pun on a song title by UK band Pulp: “Sorted for E’s & Wizz”.
+Are these questions really “Frequently Asked”?
+OK, you got me. They have, literally, never been asked.
+Version history
+2009.02.11 – Version 2.0
+[NEW] Curvaceous. Allows you to apply easing expressions to curved motion paths, and to mask or shape layer paths.
+2008.12.01 – Version 1.12
+[FIXED] After Effects CS4 compatability.
+2008.03.24 – Version 1.1
+[NEW] Tooltips added to the palette
+[NEW] Popup menu added so you can select which keyframes to affect (all, first two and last two, or just the first two)
+[CHANGED] Replaced the “type” radio buttons with a popup menu
+[CHANGED] Eliminated need to choose easingExpressions folder path (thanks to Jeff Almasol)
+[FIXED] Fixed colour of text in popup menus – thanks to Jeff again
+2008.03.21 – Version 1.0
+Initial release
+Tags: Animation Assistant, Bounce, Ease, Expressions, Featured, Keyframes, Smooth
+About the author
+Ian is from Wellington, New Zealand. He has lived in London, Amsterdam, and now resides just a stone's throw from Bondi Beach in Sydney, Australia. When not noodling away on his Mac, he enjoys being punched in the nose by his baby girl, Poppy.

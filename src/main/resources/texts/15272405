@@ -1,0 +1,22 @@
+関連パッケージのインストール 
+まず、Munin に関連するパッケージをインストールする。
+# yum install sysstat
+# yum --enablerepo=rpmforge install perl-rrdtool
+# yum --enablerepo=rpmforge install perl-Date-Manip
+# yum --enablerepo=rpmforge install perl-HTML-Template
+# yum --enablerepo=rpmforge install perl-Net-SNMP
+# yum --enablerepo=rpmforge install perl-Net-Server
+▲ ▼
+Muninのインストール 
+次に、Munin本体をダウンロードする。
+Muninはインストールされたホストの情報を集める「ノード」と、
+その情報を可視化する「サーバ」の2つにわかれている。
+# wget http://jaist.dl.sourceforge.net/sourceforge/munin/munin-node-1.2.5-1rhel4.noarch.rpm
+# wget http://jaist.dl.sourceforge.net/sourceforge/munin/munin-1.2.5-1rhel4.noarch.rpm
+ダウンロードしたパッケージをインストールする。
+# rpm -Uvh munin-node-1.2.5-1rhel4.noarch.rpm
+# rpm -Uvh munin-1.2.5-1rhel4.noarch.rpm
+ノードを起動するように設定する。
+# chkconfig munin-node on
+# service munin-node start
+▲ ▼

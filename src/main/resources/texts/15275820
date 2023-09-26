@@ -1,0 +1,12 @@
+Tuesday, June 17, 2008
+[JavaScript] SoundManager2
+SoundManager2を使って、MP3を再生する簡単なサンプルを作った(開始から30秒でフェードアウトする)。改善の余地ありだが、とりあえず動いたので備忘録のためにそのまま貼り付け。 <html> <head> <title>Sound Sample</title> <script type="text/javascript" src="js/soundmanager2.js"></script> <script type="text/javascript"><!-- var sound; // sound instance var interval; // value for setInterval soundManager.url = "js/soundmanager2.swf"; // different from default (swf location) soundManager.debugMode = false; // debug mode: off soundManager.onload = function () { // .onload ensures the library is loaded sound = soundManager.createSound({ id: 'mySound', url: 'URL of mp3 file' // comma is not necessary for the last option }); sound.play(); interval = setInterval("checkElapsedTime()", 1000); // every 1 second }; // volume range is from 0 to 100 function checkElapsedTime() { pos = sound.position; if (pos > 30000) { // Stop after 30 seconds clearInterval(interval); sound.stop(); sound.unload(); } else if (pos > 25000) { // Volume = 25 after 25 seconds sound.setVolume(25); } else if (pos > 20000) { // Volume = 50 after 20 seconds sound.setVolume(50) } }; --> </script> </head> <body> </body> </html> 
+Posted by
+londonhyt
+at
+11:14 PM
+Labels:
+JavaScript
+0
+comments:
+Post a Comment

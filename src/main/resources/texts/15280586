@@ -1,0 +1,23 @@
+SSH Tunneling X Windows on
+Mac OSX
+Installing X11 
+Depending on the version of OSX and the type of of installation, X11 might not be installed.
+If you have OSX 10.4, X11 is on the installation disk. Alternatively,
+X11 can be downloaded from Apple 
+Apple X11 .
+Opening X11 
+To open X11 once installed, select Go on the top toolbar and choose Utilities
+from the drop down menu. 
+Click on the X11 icon. 
+From the X11 toolbar, select Applications and then Terminal from the drop 
+down menu.
+Tunneling Over SSH 
+Type ssh -X cs.toronto.edu -l your_username. The -X flag is for tunneling X.
+Run an X application like xeyes to test if it works. 
+OpenSSH 3.8 and Above
+If you are using OSX 10.4 with OpenSSH 3.8 and having difficulties, try
+the following:
+If you are using OpenSSH 3.8 or higher and having difficulties, try the following:
+The -X flag has changed in OpenSSH 3.8 and later. By default now X11 forwarding
+applications run as untrusted clients. This may cause error messages with some applications.
+To use X11 applications as trusted clients, use the ssh -Y flag instead of ssh -X.

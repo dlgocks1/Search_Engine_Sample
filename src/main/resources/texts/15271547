@@ -1,0 +1,65 @@
+■PostgreSQLのトランザクションの仕様
+CREATE TABLE test(x INT UNIQUE);
+INSERT INTO test (x) VALUES (1);
+INSERT INTO test (x) VALUES (2);
+としておきます。
+ここで、
+=> BEGIN;
+=> INSERT INTO test (x) VALUES (3);
+INSERT 0 1
+=> INSERT INTO test (x) VALUES (1);
+ERROR: duplicate key value violates unique constraint "test_x_key"
+とするとエラーになります。PostgreSQLはトランザクション中にエラーが起こると、以後何をしてもエラーになり受け付けなくなります。ためしに続けて色々発行してみても、
+=> INSERT INTO test (x) VALUES (10);
+ERROR: current transaction is aborted, commands ignored until end of transaction block
+=> INSERT INTO test (x) VALUES (20);
+ERROR: current transaction is aborted, commands ignored until end of transaction block
+こんな感じです。COMMITすると
+=> COMMIT;
+ROLLBACK
+このようにROLLBACKされます。これがPostgreSQLの仕様です。
+■DBD::Pgの謎
+確認環境
+PostgreSQL 8.3.7
+DBD::Pg　Ver1.49
+DBD::Pgの場合
+01: $dbh->begin_work;
+02: $dbh->do('INSERT INTO test (x) VALUES (10)');
+03: $dbh->do('INSERT INTO test (x) VALUES (1);');
+04: $dbh->do('INSERT INTO test (x) VALUES (20);');
+05: $dbh->commit;
+とすると、3行目でエラーが起こり、4行目の実行でも"ERROR: current transaction is aborted, commands ignored until end of transaction block"といわれます。
+これを、DBIのprepareを使用して
+01: $dbh->begin_work;
+02: $dbh->prepare('INSERT INTO test (x) VALUES (?)')->execute(10);
+03: $dbh->prepare('INSERT INTO test (x) VALUES (?)')->execute(1);
+04: $dbh->prepare('INSERT INTO test (x) VALUES (?)')->execute(20);
+05: $dbh->commit;
+とすると、3行目でエラーが起っても、4行目の実行が反映されてしまいます。謎の挙動です。
+■謎の解析
+このようにソースを改変してログを取ってみました。
+open(my $fh, ">pg_log.txt");
+$dbh->pg_server_trace($fh);
+$dbh->begin_work;
+$dbh->prepare('INSERT INTO test (x) VALUES (?)')->execute(10);
+$dbh->prepare('INSERT INTO test (x) VALUES (?)')->execute(1);
+$dbh->prepare('INSERT INTO test (x) VALUES (?)')->execute(20);
+$dbh->pg_server_untrace();
+close($fh);
+このときサーバに対して次のようなコマンドが発行されていました。
+=> BEGIN;
+=> INSERT INTO test (x) VALUES (10);
+=> INSERT INTO test (x) VALUES (1);
+エラー : duplicate key value violates unique constraint "test_x_key"
+=> ROLLBACK;
+=> BEGIN;
+=> INSERT INTO test (x) VALUES (20);
+=> COMMIT;
+どうりで最後のCOMMITが成功するはずです。取得した生ログも置いておきます。
+これを、
+01: $dbh->begin_work;
+02: $dbh->prepare('INSERT INTO test (x) VALUES (10)')->execute();
+03: $dbh->prepare('INSERT INTO test (x) VALUES ( 1)')->execute();
+04: $dbh->prepare('INSERT INTO test (x) VALUES (20)')->execute();
+05: $dbh->commit;
+とすると再現しません。prepare中にUNIQUE制約をチェックして、勝手にrollbackしているようですが、原因がPostgreSQL側なのかDBD::Pg側なのかは絞り込めませんでした。

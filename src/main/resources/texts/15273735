@@ -1,0 +1,24 @@
+バージョンと製造年月日 
+2009年02月12日 
+Flash Player 9 
+Flash CS3 
+ActionScript3.0
+▲ ▼
+FlashVars属性を使って渡す 
+objectタグなら これを埋め込む
+<param name="FlashVars" value="hoge=1&piyo=2">
+embedタグなら、属性追加
+<embed src="hoge.swf" FlashVars="hoge=1&piyo=2" />
+こんな風
+▲ ▼
+プログラム側から取得する 
+プログラム側からは
+var flashVars:Object = this.loaderInfo.parameters;
+var hoge:String = flashVars['hoge'];
+こんな風に取得できる。
+ってドイツもこいつも書くもんだからその通りにやって
+オブジェクト参照のプロパティまたはメソッドにアクセスすることはできません。
+なんてエラーメッセージがでて途方にくれましたよ。
+この書き方には制限があって、どのインスタンスからでも使えるわけじゃなくて、loaderInfoから引数を引き出せるのはドキュメントクラスのみです。
+ac3やってるほとんどはFlex派のプログラマでFlashでの作例が少ないよ！
+▲ ▼

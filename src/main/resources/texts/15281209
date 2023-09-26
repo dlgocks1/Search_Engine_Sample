@@ -1,0 +1,14 @@
+Invalid Request.
+Usage Example: 
+- Simple:
+http://mozshot.nemui.org/shot?http://www.google.com/
+- Get small (64x64) image:
+http://mozshot.nemui.org/shot/small?http://www.google.com/
+- Get large (256x256) image:
+http://mozshot.nemui.org/shot/large?http://www.google.com/
+- Get 800x600 image:
+http://mozshot.nemui.org/shot/800x600?http://www.google.com/
+- Set browser window size to 300x300:
+http://mozshot.nemui.org/shot/-300x300?http://www.google.com/
+- Specify window & image size:
+http://mozshot.nemui.org/shot/800x800-800x800?http://www.google.com/

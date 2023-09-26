@@ -1,0 +1,4 @@
+I have an iframe and I wrote this code
+window.parent.document.getElementById('parentPrice').innerHTML
+to access parent element. How to get the same result using jquery? 
+UPDATE: Or how to access iFrame parent page using jquery?

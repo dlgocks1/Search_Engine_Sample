@@ -1,0 +1,257 @@
+Web制作に使えるWebサービスやツールなどが様々なサイトでかなり 
+紹介されています。便利なものですが、多すぎて混乱するので、 
+備忘録的にローカルサーバーに入れたWPでリンク集を作っていました。 
+そろそろ数が落ち着いて来たので多くの方とシェアしたいと思い、公開してみます。
+現在330ありますが、追加していく可能性があります。
+リンク集は全て無料で使える事を条件に集めていました。英語が苦手な方もいらっしゃいますのでTwitterサービスのまとめ同様、日本語で使い方などを説明してくれているサイトにリンクしています。無い場合は海外サイトにリンクしていますが、その場合はアメリカの国旗をつけてあります。サイトがアメリカのものかは知りませぬ。分かりゃいいんだ、分かりゃ。
+無料といえどもライセンスの縛りもありますので自己責任でご利用下さい。 
+使えるかどうかは個人差が生じますので何とも言えませんが、お役に立てれば幸いです。
+また、商用で使えそうな素材が一つも無いようなサイトは極力掲載していないつもりです。極力。
+もくじ
+XHTMLテンプレート配布
+css関係
+Flash
+素材関係
+画像加工関係
+カラー関係
+.htaccessジェネレーター
+その他便利なジェネレーター
+プログラミング
+オープンソースのCMS
+SEO、Webサイトチェック
+各種リファレンス/チートシート
+Firefoxアドオン
+※上に戻る場合は右下に戻るボタンが表示されます。IE6は・・
+XHTMLテンプレート配布
+TemplateWorld / クオリティの高いテンプレを一部無料で配布。リンクは無料一覧
+OSWD / 2000以上のテンプレをオープンソースで配布
+OpenDesigns / 1400ほどのテンプレをストック。見やすいです
+Studio7Designs / 9つしか無いけどクオリティが高いXHTMLのテンプレを配布
+Free CSS Templates / シンプルなテンプレからハイクオリティなものまで
+styleshout / ややシンプル寄りのフリーテンプレートを20個ちょい配布
+Solucija / 汎用性の高そうなテンプレートが30個以上
+FreeCSSTemplates.org / フリーXHTMLテンプレートが400個以上
+Free CSS .com / 有料と無料あり。クオリティの高いテンプレートやナビゲーション
+css関係
+CSS frame generator / XHTMLからcssの枠組みを作ってくれる
+RoundedCornr / 角丸のHTML・CSSコードを生成してくれる
+CSS Sprite Generator / 複数の画像を一つにまとめる事で表示スピードアップ
+CSS Type Set / ファミリー、色、単語間、行間等をプレビューで確認
+CSS Text Wrapper / 様々な形のテキストの回りこみを簡単に実現できる
+CSS Builder / オンラインでスタイルを生成可能
+YAML Builder / マルチカラムデザインを用意に実装
+Spiffy Box / cssによる角丸を簡単に生成
+The 1Kb CSS Grid / 複雑なCSSレイアウトをウェブ上で簡単に作成できる
+CSS SuperScrub / 無駄なcssの要素を省いて軽量化
+CSS Redundancy Checker / 未使用セレクタを教えてくれる
+Online CSS Optimizer / cssをオンラインで最適化してくれる
+Drawter / CSSレイアウトに対応したサイト製作ツール
+Column Layout Generator / 直感的に、レイアウトの枠組みのｃｓｓを作成
+cssメニュー
+CSS Menu Builder / 横、縦、パンくずと3種類の中から選択可能
+IzzyMenu.com / スタイリッシュなcssメニューを簡単生成
+CSSMenuMaker / cssメニューを作成できる。日本語も入力可
+CSS Portal / サンプルから選択してタブメニューを生成できる
+My CSS Menu / 手軽に汎用性の高いメニューを作成できる
+Pure CSS Menu / ドロップダウンメニューを簡単生成、IE6まで対応
+テンプレートジェネレーター
+WP中心になっちゃいました。
+WordPress　Theme Generator / WPのテーマをオンラインで作成
+Cssez / 国産。WPやMT他、国内のブログサービスのテンプレを作成可能
+Wordpress Layout Generator / 用意されたレイアウトから選択してカスタマイズ
+Project deply* / サイト制作のためのテンプレートをごっそり自動生成
+グリッド
+Blueprint Grid CSS Generator / グリッド幅、数等を指定してcssを自動生成
+Grid Designer / オンラインで確認しながらグリッドの設計ができる
+Grid System Generator / グリッドレイアウトのデザインのベースを作成する
+960 Grid System / 960に固定して可視性を高める為の情報。ブックマークレットも
+nP: Grid Generator / グリッドを作成して、ｃｓｓのソースをコピペ
+Plumb / 簡単にグリッドレイアウトを作成できるツール
+Flash関連
+DesignWalkerさんの記事に少し加えています。
+freetemplates4u / Flashは勿論、数々のCMSテンプレが全てフリー
+FlashVillage / ハイクオリティなFlashテンプレート
+flashmo / Flash以外にcssやギャラリーなども
+Flasheezy! / Flash素材が山のようにある。見てても楽しい
+FFiles / Falsh素材を無料でダウンロード可能
+Wix / Falshテンプレートジェネレーター。日本語が・・
+Flashbucks / 国産。個人・商用ともに無料で利用可能
+素材関係
+フリーフォント
+dafont.com / 最もストック数の多いフォントサイトだが、ライセンスが曖昧
+UrbanFonts / かなりの数のフォントをストック。著作権注意
+FontStruct / オリジナルのフォントを作成できる貴重なサービス
+Better Fonts / 10000以上ストックしてあり、その場でフォントを確認できる
+Font Squirrel / 商用サイトでも利用可能なフリーフォント。要ライセンス確認
+1001 Free Fonts / 約10＄で4000個DLも可能
+creamundo / 10000近いフリーフォントをストック。プレビュー機能も
+Fawnt / デザイナー向けのフリーフォントをダウンロード可
+Search Free Fonts / フリーフォントの検索エンジン。サムネイル付き
+YourFonts / 自分の筆跡をフォントに出来るサービス
+Abstract Fonts / 探しやすいフリーフォント配布サイト
+WhatTheFont! / 画像を解析して何のフォントか調べてくれる
+fontspace.com / プレビューで配布されるフリーフォントを大きくして確認できる
+ShowFont.net / 10000以上のフォントをストックしている
+Font Cubes / 人気順でも探せるフォント配布サイト
+Fontex / 好みのフォントを見つけやすいフリーフォント配布サイト
+SMeltery / 企業ロゴなど一風変わったフォントを配布
+フリーアイコン
+Iconza / 一括でカラー、背景色変更、3サイズから選択、フリーDL出来る
+Iconfinder / 2万近くのアイコンをストックしているアイコン検索エンジン
+Icon Archive / 2万ほどのフリーアイコンのアーカイブサイト
+iconspedia / 高品質なアイコンをそろえたWebサイト
+famfamfam / 小さくて可愛いフリーアイコンを紹介している
+FreeIconsWeb / アイコンパックを中心に15000点以上をストック
+ICONlook.com / ライセンスも表示されて見やすいアイコン検索エンジン
+iconlet / 40000個以上のアイコンから検索可能
+FeedIcons.com / RSSアイコンを統一しよう、という趣旨のプロジェクトサイト
+We Love Icons / 質感の良いアイコンを配布。サイト自体もいい感じ
+Icojoy / かわいいミニアイコンをダウンロード出来る
+Online Banner Generator / アイコンやバナーを手軽に作成できる
+フリーテクスチャ
+CG Textures / 綺麗にカテゴライズされたフリーテクスチャ配布サイト
+TextureKing / 無料のテクスチャを大量にストック
+Mayang’s / 3400以上の多種多様な高品質のテクスチャを配布
+Urban Dirty / アーバンなテクスチャが商用でも利用可（要クレジット表記）
+Texture Lovers / 凄く探しやすいフリーテクスチャ配布サイト
+Zen Textures / 大き目のテクスチャを配布してるサイト
+Grunge Textures / グランジ風を専門としたフリーテクスチャ配布サイト
+Free Stock Textures / 高解像度なテクスチャを豊富に揃えているサイト
+Free 3ds Textures / 見やすく探しやすいテクスチャ配布サイト
+TextureArchive.com / 3500種をjpgeでDL可能なフリーテクスチャ配布サイト
+フリーPhotoshopブラシ
+PS Brushes / 500種以上（09/08/04現在）のPhotoshopブラシをDL可能
+FBrushes! / 大量のPhotoshopブラシやパターンをストック、配布
+Brusheezy! / 厳選されたハイクオリティなフリーPhotoshopブラシを配布
+Qbrushes / 数多くのクオリティの高いブラシをストック。探しやすい
+myPhotoshopBrushes / ブラシやパターン、カスタムシェイプを数多くそろえる
+blendfu / ブラウザで試してからDL出来るブラシ配布サイト
+GetBrushes.com / クールなブラシを数多くストックしている
+In Obscuro / クールなブラシがあるけど商用不可
+CHEZ PLUMEAU / シンプルで探しやすいPhotoshopブラシ配布サイト
+ベクター素材
+Vecteezy / クオリティの高いベクター画像をフリー配布
+FreeVectors.net / かなりの数のベクター画像をダウンロード可能。登録も受付
+vector4free / ベクター画像のポータルサイト。ライセンスは素材ごとに確認
+Vector Logo Database / 企業ロゴをダウンロード出来る。要ユーザー登録
+Qvectors / フリーの高品質なベクター画像をダウンロード可
+Vector Portal / クリエイティブコモンズの元、フリーでダウンロード可能
+VectorStock™ / ロイヤリティフリーのベクター画像を大量にストック
+Vectors / 数百種以上のベクター素材をストック
+ファビコンジェネレーター
+favicon2dots / 画像をdotで再現してファビコン化するジェネレーター
+favikon / 手軽に画像からファビコンを作成出来る
+favicon.cc / オンラインのファビコンエディターで自作ファビコンを
+Genfavicon / Ajaxで軽快に画像から切り抜いてファビコン生成するサービス
+Bradicon! / シンプルで登録不要のファビコンジェネレーター
+ボタンジェネレーター
+My cool button / Web2.0風のボタンに用意されているアイコンも埋め込める
+Buttonator / ドラッグ＆ドロップでボタンを生成できる
+Button Maker Online / 小さいRSSボタン作成等に便利なサービス
+tabs generator / タブをオンラインでデザイン出来る
+Button Maker / 国産の細かく設定できるボタン生成ジェネレーター
+As Button Generator / 国産ボタン生成サービス。細かい設定が可能で使い易い
+button-download.com / ジェネレーターではないけど全て商用利用可能
+BannerSnack / かっこいいFlashバナーを簡単作成
+Fresh Generator / グラデーションや角丸のエレメントを作成
+ButtonBoost / 透明感あるボタンをオンラインで生成
+背景画像
+Tiled backgrounds designer / シームレスなパターン画像を生成できる
+Stripemania / 背景などに使えるストライプ画像をオンラインで生成
+Stripe Generator / Web2.0っぽいストライプ画像を簡単生成
+Squidfingers / 150点以上の繊細でシームレスなパターン画像をストック
+SeamlessTextures / 写真っぽいのにシームレスなパターン画像を配布
+ftg / Fireworksで使える無料のテクスチャ300種を配布
+ava7 patterns / 400以上のパターン画像シームレス画像を配布している
+DinPattern / 商用も無料で使えるパターン素材を配布
+Kaliber10000 / ドット絵で容量を抑えたシームレス画像をダウンロード出来る
+Pattern8 / 無料で商用サイトやプロダクトデザインに利用できるパターン素材を配布
+Tartan Designer / 可愛らしいタータンチェック柄をデザインするジェネレーター
+Repper / 手持ちの画像からパターン画像を生成できる
+Pattern Cooler / カラーやシンボルを合わせてパターン画像を生成
+写真素材
+ネタ帳さんのエントリの元、僕が確認した商用OKなサイトのみに絞っています
+public domain photos.com / public domainで5000の写真を配布
+Cepolina Photos / クレジット表記で商用無料になる写真配布サイト
+BurningWell.org / public domainで配布される写真素材サイト。景色多目
+Image * After / 20000点以上の写真素材が個人商用問わずフリー
+FreeDigitalPhotos.net / 600px程度は無料利用可能
+ImageBase / クリエイティブコモンズで提供。ポルノ、不法サイト、等はダメ
+public domain image gallery / 名の通り、public domainの写真をストック
+FreePhotos.se / こちらもpublic domainの写真をダウンロード可能。植物多目
+FreePixels.com / 個人商用利用可との事。クオリティも高め
+iLoveStock / ポルノ、非合法等、宣伝の為に人物等を使わない限り商用可
+MORGUEFILE / 商用利用可の写真を探しやすくカテゴライズ
+rePublicDomain.com / public domainで写真素材を提供してくれている
+stock.xchng / 基本的に無料だけど制限がある場合はDLボタン脇に記述あり
+Free Stock Photography / 制限無しで使いたい放題の写真配布サイト
+足成 / 国産のフリー写真素材配布サイト。人物も商用可で貴重
+その他
+Ajaxload / Ajaxのロードアニメーションを生成できる
+Load Info / こちらもローディング画像をオンライン生成可
+thumbalizr / Webページのスクリーンショットを生成する
+3D-box maker / 3Dパッケージをデザインできるジェネレーター
+E-Mail Icon Generator / メールアドレスを画像として作成してくれる
+Logo Creator / 日本語でも生成可能なWeb2.0風のロゴ作成ジェネレーター
+Stripe Designer / 様々なストライプ画像を生成するオンラインエディター
+animoto / 画像と音楽をアップロードすると動画を作成してくれる
+Preloaders / かわいいローディング画像を生成できる
+odosketch / ブラウザで行えるスケッチ風のペイントツール
+gifmake / Gifアニメを作成したり切り離したり出来る
+tutsearch / Photoshopなどのチュートリアル検索エンジン
+Font Image Generator / フォントを画像化してくれる
+QuickRibbon / 角によくある「リボン」を簡単に生成
+Open Web Tools Directory / Web開発に使えるWebツールのディレクトリ
+画像加工関係
+Snipshot / 様々な拡張子で保存できる高機能画像加工サイト
+pikifx / ブラウザオンリーで高度な画像加工が出来る
+Pixelmator / GPUを使った、動作の速いオンライン加工ツール
+SUMO / Photoshop並みの加工が出来る高機能加工ツール
+Splashup / 通称「オンラインのPhotoshop」操作感もかなり似ている
+Aviary / 加工のみならず多機能なWebサービス
+Picnik / 加工以外にフレームや図形も追加できる高機能サービス
+pixer.us / 手軽で登録不要のオンライン画像加工サービス
+Vector Magic / どんな画像もベクター画像に変換できる
+Preloadr / Flickr上の画像をオンラインで高度に加工
+FotoFlexer / 写真編集ソフトの基本的な機能を全て持ち合わせた加工ツール
+フレーム・ネタ・その他
+ImageChef / 写真に文字を入れた画像を作ってくれる。一部日本語不可
+Image Mosaic Generator / 画像をモザイク画に変換してくれるサービス
+BeFunky.com / 写真を加工してイラスト風にしてくれるWebサービス
+Image reflection generator / 画像に反射を加えてくれるサービス
+PhotoFunia / 顔写真をフレームと合成できるWebサービス
+Funny Photo / フレームを使って合成写真を作成できる
+Dumpr / 写真を使ってフレームと違和感なく合成できる
+rsizr / 画像を違和感無く引き伸ばせるWebサービス
+幕末古写真ジェネレーター / 幕末写真っぽく加工してくれる
+Warning Label Generator / 警告文を作成してくれるサービス
+Polaroize / 写真をポラロイド写真風に変換してくれるWebサービス
+その他
+smush.it / サイト内の画像を一気に最適化してくれる
+Online Image Optimizer / png、gif、jpgの縮小と最適化をしてくれる
+resize image / 画像を綺麗にリサイズできるWebサービス
+EasyPhotoResize / オンラインで画像をリサイズ
+カラー関係
+もっと良さ気なツールもあったけどウィルス検出されたのでリンクしていないWebサービスも。
+Colors Palette Generator / 画像から使用されているカラーを抽出しパレット生成
+Color Scheme Online / オンラインのシンプルなカラースキームジェネレーター
+ColorJack / 色彩の理屈に合ったカラーを教えてくれるオンラインカラーツール
+Color Scheme Designer 3 / 見やすいインターフェースのカラースキーム
+colorhunter / 画像からパレットを生成してくれるWebサービス
+colr.org / 画像ファイル（Flickrからも可）のビットマップから色を抽出
+Pictaculous / 画像をアップロードするとカラーパレットを生成。携帯にも送れる
+ColoRotate / ３Dモデルのカラースキームジェネレーター
+.htaccessジェネレーター
+.htaccess Editor / 国産で使いやすい.htaccessジェネレーター
+Mobile IP htaccess Maker / 国産。携帯以外のIPを制限するhtaccessを生成
+.HTACCESS Banning Generator / 特定のIPを拒否する.htaccess設定
+.htaccess file generator / 自動で.htaccessを設定できるジェネレーター
+その他便利なジェネレーター
+jotForm / 直感的にフォームを生成可能
+pForm / こちらもフォームを簡単生成できるサービス
+Zamzar / オンラインでファイルをコンバートするWebサービス
+kwout / Webページをキャプチャして引用できる。ブックマークレットも
+WordOff / HTMLから不要なタグを除去してくれる
+vozMe / 入力したテキストをMP3でDL出来る
+プログラミング
+はっきり申し上げますと、僕は全然詳しくないのでご意見頂けると嬉しいです。

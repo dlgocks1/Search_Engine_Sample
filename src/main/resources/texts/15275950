@@ -1,0 +1,54 @@
+ロールに与えれている権限の削除を行います。権限の削除は、権限を与えた人しか行うことが出来ません(スーパーユーザーは可)。注意する点としては、ロールAがロールCに与えた権限と、ロールBがロールCに同じ権限を与えた場合、ロールAがロールCの権限を削除してもロールBがロールCに与えた権限は残っている点などです。権限を削除するにはREVOKEを使います。
+REVOKE [GRANT OPTION FOR]
+{{SELECT | INSERT | UPDATE | DELETE | RULE | REFERENCES | TRIGGER}
+[,...] | ALL [PRIVILEGES]}
+ON [TABLE] tablename [, ...]
+FROM {username | GROUP groupname | PUBLIC} [, ...]
+[CASCADE | RESTRICT]
+REVOKE [GRANT OPTION FOR]
+{{CREATE | TEMPORARY | TEMP} [,...] | ALL [PRIVILEGES]}
+ON DATABASE dbname [, ...]
+FROM {username | GROUP groupname | PUBLIC} [, ...]
+[CASCADE | RESTRICT]
+REVOKE [GRANT OPTION FOR]
+{EXECUTE | ALL [PRIVILEGES]}
+ON FUNCTION funcname ([[argmode] [argname] argtype [, ...]]) [, ...]
+FROM {username | GROUP groupname | PUBLIC} [, ...]
+[CASCADE | RESTRICT]
+REVOKE [GRANT OPTION FOR]
+{USAGE | ALL [PRIVILEGES]}
+ON LANGUAGE langname [, ...]
+FROM {username | GROUP groupname | PUBLIC} [, ...]
+[CASCADE | RESTRICT]
+REVOKE [ GRANT OPTION FOR ]
+{{CREATE | USAGE} [,...] | ALL [PRIVILEGES]}
+ON SCHEMA schemaname [, ...]
+FROM {username | GROUP groupname | PUBLIC} [, ...]
+[CASCADE | RESTRICT]
+REVOKE [GRANT OPTION FOR]
+{CREATE | ALL [PRIVILEGES]}
+ON TABLESPACE tablespacename [, ...]
+FROM {username | GROUP groupname | PUBLIC} [, ...]
+[CASCADE | RESTRICT]
+REVOKE [ADMIN OPTION FOR]
+role [, ...]
+FROM {username | GROUP groupname | PUBLIC} [, ...]
+[CASCADE | RESTRICT]
+GRANTの場合と似ています。基本は下記の通りです。
+REVOKE 権限 ON 対象 FROM 誰から
+GRANTとの違いは「誰に」が「誰から」になっているくらいです。「GRANT OPTION FOR」を付けて権限を付与された場合、権限そのものを削除するのではなく、権限を与える権利だけが削除されます。
+また「CASCADE」と「RESTRICT」の違いですが、例えばロールAがロールBに権限(と権限を与える権限)を与え、ロールBがロールCに権限を与えた場合、ロールAはロールCの権限を取り消すことが出来ません(デフォルトで設定されている「RESTRICT」の場合)。ここで「CASCADE」を付けてロールAがロールBの権限を削除するとロールCの権限も合わせて削除することが出来ます。
+実際の例としては下記のような感じです。
+REVOKE SELECT, UPDATE, INSERT ON table_name FROM role_name;
+権限の追加と確認のテスト
+では試してみましょう。前のページで権限を与えた「testrole」ロールからDELETEの権限を削除してみます。
+権限を与えた後に確認すると下記のように表示されます。
+sample=# \z
+Access privileges for database "sample"
+Schema | Name | Type | Access privileges
+--------+------+-------+---------------------------------------------------
+public | test | table | {postgres=arwdRxt/postgres,testrole=arw/postgres}
+(1 row)
+sample=#
+「testrole=arwd/postgres」が「testrole=arw/postgres」になって「DELETE」の権限が消えていることが確認できます。
+以上です。

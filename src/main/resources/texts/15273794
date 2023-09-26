@@ -1,0 +1,39 @@
+必要なファイル類 †
+arm-linux-3.4.5.tar.bz2　または　arm-linux_3.4.5_src.tar.bz2
+uucp
+udownload
+おもに以上の3つです。
+armコンパイラは、後ほどダウンロード側に置いておきます。
+↑
+コンパイラのインストール †
+まずは、armコンパイラのバイナリを展開します。
+# tar jxvf arm-linux-3.4.5.tar.bz2 -C /usr/local
+これで、user/local内にarmコンパイラがインストールされました。
+実行パスを追加します。bashであれば
+# export PATH=$PATH:/usr/local/arm-linux_3.4.5/bin
+となります。または、.bashrc,.profileを編集して上記パスを含めることができます。
+パスが正しいかどうか以下のコマンドを実行してみてください。
+# arm-linux-gcc -v
+パスが正しければarm-linux-gccのバージョン情報が表示されます。
+↑
+コンパイラのソースコードからのインストール †
+ディレクトリは、どこでも構いません。圧縮ファイルを展開します。
+$tar jxvf arm-linux_3.4.5_src.tar.bz2
+展開されたディレクトリに移動します。
+$cd crosstool-0.42 
+ここで、ルートユーザでない場合はusr/localが一般ユーザでも書き込みができるようにしておく必要があります。
+$su -
+#chmod o+w /usr/local
+exitして一般ユーザに戻ったら、crosstool-0.42ディレクトリにあるスクリプトを起動します。
+$sh build.sh
+これで、ソースコードのコンパイルならびにインストールが行われます。時間がかかりますののんびりと待ちましょう。
+インストールが完了したら、環境変数にパスを追加します。
+# export PATH=$PATH:/usr/local/arm-linux/bin
+となります。または、.bashrc,.profileを編集して上記パスを含めることができます。
+パスが正しいかどうか以下のコマンドを実行してみてください。
+# arm-linux-gcc -v
+パスが正しければarm-linux-gccのバージョン情報が表示されます。
+一般ユーザからインストールを行った場合は、インストール後にusr/localの書き込み権限を直すことをお忘れなく。
+$su -
+#chmod o-w /usr/local
+↑

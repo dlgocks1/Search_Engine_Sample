@@ -1,0 +1,6 @@
+lineInitialize 
+lineNegotiateAPIVersion 
+lineGetDevCaps 
+lineDrop 
+lineDeallocateCall 
+lineClose.

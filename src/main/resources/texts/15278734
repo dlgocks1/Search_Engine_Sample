@@ -1,0 +1,12 @@
+技術的な話とネットでみつけたしょーもないものを紹介するブログです。世にあるエンジニアのブログのようにものすごくタメになる情報はありません。あくまで、おちエンなので。
+CodeIgniter は独自の template engine を持っていますが、
+Smarty に慣れすぎて、新しい template 記述法を覚えるのが面倒
+今まで作った Smarty の plugin は・・・
+XSS 対応を Controller(正しくは Validation)でやるのが、いままでの習慣とかなり違う
+といったことが理由で、CodeIgniter でも Smarty を使おうと作業してみました。
+日本CodeIgniterユーザ会の「Smarty と連携する」を参考にしたのですが、全くうまくいかず。。。 
+同じようにはまってしまう人のために手順を書いておきます。
+ちなみに、CodeIgniter のバージョンは 1.6.3 で、Smarty は 2.6.20 を使用します。
+1. Smarty のダウンロード
+まずは、Smarty をダウンロード。
+system/libraries に解凍しましょう。

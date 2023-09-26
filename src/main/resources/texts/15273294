@@ -1,0 +1,10 @@
+Today I finally got fed up with the traditional X11 keyboard mapping in Mac OS X. I’m talking specifically about the meta key. Any Mac user who has not delved into the wonderful world of X11 will not know what a meta key is, so let me give some background here. The meta key is a function key, similar to the command key (on Macs) or the ctrl key (on Windows machines). Its main use is in my favorite text-editor, Emacs, which requires X11 to run. The Emacs philosophy is something that would take hours to discuss, but in short, Emacs users believe that you shouldn’t have to move your hands from the home row typing position when editing text. No use of the mouse or the arrow keys is required. All moving around, deleting text, cutting, copying, etc. is done with a combination of the control key, the meta key, and the standard letters. Check out some of these common Emacs keyboard shortcuts to get an idea of what I’m talking about. Productivity is curbed in Emacs when there is no meta key or when it is in an unfamiliar keyboard spot.
+There is a way to switch which key that Mac OS X recognizes as meta by using an X11 keyboard mapping preference file. First, uncheck the “Use the system keyboard layout” option in X11 preferences. You may also have to disable the “Enable keyboard shortcuts under X11″ option as well. Then, create (or add to) the file ~/.Xmodmap and insert the following six lines:
+clear Mod1 
+clear Mod2 
+keycode 63 = Mode_switch 
+keycode 66 = Meta_L 
+add Mod1 = Meta_L 
+add Mod2 = Mode_switch
+It clears the keymappings for alt and escape and then reassigns them to the reverse of what they were before. Restart X11 and it should pick up the changes.
+If this was (or wasn’t) helpful, please let me know in the comments!

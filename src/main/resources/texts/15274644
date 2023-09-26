@@ -1,0 +1,152 @@
+文字色を変更する方法です。HTMLではfont color="カラーコード、または、カラーネーム"を指定しました。
+CSSでは、color:カラーコード、または、カラーネーム;となります。
+color:カラーコード、または、カラーネーム;
+ここではカラーネームではなく、カラーコードを使ったサンプルを掲載します。カラーコードの一覧は以下。
+カラーコード Web Safe color 216色
+HTMLソース
+<html>
+<head>
+<title>題名</title>
+</head>
+<body>
+<p>1.シャーロック・ホームズ</p>
+<p style="color:#000000;">2.シャーロック・ホームズ</p>
+<p style="color:#ff0000;">3.シャーロック・ホームズ</p>
+</body>
+</html>
+ブラウザ
+他のスタイルシートによる誤りを防ぐために、インラインフレームでサンプルを取り込んで表示しています。iframeをサポートするブラウザでアクセスして下さい。
+サンプルに直接アクセスする
+上のサンプルでは、パラグラフ内の文字を一括指定していますが、何も指定しない状態とstyle="color:#000000;”は、見た目が同じ黒となります。
+文章の一部の文字色を変更したい場合は以下。
+HTMLソース
+<html>
+<head>
+<title>題名</title>
+</head>
+<body>
+<p>イギリスが生んだ名探偵と言えば、
+<span style="color:#ff0000;">シャーロック・ホームズ</span>
+が有名です。</p>
+</body>
+</html>
+ブラウザ
+他のスタイルシートによる誤りを防ぐために、インラインフレームでサンプルを取り込んで表示しています。iframeをサポートするブラウザでアクセスして下さい。
+サンプルに直接アクセスする
+文章中に何度も同じ色を指定するのであれば、classを使って文字色を指定します。
+HTMLソース
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=shift_jis">
+<meta http-equiv="Content-Style-Type" content="text/css">
+<title>題名</title>
+<style type="text/css">
+<!--
+.red {
+color:#ff0000;
+}
+-->
+</style>
+</head>
+<body>
+<p>イギリスが生んだ名探偵と言えば、
+<span class="red">シャーロック・ホームズ</span>
+が有名です。
+ドクターワトソンは、
+<span class="red">シャーロック・ホームズ</span>
+の親友であり、良き理解者です。
+</p>
+</body>
+</html>
+ブラウザ
+他のスタイルシートによる誤りを防ぐために、インラインフレームでサンプルを取り込んで表示しています。iframeをサポートするブラウザでアクセスして下さい。
+サンプルに直接アクセスする
+複数のページで同色を指定する場合、外部CSSに記述した方が便利です。
+ハイパーリンクが埋め込まれた文章
+HTMLソース
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=shift_jis">
+<meta http-equiv="Content-Style-Type" content="text/css">
+<title>題名</title>
+</head>
+<body>
+<p style="color:#ff0000;">
+イギリスが生んだ名探偵と言えば、
+<a href="url">シャーロック・ホームズ</a>
+が有名です。
+ドクターワトソンは、
+シャーロック・ホームズ
+の親友であり、良き理解者です。
+</p>
+</body>
+</html>
+ブラウザ
+他のスタイルシートによる誤りを防ぐために、インラインフレームでサンプルを取り込んで表示しています。iframeをサポートするブラウザでアクセスして下さい。
+サンプルに直接アクセスする
+上は、ハイパーリンクが埋め込まれた文章が存在するパラグラフにstyle="color:#ff0000;"を設定した結果です。
+ハイパーリンクだけは制御する事ができず、未アクセス、アクセス中、アクセス済みの状態を維持します。
+これが、HTMLとしては正しい構造であり、何ら問題はありません。
+もし、この標準機能を無視するのであれば、ハイパーリンクの疑似クラスを変更する必要があります。
+HTMLソース
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=shift_jis">
+<meta http-equiv="Content-Style-Type" content="text/css">
+<title>題名</title>
+<style type="text/css">
+<!--
+a:link, a:visited,a:active {color:#ff0000;}
+-->
+</style>
+</head>
+<body>
+<p style="color:#ff0000;">
+イギリスが生んだ名探偵と言えば、
+<a href="url">シャーロック・ホームズ</a>
+が有名です。
+ドクターワトソンは、
+シャーロック・ホームズ
+の親友であり、良き理解者です。
+</p>
+</body>
+</html>
+ブラウザ
+他のスタイルシートによる誤りを防ぐために、インラインフレームでサンプルを取り込んで表示しています。iframeをサポートするブラウザでアクセスして下さい。
+サンプルに直接アクセスする
+ハイパーリンクの疑似クラスに関しては以下のページを参照して下さい。また、ハイパーリンクの下線を無くしたいのであれば、文字色変更の後にtext-decoration:none;
+を記述します。
+a href に関する疑似クラス
+もし、特定の範囲だけ文字色を変更して、なおかつ、ハイパーリンクも特定の範囲だけ文字色を変更するのであれば、ディビジョンやパラグラフにclassを指定して、そのclassに対してのみ文字色と疑似クラスを適用します。
+HTMLソース
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=shift_jis">
+<meta http-equiv="Content-Style-Type" content="text/css">
+<title>題名</title>
+<style type="text/css">
+<!--
+.red {color:#ff0000;}
+.red a:link,.red a:visited,.red a:active {color:#ff0000;}
+-->
+</style>
+</head>
+<body>
+<div class="red">
+<p>
+イギリスが生んだ名探偵と言えば、
+<a href="URL">シャーロック・ホームズ</a>
+が有名です。
+ドクターワトソンは、
+シャーロック・ホームズ
+の親友であり、良き理解者です。
+</p>
+</div>
+これも<a href="URL">ハイパーリンク</a>です。
+</body>
+</html>
+ブラウザ
+他のスタイルシートによる誤りを防ぐために、インラインフレームでサンプルを取り込んで表示しています。iframeをサポートするブラウザでアクセスして下さい。
+サンプルに直接アクセスする
+上のサンプルは、文字色を赤く変更したい範囲を、divで囲み、classに任意の名前を付けます（サンプルでは[red]としました）。
+スタイルシートでは、class="red"に対しての文字色と、ハイパーリンクの疑似クラスを指定しました。よって、「これもハイパーリンクです。」の部分は、文字色が初期状態の黒となり、ハイパーリンクも標準の表示となります。

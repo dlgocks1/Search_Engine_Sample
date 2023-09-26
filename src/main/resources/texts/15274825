@@ -1,0 +1,4 @@
+米Microsoft Corporationは6日、Windows 7の新機能を利用するためのソースコードライブラリ「Windows API Code Pack for Microsoft .NET Framework」（以下、「Windows API Code Pack」）v1.0を公開した。現在、“MSDN”のWebサイトからダウンロードできる。なお、利用するには.NET Framework 3.5 SP1が必要で、DirectX関連の機能を利用する場合は、さらに2009年3月版の「DirectX Software Development Kit」および「Microsoft Windows SDK for Windows 7」を導入する必要がある。
+「Windows API Code Pack」は、C#/Visual Basic（以下、VB）などの言語を利用して記述された“マネージドコード”からWindows 7の各種新機能を呼び出せるようにするためのソースコードライブラリ。.NET環境からWindows APIといった“ネイティブコード”を呼び出すには、プラットフォーム呼び出し（P/Invoke）機能を利用して、関数や構造体、変数などを再定義する必要があるが、本ライブラリを利用すればその手間を大幅に削減することができる。
+また、本ライブラリにはサンプルコードも豊富に用意されているのがうれしい。サンプルコードはすべてC#/VBで記述されており、一部のサンプルにはWindowsForm版だけでなく、WPF版も用意されている。日頃.NET Frameworkを利用しており、Windows 7の新機能にも興味があるなら、ぜひ一度目を通してみてほしい。
+たとえば、Windows 7の新しいタスクバーを利用したサンプルでは、ジャンプリストの利用法や、タスクバーアイコンへ任意の画像をオーバーレイ表示する方法、タスクバーアイコンの背景に進捗状況を表示する方法などを知ることができる。また、デスクトップアイコンのドラッグアンドドロップ、ファイルツリー、エクスプローラのファイルサムネイルといったシェルを扱うサンプルや、Windows Vista/7の新しいコモンダイアログの呼び出しサンプルも豊富に用意されている。

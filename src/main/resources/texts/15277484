@@ -1,0 +1,34 @@
+For about a month or two now, I’ve been working on a toolkit to manipulate processes (running programs) on Windows. I’ve been using it mainly to research security mechanisms implemented in user processes, like Microsoft .NET Code Access Security.
+Here are some of the design goals of the toolkit:
+the toolkit must support limited accounts (accounts that are not local administrators) as much as possible
+flexibility: provide a set of commands that can be assembled in a configuration file to execute a given task
+the toolkit must be able to operate as a single EXE, without requiring the installation of supporting environments like Python
+it must be a command-line tool
+The toolkit has commands to search and replace data inside the memory of processes, dump memory or strings, inject DLLs, patch import address tables, … I’ll be posting examples in the coming weeks, illustrating how these commands can be used.
+I’m releasing a beta version of the toolkit now, you can download it here.
+This is an example of a configuration file (disable-cas.txt) to disable CAS for a given program (exactly like CASToggle does):
+process-name CASToggleDemoTargetApp.exe
+write version:2.0.50727.42 hex:7A3822B0 hex:01000000
+write version:2.0.50727.832 hex:7A38716C hex:01000000
+write version:2.0.50727.1433 hex:7A3AD438 hex:01000000
+It looks for processes with the name CASToggleDemoTargetApp.exe, and will then write to the memory of these processes to set a variable to 1 (hex:01000000). The address to write to depends upon the version of the DLL containing the variable. If the DLL has version 2.0.50727.42, we will write to address 7A3822B0. For version 2.0.50727.832, we will write to 7A38716C, … So in this configuration file, at most one write command will be successful and write to memory.
+Launch the toolkit with the configuration file like this:
+bpmtk disable-cas.txt
+You can also use the toolkit to audit programs, for example to check if they protect secrets correctly. Let’s investigate how Firefox keeps passwords (I tested this with Firefox 2.0.0.12 English on Windows XP SP2):
+I created a new Firefox profile, defined a master password and stored two passwords: one for Google (BigSecretGoogle) and one for WordPress (BigSecretWordPress).
+This is the config file:
+process-name firefox.exe
+strings address:on memory:writable regex:BigSecret
+This config file will search inside the memory (only the writable virtual memory) of Firefox for strings containing the string BigSecret, and dump them to the screen, together with the address where they were found.
+Let’s start Firefox and search inside the memory (bpmtk demo-firefox-passwords.txt):
+No BigSecrets here. Now let’s navigate to Google mail. We are prompted for the master password, so that Firefox can complete our credentials on the login screen:
+Let’s take another peek inside the memory of the Firefox process:
+It should be no surprise that we find our Google password in memory (at 2 different addresses, the U indicates that we found a Unicode string).
+Now let’s go to Firefox’s options and display the passwords:
+The password manager displays the stored URLs and the usernames, but not the passwords. Let’s take another peek inside the memory of the Firefox process:
+This time, Firefox has also decrypted our WordPress password (BigSecretWordPress), although it’s not displayed. It’s only displayed if we provide the master password a second time:
+So although Firefox prompts you a second time for the master password to display all the passwords, the passwords have already been decrypted in memory before you provided the master password a second time.
+Now I don’t have issues with this behavior of the password manager of Firefox, I don’t think it’s a security issue (I’ve an idea why it was programmed like this). But if Firefox was a perfect program, all passwords would only be decrypted when a user explicitly asks to display all passwords.
+Do you make online payments with your credit card? Now that I’ve showed you how you can look for specific strings inside a running program with my toolkit, you should know how to use it to check how long your browser keeps your credit card number inside its memory. And can you find out how to use bpmtk to erase that number from your browser’s memory?
+Let me finish with an appetizer: I’ve also developed a DLL that, once injected inside a process, will instantiate a scripting engine inside said process, and start executing a script inside the process. This allows you to inject a script inside a process, which can be handy for rapid prototyping or when you’re operating in a limited environment where you don’t have a C compiler to develop a custom DLL to inject. Of course, a script is not as powerful as a compiled C program, but I’m adding some objects to provide some missing functionality.
+This script injector will be released with an upcoming version of the bpmtk.

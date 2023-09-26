@@ -1,0 +1,411 @@
+図7-3-4　メインフォームに配置したコントロールのレイアウト
+１０　メニューからコードのアイコンをクリックしたら、フォームモジュールを表示させます。CH7-3.mdbを開いたら、frmMultiSelectListBoxのフォームモジュールをコピーして貼り付けます。フォームモジュールのソースコードは、リスト7-3-1を参照してください。本書CD-ROMのCH7-3.mdbから標準モジュールbasAutoSize, basLinkedTables, basMyLib, basWindowsCommonDialogとクラスモジュールclsMyBoxをコピーします。これらのモジュールは、フォームモジュールから参照します。これらのモジュールは、Microsoft DAO 3.6 Object Library, Microsoft ADO Ext. 2x for DDL and 
+Securityのライブラリを参照しますので、VBEのツールメニューから参照設定をクリックして登録してください。
+１１　フォームをビューモードに切り替えたら、テーブルのコンボボックスから得意先をクリックします。得意先テーブルを選択すると、フォーム左側のリストボックスに得意先テーブルのフィールドリストが表示されます。フィールドリストから得意先コード、得意先名、部署、担当者名、電話番号、都道府県をダブルクリックして選択します。選択したフィールドが右側のリストボックスに表示されていることを確認したら、表示ボタンをクリックします。サブフォームとサブフォームのテキストボックスがダイナミックに作成されて、得意先のデータシートが表示されます。サブフォームのデータシートに作成されたフィールドの列幅は、データ長に合わせて自動調整されます。
+図7-3-5　得意先テーブルの得意先コード、得意先名、部署、担当者名、電話番号、都道府県を選択して表示させた例
+１２　フォームをfrmMultiSelectListBoxの名称で保存したらAccess 
+を終了します。
+Form_Open()イベント処理
+このイベントは、フォームが開かれたときに発生します。このイベントでは、VerifyLinks_FS()関数を使用して、リンクテーブルのリンクが壊れていないか調べます。壊れているときは、再リンクします。VerifyLinks_FS()は、モジュールbasLinkedTablesに登録されています。リンクテーブルのリンクを調べたら、New clsMyBoxでクラスモジュールのインスタンスを作成します。ここで作成したインスタンスは、リストボックスに表示されているアイテムを移動するときに使用します。
+With Me
+Set mobjAvailableItems = New 
+clsMyBox
+Set mobjAvailableItems.Control 
+= .lstAvailableItems
+Set mobjSelectedItems = New 
+clsMyBox
+Set mobjSelectedItems.Control = 
+.lstSelectedItems
+End With
+Form_Load()イベント処理
+このイベントは、フォームが開かれてデータをロードするときに発生します。このイベントでは、CurrentDataオブジェクトのAllTablesプロパティを参照して、データベースに登録されているテーブル名を取得します。
+For Each obj In CurrentData.AllTables
+With obj
+If Left(.Name, 4) 
+<> "Msys" Then
+strValue = strValue & ";" & .Name
+End If
+End With
+Next obj
+取得したテーブルリストは、コンボボックスの値集合ソース(RowSource)に設定します。
+Me.cboTables.RowSource = strValue
+Form_Close()イベント処理
+このイベントは、フォームが閉じられるときに発生します。このイベントでは、フォームのOpenイベントで作成したclsMyBoxのインスタンスを解放します。
+Set 
+mobjAvailableItems = Nothing
+Set mobjSelectedItems = Nothing
+cmdView_Click()イベント処理
+このイベントは、フォームのデータ表示のコマンドボタンをクリックしたときに発生します。このイベントでは、リストボックスの右側に表示されているフィールドリストを元にSQLコマンドを作成して、サブプロシージャCreateDataSheetを呼びます。
+strSQL = "SELECT "
+intFldCount = 
+.ListCount
+For intI = 1 To 
+.ListCount
+strSQL = strSQL & .ItemData(intI) & ", " 
+Next intI
+CreatDataSheetでは、データシート用のサブフォームとコントロールをダイナミックに作成してsfrDataSheetの名称で保存します。サブフォームを作成したら、メインフォームのSourceObjectにサブフォームの名称を設定して表示させます。
+Me.sfrDataSheet.SourceObject = vbNullString
+Call CreateDataSheet(strSQL)
+Me.sfrDataSheet.SourceObject = conDataSheet
+cmdClose_Click()イベント処理
+このイベントは、フォームから閉じるのボタンをクリックしたときに発生します。このイベントでは、DoCmdのCloseメソッドでフォームを閉じます。
+cboTables_AfterUpdate()イベント処理
+このイベントは、テーブルのコンボボックスからアイテムを選択したときに発生します。このイベントでは、ADOを使用してコンボボックスで選択したテーブルのフィールド名を取得して、リストボックスに表示させます。レコードセットオブジェクトのOpenメソッドでテーブルを開いたら、For Each…Nextのループでリストボックスにフィールド名を追加します。
+.Open strSQL, _
+CurrentProject.Connection, _
+adOpenStatic, 
+adLockReadOnly, adCmdText
+フィールド名をリストボックスに追加するには、clsMyBoxオブジェクトのAddItemメソッドを使用します。クラスモジュールclsMyBoxについては、紙面の都合上説明を省略しますので、詳細はclsMyBoxのソースコードを参照してください。
+For Each fld In .Fields
+With 
+mobjAvailableItems
+.AddItem fld.Name
+End With
+Next fld
+lstAvailableItems_DblClick()イベント処理
+このイベントは、左側のリストボックスからフィールド名をダブルクリックしたときに発生します。このイベントでは、cmdAddOne_Clickを呼び出して、＞のコマンドボタンをクリックしたときの処理を行います。
+lstSelectedItems_DblClick()イベント処理
+このイベントは、右側のリストボックスからフィールド名をダブルクリックしたときに発生します。このイベントでは、cmdRemoveOne_Clickを呼び出して、＜のコマンドボタンをクリックしたときの処理を行います。
+cmdAddOne_Click()イベント処理
+このイベントは、フォームから＞のコマンドボタンをクリックしたときに発生します。このイベントでは、左側のリストボックスから選択したフィールドを右側のリストボックスに移動します。選択したアイテムを右側のリストボックスに追加するには、clsMyBoxオブジェクトのAddItemメソッドを使用します。左側のリストボックスからアイテムを削除するには、clsMyBoxオブジェクトのRemoveSelectedメソッドを使用します。これらのメソッドは、clsMyBoxに登録されていますので、詳細はソースコードを参照してください。
+With Me.lstAvailableItems
+For Each varItem In 
+.ItemsSelected
+mobjSelectedItems.AddItem .ItemData(varItem)
+Next varItem
+End With
+mobjAvailableItems.RemoveSelected
+cmdAddAll_Click()イベント処理
+このイベントは、フォームから＞＞のコマンドボタンをクリックしたときに発生します。このイベントでは、左側のリストボックスに表示されている全てのフィールドを右側のリストボックスに移動します。右側のリストボックスにアイテムを追加するには、clsMyBoxオブジェクトのAddItemメソッドを使用します。左側のリストボックスから､全てのアイテムを削除するには、clsMyBoxオブジェクトのClearメソッドを使用します。
+With Me.lstAvailableItems
+For intItem = 0 To .ListCount - 
+1
+mobjSelectedItems.AddItem .ItemData(intItem)
+Next intItem
+End With
+mobjAvailableItems.Clear
+cmdRemoveOne_Click()イベント処理
+このイベントは、フォームから＜のコマンドボタンをクリックしたときに発生します。このイベントでは、右側のリストボックスから選択したフィールドを左側のリストボックスに移動します。
+With Me.lstSelectedItems
+For Each varItem In 
+.ItemsSelected
+mobjAvailableItems.AddItem .ItemData(varItem)
+Next varItem
+End With
+mobjSelectedItems.RemoveSelected
+cmdRemoveAll_Click()イベント処理
+このイベントは、フォームから＜＜のコマンドボタンをクリックしたときに発生します。このイベントでは、右側のリストボックスに表示されている全てのフィールドを左側のリストボックスに移動します。
+With Me.lstSelectedItems
+For intItem = 0 To .ListCount - 
+1
+mobjAvailableItems.AddItem .ItemData(intItem)
+Next intItem
+End With
+mobjSelectedItems.Clear
+CreateDataSheet()
+このプロシージャでは、サブフォームとサブフォームに配置されるコントロールを実行時にダイナミックに作成します。CreateForm()関数でフォームのオブジェクトを作成したら、オブジェクト変数frmに設定します。フォームのOnCurrentイベントに、"=AutoSize_FS([Form])"を埋め込みます。AutoSize_FS()関数は、データシート上に表示されるフィールドの列幅をデータ長に合わせて自動調整します。
+Public Function 
+AutoSize_FS(frm As Form)
+Dim ctl As Control
+Const acSizeToFit = 
+-2
+For Each ctl In 
+frm.Controls
+If ctl.ControlType <> acLabel Then
+If ctl.ColumnWidth <> 0 Then
+ctl.ColumnWidth = acSizeToFit
+End If
+End If
+Next
+End Function
+DefaultViewプロパティに、２を設定してデータシートモードにします。RecordSourceプロパティに、SQLコマンドを設定します。SQLコマンドは、プロシージャの引数で指定されています。
+.OnCurrent 
+= "=AutoSize_FS([Form])"
+.DefaultView = 2
+.RecordSource = 
+strSQL
+フォームに作成するコントロールの幅、高さのデフォルト値を設定したら、For intI….Nextのループでリストボックスで選択したフィールドに対応したコントロールを作成します。
+フォームにコントロールを作成するには、CreateControl()関数を使用します。この関数は、コントロールの種類により引数が異なりますので、フィールドのデータ型を調べてデータ型に対応したコントロールを作成します。例えば、CreateControl()でテキストボックスのコントロールを作成するには、引数として、FormName,　ControlType,　Section,　ColumnName,　Left,　Topを指定します。コントロール名には、フィールド名を設定します。
+' Create TextBox
+With CreateControl( _
+FormName:=.Name, _
+ControlType:=acTextBox, _
+Section:=acDetail, _
+ColumnName:=strFieldName, _
+Left:=intI * (intWidth + intGap), _
+Top:=(intHeight + intGap))
+.Name = strFieldName
+End With
+リストボックスで選択した全てのフィールドのコントロールを作成したら、サブフォームをsfrDataSheetの名称で保存します。（CreateForm()関数は、自動的にフォーム名を付けて保存しますので、名前をsfrDataSheetに変更します。）
+DoCmd.Close acForm, 
+conDataSheet
+DoCmd.DeleteObject acForm, conDataSheet
+DoCmd.Close acForm, strFormName, acSaveYes
+DoCmd.Rename conDataSheet, acForm, strFormName
+リスト　7-3-1　frmMultiSelectListBoxのフォームモジュール
+Option Compare Database
+Option Explicit
+Const conDataSheet = "sfrDataSheet"
+Dim mobjAvailableItems As clsMyBox
+Dim mobjSelectedItems As clsMyBox
+Private Sub cboTables_AfterUpdate()
+Dim cnn As ADODB.Connection
+Dim rs As ADODB.Recordset
+Dim fld As ADODB.Field
+Dim strSQL As String
+strSQL = "SELECT * FROM " & Me.cboTables & ";"
+Set cnn = CurrentProject.Connection
+Set rs = New ADODB.Recordset
+With rs
+.Open strSQL, _
+CurrentProject.Connection, _
+adOpenStatic, 
+adLockReadOnly, adCmdText
+mobjAvailableItems.Clear
+mobjSelectedItems.Clear
+For Each fld In .Fields
+With 
+mobjAvailableItems
+.AddItem fld.Name
+End With
+Next fld
+.Close
+End With
+Set rs = Nothing
+Set cnn = Nothing
+Me.sfrDataSheet.SourceObject = vbNullString
+End Sub
+Private Sub cmdAddAll_Click()
+Dim intItem As Integer
+With Me.lstAvailableItems
+For intItem = 0 To .ListCount - 
+1
+mobjSelectedItems.AddItem .ItemData(intItem)
+Next intItem
+End With
+mobjAvailableItems.Clear
+End Sub
+Private Sub cmdAddOne_Click()
+Dim varItem As Variant
+With Me.lstAvailableItems
+For Each varItem In 
+.ItemsSelected
+mobjSelectedItems.AddItem .ItemData(varItem)
+Next varItem
+End With
+mobjAvailableItems.RemoveSelected
+End Sub
+Private Sub cmdRemoveAll_Click()
+Dim intItem As Integer
+With Me.lstSelectedItems
+For intItem = 0 To .ListCount - 
+1
+mobjAvailableItems.AddItem .ItemData(intItem)
+Next intItem
+End With
+mobjSelectedItems.Clear
+End Sub
+Private Sub cmdRemoveOne_Click()
+Dim varItem As Variant
+With Me.lstSelectedItems
+For Each varItem In 
+.ItemsSelected
+mobjAvailableItems.AddItem .ItemData(varItem)
+Next varItem
+End With
+mobjSelectedItems.RemoveSelected
+End Sub
+Private Sub lstAvailableItems_DblClick(Cancel 
+As Integer)
+cmdAddOne_Click
+End Sub
+Private Sub lstSelectedItems_DblClick(Cancel 
+As Integer)
+cmdRemoveOne_Click
+End Sub
+Private Sub cmdClose_Click()
+DoCmd.Close
+End Sub
+Private Sub cmdView_Click()
+Dim strSQL As String
+Dim ctl As Control
+Dim intFldCount As Integer
+Dim intI As Integer
+If mobjSelectedItems.ListCount = 0 Then
+MsgBox "ﾃｰﾌﾞﾙのﾌｨｰﾙﾄﾞを選択してください！", vbCritical + vbOKOnly
+Exit Sub
+End If
+With mobjSelectedItems
+strSQL = "SELECT "
+intFldCount = .ListCount
+For intI = 1 To .ListCount
+strSQL = strSQL & 
+.ItemData(intI) & ", "  ' 1-based index
+Next intI
+End With
+strSQL = Left(strSQL, Len(strSQL) - 2) & " FROM " & Me.cboTables & ";"
+Me.sfrDataSheet.SourceObject = vbNullString
+Call CreateDataSheet(strSQL)
+Me.sfrDataSheet.SourceObject = conDataSheet
+End Sub
+Private Sub Form_Close()
+Set mobjAvailableItems = Nothing
+Set mobjSelectedItems = Nothing
+End Sub
+Private Sub Form_Load()
+Dim obj As AccessObject
+Dim strValue As String
+For Each obj In CurrentData.AllTables
+With obj
+If Left(.Name, 4) 
+<> "Msys" Then
+strValue = strValue & ";" & .Name
+End If
+End With
+Next obj
+strValue = Mid(strValue, 2)
+Me.cboTables.RowSource = strValue
+End Sub
+Private Sub Form_Open(Cancel As Integer)
+If Not VerifyLinks_FS("Northwind.mdb", "得意先") Then
+MsgBox "テーブルの再リンクに失敗しました！" & vbCrLf & _
+"Accessのリンクテーブルマネージャから" & _
+" Northwind.mdb
+を再リンクしてください.", _
+vbCritical + 
+vbOKOnly
+End If
+Call SetAppTitle_FS("MultiSelect ListBox (C) " & Year(Date) & " by Akio 
+Kasai")
+With Me
+Set mobjAvailableItems = New 
+clsMyBox
+Set mobjAvailableItems.Control 
+= .lstAvailableItems
+Set mobjSelectedItems = New 
+clsMyBox
+Set mobjSelectedItems.Control = 
+.lstSelectedItems
+End With
+End Sub
+Private Sub CreateDataSheet(strSQL As String)
+Const acSizeToFit = -2
+Const conTwipsPerInch As Long = 1440
+Dim frm As Form
+Dim intI As Integer
+Dim intHeight As Integer
+Dim intWidth As Integer
+Dim intGap As Integer
+Dim intFldCount As Integer
+Dim strFormName As String
+Dim db As DAO.Database
+Dim tdf As DAO.TableDef
+Dim fld As DAO.Field
+Dim strFieldName As String
+Dim strRowSource As String
+Set db = CurrentDb
+Set tdf = db.TableDefs(Me.cboTables)
+Set frm = CreateForm()
+With frm
+strFormName = .Name
+.OnCurrent = 
+"=AutoSize_FS([Form])"
+.DefaultView = 2
+.RecordSource = strSQL
+intHeight = 0.2 * 
+conTwipsPerInch
+intWidth = 0.3 * 
+conTwipsPerInch
+intGap = 0.03 * conTwipsPerInch
+With .DefaultControl(acTextBox)
+.Width = intWidth
+.Height = intHeight
+End With
+With 
+.DefaultControl(acCheckBox)
+.Width 
+= intWidth
+.Height = intHeight
+End With
+With 
+.DefaultControl(acComboBox)
+.Width = intWidth
+.Height = intHeight
+End With
+intFldCount = 
+mobjSelectedItems.ListCount
+For intI = 1 To intFldCount
+strFieldName = 
+mobjSelectedItems.ItemData(intI)
+Set fld = 
+tdf.Fields(strFieldName)
+If fld.Type = 
+dbBoolean Then
+' 
+Create CheckBox
+With CreateControl( _
+FormName:=.Name, _
+ControlType:=acCheckBox, _
+Section:=acDetail, _
+ColumnName:=strFieldName, _
+Left:=intI * (intWidth + intGap), _
+Top:=(intHeight + intGap))
+.Name = strFieldName
+End With
+ElseIf fld.Type = 
+dbLongBinary Then
+' 
+Create Object frame
+With CreateControl( _
+FormName:=.Name, _
+ControlType:=acBoundObjectFrame, _
+Section:=acDetail, _
+ColumnName:=strFieldName, _
+Left:=intI * (intWidth + intGap), _
+Top:=(intHeight + intGap))
+.Name = strFieldName
+End With
+Else  ' Text, Numeric, Date,....
+On 
+Error Resume Next
+strRowSource = Nz(fld.Properties("RowSource"), "")
+On 
+Error GoTo 0
+If 
+Len(strRowSource) > 0 Then
+' Create ComboBox
+With CreateControl( _
+FormName:=.Name, _
+ControlType:=acComboBox, _
+Section:=acDetail, _
+ColumnName:=strFieldName, _
+Left:=intI * (intWidth + intGap), _
+Top:=(intHeight + intGap))
+.Name = strFieldName
+.RowSource = strRowSource
+.RowSourceType = "Table/Query"
+End With
+Else
+' Create TextBox
+With CreateControl( _
+FormName:=.Name, _
+ControlType:=acTextBox, _
+Section:=acDetail, _
+ColumnName:=strFieldName, _
+Left:=intI * (intWidth + intGap), _
+Top:=(intHeight + intGap))
+.Name = strFieldName
+End With
+End If
+End If
+Next intI
+End With
+On Error Resume Next
+DoCmd.Close acForm, conDataSheet
+DoCmd.DeleteObject acForm, conDataSheet
+DoCmd.Close acForm, strFormName, acSaveYes
+DoCmd.Rename conDataSheet, acForm, strFormName
+Set frm = Nothing
+Set tdf = Nothing
+Set db = Nothing
+End Sub

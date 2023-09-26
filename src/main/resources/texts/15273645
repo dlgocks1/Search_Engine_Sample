@@ -1,0 +1,9 @@
+GeoDjango Database API¶
+GeoDjango’s lookup types may be used with any manager method like
+filter(), exclude(), etc. However, the lookup types unique to
+GeoDjango are only available with geographic fields.
+Filters on ‘normal’ fields (e.g. CharField) may be chained with those on
+geographic fields. Thus, geographic queries take the following form (assuming
+the Zipcode model used in the GeoDjango Model API):
+>>> qs = Zipcode.objects.filter(<field>__<lookup_type>=<parameter>)
+>>> qs = Zipcode.objects.exclude(...)

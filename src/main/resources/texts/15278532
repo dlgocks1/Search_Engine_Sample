@@ -1,0 +1,390 @@
+2D Graphics
+3D with OpenGL
+Audio and Video
+Location and Maps
+App Widgets
+Developing
+Entwicklung
+Desarrollo
+Développement
+Sviluppo
+開発
+开发
+開發
+In Eclipse, with ADT 
+In Eclipse, mit ADT
+En Eclipse, con ADT
+Sous Eclipse, à l'aide du plugin ADT
+In Eclipse, con ADT
+Eclipse 内で ADT を使用
+利用 ADT 在 Eclipse 中开发
+在加裝 ADT 工具的 Eclipse 環境中
+In Other IDEs
+In anderen IDEs
+En otros entornos
+Sous d'autres environnements
+In altri IDE
+その他の統合開発環境
+在其他 IDE 中开发
+在其他開發環境中
+On a Device
+Debugging Tasks
+aapt
+adb
+android
+aidl
+AVDs
+ddms
+dx
+Draw 9-Patch
+Emulator
+Hierarchy Viewer
+mksdcard
+Monkey
+sqlite3
+Traceview
+Publishing
+Veröffentlichung
+Publicación
+Publication
+Pubblicazione
+公開
+发布
+發佈
+Signing Your Applications
+Signieren Ihrer Anwendungen
+Firma de aplicaciones
+Attribution de votre signature à vos applications
+Firma delle applicazioni
+アプリケーションへの署名
+应用程序签名
+簽署應用程式
+Versioning Your Applications
+Versionsverwaltung für Ihre Anwendungen
+Versiones de las aplicaciones
+Attribution d'une version à vos applications
+Controllo versioni delle applicazioni
+アプリケーションのバージョニング
+应用程序版本控制
+應用程式版本設定
+Preparing to Publish
+Vorbereitung auf die Veröffentlichung
+Publicación de aplicaciones
+Préparation à la publication
+Preparativi per la pubblicazione
+公開の準備
+准备发布
+準備發佈
+Publishing Your Applications
+Best Practices
+Bewährte Verfahren
+Prácticas recomendadas
+Meilleures pratiques
+Best practice
+ベスト プラクティス
+最佳实践
+最佳實務
+App Widgets are miniature application views that can be embedded in other applications
+(such as the Home screen) and receive periodic updates. These views are referred 
+to as Widgets in the user interface,
+and you can publish one with an App Widget provider. An application component that is 
+able to hold other App Widgets is called an App Widget host. The screenshot below shows
+the Music App Widget.
+This document describes how to publish an App Widget using an App Widget provider.
+The Basics
+To create an App Widget, you need the following:
+AppWidgetProviderInfo object
+Describes the metadata for an App Widget, such as the App Widget's layout, update frequency,
+and the AppWidgetProvider class. This should be defined in XML.
+AppWidgetProvider class implementation
+Defines the basic methods that allow you to programmatically interface with the App Widget,
+based on broadcast events. Through it, you will receive broadcasts when the App Widget is updated, 
+enabled, disabled and deleted.
+View layout
+Defines the initial layout for the App Widget, defined in XML.
+Additionally, you can implement an App Widget configuration Activity. This is an optional 
+Activity that launches when the user adds your App Widget and allows him or her
+to modify App Widget settings at create-time.
+The following sections describe how to setup each of these components.
+Declaring an App Widget in the Manifest
+First, declare the AppWidgetProvider class in your application's
+AndroidManifest.xml file. For example:
+<receiver android:name="ExampleAppWidgetProvider" >
+<intent-filter>
+<action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
+</intent-filter>
+<meta-data android:name="android.appwidget.provider"
+android:resource="@xml/example_appwidget_info" />
+</receiver>
+The <receiver> element requires the android:name 
+attribute, which specifies the AppWidgetProvider used
+by the App Widget.
+The <intent-filter> element must include an <action>
+element with the android:name attribute. This attribute specifies
+that the AppWidgetProvider accepts the ACTION_APPWIDGET_UPDATE broadcast.
+This is the only broadcast that you must explicitly declare. The AppWidgetManager
+automatically sends all other App Widget broadcasts to the AppWidgetProvider as necessary.
+The <meta-data> element specifies the
+AppWidgetProviderInfo resource and requires the 
+following attributes:
+android:name - Specifies the metadata name. Use android.appwidget.provider
+to identify the data as the AppWidgetProviderInfo descriptor.
+android:resource - Specifies the AppWidgetProviderInfo 
+resource location.
+Adding the AppWidgetProviderInfo Metadata
+The AppWidgetProviderInfo defines the essential 
+qualities of an App Widget, such as its minimum layout dimensions, its initial layout resource,
+how often to update the App Widget, and (optionally) a configuration Activity to launch at create-time.
+Define the AppWidgetProviderInfo object in an XML resource using a single
+<appwidget-provider> element and save it in the project's res/xml/ 
+folder.
+For example:
+<appwidget-provider xmlns:android="http://schemas.android.com/apk/res/android"
+android:minWidth="294dp" <!-- density-independent pixels -->
+android:minHeight="72dp"
+android:updatePeriodMillis="86400000" <!-- once per day -->
+android:initialLayout="@layout/example_appwidget"
+android:configure="com.example.android.ExampleAppWidgetConfigure" >
+</appwidget-provider>
+Here's a summary of the <appwidget-provider> attributes:
+The values for the minWidth and minHeight attributes specify the minimum
+area required by the App Widget's layout.
+The default Home screen positions App Widgets in its window based on a grid of
+cells that have a defined height and width. If the values for an App Widget's minimum width 
+or height don't match the dimensions of the cells,
+then the App Widget dimensions round up to the nearest cell size.
+(See the App Widget Design 
+Guidelines for more information on the Home screen cell sizes.)
+Because the Home screen's layout orientation (and thus, the cell sizes) can change,
+as a rule of thumb, you should assume the worst-case cell size of 74 pixels for the height
+and width of a cell. However, you must subtract 2 from the final dimension to account
+for any integer rounding errors that occur in the pixel count. To find your minimum width
+and height in density-independent pixels (dp), use this formula: 
+(number of cells * 74) - 2 
+Following this formula, you should use 72 dp for a height of one cell, 294 dp and for a width of four cells.
+The updatePeriodMillis attribute defines how often the App Widget framework should
+request an update from the AppWidgetProvider by calling the
+onUpdate() method. The actual update is not guaranteed to occur exactly on time with this value
+and we suggest updating as infrequently as possible—perhaps no more than once an hour to 
+conserve the battery. You might also allow the user to adjust the frequency in a 
+configuration—some people might want a stock ticker to update every 15 minutes, or maybe 
+only four times a day. 
+Note: If the device is asleep when it is time for an update 
+(as defined by updatePeriodMillis), then the device will wake up in order 
+to perform the update. If you don't update more than once per hour, this probably won't 
+cause significant problems for the battery life. If, however, you need to update more 
+frequently and/or you do not need to update while the device is asleep, then you can instead 
+perform updates based on an alarm that will not wake the device. To do so, set an alarm with 
+an Intent that your AppWidgetProvider receives, using the AlarmManager. 
+Set the alarm type to either ELAPSED_REALTIME or 
+RTC, which will only
+deliver the alarm when the device is awake. Then set updatePeriodMillis to 
+zero ("0").
+The initialLayout attribute points to the layout resource that defines the
+App Widget layout.
+The configure attribute defines the Activity to launch when
+the user adds the App Widget, in order for him or her to configure App Widget properties. This is optional
+(read Creating an App Widget Configuration Activity below).
+See the AppWidgetProviderInfo class for more information on the
+attributes accepted by the <appwidget-provider> element.
+Creating the App Widget Layout
+You must define an initial layout for your App Widget in XML and save it in the project's
+res/layout/ directory. You can design your App Widget using the View objects listed
+below, but before you begin designing your App Widget, please read and understand the
+App Widget Design 
+Guidelines.
+Creating the App Widget layout is simple if you're
+familiar with Declaring Layout in XML.
+However, you must be aware that App Widget layouts are based on RemoteViews,
+which do not support every kind of layout or view widget.
+A RemoteViews object (and, consequently, an App Widget) can support the 
+following layout classes:
+FrameLayout
+LinearLayout
+RelativeLayout
+And the following widget classes:
+AnalogClock
+Button
+Chronometer
+ImageButton
+ImageView
+ProgressBar
+TextView
+Descendants of these classes are not supported.
+Using the AppWidgetProvider Class
+You must declare your AppWidgetProvider class implementation as a broadcast receiver 
+using the <receiver> element in the AndroidManifest (see
+Declaring an App Widget in the Manifest above).
+The AppWidgetProvider class extends BroadcastReceiver as a convenience
+class to handle the App Widget broadcasts. The AppWidgetProvider receives only the event broadcasts that
+are relevant to the App Widget, such as when the App Widget is updated, deleted, enabled, and disabled.
+When these broadcast events occur, the AppWidgetProvider receives the following method calls:
+onUpdate(Context, AppWidgetManager, int[])
+This is called to update the App Widget at intervals defined by the updatePeriodMillis
+attribute in the AppWidgetProviderInfo (see Adding the 
+AppWidgetProviderInfo Metadata above). This method is also called
+when the user adds the App Widget, so it should perform the essential setup,
+such as define event handlers for Views and start a temporary
+Service, if necessary. However, if you have declared a configuration
+Activity, this method is not called when the user adds the App Widget,
+but is called for the subsequent updates. It is the responsibility of the 
+configuration Activity to perform the first update when configuration is done.
+(See Creating an App Widget Configuration Activity below.) 
+onDeleted(Context, int[])
+This is called every time an App Widget is deleted from the App Widget host.
+onEnabled(Context)
+This is called when an instance the App Widget is created for the first time. For example, if the user 
+adds two instances of your App Widget, this is only called the first time.
+If you need to open a new database or perform other setup that only needs to occur once 
+for all App Widget instances, then this is a good place to do it. 
+onDisabled(Context)
+This is called when the last instance of your App Widget is deleted from the App Widget host. 
+This is where you should clean up any work done in 
+onEnabled(Context), 
+such as delete a temporary database. 
+onReceive(Context, Intent)
+This is called for every broadcast and before each of the above callback methods.
+You normally don't need to implement this method because the default AppWidgetProvider 
+implementation filters all App Widget broadcasts and calls the above 
+methods as appropriate. 
+Note: In Android 1.5, there is a known issue in which the
+onDeleted() method will not be called when it should be. To work around this issue, 
+you can implement onReceive() as described in this 
+Group post
+to receive the onDeleted() callback.
+The most important AppWidgetProvider callback is 
+onUpdated() because it is called when each App Widget is added to a host (unless you use
+a configuration Activity). If your App Widget accepts any
+user interaction events, then you need to register the event handlers in this callback.
+If your App Widget doesn't create temporary
+files or databases, or perform other work that requires clean-up, then
+onUpdated() may be the only callback method you need to define. For example, if you want an App Widget
+with a button that launches an Activity when clicked, you could use the following
+implementation of AppWidgetProvider:
+public class ExampleAppWidgetProvider extends AppWidgetProvider {
+public void onUpdate(Context context, AppWidgetManager appWidgetManager, int[] appWidgetIds) {
+final int N = appWidgetIds.length;
+// Perform this loop procedure for each App Widget that belongs to this provider
+for (int i=0; i<N; i++) {
+int appWidgetId = appWidgetIds[i];
+// Create an Intent to launch ExampleActivity
+Intent intent = new Intent(context, ExampleActivity.class);
+PendingIntent pendingIntent = PendingIntent.getActivity(context, 0, intent, 0);
+// Get the layout for the App Widget and attach an on-click listener to the button
+RemoteViews views = new RemoteViews(context.getPackageName(), R.layout.appwidget_provider_layout);
+views.setOnClickPendingIntent(R.id.button, pendingIntent);
+// Tell the AppWidgetManager to perform an update on the current App Widget
+appWidgetManager.updateAppWidget(appWidgetId, views);
+}
+}
+}
+This AppWidgetProvider defines only the 
+onUpdated() method for the purpose
+of defining a PendingIntent that launches an Activity
+and attaching it to the App Widget's button
+with setOnClickPendingIntent(int, PendingIntent).
+Notice that it includes a loop that iterates through each entry in appWidgetIds, which
+is an array of IDs that identify each App Widget created by this provider.
+In this way, if the user creates more than one instance of the App Widget, then they are
+all updated simultaneously. However, only one updatePeriodMillis schedule will be 
+managed for all instances of the App Widget. For example, if the update schedule is defined 
+to be every two hours, and a second instance 
+of the App Widget is added one hour after the first one, then they will both be updated 
+on the period defined by the first one and the second update period will be ignored 
+(they'll both be updated every two hours, not every hour).
+Note: Because the AppWidgetProvider is a BroadcastReceiver,
+your process is not guaranteed to keep running after the callback methods return (see
+Application Fundamentals >
+Broadcast Receiver Lifecycle for more information). If your App Widget setup process can take several
+seconds (perhaps while performing web requests) and you require that your process continues, 
+consider starting a Service 
+in the onUpdated() method. From within the Service, you can perform your own updates to the App Widget
+without worrying about the AppWidgetProvider closing down due to an 
+Application Not Responding 
+(ANR) error. See the
+Wiktionary
+sample's AppWidgetProvider for an example of an App Widget running a Service.
+Also see the 
+ExampleAppWidgetProvider.java sample class.
+Receiving App Widget broadcast Intents
+AppWidgetProvider is just a convenience class. If you would like
+to receive the App Widget broadcasts directly, you can implement your own 
+BroadcastReceiver or override the 
+onReceive(Context, Intent) callback. 
+The four Intents you need to care about are:
+ACTION_APPWIDGET_UPDATE
+ACTION_APPWIDGET_DELETED
+ACTION_APPWIDGET_ENABLED
+ACTION_APPWIDGET_DISABLED
+Creating an App Widget Configuration Activity
+If you would like the user to configure settings when he or she adds a new App Widget,
+you can create an App Widget configuration Activity. This Activity 
+will be automatically launched by the App Widget host and allows the user to configure
+available settings for the App Widget at create-time, such as the App Widget color, size, 
+update period or other functionality settings.
+The configuration Activity should be declared as a normal Activity in the Android manifest file.
+However, it will be launched by the App Widget host with the ACTION_APPWIDGET_CONFIGURE action,
+so the Activity needs to accept this Intent. For example:
+<activity android:name=".ExampleAppWidgetConfigure">
+<intent-filter>
+<action android:name="android.appwidget.action.APPWIDGET_CONFIGURE" />
+</intent-filter>
+</activity>
+Also, the Activity must be declared in the AppWidgetProviderInfo XML file, with the 
+android:configure attribute (see Adding 
+the AppWidgetProvierInfo Metadata above). For example, the configuration Activity
+can be declared like this:
+<appwidget-provider xmlns:android="http://schemas.android.com/apk/res/android"
+...
+android:configure="com.example.android.ExampleAppWidgetConfigure" 
+... >
+</appwidget-provider>
+Notice that the Activity is declared with a fully-qualified namespace, because 
+it will be referenced from outside your package scope.
+That's all you need to get started with a configuration Activity. Now all you need is the actual
+Activity. There are, however, two important things to remember when you implement the Activity:
+The App Widget host calls the configuration Activity and the configuration Activity should always 
+return a result. The result should include the App Widget ID
+passed by the Intent that launched the Activity (saved in the Intent extras as
+EXTRA_APPWIDGET_ID).
+The onUpdate() method will not be called when the App Widget is created
+(the system will not send the ACTION_APPWIDGET_UPDATE broadcast when a configuration Activity
+is launched). It is the responsibility of the configuration Activity to request an update from the 
+AppWidgetManager when the App Widget is first created. However, 
+onUpdate() will be called for subsequent updates—it is only skipped the first time.
+See the code snippets in the following section for an example of how to return a result
+from the configuration and update the App Widget.
+Updating the App Widget from the configuration Activity
+When an App Widget uses a configuration Activity, it is the responsibility of the Activity
+to update the App Widget when configuration is complete. 
+You can do so by requesting an update directly from the 
+AppWidgetManager.
+Here's a summary of the procedure to properly update the App Widget and close
+the configuration Activity:
+First, get the App Widget ID from the Intent that launched the Activity:
+Intent intent = getIntent();
+Bundle extras = intent.getExtras();
+if (extras != null) {
+mAppWidgetId = extras.getInt(
+AppWidgetManager.EXTRA_APPWIDGET_ID, 
+AppWidgetManager.INVALID_APPWIDGET_ID);
+}
+Perform your App Widget configuration.
+When the configuration is complete, get an instance of the AppWidgetManager by calling
+getInstance(Context):
+AppWidgetManager appWidgetManager = AppWidgetManager.getInstance(context);
+Update the App Widget with a RemoteViews layout by calling
+updateAppWidget(int, RemoteViews):
+RemoteViews views = new RemoteViews(context.getPackageName(), R.layout.example_appwidget);
+appWidgetManager.updateAppWidget(mAppWidgetId, views);
+Finally, create the return Intent, set it with the Activity result, and finish the Activity:
+Intent resultValue = new Intent();
+resultValue.putExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, mAppWidgetId);
+setResult(RESULT_OK, resultValue);
+finish();
+Tip: When your configuration Activity first opens, set
+the Activity result to RESULT_CANCELED. This way, if the user backs-out of the Activity before
+reaching the end, the App Widget host is notified that the configuration was cancelled and the
+App Widget will not be added.
+See the 
+ExampleAppWidgetConfigure.java sample class in ApiDemos for an example.

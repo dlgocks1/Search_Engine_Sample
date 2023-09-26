@@ -1,0 +1,8 @@
+>>最新の音楽ニュース
+Warning: ocilogon(): _oci_open_server: ORA-12541: TNS: リスナーがありません。
+in /export/home/siteroot/con_lib/dbora.inc on line 111 
+Warning ociparse(): supplied argument is not a valid OCI8-Connection resource 
+in file: /export/home/siteroot/con_lib/dbora.inc on 147 
+see DbConnect->getError() method for detailsWarning Variable passed to each() is not an array or object 
+in file: /export/home/siteroot/con_lib/dbora.inc on 164 
+see DbConnect->getError() method for details

@@ -1,0 +1,78 @@
+ダウンロードサイト 
+http://www.collab.net/downloads/subversion/
+CollabNet Subversion Server and Client v1.5.4 (for Windows) 
+＞説明ファイル
+インストール後の動作チェック！
+svnserve 編
+1.コマンドプロンプト（cmd.exe）を起動
+2.リポジトリを作成 
+> cd <Repository_Path> 
+> svnadmin create <Repository_Name>
+3.環境設定ファイル (svnserv.conf) を編集 
+作成したリポジトリ<Repository_Name>/conf ディレクトリにあります。
+### The password-db option controls the location of the password 
+### database file. Unless you specify a path starting with a /, 
+### the file’s location is relative to the conf directory. 
+### Uncomment the line below to use the default password file. 
+password-db = passwd ← コメント(#)を外す！
+4.パスワードファイル (passwd) を編集 
+svnserv.conf と同じ場所にあります。
+[users] 
+#harry = harryssecret 
+#sally = sallyssecret 
+username = password ← ユーザー名とパスワードを追加！
+5.Windowsファイヤーウォールにて、ポートを開く
+ポート番号：3690
+6.svnserveを起動
+管理ツール＞サービス＞Subversion Server ＞開始
+7.アクセス権の設定 (svnserv.conf) 
+svnserv.conf
+[general] 
+anon-access = write 
+anon-access = none
+8.リポジトリをチェックアウト
+> svn co svn://localhost/<Repository_Name>
+Apache 編
+1.Apacheの設定 (httpd.conf) 
+CollabNet Subversionのセットアップによって、Apacheバイナリがインストールされる。 
+C:Program FilesCollabNet Subversion Serverhttpdconfhttpd.conf
+セットアップによって、以下の設定が自動的に作成されます。 
+<Location /svn> 
+DAV svn 
+SVNParentPath C:repositories 
+</Location>
+さらに、BASIC認証を使うために、以下のように追加します。 
+<Location /svn> 
+DAV svn 
+SVNParentPath C:repositories 
+SVNListParentPath On 
+Require valid-user 
+AuthType Basic 
+AuthName “Subversion repository” 
+AuthUserFile C:repositoriespassword-file 
+</Location>
+2.コマンドプロンプト（cmd.exe）を起動
+3.利用者の作成 (htpasswd) 
+htpasswd.exe は、C:Program FilesCollabNet Subversion Serverhttpdbin にあります。
+> htpasswd -cm <password-file> <username>
+<password-file>は、httpd.conf に設定した AuthUserFile とあわせます。
+新規… 
+> htpasswd -cm C:repositoriespassword-file user_1
+追加… 
+> htpasswd -m C:repositoriespassword-file user_2
+4.リポジトリを作成 
+> cd <Repository_Path> 
+> svnadmin create <Repository_Name> 
+※svnserveの場合と同じなので、既に作成済みであれば不要。
+5.ポートを開く
+ポート番号：80
+6.Apacheを起動
+管理ツール＞サービス＞Apache2.2 ＞開始
+7.リポジトリをチェックアウト
+> svn co http://localhost/svn/<Repository_Name>
+8.リポジトリの閲覧
+ブラウザで以下のURLを開く… 
+http://<hostname>/svn/
+ViewVC 
+http://<hostname>/viewvc/
+« 前の記事:ActivePython

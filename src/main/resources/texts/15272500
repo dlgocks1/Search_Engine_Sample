@@ -1,0 +1,31 @@
+掲示板 BBS 無料 フリー トラックバックBBSはこちらに移転しました。 
+http://z-server.game.coocan.jp/cgi/patio.cgi 
+リンクを設定されている方は、恐れ入りますがリンク先を変更してください。
+トップ
+スレッドタイトル一覧
+新規書き込み（親スレを立てる）
+http://z-server.game.coocan.jp/zteer/l4d/sourcemod/zserver_l4d_plugin.zip 
+z-serverで使っているSourceMODのプラグインを公開します。 
+もともとmap_selectをまともに動作させるために作ったものですが、汎用性のある作りにしているのでお役には立てるかなと思います。 
+プラグインは以下の二つを組み合わせています。詳しい使い方はドキュメントやサンプルを見てください。 
+・entmodtool.smx 
+ObsidianやSynergyで実装されているmapaddのような機能を追加するプラグインです。サーバコマンドによりエンティティの追加や、プロパティの変更を行えます。 
+Logic系のエンティティは操作することができません。（なぜだろう…） 
+・l4d_eventcommad.smx 
+Left 4 Deadで発生するさまざまなイベント時（ラウンド開始時やフィナーレ終了時など）に任意のcfgファイルを実行するプラグインです。
+コメント
+トラックバックURL ： http://z-server.bbs.coocan.jp/bbs/trackback.php?id=59
+このプラグインは直接マップの構成要素に手を加えることができるので、工夫次第でかなりのことができるはずです。 
+具体的に何ができるか、という例を幾つか挙げたいと思います。 
+・キャンペーンのマップ順を入れ替える 
+以下のような二つのファイルを作成すると、ブラッドハーベストの1番目のマップが終了した後に4番目のマップへ移動するようになります。 
+info_changelevelはラウンドクリア後の移動先のマップを指定するエンティティで、ラウンド開始時に強制的に書き換えています。 
+ただ、このままでは座標のズレがあり、マップ移動後にプレーヤーがマップ外に放り出されてしまうため、次のマップのラウンド開始時にプレーヤの位置をスタート地点に移動させる必要があります。 
+-- l4d_farm01_hilltop_round_start.cfg -- 
+em_entity "datamap" "info_changelevel" "map" "l4d_farm04_barn" 
+-- l4d_farm04_barn_round_start.cfg -- 
+em_entity "datamap" "player" "origin" "7755.83 -11339.6 449.0" 
+このようにしてブラッドハーベストのマップ順を1-4-3-2-5と入れ替えるcfgファイルをupしました。同じマップばかりで飽きてきたという方は気分転換にどうですか？ 
+http://z-server.game.coocan.jp/zteer/l4d/sourcemod/l4d_farm_mapcycle_test.zip
+コメント
+削除

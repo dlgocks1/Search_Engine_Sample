@@ -1,0 +1,15 @@
+Simplytweet now has push notifications support for both mentions (including replies) and direct messages.
+Enabling Push
+Run SimplyTweet and enable push for SimplyTweet when you are asked to.
+Manually tab to the mentions and direct messages timelines. i.e. load them (this has nothing to do with the autoload settings). You only need to do this once to register them.
+How Does it Work
+From now on, you will receive push notifications. SimplyTweet currently checks (and push notifications) every 5-10 minutes2-3 minutes (occasional lags of a few more minutes may be possible), and be useful enough, yet not irritating. If SimplyTweet finds that you have more than 1 mentions or DM, it only pushes 1 notification, for the latest message with a message count. i.e. if you are Obama, you will not get bazillion push notifications. (imagine a push for each and every mention/DM every second!). This is a feature, not a bug.
+SimplyTweet also only push notifications for mentions and DMs that are unread. If you have loaded them in SimplyTweet, there will be no push for those mentions and DMs. In other words, if you keep reloading the Mentions and DM timeline manually, you will not see push notifications.
+If you get a push notification while SimplyTweet is running, (1) if the push is for the current account, the badge for Mentions or Messages will be updated. The timeline does not autorefresh (2) if the push is for another account, there will be a popup dialog, similar to the one shown if you get a push notification while SimplyTweet is not running.
+Limitation
+The application badge count only shows the number of messages in the latest push. It will not show the total unread messages. E.g. if you get a push for 3 messages, don't launch SimplyTweet and then get a push for 2 messages. The badge will read 3 after the first push and 2 after the 2nd push (rather than 5). This is a known limitation.
+Push notifications (for all applications) work by the application, in this case SimplyTweet pushing to Apple, who will in turn push to each and individual device. According to Apple's documentation and my own testing, sometimes Apple does not push notifications to your devices right away. There can be a few minutes lag.
+Contact
+If you can't get push to work, feel free to @simplytweet or email hboon@motionobj.com
+Buy
+Don't have SimplyTweet yet? Go grab it here (opens iTunes)

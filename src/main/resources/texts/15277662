@@ -1,0 +1,12 @@
+The following guidelines must be observed when declaring statically bound thread local objects and variables:
+The thread attribute can be applied only to data declarations and definitions. It cannot be used on function declarations or definitions. For example, the following code generates a compiler error: 
+The thread modifier might be specified only on data items with static extent. This includes global data objects (both static and extern), local static objects, and static data members of C++ classes. Automatic data objects cannot be declared with the thread attribute. The following code generates compiler errors: 
+#define Thread __declspec( thread )
+void func1()
+{
+Thread int tls_i; // This will generate an error.
+}
+int func2( Thread int tls_i ) // This will generate an error.
+{
+return tls_i;
+}

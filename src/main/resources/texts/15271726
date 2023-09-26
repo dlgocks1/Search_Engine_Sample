@@ -1,0 +1,26 @@
+With the ink on the deal still fresh, many are wondering what exactly will come out of the Facebook-FriendFeed acquisition deal. And many who’ve never used FriendFeed before may be wondering what the big deal is: why bother with Yet Another Social Network?
+If you’re new to FriendFeed or have perhaps tried it and wandered away, your curiosity might be piqued now. If so, we have a quick power tip for you to help take advantage of its unique features right away. 
+If you’ve ever used the saved searches feature on Twitter you’re going to immediately understand the power of the equivalent feature on FriendFeed. The great thing about FriendFeed’s saved searches feature, however, is that it’s a lot more customizable.
+The saved searches interface makes use of the advanced search features built into FriendFeed to give you fine-grained controls in the following areas:
+Search only within specific groups – Once you’ve organized your FriendFeed contacts into groups (work, family, local, etc.), you can save searches only within that particular group. For example if you only wanted to know when your old college buddies are talking about your upcoming reunion, limit a keyword search for “reunion” within that friend group. You can even create an ad hoc list of people to include in the search without having to create a full group as well.
+Search only within the title or within comments – You can limit search results to keywords found only within the title of an entry or even only within comments on entries.
+Search only entries commented on or liked by specific people – This option can help float very important people in your list to the top of your attention when they interact with your activity stream around specific issues.
+Search only within entries with a minimum threshold of comments or likes – This option helps surface only items with a certain level of attention or activity.
+Advanced Search Operators
+In addition to the fine-grained level of control in saved searches, FriendFeed also provides a handful of advanced search operators you can make use of from the regular search bar as well as within saved searches (although some functions overlap).
+from: – Returns only search results from a particular user. Use a comma to search multiple users (Example: from:jeff,karen would return results from both jeff and karen).
+group: – Returns only search results from a particular group. Use a comma to search multiple groups (Example: from:FriendFeed Hacks, Enterprise 2.0 would return results from both those groups).
+friends: – This taps into FriendFeed’s powerful “friend of a friend” function to return search results only from a user’s friends (Example: friends:karen would return results only from karen’s friends).
+service: – Limits search results only to those items brought in from a specific service. For example, if you wanted to get a zeitgeist of what people on Facebook have been saying about the acquisition, you might search All FriendFeed users with the query “friendfeed acquisition service:facebook.”
+intitle: – Returns results with the specified term appearing in the title of the entry (Example: intitle:Veronica Mars).
+incomment: – Returns results with the specified term appearing in a comment (Example: incomment:lame).
+comment: – Returns results with comments from a particular user or user. Use a comma to search multiple users (Example: comment:jeff,karen would return items commented on by either jeff or karen).
+comments: – Returns results with at minimum this many comments (Example: comments:20 would search only within items that had at least 20 comments).
+like: – Returns results liked by a particular user or user. Use a comma to search multiple users (Example: like:jeff,karen would return items liked by either jeff or karen).
+likes: – Returns results with at minimum this many likes (Example: likes:20 would search only within items that had been liked by at least 20 people).
+- – This syntax excludes a word, user or term from your search. For example to look for items that discuss FriendFeed without mentioning Facebook, you’d use the search query “friendfeed -facebook.”
+, – As mentioned in some of the other operators above, the comma acts to add multiple users or terms to an advanced search flag. Search geeks call this an “OR” search because it finds all results that mention Term A OR Term B.
+There you have it — if you’re just diving into FriendFeed for the first time or if you haven’t been sure what all the fuss is about, give the Saved Searches feature a try and go the extra mile with the advanced search operators.
+What other FriendFeed features would you like to know about? And more broadly, what other tips or tricks would you like to see us cover here? Let us know in the comments!
+Reviews: Facebook, FriendFeed
+Tags: friendfeed, friendfeed tips, Search, tips, tricks

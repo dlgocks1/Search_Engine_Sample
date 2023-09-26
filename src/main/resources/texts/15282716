@@ -1,0 +1,37 @@
+JSDeferred について
+JSDeferred は JavaScript のコールバックによる非同期処理を直列的に書けるようにするために作られたライブラリです。
+foofunc(function () {
+barfunc(function () {
+bazfunc(function () {
+});
+});
+});
+foofunc().next(barfunc).next(bazfunc);
+簡単な使いかた
+読み込み
+まずは JSDeferred を使うために、HTML に script 要素を追加します。
+<script type="text/javascript" src="jsdeferred.js"></script>
+<script type="text/javascript" src="my.js"></script>
+JSDeferred は外部ライブラリに依存しておらず、単体で動くため、jsdeferred.js を読みこめば十分です。これから先のコードは my.js に書いていくことにします。
+最初の一歩
+JSDeferred を読みこむと、Deferred というオブジェクトが定義されます。
+便宜上 Deferred.define() を使って関数をグローバルにエクスポートします。もちろん、エクスポートせずに使うこともできます。
+Deferred.define();
+これより、グローバルな関数として、next() や loop(), call(), parallel(), wait() といった便利な関数が使えるようになります。
+簡単な非同期処理を書いてみます。
+next(function () {
+alert("Hello!");
+return wait(5);
+}).
+next(function () {
+alert("World!");
+});
+これは、まず Hello! が alert されたあと、5秒待ってから World! が alert される処理になります。
+Deferred.define() で関数をエクスポートしない場合は以下のようになります。上記コードと全く同じ意味です。
+Deferred.next(function () {
+alert("Hello!");
+return Deferred.wait(5);
+}).
+next(function () {
+alert("World!");
+});

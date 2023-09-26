@@ -1,0 +1,13 @@
+cakephp | 16:43 | カスタムコンポーネントを作って、他のコンポーネント経由でモデルを呼びたくてわからなかったので調べてみた。
+class HogeComponent extends Object {
+var $name = 'MasterHoge';
+var $Controller;
+//呼びたいコンポーネントをここに書く
+var $components = array('MasterTest') 
+function index(){
+//実際に他のモデルの情報を取得
+$data = $this->Controller->MasterTest->find();
+}
+}
+?>
+のように書くとできました。コンポーネントを使うのは複雑な用件の場合のみにしたほうがいいらしいです。

@@ -1,0 +1,13 @@
+以前のブログ（http://blog.digitrick.net/）で、"FirefoxでFlashの100%表示にバグ"という記事を書いた。
+FirefoxでFlashの100%表示にバグ
+http://blog.digitrick.net/item-73.html
+でも、これはバグではないことをマークアップエンジニアの方に聞いて初めて知る。 
+しかもFirefoxの動作は正常動作と言えるらしい。DOCTYPE宣言を消すなんてことはもうしなくていい。CSSだけで解決。
+html,body {
+height: 100%;
+}
+/* 念のため */
+#flash {
+height: 100%;
+}
+恥ずかしながら3年越しにスッキリした。

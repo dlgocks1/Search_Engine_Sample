@@ -1,0 +1,38 @@
+Javascriptを用いてCSSを切り替えるスクリプトを利用して、フォントサイズを大、中、小に切り替えれるようにしてみました。 
+実装したのは初心者のためのPC用語講座です。
+利用方法は簡単で、まずはAlternative Style: Working With Alternate Style Sheetsにてスクリプトをダウンロードします。
+これをhead内で呼び出します。スクリプトで利用するスタイルシートも呼び出します。 
+— HTML — 
+<head> 
+<link rel="stylesheet" type="text/css" href="style.css" title="standard"> 
+<link rel="alternate stylesheet" type="text/css" href="style1.css" title="alternate1"> 
+<link rel="alternate stylesheet" type="text/css" href="style2.css" title="alternate2"> 
+<script type="text/javascript" src="styleswitcher.js"> 
+</head> 
+ポイントは、変更するフォントのスタイルシートをrel=”alternate stylesheet”で呼び出す事。title=は処理を判断する時の名前だとでも思ってください。
+— HTML続き — 
+<body> 
+<a href="#" onclick="setActiveStyleSheet('alternate1'); return false;">小</a> - 
+<a href="#" onclick="setActiveStyleSheet('standard'); return false;">中（標準） - 
+<a href=”#” onclick=”setActiveStyleSheet(’alternate2′); return false;”>大</a> 
+<div id=”contents”> 
+ここのサイズが変わります 
+</div> 
+</body> 
+style.cssには 
+#contents{font-size:100%;} 
+style1.cssには 
+#contents{font-size:80%;} 
+style2.cssには 
+#contents{font-size:120%;} 
+と記述しておけば完成です。 
+あとは、それぞれクリックすれば、文字サイズが変更されます。
+参考ページ：JavaScriptを使ったCSSの切り替え
+速習Webテクニック スタイルシート 上級レイアウト (Quick Master of Web Technique)
+著者／訳者：河内 正紀
+出版社：技術評論社( 2006-03-29 )
+定価：￥ 2,919
+Amazon価格：￥ 2,919
+大型本 ( 248 ページ )
+ISBN-10 : 4774127205
+ISBN-13 : 9784774127200

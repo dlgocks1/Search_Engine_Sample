@@ -1,0 +1,12 @@
+Enterprise Architect 動作環境
+Enterprise ArchitectおよびEnterprise Architect Suiteの動作環境は次の通りです。
+Intel® Pentium®III CPU あるいは互換CPU搭載マシン (それ以上の性能を持つCPUであれば、より快適に動作します。) 
+日本語版 Microsoft Windows 2000, Windows XP, Windows Vista それぞれ、最新のサービスパックを適用してください。日本語版以外のOSでは動作いたしません。
+Vista環境での動作保証は、バージョン7.1以降です。
+各OSの64ビット版(x64)での動作保証は、バージョン7.5以降です。
+インストールのためのハードディスクの容量は100Mbyte程度必要です。
+快適なモデリングのためには、1024x768以上のディスプレイ解像度をお勧めします。
+InternetExplorerのバージョン6.0以上が必要です。 (Enterprise Architectで作成したHTMLドキュメントの閲覧にも、InternetExplorerのバージョン6.0以上が必要です)
+実行にはPowerUsers以上の権限が必要です。(インストールにはAdministratorsの権限が必要です。)
+VisualStudioやEclipseとの連携アドインやデバッグ機能を利用する場合には、対象の環境の最新のサービスパックやパッチ・アップデートなどを適用してください。日本語版あるいは英語版以外の環境では動作いたしません。
+Windows Vistaでデバッグ機能を利用する場合には、UAC(ユーザーアカウント制御)を無効にする必要があります。

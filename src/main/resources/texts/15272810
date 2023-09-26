@@ -1,0 +1,22 @@
+Hi there Im using the following method to import from an excel file we receive. The issue i'm having is when the SELECT * FROM <sheet name> is performed it doesn't get all the columns back, it misses the last one. So it returns 10 columns when they are 11 used in the Excel sheet Is there something im missing, it the first time i've used this method of extracting data from excel. 
+private static int ReadFeeForSericeFile(string feeForServiceFilePath, int startingRow) {
+int importedlineCount = 0;
+if (File.Exists(feeForServiceFilePath)) {
+string excelConnectionString = string.Format("Provider=Microsoft.Jet.OLEDB.4.0;Data Source={0};Extended Properties=\"Excel 8.0;HDR=No;IMEX=1\"", feeForServiceFilePath);
+using (OleDbConnection excelConnection = new OleDbConnection(excelConnectionString)) {
+using (OleDbCommand excelCommand = new OleDbCommand("Select * From [Register Summary$]", excelConnection)) {
+excelConnection.Open();
+using (OleDbDataReader excelReader = excelCommand.ExecuteReader(System.Data.CommandBehavior.CloseConnection)) {
+while (excelReader.Read()) { 
+if (CompassHealth.Tools.NHI.Validator.IsValidNHI(excelReader[0].ToString())) {
+for (int i = 0; i < excelReader.FieldCount; i++)
+Console.WriteLine(i.ToString() + " - " + excelReader[i].ToString());
+//Console.WriteLine(excelReader[0].ToString() + " " + excelReader[1].ToString() + " " + excelReader[2].ToString() + " " + excelReader[3].ToString() + " " + excelReader[4].ToString() + " " + excelReader[5].ToString() + " " + excelReader[6].ToString() + " " + excelReader[7].ToString() + " " + excelReader[8].ToString() + " " + excelReader[9].ToString()); 
+importedlineCount += 1;
+}
+}
+}
+}
+}
+}
+}

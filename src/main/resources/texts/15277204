@@ -1,0 +1,15 @@
+クライアント側で秘密鍵、公開鍵をパスフレーズなしで作って、サーバ側にその公開鍵を持たせることでパスワードなしでログインできる。実はログインが目的ではなく、scp,sftpをバッチ的に使いたい場合に有効。以下はssh version2の場合。version 1の場合はrsaで鍵を作成する必要があるはず。クライアント側
+$ cd $HOME/.ssh
+$ ssh-keygen -t dsa
+パスフレーズは入力しない。
+$ scp -p id_dsa.pub user@server:.ssh/
+ログインパスワードを入力して公開鍵をサーバ側へコピー
+サーバ側
+server$ mkdir $HOME/.ssh
+server$ chmod 700 $HOME/.ssh
+server$ cd $HOME/.ssh
+server$ touch authorized_keys2
+server$ chmod 600 authorized_keys2
+server$ cat id_dsa.pub >>authorized_keys2
+server$ rm id_dsa.pub
+これでクライアント側からplain text password認証なしでログインが可能に。

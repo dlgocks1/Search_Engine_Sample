@@ -1,0 +1,30 @@
+My Juno
+0 ) { $('#submenumy_artists').show(0); }" onmouseout="javascript:if( $('#submenumy_artists').length > 0 ) { $('#submenumy_artists').hide(0); }">
+Myアーティスト
+アーティストの追加と管理
+0 ) { $('#submenumy_labels').show(0); }" onmouseout="javascript:if( $('#submenumy_labels').length > 0 ) { $('#submenumy_labels').hide(0); }">
+Myレーベル
+レーベルの追加と管理
+0 ) { $('#submenumy_wishlist').show(0); }" onmouseout="javascript:if( $('#submenumy_wishlist').length > 0 ) { $('#submenumy_wishlist').hide(0); }">
+Myほしい物リスト
+0 ) { $('#submenumy_new_release').show(0); }" onmouseout="javascript:if( $('#submenumy_new_release').length > 0 ) { $('#submenumy_new_release').hide(0); }">
+Myニュースレター
+0 ) { $('#submenumy_comming_soon').show(0); }" onmouseout="javascript:if( $('#submenumy_comming_soon').length > 0 ) { $('#submenumy_comming_soon').hide(0); }">
+Myニューリリースお知らせメール
+0 ) { $('#submenumy_back_catalog').show(0); }" onmouseout="javascript:if( $('#submenumy_back_catalog').length > 0 ) { $('#submenumy_back_catalog').hide(0); }">
+My再入荷お知らせメール
+0 ) { $('#submenumy_charts').show(0); }" onmouseout="javascript:if( $('#submenumy_charts').length > 0 ) { $('#submenumy_charts').hide(0); }">
+My Chart
+0 ) { $('#submenumy_juno_player').show(0); }" onmouseout="javascript:if( $('#submenumy_juno_player').length > 0 ) { $('#submenumy_juno_player').hide(0); }">
+My Juno Player
+0 ) { $('#submenumy_account').show(0); }" onmouseout="javascript:if( $('#submenumy_account').length > 0 ) { $('#submenumy_account').hide(0); }">
+Myアカウント
+ログイン情報の変更
+ニックネームの変更
+パスワードの変更
+設定のカスタマイズ
+住所/カード情報
+0 ) { $('#submenumy_download').show(0); }" onmouseout="javascript:if( $('#submenumy_download').length > 0 ) { $('#submenumy_download').hide(0); }">
+Myダウンロード
+0 ) { $('#submenumy_order_history').show(0); }" onmouseout="javascript:if( $('#submenumy_order_history').length > 0 ) { $('#submenumy_order_history').hide(0); }">
+My注文履歴

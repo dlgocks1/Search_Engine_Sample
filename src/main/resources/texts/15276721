@@ -1,0 +1,86 @@
+この記事の内容は Red Hat Linux 7.3 向けに書かれたもので、古くなっている部分があります。ご注意下さい。
+はじめに
+sendmail を利用したメールサーバを構築します。試した環境は、Redhat Linux 7.3 + sendmail 8.11.6 です。以下は Linux のインストール時に sendmail もインストールされているものとして話を進めます。
+Sendmail は Sendmail 社が開発しているメール配送ソフト(MTA)です。オープンソース版の sendmail は無料で利用することが出来ます。インターネットで利用されているメールサーバの約7割は、sendmail を利用していると言われています。1982 年のリリース以来、20年以上もの間、使われて続けています。
+sendmail が開発された当初は、インターネットは大学や研究機関など一部で利用されていたため、セキュリティはほとんど考慮されていませんでした。ところが、インターネットが商業利用され始めると、モラルのない利用者が現われ、sendmail のセキュリティの問題が次々と露呈してきました。しかし、現在ではほとんどのセキュリティ問題は修正・解決されています。
+sendmail.mc の編集
+sendmail の設定は、難解なことで有名です。さらに、他の Linux のアプリケーションの設定とも方式がかなり異なっています。sendmail の設定ファイルは /etc/sendmail.cf ですが、読むことも難しければ、手作業で編集することも非常に困難です。
+そこで、比較的わかりやすい、m4 マクロを利用する方法が一般的です。sendmail.mc は /etc/mail ディレクトリに入っています。このファイルを root で編集します。その後、次のように m4 コマンドで sendmail.cf ファイルを生成します。
+# m4 /etc/mail/sendmail.mc > /etc/sendmail.cf
+受け取るドメインの指定
+sendmail がメールを受け取るドメインを local-host-names ファイルに指定します。この記述がないと、sendmail はメールを受信しません。
+# vi /etc/mail/local-host-names
+バーチャルドメインの設定になっているときは、
+example.net
+example.jp
+のように受け取りたいドメイン名を列挙します。
+sendmail の起動
+sendmail を起動して、テストしてみます。
+# service sendmail start
+sendmailを起動中: [ OK ]
+コンソール上から、mail コマンドを使ってメールの送信テストをします。mail コマンドに引数で与えたユーザ宛にメールが送信されます。 次のように入力してください。
+# mail root
+Subject: test
+This Mail is test.
+.
+Cc:
+本文入力を終えるには行頭で .(ピリオド) のみを入力します。いまは CC を指定する必要はありません。次のようにメールが届くはずです。
+You have new mail in /var/spool/mail/root
+再び mail コマンドを使って、今度は受信のテストを行ないます。mail コマンドは引数無しで実行すると、自分のメールボックスを見ることができます。
+# mail
+Mail version 8.1 6/6/93. Type ? for help.
+"/var/spool/mail/fumika": 1 messages 1 new 1 unread
+>U 1 fumika@net.jp Sat May 17 12:34 14/375 "test"
+メールが届いていれば、sendmail は動作しています。
+自動起動
+sendmail の自動起動設定は、ntsysv コマンドで行ないます。
+# ntsysv
+sendmail に * をつけて自動起動するようにします。
+SMTP認証を利用したメール送信
+筆者が試した sendmail 8.11.6 では、デフォルトで SMTP 認証(SMTP_AUTH) の設定がなされているので、SMTP 認証に対応したメールクライアントからであれば、メールの送信が可能です。2003年5月の時点では、ほとんどのメールクライアントが SMTP 認証対応を済ませています。例えば、Netscape 7.0 に附属のメールクライアントは、SMTP 認証に対応しています。［送信サーバ(SMTP)の設定］で［名前とパスワードを使用する］をチェックします。
+SMTP 認証がうまく行かない場合は、sendmail.mc ファイルの以下の行が有効になっているかチェックしてください。
+TRUST_AUTH_MECH(`DIGEST-MD5 CRAM-MD5 LOGIN PLAIN')dnl
+define(`confAUTH_MECHANISMS', `DIGEST-MD5 CRAM-MD5 LOGIN PLAIN')dnl
+また、SMTP 認証には、Cyrus SASL という認証機能のプログラムがインストールされている必要がありますので、うまく行かない場合は確認してください。
+# rpm -qa | grep cyrus-sasl
+cyrus-sasl-1.5.24-25
+cyrus-sasl-devel-1.5.24-25
+cyrus-sasl-plain-1.5.24-25
+cyrus-sasl-md5-1.5.24-25
+リレーの許可
+参考までに、SMTP 認証に対応していないメールクライアントでの送信を考えます。sendmail は初期状態では、SMTP 認証を利用しない場合は、ローカルホスト以外からのメールを受け付けないようになっています。この制限を解除して、ネットワーク経由でのメール転送(リレー)をできるようにするには sendmail.mc ファイルの以下の行をコメント化します。
+DAEMON_OPTIONS(`Port=smtp,Addr=127.0.0.1, Name=MTA')
+↓
+dnl DAEMON_OPTIONS(`Port=smtp,Addr=127.0.0.1, Name=MTA')
+mc ファイルでは、dnl 以降、行末までがコメント扱いになります。その後、sendmail.cf ファイルを生成し、sendmail を再起動します。これで SMTP 認証無しで、SMTP を利用することが可能になります。
+# m4 /etc/mail/sendmail.mc > /etc/mail/sendmail.cf
+# service sendmail restart
+不正リレーの防止
+さて、メールのリレーが可能になりましたが、このままインターネットにメールサーバを公開してしまうと、誰でも sendmail を利用してメールの送信ができてしまいます。このように誰でもメールの転送が出来るサーバをオープンリレーサーバといいます。誰でもメールを送信できてしまうため、迷惑メールを大量に送信するのに使われてしまいます。このような行為に利用されると、メールの処理に時間がかかってサーバが過負荷に陥ったり、エラーメールや抗議のメールが大量に届くことになります。また、迷惑メールを送信したサーバということで、他のメールサーバから接続を遮断されてしまうかもしれません。踏み台にされたのが会社のサーバであれば、信用問題にもなりかねません。
+不正なリレーを防止するために、アクセスデータベースファイルを利用して、アクセス制限をかけます。この機能を使うには、sendmail.mc で、次の行が有効になっている必要があります。
+FEATURE(`access_db',`hash -o /etc/mail/access.db')dnl
+/etc/mail/access ファイルを修正して、リレーを許可する IP アドレスを指定します。ここではイントラネットの IP アドレス 192.168.0.0/24 からの送信を許可します。
+localhost.localdoamin RELAY
+localhost RELAY
+127.0.0.1 RELAY
+192.168.0 RELAY
+access ファイルをデータベースに変換します。変換には sendmail に付属の makemap コマンドを利用します。その後、再起動すれば、イントラネットからのみ SMTP の利用が可能になります。
+# makemap -v hash /etc/mail/access.db < /etc/mail/access
+key=`localhost.localdomain', val=`RELAY'
+key=`localhost', val=`RELAY'
+key=`127.0.0.1', val=`RELAY'
+key=`192.168.0', val=`RELAY'
+# service sendmail restart
+アクセスデータベースの指定をしても、外出先などモバイル環境からは SMTP 認証を使うことにより、メール送信が出来ます。
+拒否したいアドレスを指定する
+ウィルスメールや、迷惑メール防止のため、受信を拒否したいアドレスやドメインを access ファイルに指定します。メールアドレスの右側に REJECT を指定することにより、受信拒否が出来ます。@ から始まるものはドメインごと拒否されます。
+support@microsoft.com REJECT
+@commercecheck.com REJECT
+@visa-security.com REJECT
+localhost.localdoamin RELAY
+localhost RELAY
+127.0.0.1 RELAY
+192.168.0 RELAY
+# service sendmail restart
+関連項目
+メールクライアントでメールを受信するには、sendmail ではなく、POP サーバが必要です。POP3, APOP, POP with SSL の設定のページで説明しています。

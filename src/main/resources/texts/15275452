@@ -1,0 +1,8 @@
+2009年8月11日
+[jQuery] ページ内の指定の要素にスクロールしてハイライト
+ページ内の特定の要素にしゅるしゅるっとスムーズにスクロールして、その要素をハイライト。 下記のサイトはjQuery.ScrollToとjQuery UI Effectsを利用してそれを実現するためのチュートリアルです。 英語ですが丁寧にコードを書いてくれてるのでとても分かりやすいと思います。 jQuery FAQs: Scroll To and Highlight Tutorial http://www.corydorning.com/blog/jquery-faqs-scroll-and-highlight-tutorial デモ
+ラベル:
+jquery
+0
+コメント:
+コメントを投稿

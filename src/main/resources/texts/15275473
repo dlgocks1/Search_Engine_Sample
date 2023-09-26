@@ -1,0 +1,92 @@
+Docbook v4.4のXMLを使ってドキュメントをつくり、FrameMakerでフォーマット、
+そのXML文書を多言語展開して、FrameMakerでフォーマット、という仕事をしていると、
+diff とか diff3 を使ってXML文書を比較する機会が結構ある。
+異なるリビジョンのドキュメントで変更点をチェック
+多言語展開済み（＝翻訳済み）XMLに対して再翻訳が発生した場合にdiff3を使って変更マージ
+などの場合。
+そのときに diff, diff3 を使って差を調べるのだが、XMLとして内容が同じでも
+改行位置やインデント量が異なると diff, diff3 は内容が異なっていると判断してしまう。
+これは意図したことではないため、対策として
+diff,diff3処理する前に、XML文書を整形して、改行位置とインデント量を整える（normalize 正規化）
+作業を行う必要がある。
+これをAntで処理する方法。
+normalize.xml
+<?xml version="1.0" encoding="UTF-8" ?>
+<project>
+<target name="normalize" >
+<antcall target="unpretty" >
+<param name="myxml" value="${myxml}" />
+</antcall>
+<antcall target="pretty" >
+<param name="myxml" value="${myxml}" />
+</antcall>
+</target>
+<target name="pretty">
+<script language="javascript" classpath="lib/jdom.jar">
+<![CDATA[
+importPackage(java.io);
+importPackage(org.jdom);
+importPackage(org.jdom.input);
+importPackage(org.jdom.output);
+var ENC="UTF-8";
+var basedir=project.getProperty("basedir");
+var cur_dir=File(basedir)
+var work=project.getProperty("myxml");
+var work2=project.getProperty("myxml");
+var inf=File(cur_dir,work);
+var outf=File(cur_dir,work2);
+var doc=SAXBuilder().build(inf); 
+var format=Format.getPrettyFormat();
+format.setEncoding(ENC);
+var out=XMLOutputter(format); 
+var w=OutputStreamWriter(FileOutputStream(outf),ENC);
+out.output(doc,w);
+w.close();
+]]>
+</script>
+<!--
+<move file="${work2}" tofile="${work}" />
+-->
+</target>
+<target name="unpretty" >
+<script language="javascript" classpath="lib/jdom.jar">
+<![CDATA[
+importPackage(java.io);
+importPackage(org.jdom);
+importPackage(org.jdom.input);
+importPackage(org.jdom.output);
+var ENC="UTF-8";
+var basedir=project.getProperty("basedir");
+var cur_dir=File(basedir)
+var work=project.getProperty("myxml");
+var work2=project.getProperty("myxml");
+var inf=File(cur_dir,work);
+var outf=File(cur_dir,work2);
+var doc=SAXBuilder().build(inf); 
+var format=Format.getCompactFormat();
+format.setEncoding(ENC);
+var out=XMLOutputter(format); 
+var w=OutputStreamWriter(FileOutputStream(outf),ENC);
+out.output(doc,w);
+w.close();
+]]>
+</script>
+<!--
+<move file="${work2}" tofile="${work}" />
+-->
+</target>
+</project>
+このタスクは繰り返しいろいろな変換作業で使用するので、
+build.xmlに直接記述しないで、normalize.xml というファイルに保存し、
+モジュール化し、import タスクを使って、build.xml から使用する。
+build.xml
+normalize を使用する例
+<?xml version="1.0" encoding="UTF-8" ?>
+<project basedir="." default="main" >
+<import file="normalize.xml" optional="true" />
+<target name="main" >
+<antcall target="normalize">
+<param name="myxml" value="mydocbook.xml" />
+</antcall>
+</target>
+</project>

@@ -1,0 +1,16 @@
+■[サーバ管理] dateコマンド と crontab の コマンドライン中の %(パーセント)記号
+FAQだろうけど、 crontabの話
+crontab の標準出力を 日付入りファイル名で保存
+30 2 * * * pdumpfs /backups/latest /backups >/backups/backup-`date '+%Y%m%d%H%M'`.txt
+という crontabを書いた。 2時30分に pdumpfsを起動し、 その標準出力を backup-20090204.txt という 日付入りファイル名で保存することを意図している。
+エラー
+しかし、 2時30分 には
+/bin/sh: -c: line 0: unexpected EOF while looking for matching ``'
+/bin/sh: -c: line 1: syntax error: unexpected end of file
+というエラーが出た。
+manpageには
+crontab の manpage には 次のような記述がある：
+The entire command portion of the line, up to a newline or % character, will be executed by /bin/sh or by the shell specified in the SHELL variable of the cronfile. Percent-signs (%) in the command, unless escaped with backslash (\), will be changed into newline characters, and all data after the first % will be sent to the command as standard input.
+%記号はコマンドの終わりとして解釈され、 その後の文字列は標準入力として扱われるということだ。 くだんの crontab はコマンドライン部分に問題があり、コマンドの終わりまで 閉じる ` 記号が現れなかったためにエラーになったわけだ。
+crontab から呼び出す コマンドラインで % を使いたい場合は \(バックスラッシュ)でエスケープするか、処理そのものをファイルに記述して crontab から呼び出すのが良い。
+Permalink | コメント(0) | トラックバック(0) | 11:51

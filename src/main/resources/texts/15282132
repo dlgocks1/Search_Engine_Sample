@@ -1,0 +1,4 @@
+userChrome画像だけ他ドメイン拒否のメニューを作らないようになってたので、てっきりできない物だと思ってました。。 ucjsPermission2.uc.xul の 621 行付近と、ucjsPermissionPreferences2.uc.xul の 99 行目付近を
+image: { blockVisible:true , noforeignVisible:false, sessionVisible:false, allowVisible:true, prefilledHost:"", permissionType:"image"},
+image: { blockVisible:true , noforeignVisible:true, sessionVisible:false, allowVisible:true, prefilledHost:"", permissionType:"image"},
+に書き替える。以上。 Firefox：ちょっと変わった広告画像カット: べつになんでもないことabout:config で "permissions.default.image;3" を設定しても他ドメイン拒否ができるようです。 これタブ毎にも設定できないかなぁ〜と思ったけど、さすがに無理かも。。"gBrowser.selectedBrowser.docShell.arrowImages" を変更すればタブ毎に許可/拒否はできるけど、真偽値だから二択ですね。 まあ他ドメイン拒否なんて需要は高くないからどうでもいいか。

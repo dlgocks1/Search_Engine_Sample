@@ -1,0 +1,642 @@
+
+Mean Value Coordinates for Closed Triangular Meshes
+Tao Ju, Scott Schaefer, Joe Warren
+Rice University
+(a) (b) (c) (d)
+Figure 1: Original horse model with enclosing triangle control mesh shown in black (a). Several deformations generated using our 3D mean
+value coordinates applied to a modiﬁed control mesh (b,c,d).
+Abstract
+Constructing a function that interpolates a set of values deﬁned at
+vertices of a mesh is a fundamental operation in computer graphics.
+Such an interpolant has many uses in applications such as shad-
+ing, parameterization and deformation. For closed polygons, mean
+value coordinates have been proven to be an excellent method for
+constructing such an interpolant. In this paper, we generalize mean
+value coordinates from closed 2D polygons to closed triangular
+meshes. Given such a mesh P, we show that these coordinates
+are continuous everywhere and smooth on the interior of P. The
+coordinates are linear on the triangles of P and can reproduce lin-
+ear functions on the interior of P. To illustrate their usefulness, we
+conclude by considering several interesting applications including
+constructing volumetric textures and surface deformation.
+CR Categories: I.3.5 [Computer Graphics]: Computational Ge-
+ometry and Object Modeling—Boundary representations; Curve,
+surface, solid, and object representations; Geometric algorithms,
+languages, and systems
+Keywords: barycentric coordinates, mean value coordinates, vol-
+umetric textures, surface deformation
+1 Introduction
+Given a closed mesh, a common problem in computer graphics is to
+extend a function deﬁned at the vertices of the mesh to its interior.
+For example, Gouraud shading computes intensities at the vertices
+of a triangle and extends these intensities to the interior using linear
+interpolation. Given a triangle with vertices {p1, p2, p3} and asso-
+ciated intensities {f1, f2, f3}, the intensity at point v on the interior
+of the triangle can be expressed in the form
+ˆf [v] =
+∑j wj f j
+∑j wj
+(1)
+where wj is the area of the triangle {v, pj−1, pj+1}. In this formula,
+note that each weight wj is normalized by the sum of the weights,
+∑j wj to form an associated coordinate
+wj
+∑j wj
+. The interpolant ˆf[v]
+is then simply the sum of the f j times their corresponding coordi-
+nate.
+Mesh parameterization methods [Hormann and Greiner 2000;
+Desbrun et al. 2002; Khodakovsky et al. 2003; Schreiner et al.
+2004; Floater and Hormann 2005] and freeform deformation meth-
+ods [Sederberg and Parry 1986; Coquillart 1990; MacCracken and
+Joy 1996; Kobayashi and Ootsubo 2003] also make heavy use of
+interpolants of this type. Both applications require that a point v be
+represented as an afﬁne combination of the vertices on an enclosing
+shape. To generate this combination, we simply set the data val-
+ues f j to be their associated vertex positions pj. If the interpolant
+reproduces linear functions, i.e.;
+v =
+∑j wj pj
+∑j wj
+,
+the coordinate functions
+wj
+∑j wj
+are the desired afﬁne combination.
+For convex polygons in 2D, a sequence of papers, [Wachspress
+1975], [Loop and DeRose 1989] and [Meyer et al. 2002], have pro-
+posed and reﬁned an interpolant that is linear on its boundaries
+and only involves convex combinations of data values at the ver-
+tices of the polygons. This interpolant has a simple, local deﬁni-
+tion as a rational function and reproduces linear functions. [War-
+ren 1996; Warren et al. 2004] also generalized this interpolant to
+convex shapes in higher dimensions. Unfortunately, Wachspress’s
+interpolant does not generalize to non-convex polygons. Applying
+(a) (b)
+(c) (d)
+Figure 2: Interpolating hue values at polygon vertices using Wach-
+spress coordinates (a, b) versus mean value coordinates (c, d) on a
+convex and a concave polygon.
+the construction to such a polygon yields an interpolant that has
+poles (divisions by zero) on the interior of the polygon. The top
+portion of Figure 2 shows Wachspress’s interpolant applied to two
+closed polygons. Note the poles on the outside of the convex poly-
+gon on the left as well as along the extensions of the two top edges
+of the non-convex polygon on the right.
+More recently, several papers, [Floater 1997; Floater 1998;
+Floater 2003], [Malsch and Dasgupta 2003] and [Hormann 2004],
+have focused on building interpolants for non-convex 2D polygons.
+In particular, Floater proposed a new type of interpolant based on
+the mean value theorem [Floater 2003] that generates smooth co-
+ordinates for star-shaped polygons. Given a polygon with vertices
+pj and associated values f j, Floater’s interpolant deﬁnes a set of
+weight functions wj of the form
+wj =
+tan
+αj−1
+2 +tan
+αj
+2
+|pj −v|
+. (2)
+where αj is the angle formed by the vector pj − v and pj+1 − v.
+Normalizing each weight function wj by the sum of all weight func-
+tions yields the mean value coordinates of v with respect to pj.
+In his original paper, Floater primarily intended this interpolant
+to be used for mesh parameterization and only explored the behav-
+ior of the interpolant on points in the kernel of a star-shaped poly-
+gon. In this region, mean value coordinates are always non-negative
+and reproduce linear functions. Subsequently, Hormann [Hormann
+2004] showed that, for any simple polygon (or nested set of sim-
+ple polygons), the interpolant ˆf[v] generated by mean value coor-
+dinates is well-deﬁned everywhere in the plane. By maintaining a
+consistent orientation for the polygon and treating the αj as signed
+angles, Hormann also shows that mean value coordinates reproduce
+linear functions everywhere. The bottom portion of Figure 2 shows
+mean value coordinates applied to two closed polygons. Note that
+the interpolant generated by these coordinates possesses no poles
+anywhere even on non-convex polygons.
+Contributions Horman’s observation suggests that Floater’s
+mean value construction could be used to generate a similar in-
+terpolant for a wider class of shapes. In this paper, we provide
+such a generalization for arbitrary closed surfaces and show that
+the resulting interpolants are well-behaved and have linear preci-
+sion. Applied to closed polygons, our construction reproduces 2D
+mean value coordinates. We then apply our method to closed tri-
+angular meshes and construct 3D mean value coordinates. (In in-
+dependent contemporaneous work, [Floater et al. 2005] have pro-
+posed an extension of mean value coordinates from 2D polygons to
+3D triangular meshes identical to section 3.2.) Next, we derive an
+efﬁcient, stable method for evaluating the resulting mean value in-
+terpolant in terms of the positions and associated values of vertices
+of the mesh. Finally, we consider several practical applications of
+such coordinates including a simple method for generating classes
+of deformations useful in character animation.
+2 Mean value interpolation
+Given a closed surface P in R3, let p[x] be a parameterization of
+P. (Here, the parameter x is two-dimensional.) Given an auxiliary
+function f [x] deﬁned over P, our problem is to construct a function
+ˆf [v] where v ∈ R3 that interpolates f [x] on P, i.e.; ˆf [p[x]] = f [x] for
+all x. Our basic construction extends an idea of Floater developed
+during the construction of 2D mean value coordinates.
+To construct ˆf [v], we project a point p[x] of P onto the unit sphere
+Sv centered at v. Next, we weight the point’s associated value f [x]
+by 1
+|p[x]−v| and integrate this weighted function over Sv. To ensure
+afﬁne invariance of the resulting interpolant, we divide the result
+by the integral of the weight function 1
+|p[x]−v| taken over Sv. Putting
+the pieces together, the mean value interpolant has the form
+ˆf[v] = xw[x,v] f [x]dSv
+xw[x,v]dSv
+(3)
+where the weight function w[x,v] is exactly 1
+|p[x]−v| . Observe that
+this formula is essentially an integral version of the discrete formula
+of Equation 1. Likewise, the continuous weight function w[x,v] and
+the discrete weights wj of Equation 2 differ only in their numera-
+tors. As we shall see, the tan α
+2 terms in the numerators of the wj
+are the result of taking the integrals in Equation 3 with respect to
+dSv.
+The resulting mean value interpolant satisﬁes three important
+properties.
+Interpolation: As v converges to the point p[x] on P, ˆf [v] con-
+verges to f [x].
+Smoothness: The function ˆf [v] is well-deﬁned and smooth for all
+v not on P.
+Linear precision: If f [x] = p[x] for all x, the interpolant ˆf [v] is
+identically v for all v.
+Interpolation follows from the fact that the weight function
+w[x,v] approaches inﬁnity as p[x] → v. Smoothness follows because
+the projection of f [x] onto Sv is continuous in the position of v and
+taking the integral of this continuous process yields a smooth func-
+tion. The proof of linear precision relies on the fact that the integral
+of the unit normal over a sphere is exactly zero (due to symmetry).
+Speciﬁcally,
+x
+p[x]−v
+|p[x]−v|
+dSv = 0
+since p[x]−v
+|p[x]−v|
+is the unit normal to Sv at parameter value x. Rewrit-
+ing this equation yields the theorem.
+v =
+x
+p[x]
+|p[x]−v|
+dSv
+x
+1
+|p[x]−v|
+dSv
+Notice that if the projection of P onto Sv is one-to-one (i.e.; v is
+in the kernel of P), then the orientation of dSv is non-negative,
+which guarantees that the resulting coordinate functions are posi-
+tive. Therefore, if P is a convex shape, then the coordinate functions
+are positive for all v inside P. However, if v is not in the kernel of P,
+then the orientation of dSv is negative and the coordinates functions
+may be negative as well.
+3 Coordinates for piecewise linear shapes
+In practice, the integral form of Equation 3 can be complicated to
+evaluate symbolically 1. However, in this section, we derive a sim-
+ple, closed form solution for piecewise linear shapes in terms of the
+vertex positions and their associated function values. As a simple
+example to illustrate our approach, we ﬁrst re-derive mean value co-
+ordinates for closed polygons via mean value interpolation. Next,
+we apply the same derivation to construct mean value coordinates
+for closed triangular meshes.
+3.1 Mean value coordinates for closed polygons
+Consider an edge E of a closed polygon P with vertices {p1, p2}
+and associated values {f1, f2}. Our ﬁrst task is to convert this dis-
+crete data into a continuous form suitable for use in Equation 3. We
+can linearly parameterize the edge E via
+p[x] = ∑
+i
+φi[x]pi
+where φ1[x] = (1 − x) and φ2[x] = x. We then use this same pa-
+rameterization to extend the data values f1 and f2 linearly along E.
+Speciﬁcally, we let f [x] have the form
+f [x] = ∑
+i
+φi[x] fi.
+Now, our task is to evaluate the integrals in Equation 3 for 0 ≤ x ≤ 1.
+Let E be the circular arc formed by projecting the edge E onto the
+unit circle Sv, we can rewrite the integrals of Equation 3 restricted
+to E as
+xw[x,v] f [x]dE
+xw[x,v]dE
+=
+∑iwi fi
+∑iwi
+(4)
+where weights wi = x
+φi[x]
+|p[x]−v| dE.
+Our next goal is to compute the corresponding weights wi for
+edge E in Equation 4 without resorting to symbolic integration
+(since this will be difﬁcult to generalize to 3D). Observe that the
+following identity relates wi to a vector,
+∑
+i
+wi(pi −v) = m. (5)
+where m = x
+p[x]−v
+|p[x]−v|
+dE is simply the integral of the outward unit
+normal over the circular arc E. We call m the mean vector of E, as
+scaling m by the length of the arc yields the centroid of the circular
+arc E. Based on 2D trigonometry, m has a simple expression in
+terms of p1 and p2. Speciﬁcally,
+1To evaluate the integral of Equation 3, we can relate the differential dSv
+to dx via
+dSv =
+p⊥[x].(p[x]−v)
+|p[x]−v|2
+dx
+where p⊥[x] is the cross product of the n − 1 tangent vectors ∂ p[x]
+∂xi
+to P at
+p[x]. Note that the sign of this expression correctly captures whether P has
+folded back during its projection onto Sv.
+m = tan[α/2](
+(p1 −v)
+|p1 −v|
++
+(p2 −v)
+|p2 −v|
+)
+where α denotes the angle between p1 −v and p2 −v. Hence we ob-
+tain wi = tan[α/2]/ pi −v which agrees with the Floater’s weight-
+ing function deﬁned in Equation 2 for 2D mean value coordinates
+when restricted to a single edge of a polygon.
+Equation 4 allows us to formulate a closed form expression for
+the interpolant ˆf [v] in Equation 3 by summing the integrals for all
+edges Ek in P (note that we add the index k for enumeration of
+edges):
+ˆf [v] =
+∑k∑iwk
+i f k
+i
+∑k∑iwk
+i
+(6)
+where wk
+i and f k
+i are weights and values associated with edge Ek.
+3.2 Mean value coordinates for closed meshes
+We now consider our primary application of mean value interpo-
+lation for this paper; the derivation of mean value coordinates for
+triangular meshes. These coordinates are the natural generalization
+of 2D mean value coordinates.
+Given triangle T with vertices {p1, p2, p3} and associated values
+{f1, f2, f3}, our ﬁrst task is to deﬁne the functions p[x] and f [x]
+used in Equation 3 over T. To this end, we simply use the linear
+interpolation formula of Equation 1. The resulting function f [x] is
+a linear combination of the values fi times basis functions φi[x].
+As in 2D, the integral of Equation 3 reduces to the sum in Equa-
+tion 6. In this case, the weights wi have the form
+wi =
+x
+φi[x]
+|p[x]−v|
+dT
+where T is the projection of triangle T onto Sv. To avoid computing
+this integral directly, we instead relate the weights wi to the mean
+vector m for the spherical triangle T by inverting Equation 5. In
+matrix form,
+{w1,w2,w3} = m {p1 −v, p2 −v, p3 −v}−1
+(7)
+All that remains is to derive an explicit expression for the mean
+vector m for a spherical triangle T. The following theorem solves
+this problem.
+Theorem 3.1 Given a spherical triangle T, let θi be the length of
+its ith edge (a circular arc) and ni be the inward unit normal to its
+ith edge (see Figure 3 (b)). Then,
+m = ∑
+i
+1
+2
+θini (8)
+where m, the mean vector, is the integral of the outward unit nor-
+mals over T .
+Proof: Consider the solid triangular wedge of the unit sphere with
+cap T. The integral of outward unit normals over a closed sur-
+face is always exactly zero [Fleming 1977, p.342]. Thus, we can
+partition the integral into three triangular faces whose outward nor-
+mals are −ni with associated areas 1
+2 θi. The theorem follows since
+m−∑i
+1
+2 θini is then zero. ⊥
+Note that a similar result holds in 2D, where the mean vector m
+deﬁned by Equation 3.1 for a circular arc E on the unit circle can be
+interpreted as the sum of the two inward unit normals of the vectors
+pi − v (see Figure 3 (a)). In 3D, the lengths θi of the edges of the
+spherical triangle T are the angles between the vectors pi−1 −v and
+pi+1 − v while the unit normals ni are formed by taking the cross
+v
+m
+-n1
+-n2
+E v
+T
+m
+-n2
+-n1
+-n3
+θ3
+θ1
+θ2
+ψ3
+ψ1
+ψ2
+(a) (b)
+Figure 3: Mean vector m on a circular arc E with edge normals
+ni (a) and on a spherical triangle T with arc lengths θi and face
+normals ni.
+product of pi−1 − v and pi+1 − v. Given the mean vector m, we
+now compute the weights wi using Equation 7 (but without doing
+the matrix inversion) via
+wi =
+ni ·m
+ni ·(pi −v)
+(9)
+At this point, we should note that projecting a triangle T onto
+Sv may reverse its orientation. To guarantee linear precision, these
+folded-back triangles should produce negative weights wi. If we
+maintain a positive orientation for the vertices of every triangle T,
+the mean vector computed using Equation 8 points towards the pro-
+jected spherical triangle T when T has a positive orientation and
+away from T when T has a negative orientation. Thus, the resulting
+weights have the appropriate sign.
+3.3 Robust mean value interpolation
+The discussion in the previous section yields a simple evaluation
+method for mean value interpolation on triangular meshes. Given
+point v and a closed mesh, for each triangle T in the mesh with
+vertices {p1, p2, p3} and associated values {f1, f2, f3},
+1. Compute the mean vector m via Equation 8
+2. Compute the weights wi using Equation 9
+3. Update the denominator and numerator of ˆf [v] deﬁned in
+Equation 6 respectively by adding ∑iwi and ∑iwi fi
+To correctly compute ˆf [v] using the above procedure, however,
+we must overcome two obstacles. First, the weights wi computed
+by Equation 9 may have a zero denominator when the point v lies on
+plane containing the face T. Our method must handle this degener-
+ate case gracefully. Second, we must be careful to avoid numerical
+instability when computing wi for triangle T with a small projected
+area. Such triangles are the dominant type when evaluating mean
+value coordinates on meshes with large number of triangles. Next
+we discuss our solutions to these two problems and present the com-
+plete evaluation algorithm as pseudo-code in Figure 4.
+• Stability:
+When the triangle T has small projected area on the unit
+sphere centered at v, computing weights using Equation 8
+and 9 becomes numerically unstable due to cancelling of unit
+normals ni that are almost co-planar. To this end, we next
+derive a stable formula for computing weights wi. First, we
+substitute Equation 8 into Equation 9, using trigonometry we
+obtain
+wi =
+θi −cos[ψi+1]θi−1 −cos[ψi−1]θi+1
+2sin[ψi+1]sin[θi−1]|pk
+i −v|
+, (10)
+// Robust evaluation on a triangular mesh
+for each vertex pj with values fj
+dj ← pj −x
+if dj < ε return fj
+uj ← (pj −x)/dj
+totalF← 0
+totalW← 0
+for each triangle with vertices p1, p2, p3 and values f1, f2, f3
+li← ui+1 −ui−1 // for i = 1,2,3
+θi← 2arcsin[li/2]
+h ← (∑θi)/2
+if π −h < ε
+// x lies on t, use 2D barycentric coordinates
+wi← sin[θi]di−1di+1
+return (∑wi fi)/(∑wi)
+ci← (2sin[h]sin[h−θi])/(sin[θi+1]sin[θi−1])−1
+si← sign[det[u1,u2,u3]] 1−ci
+2
+if ∃i,|si| ≤ ε
+// x lies outside t on the same plane, ignore t
+continue
+wi← (θi −ci+1θi−1 −ci−1θi+1)/(di sin[θi+1]si−1)
+totalF+ = ∑wi fi
+totalW+ = ∑wi
+fx← totalF/totalW
+Figure 4: Mean value coordinates on a triangular mesh
+where ψi(i = 1,2,3) denotes the angles in the spherical trian-
+gle T. Note that the ψi are the dihedral angles between the
+faces with normals ni−1 and ni+1. We illustrate the angles ψi
+and θi in Figure 3 (b).
+To calculate the cos of the ψi without computing unit normals,
+we apply the half-angle formula for spherical triangles [Beyer
+1987],
+cos[ψi] =
+2 sin[h]sin[h−θi]
+sin[θi+1]sin[θi−1]
+−1, (11)
+where h = (θ1 +θ2 +θ3)/2. Substituting Equation 11 into 10,
+we obtain a formula for computing wi that only involves
+lengths pi − v and angles θi. In the pseudo-code from Fig-
+ure 4, angles θi are computed using arcsin, which is stable for
+small angles.
+• Co-planar cases: Observe that Equation 9 involves division
+by ni · (pi −v), which becomes zero when the point v lies on
+plane containing the face T. Here we need to consider two
+different cases. If v lies on the plane inside T, the continuity
+of mean value interpolation implies that ˆf [v] converges to the
+value f [x] deﬁned by linear interpolation of the fi on T. On
+the other hand, if v lies on the plane outside T, the weights
+wi become zero as their integral deﬁnition
+φi[x]
+|p[x]−v| dT be-
+comes zero. We can easily test for the ﬁrst case because the
+sum Σiθi = 2π for points inside of T. To test for the second
+case, we use Equation 11 to generate a stable computation for
+sin[ψi]. Using this deﬁnition, v lies on the plane outside T if
+any of the dihedral angles ψi (or sin[ψi]) are zero.
+4 Applications and results
+While mean value coordinates ﬁnd their main use in boundary value
+interpolation, these coordinates can be applied to a variety of appli-
+cations. In this section, we brieﬂy discuss several of these applica-
+tions including constructing volumetric textures and surface defor-
+mation. We conclude with a section on our implementation of these
+coordinates and provide evaluation times for various shapes.
+Figure 5: Original model of a cow (top-left) with hue values spec-
+iﬁed at the vertices. The planar cuts illustrate the interior of the
+function generated by 3D mean value coordinates.
+4.1 Boundary value interpolation
+As mentioned in Section 1, these coordinate functions may be used
+to perform boundary value interpolation for triangular meshes. In
+this case, function values are associated with the vertices of the
+mesh. The function constructed by our method is smooth, interpo-
+lates those vertex values and is a linear function on the faces of the
+triangles. Figure 5 shows an example of interpolating hue speciﬁed
+on the surface of a cow. In the top-left is the original model that
+serves as input into our algorithm. The rest of the ﬁgure shows sev-
+eral slices of the cow model, which reveal the volumetric function
+produced by our coordinates. Notice that the function is smooth on
+the interior and interpolates the colors on the surface of the cow.
+4.2 Volumetric textures
+These coordinate functions also have applications to volumetric
+texturing as well. Figure 6 (top-left) illustrates a model of a bunny
+with a 2D texture applied to the surface. Using the texture coordi-
+nates (ui,vi) as the fi for each vertex, we apply our coordinates and
+build a function that interpolates the texture coordinates speciﬁed
+at the vertices and along the polygons of the mesh. Our function
+extrapolates these surface values to the interior of the shape to con-
+struct a volumetric texture. Figure 6 shows several slices revealing
+the volumetric texture within.
+4.3 Surface Deformation
+Surface deformation is one application of mean value coordinates
+that depends on the linear precision property outlined in Section 2.
+In this application, we are given two shapes: a model and a control
+mesh. For each vertex v in the model, we ﬁrst compute its mean
+value weight functions wj with respect to each vertex pj in the
+undeformed control mesh. To perform the deformation, we move
+the vertices of the control mesh to induce the deformation on the
+original surface. Let ˆpj be the positions of the vertices from the
+deformed control mesh, then the new vertex position ˆv in the de-
+formed model is computed as
+ˆv =
+∑j wj ˆpj
+∑j wj
+.
+Notice that, due to linear precision, if ˆpj = pj, then ˆv = v. Figures 1
+and 7 show several examples of deformations generated with this
+Figure 6: Textured bunny (top-left). Cuts of the bunny to expose
+the volumetric texture constructed from the surface texture.
+process. Figure 1 (a) depicts a horse before deformation and the
+surrounding control mesh shown in black. Moving the vertices of
+the control mesh generates the smooth deformations of the horse
+shown in (b,c,d).
+Previous deformation techniques such as freeform deforma-
+tions [Sederberg and Parry 1986; MacCracken and Joy 1996] re-
+quire volumetric cells to be speciﬁed on the interior of the control
+mesh. The deformations produced by these methods are depen-
+dent on how the control mesh is decomposed into volumetric cells.
+Furthermore, many of these techniques restrict the user to creating
+control meshes with quadrilateral faces.
+In contrast, our deformation technique allows the artist to spec-
+ify an arbitrary closed triangular surface as the control mesh and
+does not require volumetric cells to span the interior. Our tech-
+nique also generates smooth, realistic looking deformations even
+with a small number of control points and is quite fast. Generating
+the mean value coordinates for ﬁgure 1 took 3.3s and 1.9s for ﬁg-
+ure 7. However, each of the deformations only took 0.09s and 0.03s
+respectively, which is fast enough to apply these deformations in
+real-time.
+4.4 Implementation
+Our implementation follows the pseudo-code from Figure 4 very
+closely. However, to speed up computations, it is helpful to pre-
+compute as much information as possible.
+Figure 8 contains the number of evaluations per second for var-
+ious models sampled on a 3GHz Intel Pentium 4 computer. Previ-
+ously, practical applications involving barycentric coordinates have
+been restricted to 2D polygons containing a very small number of
+line segments. In this paper, for the ﬁrst time, barycentric coor-
+dinates have been applied to truly large shapes (on the order of
+100,000 polygons). The coordinate computation is a global com-
+putation and all vertices of the surface must be used to evaluate
+the function at a single point. However, much of the time spent is
+determining whether or not a point lies on the plane of one of the
+triangles in the mesh and, if so, whether or not that point is inside
+that triangle. Though we have not done so, using various spatial
+partitioning data structures to reduce the number of triangles that
+Figure 7: Original model and surrounding control mesh shown in
+black (top-left). Deforming the control mesh generates smooth de-
+formations of the underlying model.
+Model Tris Verts Eval/s
+Horse control mesh (ﬁg 1) 98 51 16281
+Armadillo control mesh (ﬁg 7) 216 111 7644
+Cow (ﬁg 5) 5804 2903 328
+Bunny (ﬁg 6) 69630 34817 20
+Figure 8: Number of evaluations per second for various models.
+must be checked for coplanarity could greatly enhance the speed of
+the evaluation.
+5 Conclusions and Future Work
+Mean value coordinates are a simple, but powerful method for cre-
+ating functions that interpolate values assigned to the vertices of a
+closed mesh. Perhaps the most intriguing feature of mean value co-
+ordinates is that fact that they are well-deﬁned on both the interior
+and the exterior of the mesh. In particular, mean value coordinates
+do a reasonable job of extrapolating value outside of the mesh. We
+intend to explore applications of this feature in future work.
+Another interesting point is the relationship between mean value
+coordinates and Wachspress coordinates. In 2D, both coordinate
+functions are identical for convex polygons inscribed in the unit cir-
+cle. As a result, one method for computing mean value coordinates
+is to project the vertices of the closed polygon onto a circle and
+compute Wachspress coordinates for the inscribed polygon. How-
+ever, in 3D, this approach fails. In particular, inscribing the vertices
+of a triangular mesh onto a sphere does not necessarily yield a con-
+vex polyhedron. Even if the inscribed polyhedron happens to be
+convex, the resulting Wachspress coordinates are rational functions
+of the vertex position v while the mean value coordinates are tran-
+scendental functions of v.
+Finally, we only consider meshes that have triangular faces. One
+important generalization would be to derive mean value coordinates
+for piecewise linear mesh with arbitrary closed polygons as faces.
+On these faces, the coordinates would degenerate to standard 2D
+mean value coordinates. We plan to address this topic in a future
+paper.
+Acknowledgements
+We’d like to thank John Morris for his help with designing the con-
+trol meshes for the deformations. This work was supported by NSF
+grant ITR-0205671.
+References
+BEYER, W. H. 1987. CRC Standard Mathematical Tables (28th Edition). CRC Press.
+COQUILLART, S. 1990. Extended free-form deformation: a sculpturing tool for 3d ge-
+ometric modeling. In SIGGRAPH ’90: Proceedings of the 17th annual conference
+on Computer graphics and interactive techniques, ACM Press, 187–196.
+DESBRUN, M., MEYER, M., AND ALLIEZ, P. 2002. Intrinsic Parameterizations of
+Surface Meshes. Computer Graphics Forum 21, 3, 209–218.
+FLEMING, W., Ed. 1977. Functions of Several Variables. Second edition. Springer-
+Verlag.
+FLOATER, M. S., AND HORMANN, K. 2005. Surface parameterization: a tutorial and
+survey. In Advances in Multiresolution for Geometric Modelling, N. A. Dodgson,
+M. S. Floater, and M. A. Sabin, Eds., Mathematics and Visualization. Springer,
+Berlin, Heidelberg, 157–186.
+FLOATER, M. S., KOS, G., AND REIMERS, M. 2005. Mean value coordinates in 3d.
+To appear in CAGD.
+FLOATER, M. 1997. Parametrization and smooth approximation of surface triangula-
+tions. CAGD 14, 3, 231–250.
+FLOATER, M. 1998. Parametric Tilings and Scattered Data Approximation. Interna-
+tional Journal of Shape Modeling 4, 165–182.
+FLOATER, M. S. 2003. Mean value coordinates. Comput. Aided Geom. Des. 20, 1,
+19–27.
+HORMANN, K., AND GREINER, G. 2000. MIPS - An Efﬁcient Global Parametrization
+Method. In Curves and Surfaces Proceedings (Saint Malo, France), 152–163.
+HORMANN, K. 2004. Barycentric coordinates for arbitrary polygons in the plane.
+Tech. rep., Clausthal University of Technology, September. http://www.in.tu-
+clausthal.de/ hormann/papers/barycentric.pdf.
+KHODAKOVSKY, A., LITKE, N., AND SCHROEDER, P. 2003. Globally smooth pa-
+rameterizations with low distortion. ACM Trans. Graph. 22, 3, 350–357.
+KOBAYASHI, K. G., AND OOTSUBO, K. 2003. t-ffd: free-form deformation by using
+triangular mesh. In SM ’03: Proceedings of the eighth ACM symposium on Solid
+modeling and applications, ACM Press, 226–234.
+LOOP, C., AND DEROSE, T. 1989. A multisided generalization of B´ezier surfaces.
+ACM Transactions on Graphics 8, 204–234.
+MACCRACKEN, R., AND JOY, K. I. 1996. Free-form deformations with lattices of
+arbitrary topology. In SIGGRAPH ’96: Proceedings of the 23rd annual conference
+on Computer graphics and interactive techniques, ACM Press, 181–188.
+MALSCH, E., AND DASGUPTA, G. 2003. Algebraic construction of smooth inter-
+polants on polygonal domains. In Proceedings of the 5th International Mathemat-
+ica Symposium.
+MEYER, M., LEE, H., BARR, A., AND DESBRUN, M. 2002. Generalized Barycentric
+Coordinates for Irregular Polygons. Journal of Graphics Tools 7, 1, 13–22.
+SCHREINER, J., ASIRVATHAM, A., PRAUN, E., AND HOPPE, H. 2004. Inter-surface
+mapping. ACM Trans. Graph. 23, 3, 870–877.
+SEDERBERG, T. W., AND PARRY, S. R. 1986. Free-form deformation of solid geo-
+metric models. In SIGGRAPH ’86: Proceedings of the 13th annual conference on
+Computer graphics and interactive techniques, ACM Press, 151–160.
+WACHSPRESS, E. 1975. A Rational Finite Element Basis. Academic Press, New York.
+WARREN, J., SCHAEFER, S., HIRANI, A., AND DESBRUN, M. 2004. Barycentric
+coordinates for convex sets. Tech. rep., Rice University.
+WARREN, J. 1996. Barycentric Coordinates for Convex Polytopes. Advances in
+Computational Mathematics 6, 97–108.

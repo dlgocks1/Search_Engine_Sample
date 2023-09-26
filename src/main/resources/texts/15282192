@@ -1,0 +1,15 @@
+Boot Camp vs Image file
+I am wondering what are the advantages/disadvantages to running a VM off of a boot camp partition vs. running off a parallels image in terms of speed, performance and stability. I am currently running off a ntfs formatted boot camp partition but it seems a bit slow. Also, my Mac OS side seems to be running slow since setting up the boot camp partition whether parallels is running or not. Any input on this matter would be greatly appreciated.
+To improve the performance of VM please follow the instructions below: 
+1. Set memory for Virtual Machine to less than 1 GB if you running vista or 512 MB if your running XP 
+2. Perform Mac and Windows side disk defragmentation http://www.xvsxp.com/system/system_tools_defrag.php 
+3. Set Adjust memory limit from Auto to Manual at Parallels Desktop -Preferences-Memory, and set limit a bit more higher than VM memory 
+4. Disable Themes in Windows XP serives.msc stop Themes service 
+5. If you are running in Coherence, try to switch to Single Window, or lower Mac resolution 
+6. Some antivirus software can load CPU when Heuristic Prediction is set, or Tamper protection (Symantec, MacAffey), adjust settings to risk you are supposed, high security settings is not always good idea, as it can also affect software running 
+7. Run msconfig , and disable unneeded startup items 
+See http://www.netsquirrel.com/msconfig/msconfig_xp.html 
+8. Make sure that no VNC,or remote desktop connection is established to Mac, this can slowdown Parallels Desktop 
+9. Optimize computer experience for best performance 
+10. Make sure that at least 1.25 GB of Memory is free for Mac OS (it is Total Memory - Virtual Machine Memory) 
+11. Make sure that at least 2 GB +Virtual Machine assigned memory *2 is available on Mac OS partition where VM is located

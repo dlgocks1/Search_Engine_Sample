@@ -1,0 +1,25 @@
+今回はPHPとjQueryを組み合わせて、サイトにRSSから取得した記事の一覧を表示する方法を紹介したいと思います。
+必要になるファイルは
+・RSSを取得し、xml を html に変換処理をするPHPファイル get_rss.php 
+・jQuery を使って PHP からデータを受け取り、表示するHTMLファイル show_rss.html
+の二つだけです。 
+PHPの便利な関数を使うので、ソースコードも短く、簡単です。 
+それでは、早速具体的に解説していきます。
+以下、RSS1.0に対応する形で記述しています。
+get_rss.php
+<?php
+$url = “RSSのURL”;
+$str = mb_convert_encoding(file_get_contents($url), ‘UTF-8′, ‘auto’);
+$xml = @simplexml_load_string($str);
+$title_text = ‘<div class=”title”>’.$xml->channel->title.’</div>’; 
+echo $title_text;
+$i = 1; 
+foreach($xml->item as $item) { 
+$str = ‘<div class=”news_text”><a href=”‘.$item->link.’” target=”_blank”>’.$item->title.’</a></div>’; 
+echo $str; 
+$i++; 
+if($i > 10){ 
+break; 
+} 
+}
+?>

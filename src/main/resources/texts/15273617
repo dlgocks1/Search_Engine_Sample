@@ -1,0 +1,52 @@
+Ubuntu に PostgreSQL と DataMapper をインストールして使ってみた。
+インストール
+PostgreSQL のインストール。
+あとで Ruby の PostgreSQL バインディングをインストールするときに必要になるので、
+postgresql-server-8.3 もインストール。
+$ sudo apt-get install postgresql-8.3
+$ sudo apt-get install postgresql-server-8.3
+gem で datamapper と dopostgres をインストール。
+$ sudo gem1.8 install data_mapper
+$ sudo gem1.8 install do_postgres
+データベースへの接続
+require 'rubygems'
+require 'data_mapper'
+require 'stacks'
+DataMapper::Logger.new(STDOUT, :debug)
+DataMapper.setup(:default, :adapter => 'postgres', :database => 'stock')
+モデルの定義
+ActiveRecord はモデルのメタデータはデータベースが大元って感じだけど、
+DataMapper はモデルのメタデータはモデルに記述する模様。
+module Stocks; end
+class Stocks::Stock
+include DataMapper::Resource
+property :code, String, :key => true, :length => 4
+property :name, Text
+property :market, Text
+property :category, Text
+property :unit, Integer
+property :rating, Float
+has n, :prices, :class_name => 'Stocks::Price', :child_key => [:code]
+storage_names[:default] = 't_stock'
+end
+class Stocks::Price
+include DataMapper::Resource
+property :code, String, :key => true, :length => 4
+property :date, DateTime, :key => true
+property :price, Integer
+property :high, Integer
+property :low, Integer
+property :total, Integer
+belongs_to :stock, :class_name => 'Stocks::Stock', :child_key => [:code]
+storage_names[:default] = 't_price'
+end
+storage_names で データベース上のテーブル名を指定。
+has n、belongs_to で、アソシエーションの指定。
+:key => true を二つ指定することで複合キーも指定できるっぽい。
+検索
+sakata_tane = Stocks::Stock.get('1377')
+sakata_tane.prices.all(:order => [:date.asc]).each do |p|
+puts "#{p.code}:#{p.date}:#{p.price}"
+end
+ActiveRecord よりテーブル定義に対して制約が少なさそうなので、
+既存のデータベースにアクセスするときなどに良さそう？

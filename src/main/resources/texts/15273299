@@ -1,0 +1,34 @@
+アクセスログ解析Moguraは大変使いやすいのだが、ちょっとUserAgentの判定リストが 
+古くなってしまっている。 
+このため、最近のiPhoneやPS3なんてものも正しく表示されない。 
+だから、自分のターゲットに合わせて編集してやる必要があるが、 
+そのやりかたをメモしておこう。
+(1)OSまたはブラウザで解析ログを参照する。 
+または、直接テーブルosaka_uaの内容 をみてみる。
+(2)’Unknown OS’ もしくは、Unknown Browserと表示されている 
+ログの詳細をみて、UserAgentを把握する。
+(3)moguralistの下のos.php,browser.phpを適当に編集する。 
+例えば、こんな感じ
+// 追加 
+$os_list['other']['Nintendo Wii'] = array(’Nintendo’ => ‘Wii’); 
+$os_list['other']['Nintendo DSi'] = array(’Nintendo’ => ‘DSi’); 
+$os_list['other']['PLAYSTATION 3;'] = array(’PS3′ => ”); 
+$os_list['other']['PSP (PlayStation Portable); 2'] = array(’PSP’ => ‘2′);
+$os_list['other']['iPhone'] = array(’iPhone’ => ”); 
+$os_list['other']['jig browser'] = array(’jig browser’ => ”); 
+$os_list['other']['KDDI'] = array(’au’ => ”); 
+$os_list['other']['SoftBank'] = array(’SoftBank’ => ”); 
+$os_list['other']['WILLCOM'] = array(’WILLCOM’ => ”); 
+$os_list['other']['FOMA'] = array(’DoCoMo’ => ‘FOMA’); 
+$os_list['other']['SymbianOS'] = array(’SymbianOS’ => ”);
+(4)以下のＳＱＬを実行して、osの項目をNULLクリアする。 
+この項目はログ参照時に自動的に新しいUAリストを元にして再設定される。 
+update osaka_ua set os=null
+もし頻繁にメンテを行うなら、次の修正もしておくと便利 
+(5)moguralistの下のos.php,browser.phpを修正する。
+$sql["where"] = “(ISNULL(os) OR ISNULL(brow))”; 
+の部分を 
+$sql["where"] = “(ISNULL(os) OR ISNULL(brow) OR os = ‘Unknown OS’ OR brow=’Unknown Browser’)”;
+と修正する。 
+Unkownのログを見つけたら、リスト編集するだけで、再設定されるようになる。
+(6)手動で行う場合は、コントールパネルで、その他の設定ー＞UserAgent更新を実行する。

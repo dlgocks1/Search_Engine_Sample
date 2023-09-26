@@ -1,0 +1,8 @@
+フォームを開く場合、フォームを自動的に画面の中央に表示させるには、自動中央寄せプロパティを"はい"に設定するだけで済みます。しかし、任意の位置に表示するには、VBAを使ってその座標値を指定しなければなりません。それには、フォームの"Load/読み込み時"イベントプロシージャに、DocmdオブジェクトのMoveSizeメソッドを使った次のようなコードを記述します。
+Private Sub Form_Load() 
+Const TWIP = 567  '1cmあたりのtwip値 
+'フォームの左端を2cm、上端を3cmに設定 
+DoCmd.MoveSize TWIP * 2, TWIP * 3 
+End Sub
+※Access2002では、DocmdオブジェクトのMoveSizeメソッドではなく、フォームの"Move"メソッドでも同様のことが実現できます。 
+Me.Move TWIP * 2, TWIP * 3

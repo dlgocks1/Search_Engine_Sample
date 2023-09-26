@@ -1,0 +1,6 @@
+はじめに　2009年7月に正式リリースされたPostgreSQL 8.4で、分析関数（window関数）がサポートされました。本連載では、分析関数の衝撃シリーズをPostgreSQL用にアレンジした内容と、OracleやDB2の分析関数をPostgreSQL 8.4で代用する方法を扱います。　本稿では、『分析関数の衝撃2 （中編）』を、PostgreSQL8.4用にリニューアルした内容を扱います。対象読者PostgreSQLでwindow関数を使ってみたい方分析関数の理解を深めたい方 　『自己結合の使い方』と 『相関サブクエリで行と行を比較する』に記載されているSQLをwindow関数を使って記述していきますので、『自己結合の使い方』と『相関サブクエリで行と行を比較する』を読まれてからのほうが理解しやすいと思います。必要な環境　本稿で扱うSQLは、PostgreSQL 8.4 beta2で動作確認しました。その他、次の環境でも応用が可能です。OracleDB2SQL Server 1. 部分的に不一致なキーの検索　まずは、部分的に不一致なキーを検索するSQLについてです。 『自己結合の使い方』では、以下の自己非等値結合を使うSQLが提示されています。
+SELECT DISTINCT A1.name, A1.address
+FROM Addresses A1,
+Addresses A2
+WHERE A1.family_id = A2.family_id
+AND A1.address <> A2.address ;

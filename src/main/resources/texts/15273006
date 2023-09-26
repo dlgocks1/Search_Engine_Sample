@@ -1,0 +1,7 @@
+2008/01/12
+まぁ、とにかく良く見かける警告ログ。 良くあるだけに、理由も基本的には単純。
+log4j.properties
+or log4j.xml
+がクラスパスに無い。※Maven2を使っている場合は、『src/main/resources』配下に置けばOK。それ以外なら、基本的にコンパイル
+後に『WEB-INF/classes』配下にあればOK。src配下って事になるかな？
+log4j.propertiesなら、log4j.category以下に存在していないパッケージが記述してある。log4j.xmlなら、タグのname属性に存在していないパッケージが記述してある。なので、ここを修正すればOK。

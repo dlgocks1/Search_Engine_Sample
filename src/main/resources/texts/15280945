@@ -1,0 +1,17 @@
+longdesc属性
+longdesc属性は、詳細な説明文書へのリンクを設定するための属性です。
+属性値にURIを指定することで、画像やフレームに対して詳細な説明文書へのリンクを設定することができます。
+longdesc属性は、画像に設定されたalt属性による説明や、フレームに設定されたtitle属性による説明を補完するために用います。
+参考
+HTML 4.01 Specification
+13.2 Including an image: the IMG element
+16.2.2 The FRAME element
+この属性が設定可能な要素
+frame
+img
+iframe
+この属性が定義されているDTD
+この属性がDTD内で定義されていることを○で示しています。
+HTML 4.01
+XHTML 1.0
+XHTML 1.1

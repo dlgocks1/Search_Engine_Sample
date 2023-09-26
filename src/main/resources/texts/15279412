@@ -1,0 +1,21 @@
+「AS3Dmod」で3Dオブジェクトにエフェクトを加える
+AS3modとは、オブジェクトにエフェクトかけることができます。Papervision3Dのフリーの拡張クラスです。エフェクトは「Taper」「Skew」「Twist」「Bloat」「Bend」「Perlin」「Noise」の全7種類となります（図3）。 
+それでは、AS3Dmodの設定方法と使用方法を紹介します。サンプルの「p3/as3mod/modTest.as」を見ていきます。 
+最新バージョンを使用したい方は、Google CodeからAS3Modソースをダウンロード（http://code.google.com/p/as3dmod/）できます。まず、最初に割り当てる3Dオブジェクトを作成します。 
+まず、マテリアルを設定します（74-81行目）。作成した3DオブジェクトにModifierStack Classを使用して、モディファイアに加えます（87行目）。 
+m = new ModifierStack(使用している3Dエンジンのタイプ,割り当てる先); 
+m = new ModifierStack(new LibraryPv3d(), _cube); 
+次に、オブジェクトにかけるモディファイアの初期値を設定します。モディファイアは複数同時に設定しても反映されます。本サンプルのプログラムでは、全種類のモディファイアの初期設定をしています（89-119行目）。 
+割り当てたいモディファイアは、サンプル内ではBloatとBendを設定しています。これらをModifierStackに加えます（125-126行目）。 
+m.addModifier(bl) 
+m.addModifier(ben) 
+動きをつけるために_onRenderCube関数内でPhaseクラスを使用して、モディファイアの動きをつける値をループさせます。Bloatの場合はモディファイアをY軸上下することによって膨らむ動きをつけ、Bendのforce値をループさせることによって上下させる動きをしています（131-135行目）。値が全部設定された後、モディファイアに割り当てる（146行目）。 
+m.apply() 
+最後に、この_onRenderCubeをonRenderTick内にいれて毎フレーム呼び出すことで動きをつけられることができます。本サンプルではほかのモディファイアも記述されていますので、ぜひお試しください。
+今回のまとめ
+Papervision3Dを拡張するということで、今回はそれぞれ違った表現の拡張クラスを紹介してきました。駆け足で解説した部分もありますので、公式サイトを見ていただければ、さらに詳しいドキュメントやサンプルソースなどが見つかるはずです。 
+Papervision3D以外にも、Away3d（http://away3d.com/）やSandy3d（http://www.flashsandy.org/）、商用の場合ライセンスが必要なAlternativa3d（http://alternativaplatform.com/en/alternativa3d/）などのFlash3Dエンジンがありますので、そちらもぜひ挑戦してみてはいかがでしょうか。 
+【参考文献】 
+「Ascollada」（http://ascollada.org/）（アクセス：2008/12） 
+「Vectorvision」（http://blog.barcinski-jeanjean.com/）（アクセス：2008/12） 
+「AS3mod」（http://www.everydayflash.com/blog/?tag=as3dmod）（アクセス：2008/12）

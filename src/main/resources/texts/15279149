@@ -1,0 +1,314 @@
+Lovelog+* | WordPress テーマ
+WordPressとXOOPS、Mediawikiのテーマを配布。プラグインの解説や日本語版の配布、テンプレートタグによるカスタマイズ方法を紹介。
+WordPress 条件タグ解説
+序論
+どんな内容を表示するか、そして、そのページがどんな状態に合うかによって、特定のページにどのようにその内容を表示するかを変えるのにあなたのTemplateファイルの中で条件付きタグを使用することができます。 例えば、ポストのシリーズの上にテキストの切れ端を表示しますが、あなたはあなたのブロッグのメインページだけに表示したがっているかもしれません。条件付きタグis_home()と共に、そのタスクを簡単にします。 
+これらのタグがWordPressのTemplate Hierarchyに持っている親密な関係に注意してください。 
+⇒The Conditional Tags can be used in your Template files to change what content is displayed and how that content is displayed on a particular page depending on what conditions that page matches. For example, you might want to display a snippet of text above the series of posts, but only on the main page of your blog. With the is_home() Conditional Tag, that task is made easy.
+Note the close relation these tags have to WordPress’ Template Hierarchy.
+…のための状態
+Conditional Tagsのすべてが、ある状態が会われて、次に、TRUEかFALSEのどちらかを返すかどうかを見るためにテストされます。 出力TRUEが以下にそれの様々なタグの下に記載されている状態。 パラメタを受け入れることができるそれらのタグがそのように注意されます。 
+⇒The Conditions For…
+All of the Conditional Tags test to see whether a certain condition is met, and then returns either TRUE or FALSE. The conditions under which various tags output TRUE is listed below. Those tags which can accept parameters are so noted.
+メインページ
+The Main Page 
+is_home()
+主なブロッグページを表示しているとき。 (Wordpress2.1は先のバージョンと異なってこの機能を扱います。 静的なFrontページを参照してください。) 
+⇒When the main blog page is being displayed. (Wordpress 2.1 handles this function differently than prior versions. See static Front Page.) 
+フロントページ
+The Front Page 
+is_front_page() 
+いつそれがサイトの前であるかはそれがポストかページであることにかかわらず表示しました。 主なブロッグページを表示していると本当のリターンと’設定->Reading->Frontページ表示’は「あなたの最新のポスト」に設定されて、いつ’設定->Reading->Frontページは表示すること’が「静的なページ」に設定されて、「第一面」値が表示される現在のページであるかをそうされます。 注意: このタグはバージョン2.5で加えられました。 
+⇒When it is the front of the site displayed, whether it is posts or a Page. Returns true when the main blog page is being displayed and the ‘Settings->Reading->Front page displays’ is set to “Your latest posts”, or when ‘Settings->Reading->Front page displays’ is set to “A static page” and the “Front Page” value is the current Page being displayed. Note: this tag was added at Version 2.5.
+管理パネル
+The Administration Panels 
+is_admin()
+Dashboardか管理パネルを表示しているとき。
+⇒When the Dashboard or the administration panels are being displayed.
+個別記事ページ
+A Single Post Page 
+is_single() 
+どんな単一のポストページも表示しているとき。 
+⇒When any single Post page is being displayed. 
+is_single(’17′)
+単一のポストとしてポスト17を表示しているとき。 
+⇒When Post 17 is being displayed as a single Post.
+is_single(’Irish Stew’)
+単一のポストとしてTitle「アイルランドシチュー」をもっているポストを表示しているとき。 
+⇒When the Post with Title “Irish Stew” is being displayed as a single Post. 
+is_single(’beef-stew’)
+単一のポストとしてポストSlug「ビーフシチュー」をもっているポストを表示しているとき。 
+⇒When the Post with Post Slug “beef-stew” is being displayed as a single Post.
+is_single(array(17,’beef-stew’,'Irish Stew’))
+表示されるただ一つのポストがどちらかなら本当のリターンはID17を掲示するか、ポスト_名前が「ビーフシチュー」であるかポスト_タイトルは「アイルランドシチュー」です。 注意: アレイ能力はバージョン2.5で加えられました。 
+⇒Returns true when the single post being displayed is either post ID 17, or the post_name is “beef-stew”, or the post_title is “Irish Stew”. Note: the array ability was added at Version 2.5.
+記事を含む様々なページ
+Any Page Containing Posts 
+comments_open()
+コメントがWordPress Loopで処理される現在のポストのために許容されているとき 
+⇒When comments are allowed for the current Post being processed in the WordPress Loop.
+pings_open()
+pingsがWordPress Loopで処理される現在のポストのために許容されているとき。 
+⇒When pings are allowed for the current Post being processed in the WordPress Loop.
+「ページ」ページ
+A PAGE Page 
+このセクションはあなたのブロッグからどんな一般的なウェブページではなく、WordPressページも 
+示します。 
+⇒This section refers to WordPress Pages, not any generic webpage from your blog.
+is_page() 
+どんなページも表示しているとき。 
+⇒When any Page is being displayed. 
+is_page(’42′)
+42ページ(ID)を表示しているとき。 
+⇒When Page 42 (ID) is being displayed.
+is_page(’About Me And Joe’)
+“About Me And Joe”に関するpost_titleがあるページを表示しているとき。 
+⇒When the Page with a post_title of “About Me And Joe” is being displayed.
+is_page(’about-me’)
+“about-me”のpost_name（スラッグ）ページの時、 “about-me” 表示しています。 
+⇒When the Page with a post_name (slug) of “about-me” is being displayed.
+is_page(array(42,’about-me’,'About Me And Joe’))
+表示されたページがポストID42かpost_nameの”about-me”のどちらかであるときに、本当に戻る、post_title、 “About Me And Joe”というタイトルを掲示してください。 注意: array能力はバージョン2.5で加えられました。 
+⇒Returns true when the Pages displayed is either post ID 42, or post_name “about-me”, or post_title “About Me And Joe”. Note: the array ability was added at Version 2.5. 
+サブページがないかどうかテストすること。
+⇒Testing for sub-Pages
+あります。_subpage()はまだ機能ではありませんが、あなたは少しのコードでこれをテストすることができます: 
+⇒There is no is_subpage() function yet, but you can test this with a little code:
+post_parent ) {
+// This is a subpage
+} else {
+// This is not a subpage
+}
+?>
+これがそのページ(例えば、ページベースのサイトの異なったセクションの現在のa異なったバナーへの)の特定のページOR a子供であるか否かに関係なく、テストする必要があるなら、得てください、親ページID、-後ろから、終わりなさい、そして、使用はこのように以下をコード化します。 
+⇒If you need to test whether this is a particular page OR a child of that page (e.g. to present a different banner on different sections of a page-based site), get the parent page IDs from the back-end, then use code like this:
+post_parent=="2") {
+$bannerimg="home.jpg";
+} elseif (is_page(learning) || $post->post_parent=="56") { 
+$bannerimg="teaching.jpg";
+} elseif (is_page(admissions) || $post->post_parent=="15") {
+$bannerimg="admissions.jpg";
+} else {
+$bannerimg="home.jpg" ; // Fall-through
+} 
+?>
+ページテンプレート
+Is a Page Template 
+バージョン2.5で始まって、これはあなたがページテンプレートにいるかどうか、または特定のページテンプレートが使用されているかどうかとあなたを決心しています。 
+⇒Beginning with Version 2.5 this allows you to determine whether or not you are in a page template or if a specific page template is being used.
+is_page_template() 
+ページTemplateは使用されていますか? 
+⇒Is a Page Template being used? 
+is_page_template(’about.php’)
+ページ・テンプレートはありますか「に関して」使用?次のことを注目する、あなたが特別のページ・テンプレートを指定したければ、他のconditionalsで違っている、about.phpまたはmy_page_template.phpのようなファイル名を使用する必要があります。 
+⇒Is Page Template ‘about’ being used? Note that unlike with other conditionals, if you want to specify a particular Page Template, you need to use the filename, such as about.php or my_page_template.php. 
+カテゴリーページ
+A Category Page 
+is_category() 
+なにかカテゴリーアーカイブページの時、表示しています。 
+⇒When any Category archive page is being displayed. 
+is_category(’9′)
+カテゴリー9のアーカイブページの時、表示します。 
+⇒When the archive page for Category 9 is being displayed. 
+is_category(’Stinky Cheeses’)
+“Stinky Cheeses”というカテゴリー名のアーカイブページの時、表示します。 
+⇒When the archive page for the Category with Name “Stinky Cheeses” is being displayed. 
+is_category(’blue-cheese’)
+カテゴリースラッグ名”blue-cheese” のカテゴリーのアーカイブページの時、表示します。 
+⇒When the archive page for the Category with Category Slug “blue-cheese” is being displayed.
+is_category(array(9,’blue-cheese’,'Stinky Cheeses’))
+表示されるポストのカテゴリがterm_ID 9、”blue-cheese”スラッグ、または”Stinky Cheeses”名前のどちらかであるときに、本当に戻ります。 
+⇒Returns true when the category of posts being displayed is either term_ID 9, or slug “blue-cheese”, or name “Stinky Cheeses”. Note: the array ability was added at Version 2.5. 
+in_category(’5′)
+本当に、指定されたcategory idにはポストが電流であるならあります。リターン、さらに読んでください。 
+注意: テスト、”is”、およびin”が大差であるときに、スペルを必ずチェックしてください。 
+また、is_archive()とCategory Tmplatesを見てください。 
+⇒Returns true if the current post is in the specified category id. read more 
+Note: Be sure to check your spelling when testing, “is” and “in” are a big difference.
+See also is_archive() and Category Templates.
+タグページ
+A Tag Page 
+is_tag() 
+どんなTagアーカイブページも表示しているとき 
+⇒When any Tag archive page is being displayed. 
+is_tag(’mild’)
+‘mild’のスラッグがあるタグのためのアーカイブページを表示しているとき。 
+⇒When the archive page for tag with the slug of ‘mild’ is being displayed. 
+is_tag(array(’sharp’,'mild’,'extreme’))
+表示されるタグアーカイブが”sharp”、”mild”か”extreme”のどちらかのスラッグを持っているとき、本当に、戻ります。 注意: 配列能力はバージョン2.5で加えられました。 
+また、is_archive() とTag Templatesを見てください。 
+⇒Returns true when the tag archive being displayed has a slug of either “sharp”, “mild”, or “extreme”. Note: the array ability was added at Version 2.5. 
+See also is_archive() and Tag Templates.
+執筆者ページ
+An Author Page 
+is_author()
+どんな著者ページも表示されている場合。 
+⇒When any Author page is being displayed.
+is_author(’4′)
+著者番号(ID)4のアーカイブ・ページが表示されている場合。 
+⇒When the archive page for Author number (ID) 4 is being displayed. 
+is_author(’Vivian’)
+愛称”Vivian”を持った著者のためのアーカイブ・ページが表示されている場合。 
+⇒When the archive page for the Author with Nickname “Vivian” is being displayed. 
+is_author(’john-jones’)
+Nicename”john-jones”を持った著者のためのアーカイブ・ページが表示されている場合。 
+⇒When the archive page for the Author with Nicename “john-jones” is being displayed. 
+is_author(array(4,’john-jones’,'Vivian’))
+表示されているポストの著者が一方のユーザーID 4、user_nicename”john-jones”、あるいは愛称”Vivian”である場合、trueを返す。 
+注:配列能力はバージョン2.5で加えられました。 
+さらにis_archiveな()および著者テンプレートを参照してください。 
+⇒Returns true when the author of the posts being displayed is either user ID 4, or user_nicename “john-jones”, or nickname “Vivian”. Note: the array ability was added at Version 2.5. 
+See also is_archive() and Author Templates.
+日付ページ
+A Date Page 
+is_date() 
+どんな日付に基づいたアーカイブ・ページも表示されている場合(つまり毎月か、年1回か、毎日か、時間に基づいたアーカイブ)。 
+⇒When any date-based archive page is being displayed (i.e. a monthly, yearly, daily or time-based archive). 
+is_year() 
+年1回のアーカイブが表示されている場合。 
+⇒When a yearly archive is being displayed. 
+is_month() 
+毎月のアーカイブが表示されている場合。 
+⇒When a monthly archive is being displayed.
+is_day() 
+⇒When a daily archive is being displayed.
+毎日のアーカイブが表示されている場合。 
+is_time() 
+いつ、1つの、一時間ごと、「微細に」あるいは「第2に」、アーカイブは表示されています。 
+さらにis_archiveな()を参照してください。 
+⇒When an hourly, “minutely”, or “secondly” archive is being displayed. 
+See also is_archive().
+様々なアーカイブ
+Any Archive Page 
+is_archive()
+任意のタイプのアーカイブ・ページが表示されている場合。カテゴリー、著者および日付に基づいたページはすべてアーカイブのタイプです。 
+⇒When any type of Archive page is being displayed. Category, Author and Date based pages are all types of Archives. 
+検索結果ページ
+A Search Result Page 
+is_search()
+検索結果ページ・アーカイブが表示されている場合。 
+⇒When a search result page archive is being displayed. 
+<math>\int f(x)dx</math> 
+404ページが見つかりませんでした
+A 404 Not Found Page 
+is_404() 
+ページが「HTTP 404の後に表示する場合:見つけなかった」エラーが生じます。 
+⇒When a page displays after an “HTTP 404: Not Found” error occurs. 
+ページがつけられたページ
+A Paged Page 
+is_paged() 
+表示されているページがそうである時、「ページをつけました。」これは、数ページ上にアーカイブあるいは主なページのある分裂を指します。これは、その内容がQuickTagを使用して、ページに分割されたポストあるいはページを指しません。 
+⇒When the page being displayed is “paged”. This refers to an archive or the main page being split up over several pages. This does not refer to a Post or Page whose content has been divided into pages using the QuickTag. 
+付属
+An Attachment 
+is_attachment() 
+ポストまたはページへの付属ドキュメントが表示されている場合。付属は、ポスト・エディターのアップロード・ユーティリィティを通ってアップロードされたイメージあるいは他のファイルです。付属は自分の「ページ」あるいはテンプレートに表示することができます。より詳細には、見る、イメージとファイルの付属の使用。 
+⇒When an attachment document to a post or Page is being displayed. An attachment is an image or other file uploaded through the post editor’s upload utility. Attachments can be displayed on their own ‘page’ or template. For more information, see Using Image and File Attachments. 
+組織化
+A Syndication 
+is_feed() 
+要求されたサイトが組織化である場合。このタグは、ユーザによって典型的に使用されません;それは、WordPressによって内部に使用され、Plugin開発者に利用可能です。 
+⇒When the site requested is a Syndication. This tag is not typically used by users; it is used internally by WordPress and is available for Plugin Developers. 
+トラックバック
+A Trackback 
+is_trackback() 
+要求されたサイトがWordPressのそのTrackbackエンジンの中へのホックである場合。このタグは、ユーザによって典型的に使用されません;それは、WordPressによって内部に使用され、Plugin開発者に利用可能です。 
+⇒When the site requested is WordPress’ hook into its Trackback engine. This tag is not typically used by users; it is used internally by WordPress and is available for Plugin Developers. 
+プレビュー
+A Preview 
+is_preview() 
+表示されている単一のポストがドラフトモードで見られる場合。 
+⇒When a single post being displayed is viewed in Draft mode. 
+抜粋
+Has An Excerpt 
+!empty($post->post_excerpt)
+ポストが抜粋を持っているかどうかチェックする内蔵の方法はありません。しかし、同じ方法で上記のコードを使用してもよい。移動する「!」「has_no_excerpt」のエミュレート。 
+⇒There is no built-in way to check if a post has an excerpt, but you can use the above code in the same way. Remove the ‘!’ to emulate ‘has_no_excerpt’. 
+例を動かすこと
+Working Examples 
+ここに、これらの条件付きのタグを使用する方法を実証する作業見本があります。 
+⇒Here are working samples to demonstrate how to use these conditional tags.
+Single Post 
+この例は、ポスト・ページを見る場合にだけ特定のものを表示するためにis_single()を使用する方法を教えます: 
+⇒This example shows how to use is_single() to display something specific only when viewing a single post page:
+if (is_single()){
+echo 'This is just one of many fabulous entries in the ' . single_cat_title() . ' category!';
+}
+日付に基づいた違い
+Date-Based Differences 
+誰かが日付によって私たちのサイトを拾い読みする場合は、異なる色の使用により異なる年にポストを識別しましょう: 
+⇒If someone browses our site by date, let’s distinguish posts in different years by using different colors:
+">
+" rel="bookmark" title="Permanent Link to ">
+可変サイドバー記事内容
+Variable Sidebar Content 
+この例は、リーダにページをつけるものに基づいたあなたの側面記事中の異なる内容を表示するでしょう、現在見ています。 
+⇒This example will display different content in your sidebar based on what page the reader is currently viewing.
+";
+wp_list_cats('optionall=0&sort_column=name&list=1&children=0');
+echo "";
+} elseif (is_category()) {
+// we're looking at a single category view, so let's show _all_ the categories
+echo "
+";
+wp_list_cats('optionall=1&sort_column=name&list=1&children=1&hierarchical=1');
+echo "
+";
+} elseif (is_single()) {
+// we're looking at a single page, so let's not show anything in the sidebar
+} elseif (is_page()) {
+// we're looking at a static page. Which one?
+if (is_page('About')) {
+// our about page.
+echo "
+This is my about page!
+";
+} elseif (is_page('Colophon')) {
+echo "
+This is my colophon page, running on WordPress " . bloginfo('version') . "
+";
+} else {
+// catch-all for other pages
+echo "
+Vote for Pedro!
+";
+}
+} else {
+// catch-all for everything else (archives, searches, 404s, etc)
+echo "
+Pedro offers you his protection.
+";
+} // That's all, folks!
+?>
+">
+有用な404ページ
+Helpful 404 page 
+ビジターが404エラー・ページを得る場合、それは脅迫することができます、そして助けにならないWordpressを使用すると、404を鈍らせて、emailする(ユーザが存在しないページへのリンクをクリックする場合は常に、)ことにより、それをまたユーザとあなた自身に役立つようにすることができます。これを使用し、oを忘れない場合 
+⇒When a visitor gets a 404 error page, it can be intimidating, and unhelpful. Using Wordpress, you can take the edge off a 404 and make it helpful to users, and yourself, too, by emailing whenever the user clicks a link to a non-existent page. If you use this, don’t forget o
+You
+$casemessage = "All is not lost!";
+}elseif (isset($_SERVER['HTTP_REFERER'])) {
+#this will help the user find what they want, and email me of a bad link
+echo “clicked a link to”; #now the message says You clicked a link to…
+#setup a message to be sent to me
+$failuremess = “A user tried to go to $website”
+.$_SERVER['REQUEST_URI']." and received a 404 (page not found) error. ";
+$failuremess .= “It wasn’t their fault, so try fixing it.
+They came from ".$_SERVER['HTTP_REFERER'];
+mail($adminemail, “Bad Link To “.$_SERVER['REQUEST_URI'],
+$failuremess, "From: $websitename ");
+#email you about problem
+$casemessage = “An administrator has been emailed
+about this problem, too.";
+#set a friendly message
+}
+echo " ".$website.$_SERVER['REQUEST_URI']; ?> 
+and it doesn't exist. You can click back
+and try again or search for what you're looking for:
+動的なメニュー強調
+Dynamic Menu Highlighting 
+動的なメニューの強調する記事は、メニュー中の現在のページの強調を可能にするために条件付きのタグを使用する方法について議論します。 
+⇒The Dynamic Menu Highlighting article discusses how to use the conditional tags to enable highlighting of the current page in a menu. 
+External Ressources
+外部のRessources* フランスの翻訳:fr:Marqueurs_conditionnels 
+French translation : fr:Marqueurs_conditionnels

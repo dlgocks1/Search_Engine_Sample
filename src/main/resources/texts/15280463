@@ -1,0 +1,37 @@
+2009年8月11日
+ヴイエムウェアは仮想化市場で高いシェアを誇るトップベンダであり、技術的にも他社より先行しています。そのヴイエムウェアが、Javaアプリケーションフレームワーク「Spring Framework」の開発元であるSpringSourceを買収すると発表しました。
+PaaSソリューション開発：VMware、SpringSourceを約4億ドルで買収 - ITmedia エンタープライズ
+VMwareがSpringSourceを約400億円で買収へ，「統合クラウド基盤を開発」 - ニュース：ITpro
+報道では、買収の理由を以下のように説明しています。
+この買収により、VMwareはSpringSourceとともに、プライベートクラウドおよびパブリッククラウドで稼働するPaaS（サービスとしてのプラットフォーム）の統合ソリューションを開発する計画だ。（ITmediaエンタープライズ）
+ハイパーバイザとJavaフレームワークの連係で運用ボトルネック解消
+ヴイエムェアのCTO、Steve Herrod氏は、この買収について同社のブログ「VMware: The Console: VMware to acquire SpringSource」で、同社がSpringSourceの買収によって具体的にどのようなことを実現したいのか、はっきりと書いています。手っ取り早くいえば、仮想マシンとJavaフレームワークの連係です。
+Information from the frameworks and tools such as Hyperic can pinpoint slowness in the service, and we can remediate the problem areas by altering settings of VMware DRS, cloning another instance of the web server VM, or even interacting with the traffic managers of the datacenter to balance out the load.
+フレームワークとHyperic（SpringSourceの管理ツール）からの情報で、サービス内で動作が遅延している部分を察知できる。VMwareはインスタンスを複製して起動することでそれに対応することができるだろう。あるいは、データセンターのトラフィック管理ツールと連係してロードバンランスすることもできる。
+つまり、Javaアプリケーションと管理ツールとハイパーバイザとが連係して、アプリケーション運用中に発生するボトルネックを自律的に解消するシステムを実現する。これがSpringSourceを買収した理由だというわけです。
+ハイパーバイザとフレームワークの情報共有を標準化
+しかもこれはVMwareだけで実現するのではなく、オープンな環境での実現を目指すと、SpringSourceのCEO Rod Johnson氏がブログ「SpringSource: Chapter Two | SpringSource Team Blog」で次のように書いています。
+A solution that will deliver a Platform as a Service (Paas) built around technologies that you already know, which can slash cost and complexity. A solution built around open, portable middleware technologies that can run on traditional Java EE application servers in a conventional data center and on Amazon EC2 and other elastic compute environments as well as on the VMware platform.
+ソリューションはコストや複雑さを削減可能なPaaSとして知られるテクノロジーで提供される予定だ。と同時に、オープンで移植性のあるJavaEEアプリケーションサーバ上で構築されるミドルウェアテクノロジーであり、既存のデータセンターやAmazon EC2、そしてVMwareのような拡張性のあるプラットフォームの上で動作する。
+ここから想像するとハイパーバイザとJavaフレームワークとのあいだで情報共有するための標準を策定することで、VMware以外のハイパーバイザ（例にあるAmazon EC2はXenをハイパーバイザとして採用しています）、SpringSource製以外のフレームワークでもお互いに連係することができることを目指すように読み取れます。
+Javaはクラウド対応へと進化
+いままでもJavaによる分散アプリケーションの実現は不可能ではありませんでしたが、あらかじめそうした実行環境を手動で用意し、構築しておく必要がありました。VMwareとSpringSourceの連係は、自律的に分散して実行するアプリケーションを簡単にデプロイできる環境の実現と標準化を目指したものだと考えられます。
+仮想化やクラウドの登場で、アプリケーションのリソースは稼働中のサーバ内のリソースに限る必要がなくなりました。ハイパーバイザとJavaフレームワークの連係は、そうしたクラウド時代の新しい環境に対応するものへとJavaを進化させるきっかけになりそうです。
+もしかしたらいずれ、メモリが足りなければ、空いているサーバのメモリを割り当てて通信経由で利用し、スレッドが増えたら空いてるサーバで実行、といったことがあたりまえになるかもしれません。いや、もしかしたら僕が知らないだけでGoogle App EngineのJavaはすでにそうなっているのかもしれません（ご存じの方がいたら教えてください）。
+関連記事 on Publickey
+仮想化はオンプレミスとクラウドを結びつけるキーテクノロジー 
+インテルとAMDの動画で見る、仮想化のライブマイグレーション 
+仮想化の新標準「OVF」登場、OSなんてどうでもよくなる、かも 
+ついに無制限に解放されたGoogle App Engine/Java。RoRやPHP、もちろんJavaも試そう 
+参考記事 on the Web
+VMware to Acquire SpringSource
+VMware: The Console: VMware to acquire SpringSource
+SpringSource: Chapter Two | SpringSource Team Blog
+この記事に付けられたタグ
+Java , 仮想化 
+最近のエントリ
+VMWareによるSpringSourceの買収で、Javaがクラウド対応へ進化する
+スタートアップに人気のホスティングサービスはSoftLayer、Amazon、Slicehost
+IEチームがHTML5の議論に参入！ 「タグの選び方が恣意的ではないか？」などの意見
+現在、価値が上昇中のITスキルはJava、Linux、仮想化。では価値が下降したスキルは？米調査会社
+Web版Officeの公式対応ブラウザはIE7、IE8、FF3.5、Safari4。Silverlightがあると軽快に

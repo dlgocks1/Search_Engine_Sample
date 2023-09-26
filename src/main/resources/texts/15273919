@@ -1,0 +1,16 @@
+August 10, 2009, 4:01 pm
+An Elephant Leaves the Room at Yahoo
+By Ashlee Vance
+Doug Cutting, one of Yahoo’s top search and infrastructure software experts, will leave the company later this month and join the Silicon Valley start-up Cloudera. 
+Mr. Cutting’s exit from Yahoo follows the company’s recent search tie-up with Microsoft. Under the deal between the two companies, Microsoft take over Yahoo’s search operations while Yahoo takes the lead in selling ads to large clients. As a result of the agreement, Yahoo will transfer some of its employees working on search technology to Microsoft and fire others. 
+Yahoo has been criticized in Silicon Valley circles for ceding some of its technology know-how to Microsoft and dampening its engineering culture. But, in an interview, Mr. Cutting stressed that his departure had nothing to do with Yahoo deciding to move away from its internal search technology.
+“This has been in the works for awhile and is unrelated,” Mr. Cutting said. “I am definitely not leaving in any sort of protest, and the thing I like least about this move is that it might be perceived that way.”
+Through a spokesman, Yahoo thanked Mr. Cutting for his work at the company. “Moving forward, we wish Doug the best in his new endeavors,” the company said in a statement. “We are looking forward to continuing to lead on innovation and investment in Hadoop, as well as to collaborating with Doug and the growing Hadoop community.”
+Mr. Cutting created Hadoop, an open-source software framework used to manipulate large volumes of data. The software has become widely used by a number of Web-based companies, including Yahoo and Facebook, to analyze the vast amounts of information they gather. 
+The underlying technology behind Hadoop mimics similar technology used by Google to break up large data sets into smaller chunks that can be digested by relatively cheap computers. Once the data is spread across many computers, engineers can run complex analytical tasks using the information. 
+But while Google keeps its technology relatively secret, Hadoop is available to anyone. It’s an open-source project shepherded by the nonprofit Apache Software Foundation. 
+Earlier this year, Cloudera unveiled its plans to take Hadoop to the corporate world in a bid to help companies in various industries deal with their explosion of data. The executives behind Cloudera argue that banks, oil and gas companies, biotech firms and others can benefit from the same techniques pioneered by the Web set. So, Cloudera sells consulting and support services for Hadoop. 
+Mr. Cutting said that he was looking forward to working on more diverse problems, rather than always tuning Hadoop for Yahoo’s internal use. 
+“He knows the software better than almost anyone,” said Mike Olson, the chief executive of Cloudera. “He has such great taste and great judgment and will make us a more capable company.”
+Mr. Cutting will leave Yahoo at the end of August and start as an architect at Cloudera in September. His departure from Yahoo was announced at a meeting on Monday. 
+Before developing Hadoop, Mr. Cutting worked on some open-source search systems along with Mike Cafarella, a professor at the University of Washington. Mr. Cafarella has also signed on a consultant with Cloudera. The company employs about 20 people.

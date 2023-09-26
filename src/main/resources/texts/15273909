@@ -1,0 +1,4 @@
+いつも忘れるのでメモ：
+$ ruby script/plugin install git://github.com/dchelimsky/rspec.git -r 'refs/tags/1.2.7'
+$ ruby script/plugin install git://github.com/dchelimsky/rspec-rails.git -r 'refs/tags/1.2.7.1'
+$ ruby script/generate rspec

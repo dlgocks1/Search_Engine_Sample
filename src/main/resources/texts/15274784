@@ -1,0 +1,29 @@
+回答
+いくつかのWeb アプリケーションにおいては、httpd.conf や、httpd.include を修正する必要がある場合があります。 
+ですが、Plesk環境では、httpd.conf 、ドメインごとに作成される httpd.include ファイル(/var/www/vhosts/(ドメイン名)/conf/httpd.include)を編集することは、許可されていません。 
+そのため、設定を変更したい場合は、以下の手順で vhost.conf / vhost_ssl.conf を作成して、設定を有効にしてください。 
+ただし、これらの作業は弊社のサポートのご提供範囲外とさせていただきますので、お客様の責任の範囲にて行っていただきますようお願いいたします。なお、Pleskが導入されていない環境においては以下でご案内する方法は適用されません。  
+解決方法
+例：ドメイン名 : example.jpの場合
+以下の例の、 example.jp はご利用のドメイン名に全て読み替えてください。  
+/var/www/vhosts/example.jp/confディレクトリに、以下の内容で vhost.confというファイルを作成します。 （httpsをご利用の場合はvhost_ssl.confを作成します） 
+以下は、PHPのsafe_modeをoff、にして、/var/www/vhosts/example.jp/privateディレクトリのファイルを開けるようにする設定例です。 
+OSがCentOS4/RHEL4以前バージョンの場合 
+<Directory /var/www/vhosts/example.jp/httpdocs> 
+<IfModule sapi_apache2.c> 
+php_admin_flag engine on 
+php_admin_flag safe_mode off 
+php_admin_value open_basedir "/var/www/vhosts/example.jp/httpdocs:/tmp:/var/www/vhosts/example.jp/private" 
+</IfModule> 
+</Directory>
+<Directory /var/www/vhosts/example.jp/httpdocs> 
+<IfModule mod_php5.c> 
+php_admin_flag engine on 
+php_admin_flag safe_mode on 
+php_admin_value open_basedir "/var/www/vhosts/example.jp/httpdocs:/tmp:/var/www/vhosts/example.jp/private" 
+</IfModule> 
+</Directory>
+(Web ブラウザ上では open_basedir の後に改行が入っているように表示される場合がございますが、実際には改行は入りませんのでご注意ください) 
+vhost.conf / vhost_ssl.conf ファイルに書く記述は<VirtualHost></VirtualHost>ディレクティブ内に書けるものしか指定することができません。ご注意下さい。 
+なお、サーバ開通時に Plesk のバージョンが 7.5.4 未満だったサーバにつきましては、バーチャルホストの標準パスが /home/httpd/vhosts/example.jp/httpdocs となります。そのため上記のご説明の /var/www/vhosts/example.jp/ の部分を /home/httpd/vhosts/example.jp/と置き換えて設定・操作いただきますようお願いいたします。 
+Plesk が vhost.conf / vhost_ssl.conf を読み込むよう設定します

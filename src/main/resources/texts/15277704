@@ -1,0 +1,67 @@
+ぽろきぃのオフィシャルウィキ
+ライブドアウィキをろうそくが燃え尽きるまで、がんばります。
+トップページページ一覧タグ一覧編集
+履歴
+mysqlスレーブが壊れて作り直したい時
+最終更新：polocky 2008年12月02日(火) 15:21:06
+準備
+(0)マスターのターミナルを二つ開く
+(1)マスターの書き込みをロックする
+(1)現在の番号をとる
+(2)ダンプする
+(1)ロック解除する
+リストアー
+FOREIGN KEY
+失敗したマスターとの連携情報を消去
+リストアーする
+CHANGE MASTER
+同期
+slaveスタート
+確認
+準備
+(0)マスターのターミナルを二つ開く
+(1),(2) 
+(1)マスターの書き込みをロックする
+FLUSH TABLES WITH READ LOCK;
+(1)現在の番号をとる
+mysql> show master status;
++-----------------+----------+--------------+------------------+
+| File | Position | Binlog_do_db | Binlog_ignore_db |
++-----------------+----------+--------------+------------------+
+| polocky-bin.735 | 77777 | | |
++-----------------+----------+--------------+------------------+
+1 row in set (0.00 sec)
+(2)ダンプする
+mysqldump -u root polocky --opt > /path/to/dumpfile
+(1)ロック解除する
+UNLOCK TABLES;
+リストアー
+FOREIGN KEY
+SET FOREIGN_KEY_CHECKS=0;をダンプしたファイルの頭につける
+cat hoge.dump >> append.dump
+失敗したマスターとの連携情報を消去
+mysqld stop
+rm master.info
+rm relay-log.info
+mysqld start
+リストアーする
+mysqld start
+drop database polocky;
+create database polocky;
+/mysql -u root polocky < dump_file
+CHANGE MASTER
+CHANGE MASTER TO MASTER_HOST = '192.168.1.11',MASTER_USER = 'repl',MASTER_PASSWORD = 'polocky',MASTER_LOG_FILE = 'polocky-bin.735',MASTER_LOG_POS = 77777;
+同期
+slaveスタート
+slave start
+確認
+show slave status
+Exec_master_log_pos,Read_Master_Log_Posが同じか確認 
+このページを編集する
+コメントを書くコメント（0）トラックバック（0）
+カテゴリ：ゲーム総合
+タグ：
+技術
+mysql
+未完成
+添付ファイル（0）
