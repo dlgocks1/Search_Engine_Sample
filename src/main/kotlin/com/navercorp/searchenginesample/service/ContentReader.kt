@@ -22,7 +22,7 @@ class ContentReader {
             e.printStackTrace()
             return null
         }
-        return result.toString().take(100)
+        return result.toString()
     }
 
     fun readMetaFile(filePath: String): List<HatenaEntry> {
