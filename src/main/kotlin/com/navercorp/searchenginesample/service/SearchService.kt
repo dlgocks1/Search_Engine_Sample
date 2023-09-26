@@ -21,14 +21,14 @@ class SearchService(
             invertedIndex.postings.map { eid ->
                 val hatenaEntry = hatenaEntryRepository.findByIdOrNull(eid)
                 SearchResult(
+                    eid = eid,
                     title = hatenaEntry?.title ?: "",
                     url = hatenaEntry?.url ?: "",
                     snippet = contentReader.getContent(eid) ?: ""
                 )
             }
-        }.flatten()
+        }.flatten().sortedByDescending { it.eid }
     }
-
 
     companion object {
         const val MIN_GRAM = 2
