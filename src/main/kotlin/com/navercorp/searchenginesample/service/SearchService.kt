@@ -3,6 +3,7 @@ package com.navercorp.searchenginesample.service
 import com.navercorp.searchenginesample.domain.SearchResult
 import com.navercorp.searchenginesample.repository.HatenaEntryRepository
 import com.navercorp.searchenginesample.repository.InvertedIndexRepository
+import org.slf4j.LoggerFactory
 import org.springframework.data.repository.findByIdOrNull
 import org.springframework.stereotype.Service
 
@@ -14,6 +15,8 @@ class SearchService(
     private val contentReader: ContentReader
 ) {
 
+    private val logger = LoggerFactory.getLogger(SearchService::class.java)
+
     fun query(keyword: String): List<SearchResult> {
         val searchNgram = nGramTokenizer.performNgramTokenization(keyword, MIN_GRAM, MAX_GRAM)
         val invertedIndexes = invertedIndexRepository.findAllById(searchNgram)
@@ -24,10 +27,10 @@ class SearchService(
                     eid = eid,
                     title = hatenaEntry?.title ?: "",
                     url = hatenaEntry?.url ?: "",
-                    snippet = contentReader.getContent(eid) ?: ""
+                    snippet = contentReader.getContent(eid)?.take(100) ?: ""
                 )
             }
-        }.flatten().sortedByDescending { it.eid }
+        }.flatten().sortedByDescending { it.eid }.also { logger.info("totalElements : ${it.size}") }
     }
 
     companion object {
