@@ -1,0 +1,15 @@
+Flash Lite 1.x ActionScript の学習 >
+Flash Lite 1.x ActionScript について >
+Flash Lite 1.x ActionScript がサポートしていない Flash 4 ActionScript
+次の Flash 4 ActionScript の機能は Flash Lite 1.x ActionScript ではまったくサポートされていないか、一部しかサポートされていません。
+startDrag() 関数および stopDrag() 関数。
+Flash Lite 1.x ActionScript では、Flash Player 4 でサポートされているボタンイベントの一部のみがサポートされています。ボタンイベントの処理の詳細については、『Flash Lite アプリケーションの開発』のインタラクティブ機能とナビゲーション機能の作成を参照してください。
+Flash Lite 1.x ActionScript では、Flash Player 4. でサポートされているキーイベントの一部のみがサポートされています。Flash Lite でサポートされているキーイベントについては、『Flash Lite アプリケーションの開発』のインタラクティブ機能とナビゲーション機能の作成を参照してください。
+_dropTarget プロパティ
+_soundBufTime プロパティ
+_url プロパティ
+String() 変換関数
+このページに新しいコメントが追加された場合に、電子メールでの通知を希望する。 
+| コメントレポート
+現在のページ: http://livedocs.adobe.com/flash/9.0_jp/main/00005691.html
+コメントの追加

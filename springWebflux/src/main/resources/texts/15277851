@@ -1,0 +1,10 @@
+3. 「Setup」では、「はい」をクリックして、インストールを開始します。 
+4. 「Welcome to the Subversion Setup Wizard」では、「Next >」をクリックして、次へ進みます。 
+5. 「License Agreement」では、「I accept the agreement」を選択し、「Next >」をクリックして、次へ進みます。 
+6. 「Information」では、表示された内容を確認した後、「Next >」をクリックして、次へ進みます。 
+7. 「Select Destination Location」では、インストール先ディレクトリを指定した後、「Next >」をクリックして、次へ進みます。 
+ここでは、インストール先を「C:\usr\local\subversion」とします。 
+8. 「Select Start Menu Folder」では、スタートメニューのフォルダ名を指定した後、「Next>」をクリックして次へ進みます。 
+ここでは、フォルダ名はデフォルト（Subversion）のまま変更しません。 
+9. 「Select Additional Tasks」では、以下の内容を設定した後、「Next>」をクリックして次へ進みます。 
+＜設定内容＞

@@ -1,0 +1,276 @@
+RSS 2.0 | 
+Atom 1.0
+Sponsored Link
+Misc
+ブログ(Windws Live版) 
+昔のページ(ブログ風?) 
+Htmlエンコード
+BindingElementsViewer
+Favorites
+MSDNフォーラム
+ASP.NETフォーラム
+ASP.NETホーム
+ASP.NET AJAX
+今日の天気
+Web Site Offerer
+Webサイトのテンプレート,素材を使わせていただいているサイト様へのリンクです。
+freecsstemplate
+テンプレートがいっぱい。
+ホームページ素材
+大き目のアイコンがいっぱい
+1キロバイトの素材屋さん
+サイズの小さなアイコンがいっぱい
+素材屋さんブログ
+Web用の素材がいっぱい
+Recommendation
+XmlSerializerはオブジェクトをXML形式にシリアライズすることができる便利なシリアライザです。シリアライズできないクラスの場合は、IXmlSerializableを実装する必要があります。クラスのフィールドにリストのリスト(ArrayListのリストやList<T>のリスト)やIDictionary型等が含まれている場合はそのままではシリアライズできません。今回はクラスのフィールドにIDictionaryを実装した、SortedList<TKey,TVal>を含めているのでIXmlSerizableを実装したサンプルを掲載します。
+確認環境
+Windows Vista Enterprise Edition
+開発環境:Visual Studio 2008 Professional 英語版
+.NET 3.5(.NET 2.0以上)
+1. シリアライズ対象クラスの作成
+Visual Studio 2008 を起動し、コンソールプロジェクトを作成します。名前はXmlSerializerTestとしました。
+1.1 UserInfoクラスの作成
+UserInfo.csクラスファイルを作成し、以下のように編集します。XmlSerialzerは規定ではパブリックなフィールドやプロパティを属性としてシリアライズします。シリアライズするプロパティやフィールドを要素とするか、属性とするか、名前を指定する場合などは、XmlElement,XmlAttributeで指定します。XmlRootを指定すると、ルート要素がシリアライズされるときに要素名を指定できます。サンプルに掲載されていませんが、配列の要素名を変更する場合はXmlArrayAttributeを指定します。詳細はMSDNドキュメントを参照願います。
+namespace XmlSerializerTest
+{
+[XmlRoot("user", Namespace="urn:Handcraft.UserInfo")]
+public class UserInfo
+{
+public UserInfo()
+{
+ApplicationName = "/";
+UserName = string.Empty;
+IsApproved = false;
+IsLockedOut = false;
+Comment = string.Empty;
+Email = string.Empty;
+CreationDate = MinumDateTime();
+LastActivityDate = MinumDateTime();
+LastLockoutDate = MinumDateTime();
+LastLoginDate = MinumDateTime();
+LastPasswordChangedDate = MinumDateTime();
+PasswordQuestion = string.Empty;
+PasswordAnswer = string.Empty;
+EncodedPassword = string.Empty;
+PasswordSalt = string.Empty;
+}
+/// <summary>アプリケーション名</summary>
+[XmlAttribute("applicationName")]
+public string ApplicationName { get; set; }
+/// <summary>ユーザID</summary>
+[XmlAttribute("name")]
+public string UserName { get; set; }
+/// <summary>承認済みか</summary>
+[XmlElement("approved")]
+public bool IsApproved { get; set; }
+/// <summary>ロックアウト中か</summary>
+[XmlElement("lockouted")]
+public bool IsLockedOut { get; set; }
+/// <summary>コメント</summary>
+[XmlElement("comment")]
+public string Comment { get; set; }
+/// <summary>email</summary>
+[XmlElement("email")]
+public string Email { get; set; }
+[XmlElement("creationDate")]
+public DateTime CreationDate { get; set; }
+/// <summary>最終活動日時</summary>
+[XmlElement("lastActivityDate")]
+public DateTime LastActivityDate { get; set; }
+/// <summary>最終ロックアウト日時</summary>
+[XmlElement("lastLockoutDate")]
+public DateTime LastLockoutDate { get; set; }
+/// <summary>最終ログイン日時</summary>
+[XmlElement("lastLoginDate")]
+public DateTime LastLoginDate { get; set; }
+/// <summary>最終パスワード変更日時</summary>
+[XmlElement("lastPasswordChangedDate")]
+public DateTime LastPasswordChangedDate { get; set; }
+/// <summary>パスワードの質問</summary>
+[XmlElement("passwordQuestion")]
+public string PasswordQuestion { get; set; }
+/// <summary>パスワードの答え</summary>
+[XmlElement("passwordAnswer")]
+public string PasswordAnswer { get; set; }
+/// <summary>パスワード</summary>
+[XmlElement("password")]
+public string EncodedPassword { get; set; }
+/// <summary>パスワードサルト</summary>
+[XmlElement("passwordSalt")]
+public string PasswordSalt { get; set; }
+public virtual MembershipUser CreateMembershipUser(string providerName, object providerUserKey)
+{
+return new MembershipUser(providerName, UserName, providerUserKey, Email, 
+PasswordQuestion, Comment, IsApproved, IsLockedOut, 
+CreationDate, LastLoginDate, LastActivityDate, 
+LastPasswordChangedDate, LastLockoutDate);
+}
+public virtual MembershipUser CreatemembershipUser(string providerName)
+{
+return CreateMembershipUser(providerName, null);
+}
+protected virtual DateTime MinumDateTime()
+{
+return new DateTime(1754, 1, 1, 0, 0, 0, 0);
+}
+}
+}
+1.2 UserInfoListクラスの作成
+UserInfoクラスをコンテナの要素として含むUserInfoList.csを作成し、以下のように編集しました。UserInfoListはIXmlSerializableを実装して、独自にシリアライズするようにしています。
+namespace XmlSerializerTest
+{
+[XmlRoot("users", Namespace = "urn:Handcraft.UserInfoList")]
+public class UserInfoList : IXmlSerializable
+{
+/// <summary>
+/// ユーザ情報を格納するコレクション
+/// キーにUserInfo.UserNameを使用する
+/// </summary>
+private SortedList<string, UserInfo> _users = new SortedList<string, UserInfo>();
+/// <summary>
+/// UserInfoを追加する
+/// </summary>
+/// <param name="userInfo"></param>
+public void AddUserInfo(UserInfo userInfo)
+{
+_users.Add(userInfo.UserName, userInfo);
+}
+public UserInfo GetUserInfo(string name)
+{
+return _users[name];
+}
+public bool RemoveUserInfo(string name)
+{
+return _users.Remove(name);
+}
+#region IXmlSerializable Membersの実装
+public System.Xml.Schema.XmlSchema GetSchema()
+{
+return null;
+}
+/// <summary>
+/// 独自でデシリアライズを行う
+/// </summary>
+/// <param name="reader"></param>
+public void ReadXml(System.Xml.XmlReader reader)
+{
+XmlSerializer s = new XmlSerializer(typeof(UserInfo));
+reader.Read();
+while (reader.NodeType != System.Xml.XmlNodeType.EndElement)
+{
+UserInfo o = s.Deserialize(reader) as UserInfo;
+AddUserInfo(o);
+}
+}
+/// <summary>
+/// 独自でシリアライズを行う
+/// </summary>
+/// <param name="writer"></param>
+public void WriteXml(System.Xml.XmlWriter writer)
+{
+XmlSerializer s = new XmlSerializer(typeof(UserInfo));
+foreach (UserInfo val in _users.Values)
+{
+s.Serialize(writer, val);
+}
+}
+#endregion
+}
+}
+2 テストプログラムの作成
+プロジェクト作成時に既定で作成されるProgram.csのMainを以下のように編集してテストプログラムを記述します。
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Xml.Serialization;
+using System.IO;
+namespace XmlSerializerTest
+{
+class Program
+{
+static void Main(string[] args)
+{
+XmlSerializer serializer = new XmlSerializer(typeof(UserInfoList));
+UserInfoList list = new UserInfoList();
+UserInfo info = new UserInfo();
+info.UserName = "test";
+list.AddUserInfo(info);
+info = new UserInfo();
+info.UserName = "kitakore";
+list.AddUserInfo(info);
+using (FileStream fs = new FileStream(@"D:\temp\test.xml", FileMode.Create))
+{
+serializer.Serialize(fs, list);
+}
+using (FileStream fs = System.IO.File.OpenRead(@"D:\temp\test.xml"))
+{
+UserInfoList o = serializer.Deserialize(fs) as UserInfoList;
+Console.WriteLine(o.GetUserInfo("test").UserName);
+}
+//そのほかいろいろ
+List<UserInfo> glist = new List<UserInfo>();
+glist.Add(info);
+XmlSerializer s = new XmlSerializer(typeof(List<UserInfo>));
+using (FileStream fs = new FileStream(@"D:\temp\test2.xml", FileMode.Create))
+{
+s.Serialize(fs, glist);
+}
+UserInfo[] arrayList = new UserInfo[1];
+arrayList[0] = info;
+XmlSerializer s1 = new XmlSerializer(typeof(UserInfo[]));
+using (FileStream fs = new FileStream(@"D:\temp\test3.xml", FileMode.Create))
+{
+s1.Serialize(fs, arrayList);
+}
+}
+}
+}
+test.xmlの内容は次のようになります。
+<?xml version="1.0"?>
+<users xmlns="urn:Handcraft.UserInfoList">
+<user xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" applicationName="/" name="kitakore" xmlns="urn:Handcraft.UserInfo">
+<approved>false</approved>
+<lockouted>false</lockouted>
+<comment />
+<email />
+<creationDate>1754-01-01T00:00:00</creationDate>
+<lastActivityDate>1754-01-01T00:00:00</lastActivityDate>
+<lastLockoutDate>1754-01-01T00:00:00</lastLockoutDate>
+<lastLoginDate>1754-01-01T00:00:00</lastLoginDate>
+<lastPasswordChangedDate>1754-01-01T00:00:00</lastPasswordChangedDate>
+<passwordQuestion />
+<passwordAnswer />
+<password />
+<passwordSalt />
+</user>
+<user xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" applicationName="/" name="test" xmlns="urn:Handcraft.UserInfo">
+<approved>false</approved>
+<lockouted>false</lockouted>
+<comment />
+<email />
+<creationDate>1754-01-01T00:00:00</creationDate>
+<lastActivityDate>1754-01-01T00:00:00</lastActivityDate>
+<lastLockoutDate>1754-01-01T00:00:00</lastLockoutDate>
+<lastLoginDate>1754-01-01T00:00:00</lastLoginDate>
+<lastPasswordChangedDate>1754-01-01T00:00:00</lastPasswordChangedDate>
+<passwordQuestion />
+<passwordAnswer />
+<password />
+<passwordSalt />
+</user>
+</users> <password />
+<passwordSalt />
+</user>
+</users>
+3. その他の情報
+XmlSerializerはシリアライズするクラスを動的にコンパイル処理を行うのにcsc.exeを使います。このとき、csc.exeが停止することがあるそうです。詳細は以下のリンク参照。回避方法としてプリコンパイルを行うようsgen.exeツールを使うようにします。
+-XmlSerializer クラスから起動された csc.exe が一定時間応答を停止する場合がある  
+http://support.microsoft.com/kb/899153/ja 
+-Windows Vista で XmlSerializer クラスを使用するアプリケーションの動作により、リムーバブル ディスクが安全に取り外せないことがある 
+http://support.microsoft.com/kb/957190/ja
+XMLのシリアル化を細かく制御する属性については次のリンクを参照
+XML シリアル化を制御する属性 
+http://msdn.microsoft.com/ja-jp/library/83y7df3e(VS.80).aspx
+説明は以上です。間違い、誤り等があればご連絡ください。

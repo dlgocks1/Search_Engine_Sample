@@ -1,0 +1,24 @@
+Web 制作会社で働く19歳のメモ帳です。 
+仕事や趣味で HTML CSS Javascript WordPress Photoshop PHP MySQL などを扱います。基本的に脳内は PHP が80%くらいを占めている Web 制作者です。28歳までに Web で世界を変えることが夢です。
+メールは届いて当然ですよね。携帯のメールとか Gmail のようなフリーのメールアドレスを利用している人は問題ないかもしれませんが、私のように独自ドメインでメールをしたい人は、自分のサーバーでメールを送受信するので、サーバーに何か障害などが発生した場合、メールが受信できなくなるなどの悲惨な状況に陥ります。
+DNS レコードを設定する
+以前一度 Google Apps を設定しようと思ったことがあったんですが、ちょっと DNS についての知識が欠如していたので、なかなか Google Apps を変更することができませんでしたが、今回本気で Gmail が利用したかったので簡単に学んでみました。以下のページが日本で一番分かりやすかったので、皆さんも学ぶ際はぜひここで。実は DNS って凄まじく便利でした。 
+DNSの解説 for ビギナー
+ちなみに Google Apps に独自ドメインを使うのは独自ドメインで Gmail を使いたいから。独自ドメインを設定するみたいな感じになってますが、実際は MX レコードを向ければ良いだけなので A レコードを現在利用しているサーバーに向けていれば何も問題はありません。いずれにしても Google Apps を利用するなら最低限の DNS に関する知識がある必要があるかもですね。
+CHAME を設定してサブドメインで Gmail にアクセスできる
+例えば、hoge.com というドメインで Google Apps を利用している場合、mail.hoge.com というアドレスから Gmail を利用できるようになります。ちなみにデフォルトは mail.google.com/a/hoge.com になります。これでも十分短いですけど、せっかく独自ドメインを設定するんだからとことんやりたいものです。
+設定例
+どのサイトにも設定例はありません。なので私が公開しておきます。CNAME を気をつけましょう。ghs.google.com. 最後のドット(.)を忘れてしまうとどれだけ待っても設定は反映されないです。48時間は設定が反映されないかもしれないということで、待つ必要があるみたいですが、私や他の人も正しく設定していれば大体の人が数十分で設定が反映されているようです。
+cname mail ghs.google.com.
+cname docs ghs.google.com.
+cname calendar ghs.google.com.
+cname sites ghs.google.com.
+mx aspmx.l.google.com. 10
+mx alt1.aspmx.l.google.com. 20
+mx alt2.aspmx.l.google.com. 20
+mx aspmx2.googlemail.com. 30
+mx aspmx3.googlemail.com. 30
+mx aspmx4.googlemail.com. 30
+mx aspmx5.googlemail.com. 30
+txt @ v=spf1 include:aspmx.googlemail.com ~all
+追記(2009/4/26):本当は2009 年 4 月 16 日 2:49 amの記事でしたが、大人の事情で今日の記事に変更します。

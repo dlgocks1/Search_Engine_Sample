@@ -1,0 +1,17 @@
+TR09-064 | 5th August 2009 20:37
+Unconditional Lower Bounds against Advice
+Abstract: 
+We show several unconditional lower bounds for exponential time classes
+against polynomial time classes with advice, including:
+\begin{enumerate}
+\item For any constant $c$, $\NEXP \not \subseteq \P^{\NP[n^c]}/n^c$
+\item For any constant $c$, $\MAEXP \not \subseteq \MA/n^c$
+\item $\BPEXP \not \subseteq \BPP/n^{o(1)}$
+\end{enumerate}
+It was previously unknown even whether $\NEXP \subseteq \NP/n^{0.01}$.
+For the probabilistic classes, no lower bounds for uniform exponential time
+against advice were known before.
+We also consider the question of whether these lower bounds can be made to work
+on almost all input lengths rather than on infinitely many. We give an oracle
+relative to which $\NEXP \subseteq \io\NP$, which provides evidence that this
+is not possible with current techniques.

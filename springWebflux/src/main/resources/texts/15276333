@@ -1,0 +1,496 @@
+Saturday, February 03, 2007
+Three Autocomplete implementations compared
+Many web sites are now offering forms which suggest completions as you type. For example, in a form to hold the name of a US state, typing in "C" will pop up a list box containing ["California", "Colorado"]. Subsequently typing in an "a" will decrease the options in the list box to only ["California"]. Hitting the ENTER key will populate the field with "California". One of the most popular (although probably not the first) implementations is Google Suggest.
+This feature is certainly very helpful from the user's perspective, since it saves keystrokes and enables him to get his job done faster. A side effect is that the list of completions aids in the process of discovery. For the user, it could mean that he gets to pages which he would not have looked at otherwise. For the site owner, it means that the site is more "sticky", thus translating into more page views and advertising dollars for sites that depend on advertising.
+I have been curious about how auto-complete works, although the curiosity did not translate into actual code till recently. Obviously, AJAX is part of the equation, since each keystroke event in the form needs to be captured and sent back to the server and the possible completions returned and displayed in the scope of a single request. I was more interested, however, in how the server-side component can be built to efficiently return the results it needed to.
+Over the last week, I came up with three possible implementations to do auto-completions on the file names in my ~/tmp directory. There are about 280 files in there, so this is nothing compared to what production quality auto-completion components will have to serve on real websites, but it could be a starting point for better ideas. I enumerate them here, with code, and some relative performance numbers.
+In-Memory Trie
+Tries are specialized data structures where a word can be stored as a sequence of characters. Reading the word involves traversing down the branch of the tree. At each node, the possible completions of the partial word can be found by traversing down all possible paths to the leaf level. It seemed ideal for modeling auto-completions, which is why I chose it. A Trie is modelled as a collection of TrieNode objects. A TrieNode is basically the current character and a Map of completions. Here is the code:
+1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+16
+17
+18
+19
+20
+21
+22
+23
+24
+25
+26
+27
+28
+29
+30
+31
+32
+33
+34
+35
+36
+37
+38
+39
+40
+41
+42
+43
+44
+45
+46
+47
+48
+49
+50
+51
+52
+53
+54
+55
+56
+57
+58
+59
+60
+61
+62
+63
+64
+65
+66
+67
+68
+69
+70
+71
+72
+73
+74
+75
+76
+77
+78
+79
+80
+81
+82
+83
+84
+85
+86
+87
+88
+89
+90
+91
+92
+93
+94
+95
+96
+97
+98
+99
+100
+101
+102
+103
+104
+105
+106
+107
+108
+109
+110
+111
+112
+113
+114
+115
+116
+117
+118
+119
+120
+121
+122
+123
+124
+125
+126
+127
+128
+129
+130
+131
+132// Trie.java
+public class Trie {
+private TrieNode rootNode;
+public Trie() {
+super();
+rootNode = new TrieNode(' ');
+}
+public void load(String phrase) {
+loadRecursive(rootNode, phrase + "$");
+}
+private void loadRecursive(TrieNode node, String phrase) {
+if (StringUtils.isBlank(phrase)) {
+return;
+}
+char firstChar = phrase.charAt(0);
+node.add(firstChar);
+TrieNode childNode = node.getChildNode(firstChar);
+if (childNode != null) {
+loadRecursive(childNode, phrase.substring(1));
+}
+}
+public boolean matchPrefix(String prefix) {
+TrieNode matchedNode = matchPrefixRecursive(rootNode, prefix);
+return (matchedNode != null);
+}
+private TrieNode matchPrefixRecursive(TrieNode node, String prefix) {
+if (StringUtils.isBlank(prefix)) {
+return node;
+}
+char firstChar = prefix.charAt(0);
+TrieNode childNode = node.getChildNode(firstChar);
+if (childNode == null) {
+// no match at this char, exit
+return null;
+} else {
+// go deeper
+return matchPrefixRecursive(childNode, prefix.substring(1));
+}
+}
+public List<String> findCompletions(String prefix) {
+TrieNode matchedNode = matchPrefixRecursive(rootNode, prefix);
+List<String> completions = new ArrayList<String>();
+findCompletionsRecursive(matchedNode, prefix, completions);
+return completions;
+}
+private void findCompletionsRecursive(TrieNode node, String prefix, List<String> completions) {
+if (node == null) {
+// our prefix did not match anything, just return
+return;
+}
+if (node.getNodeValue() == '$') {
+// end reached, append prefix into completions list. Do not append
+// the trailing $, that is only to distinguish words like ann and anne
+// into separate branches of the tree.
+completions.add(prefix.substring(0, prefix.length() - 1));
+return;
+}
+Collection<TrieNode> childNodes = node.getChildren();
+for (TrieNode childNode : childNodes) {
+char childChar = childNode.getNodeValue();
+findCompletionsRecursive(childNode, prefix + childChar, completions);
+}
+}
+public String toString() {
+return "Trie:" + rootNode.toString();
+}
+}
+// TrieNode.java
+public class TrieNode {
+private Character character;
+private HashMap<Character,TrieNode> children;
+public TrieNode(char c) {
+super();
+this.character = new Character(c);
+children = new HashMap<Character,TrieNode>();
+}
+public char getNodeValue() {
+return character.charValue();
+}
+public Collection<TrieNode> getChildren() {
+return children.values();
+}
+public Set<Character> getChildrenNodeValues() {
+return children.keySet();
+}
+public void add(char c) {
+if (children.get(new Character(c)) == null) {
+// children does not contain c, add a TrieNode
+children.put(new Character(c), new TrieNode(c));
+}
+}
+public TrieNode getChildNode(char c) {
+return children.get(new Character(c));
+}
+public boolean contains(char c) {
+return (children.get(new Character(c)) != null);
+}
+public int hashCode() {
+return character.hashCode();
+}
+public boolean equals(Object obj) {
+if (!(obj instanceof TrieNode)) {
+return false;
+}
+TrieNode that = (TrieNode) obj;
+return (this.getNodeValue() == that.getNodeValue());
+}
+public String toString() {
+return ReflectionToStringBuilder.reflectionToString(this, ToStringStyle.DEFAULT_STYLE);
+}
+}
+In-Memory Relational Database
+Although the previous implementation works fine, it is not very readable. This got me thinking. All we are doing are prefix queries on the passed in word, so a possible implementation could be database based. We use an in-memory database such as HSQLDB to ensure similar performance to the Trie implementation. Here is the code for this implementation.
+1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+16
+17
+18
+19
+20
+21
+22
+23
+24
+25
+26
+27
+28
+29
+30
+31
+32
+33
+34
+35
+36
+37
+38
+39
+40
+41
+42
+43
+44
+45
+46
+47// DbTrie.java
+public class DbTrie {
+private static final String DB_NAME = "/tmp/lsdb";
+private static final String LOAD_SQL = "insert into ls(name) values (?)";
+private static final String MATCH_SQL = "select count(*) from ls where name like '%prefix%%'";
+private static final String FIND_SQL = "select name from ls where name like '%prefix%%'";
+private JdbcTemplate jdbcTemplate;
+private boolean loadData = false;
+public DbTrie() throws Exception {
+DriverManagerDataSource dataSource = new DriverManagerDataSource();
+dataSource.setDriverClassName("org.hsqldb.jdbcDriver");
+dataSource.setUrl("jdbc:hsqldb:file:" + DB_NAME);
+dataSource.setUsername("sa");
+dataSource.setPassword("");
+jdbcTemplate = new JdbcTemplate(dataSource);
+if (! (new File(DB_NAME + ".properties").exists())) {
+jdbcTemplate.execute("create table ls(name varchar(64) not null, primary key(name));");
+loadData = true;
+}
+}
+public void load(String line) {
+if (loadData) {
+jdbcTemplate.update(LOAD_SQL, new String[] {line});
+}
+}
+public boolean matchPrefix(String prefix) {
+int numMatches = jdbcTemplate.queryForInt(MATCH_SQL.replaceAll("%prefix%", prefix));
+return (numMatches > 0);
+}
+@SuppressWarnings("unchecked")
+public List<String> findCompletions(String prefix) {
+List<String> completions = new ArrayList<String>();
+List<Map<String,String>> rows = jdbcTemplate.queryForList(
+FIND_SQL.replaceAll("%prefix%", prefix));
+for (Map<String,String> row : rows) {
+completions.add(row.get("NAME"));
+}
+return completions;
+}
+}
+Java Set
+My final implementation is a plain old java.util.TreeSet. Given that we need a way to quickly jump down to the position where the rest of the entries are lexicographically greater than or equal to our input, then iterate until we reach a point where the entries no longer start with our input, a TreeSet seemed to be the ideal data structure. Here is the code:
+1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+16
+17
+18
+19
+20
+21
+22
+23
+24
+25
+26
+27
+28
+29
+30
+31
+32
+33
+34
+35
+36// SetTrie.java
+public class SetTrie {
+private TreeSet<String> lines;
+public SetTrie() {
+lines = new TreeSet<String>();
+}
+public void load(String line) {
+lines.add(line);
+}
+public boolean matchPrefix(String prefix) {
+Set<String> tailSet = lines.tailSet(prefix);
+for (String tail : tailSet) {
+if (tail.startsWith(prefix)) {
+return true;
+}
+}
+return false;
+}
+public List<String> findCompletions(String prefix) {
+List<String> completions = new ArrayList<String>();
+Set<String> tailSet = lines.tailSet(prefix);
+for (String tail : tailSet) {
+if (tail.startsWith(prefix)) {
+completions.add(tail);
+} else {
+break;
+}
+}
+return completions;
+}
+}
+Performance
+Each implementation was tested with the standard call sequence and the timing information captured. The call sequence is shown below:
+1
+2
+3
+4
+5
+6
+7
+8
+9
+10 Trie trie = new Trie();
+//DbTrie trie = new DbTrie();
+//SetTrie trie = new SetTrie();
+for (String line : lines) { // contains filenames from ~/tmp/
+trie.load();
+}
+for (int i = 1; i < TEST_STRING_LENGTH; i++) {
+String prefix = TEST_STRING.substring(0, i);
+List<String> completions = trie.findCompletions(prefix);
+}
+Here are some performance numbers for each of the three implementations. As expected, the Trie implementation (being a specialized data structure) is the fastest, and the HSQLDB implementation is the slowest (because of the overhead of an SQL engine). The Set based implementation is the easiest to understand, but is not as quick as the Trie based implementation.
+Implementation
+Setup (ms)
+Average Lookup time (ms)
+Trie
+82
+0.03
+HSQLDB
+192
+1.87
+Set
+6
+0.06
+Conclusion
+All the implementations above are in-memory implementations. For large data sets, loading these data sets into memory could impact startup times significantly. There is also the concern with huge memory footprints of the application servers. While these may be possible implementations for small sites, these would probably not be suitable for large sites, even though they do have response times that can be measured in the order of fractions of milliseconds.
+Posted by
+Sujit Pal
+at
+10:19 AM
+Labels:
+ajax,
+data-structure,
+databases,
+search,
+webapp-development
+Share/Save:
+10
+comments (moderated to prevent spam):
+Sree
+said...
+Vert nice post. Thanks for comparing Trie and TreeSet. However, I think the Trie looked faster (about twice as fast as TreeSet) mainly because the # of files in your /tmp folder are relatively less (~280). I wonder how the perf numbers would look if the elements are in the order of thousands. Overall, a very useful post. Thanks, Sree
+12/12/2007 9:58 AM
+Sujit Pal
+said...
+Thanks Sree, I haven't done tests comparing a Trie with a TreeSet for large number of elements, but intuitively, I don't think the relative numbers would change very much. With a larger number of elements, assuming more overlap in the leading chars, the Trie implementation would have to climb deeper into the Trie to get the suggestion, while the TreeSet implementation would have to scan through a greater number of sorted rows. What do you think?
+12/17/2007 2:57 AM
+Anonymous
+said...
+Thank you for your interesting post! It made me think about a data structure for rank-sensitive autocompletion, that is efficient for the retrieval of the top k best-ranking completions of a given prefix. And I came up with something I called Suggest Tree. It is fine both in terms of time and space efficiency. Best regards, Nicolai
+3/02/2008 1:12 AM
+tomermolo
+said...
+looks good but very complicating...i think predictad simplifies the process
+3/04/2008 4:29 AM
+Sujit Pal
+said...
+Hi Nicolai, your Suggest Tree looks really interesting. I agree its probably going to scale better since you are also taking into account popularity of a given term. Thank you for the link.
+3/09/2008 9:50 AM
+Sujit Pal
+said...
+Hi Tomer, thanks for the pointer to PredictAd, its a very nice product you guys have come up with. Actually, I was just curious as to how its done, and I had some ideas, which is what I tried out and wrote about on the blog. The code here does help people to roll their own autocomplete solutions, but the intent is not to compete with solutions from a commercial product such as PredictAd. I liked the examples on your blog too.
+3/09/2008 10:01 AM
+Eyal
+said...
+Great post. Thanks Sujit. For all of you C# guys, I've built the corresponding equivalent of a TRIE for the .NET framework, based on this and other posts. Have a look at my post here: http://metalthought.blogspot.com/2009/05/enhanced-performance-for-aspnet-ajax.html
+6/27/2009 1:49 PM
+Sujit Pal
+said...
+Thanks Eyal, and you are welcome. I will check out the page for the C# version.
+7/01/2009 11:06 PM
+Anonymous
+said...
+This is an awesome review. Helped a lot, and I have used the TreeSet to blaze through autocomplete lookups. I made one to lookup every country, and every state in every country worldwide. The number of states is quite large. The lookup is under 2ms using TreeSets... and often 0ms. I added a "limit" field which is useful for ajax autocomplete boxes... ie, just give me "5" states that start with "cal..." across the world. (don't need the huge list). Works great. Thanks!
+7/31/2009 11:17 AM
+Sujit Pal
+said...
+You are welcome, and thanks for the feedback. Glad it helped.
+7/31/2009 3:33 PM
+Post a Comment

@@ -1,0 +1,6 @@
+TR09-065 | 10th August 2009 19:18
+Faster exponential time algorithms for the shortest vector problem
+Abstract: 
+We present new faster algorithms for the exact solution of the shortest vector problem in arbitrary lattices. Our main result shows that the shortest vector in any $n$-dimensional lattice can be found in time $2^{3.199 n}$ and space $2^{1.325 n}$.
+This improves the best previously known algorithm by Ajtai, Kumar and Sivakumar [Proceedings of STOC 2001] which was shown by Nguyen and Vidick [J. Math. Crypto. 2(2):181--207] to run in time $2^{5.9n}$ and space $2^{2.95n}$. We also present a practical variant of our algorithm which provably uses an amount of space proportional to $\tau_n$, the ``kissing'' constant in dimension $n$. Based on the best currently known upper and lower bounds on the kissing constant, the space complexity of our second algorithm is provably bounded by $2^{0.41n}$, and it is likely to be at most $2^{0.21n}$ in practice.
+No upper bound on the running time of our second algorithm is currently known, but experimentally the algorithm seems to perform fairly well in practice, with running time $2^{0.48n}$, and space complexity $2^{0.18n}$.

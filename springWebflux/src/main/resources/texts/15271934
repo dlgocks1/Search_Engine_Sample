@@ -1,0 +1,8 @@
+jCryption.orgは8月2日、HTMLフォームを暗号化できるオープンソースJavaScriptライブラリ「jCryption 1.0」を公開した。ライセンスはMIT Licenseを利用、Google Codeのプロジェクトページよりダウンロードできる。
+jCryptionは、HTMLフォームデータ（POST/GET-Data）を暗号化するプラグイン。RSAアルゴリズムとjQueryを利用してクライアント側でデータを暗号化する。解読は、サーバー側でPHPを利用して行う。
+SSLがない状態でもデータを高速かつシンプルに暗号化できることが特徴だが、認証の機能がないことなどから、SSLの代わりにはならないとしている。土台レベルのセキュリティ提供を目指すという。
+「Internet Explorer 6」以上、「Mozilla Firefox 3」以上、「Opera 9」以上、「Safari 3」、「Google Chrome」で動作確認済みとのこと。
+ｊCryption.org 
+http://www.jcryption.org/
+Google Codeの「jCryption」プロジェクトページ 
+http://code.google.com/p/jcryption/

@@ -1,0 +1,74 @@
+In this tutorial, we'll explain how to create a cute earth illustration. We’ll use basic shapes and some Illustrator knowhow to make this. It’s a fun look at the earth, as seen from space, and interpreted in a cartoon vector style. Let’s get started!
+Final Image Preview
+Below is the final image we will be working towards. Want access to the full Vector Source files and downloadable copies of every tutorial, including this one? Join Vector Plus for just 9$ a month.
+Tutorial Details
+Program: Adobe Illustrator CS4
+Difficulty: Beginner
+Estimated Completion Time: 1 hours
+Step 1
+Open up a new document and create a rectangle with the Rectangle Tool (M). Fill it with black. This will be the universe background.
+Step 2
+Next, create a circle with the Ellipse Tool (L) and fill it with a blue.
+Step 3
+Make a copy of the ellipse. Then select the Pencil Tool (N) and start drawing a wave like shape. Place it so it overlaps with the circle.
+Step 4
+Select both, the circle and the wave and select the Add to Shape Area in the Pathfinder Palette.
+Step 5
+This will be the basic background for the earth resembling the water. 
+Step 6
+Make a copy of the earth/water shape on top (Command + C + F) and fill it with a radial black to white gradient. Set the layer mode to Multiply at 41% Opacity.
+Step 7
+Select the original circle and duplicate it. Overlap both until you can create a sickle like shape (Choose Subtract from the Pathfinder Palette). Fill it with a radial black to white gradient and set the layer mode to Multiply at 27% Opacity.
+Step 8
+Place the first full circle on top of the earth and then the sickle like shape on top of that.
+Step 9
+Let’s create the land pieces. Create another circle (the same size as the earth) and set the stroke to blue. Then start drawing shapes with the Pencil Tool (N) resembling land shapes. Make sure they overlap with the circle outline.
+Step 10
+Select them all and fill them with blue, no stroke. You can easily achieve this by clicking Shift + X to swap the Stroke color to the Fill Color. Now select all the shapes and hit the Divide button on the Pathfinder Palette.
+Step 11
+Delete the shapes you do not need. Now fill the remaining ones with a color of your choice. I chose a green gradient to represent the land masses.
+Step 12
+Select the land shapes and go to Object > Path > Offset Path and apply the settings below.
+Step 13
+Make a copy of the circle and then select it with the bigger offset shapes. Hit the Divide button in the Pathfinder Palette.
+Step 14
+Use the Direct Selection Tool to select the overlapping parts, then delete them. Now make sure the shapes that are slightly bigger are placed behind the original shapes of the land. Then change the fill color to a light blue.
+Step 15
+Select the light blue shapes and apply a Feather Effect and set the layer mode to 55% Opacity.
+Step 16
+Place the earth shape with the radial gradient on top of all shapes.
+Step 17
+Let’s move on to the smaller elements. We want to create some trees that are oversized and whimsical. Create a tree trunk with the Pen Tool (P) and fill it with brown.
+Step 18
+Then create the leaf part and fill it with a radial green gradient.
+Step 19
+Group both and apply a Drop Shadow (Effect > Stylize > Drop Shadow).
+Step 20
+Make several copies of the tree and change the green gradient slightly. Overlap them and place them on top of one of the grass shapes. Rotate them as needed. 
+Step 21
+Let’s move on to the light house part. Create several red rectangles and place them apart, just like you see in the image below.
+Step 22
+Then draw on top of the rectangles a light house shape filled with red.
+Step 23
+Select all of the rectangles and the light house shape and hit the Divide button in the Pathfinder Palette. 
+Step 24
+Start deleting the unnecessary shapes and fill each second shape with white.
+Step 25
+Add to the bottom red rectangle a path point with the Pen Tool (P). Then select the point with the Direct Selection Tool (A) and drag it downwards. Add path point handles by pressing Alt and once you move over the point, click and drag. Adjust the handles so the bottom of the rectangle becomes rounded.
+Step 26
+Add some more shapes to complete the lighthouse. Now select all and group (Command + G). Skew or rotate the lighthouse.
+Step 27
+Place the lighthouse on top of another land shape.
+Step 28
+You can add as many fun objects as desired. For example, a house, a boat, some bushes etc. All can be achieved with simple shapes.
+Step 29
+Let’s give the scene some drama. Create a funny shape like you see in the images below and fill it with a black to white radial gradient.
+Step 30
+Place it on top of all the other shapes including the background. Then set the layer mode to Overlay at 100% Opacity.
+Step 31
+Create a fairly big circle, fill it with black and place it behind the lighthouse, but on top of the background. Now add one mesh point in the middle with the Mesh Tool (U). Select the mesh point with the Direct Selection Tool (A) and fill the point with a dark grey.
+Step 32
+Create another circle and repeat the same. But instead of selecting the middle mesh point, select the outer mesh point and fill the point with a lighter grey. This will make the circle look like another far away planet.
+Conclusion
+This is it. Pretty straight forward and simple. I hope you had fun with this tutorial. I would like to thank Sean Geng who’s earth illustration inspired me to write a tutorial. Please check out his portfolio, DesignSpasm.net.
+Subscribe to the Vectortuts+ RSS Feed to stay up to date with the latest vector tutorials and articles.

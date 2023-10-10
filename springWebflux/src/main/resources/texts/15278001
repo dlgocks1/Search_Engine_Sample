@@ -1,0 +1,5 @@
+HTTP Subsystem Messages
+The HTTP1.0 catalog contains messages in the range
+BEA101000 - BEA109999. Messages in this catalog are part of the
+weblogic.servlet
+Internationalization package and the weblogic.i18n Localization package.

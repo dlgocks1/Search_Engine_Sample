@@ -1,0 +1,17 @@
+【onLoad()，onUnloadと，window.openの組み合わせの解説】
+onLoad()は，ページがロードされた時点で，onUnload()はページがアンロードされた時点何かを行うイベント・ハンドラです．これらとwindow.openを組み合わせれば，ページを開けたとたんに「Welcome」というウインドウを表示させ，ページを出る時にそのウインドウを閉じる，といったことも可能です． 
+ページを出る時にウインドウを閉じるには，ウインドウを開けた時にwinflという変数に1を代入します．そして，ページを出る時にこれが1なら，OPEN1という開けたウインドウをclose()すればよいのです．
+<HEAD> 
+<TITLE>最初のページ</TITLE> 
+</HEAD> 
+<BODY BGCOLOR="#FFFFCC" onLoad="WinOpen()"　onUnload="if(winfl==1){OPEN1.close();winfl=0}"> 
+オーブンしたウインドウは，このページを脱する時に自動的にクローズします． 
+<SCRIPT LANGUAGE="JavaScript"> 
+var winfl=0; 
+function WinOpen(){ 
+winfl=1; OPEN1=window.open('../gif_make/jikko30.html','MADO1','toolbar=0,location=0,directories=0, 
+status=0,menubar=0,scrollbars=0,resizable=0,width=400,height=150');
+} 
+</SCRIPT> 
+</BODY> 
+</HTML>

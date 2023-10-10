@@ -1,0 +1,17 @@
+"object"
+リソース型はキャストには使用できません。また、この方法では null型もキャストには使用できません。設定しようとするとエラーが発生します。
+$src1 = 0;
+$cast1 = (string)$src1;
+var_dump($cast1); // 出力： string(1) "0"
+$src2 = 1.23;
+$cast2 = (string)$src2;
+var_dump($cast2); // 出力： string(4) "1.23"
+$src3 = "0";
+$cast3 = (float)$src3;
+var_dump($cast3); // 出力： float(0)
+$src4 = 0;
+$cast4 = (bool)$src4;
+var_dump($cast4); // 出力： bool(false)
+$src5 = TRUE;
+$cast5 = (string)$src5;
+var_dump($cast5); // 出力： string(1) "1"

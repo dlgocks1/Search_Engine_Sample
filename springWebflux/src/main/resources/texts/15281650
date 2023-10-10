@@ -1,0 +1,1 @@
+Linux, Android | 10:51カーネルのドライバを変更$ cd ~/mycake/kernel$ cp arch/arm/configs/msm_defconfig .config$ vi .config（使用したいドライバ選択変更）$ make ARCH=arm CROSS_COMPILE=../prebuilt/linux-x86/toolchain/arm-eabi-4.3.1/bin/arm-eabi- zImage作成したzImageを使ってboot.img、system.imgを作成$ cd ~/mycake/$ vi buildspec.mkTARGET_PREBUILT_KERNEL:=~/mycake/kernel/arch/arm/boot/zImage$ makefastbootで書き込む

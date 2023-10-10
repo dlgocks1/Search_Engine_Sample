@@ -1,0 +1,67 @@
+Package: cl-clg
+Version: 0.94~20080506-1
+Severity: normal
+Tags: patch
+CLG uses the function SB-ALIEN::SHARED-OBJECT-FILE which is now
+(SBCL 1.0.25 and possibly older releases) called
+SB-ALIEN::SHARED-OBJECT-NAMESTRING. The attached patch fixes that.
+-- System Information:
+Debian Release: squeeze/sid
+APT prefers unstable
+APT policy: (500, 'unstable'), (500, 'testing'), (500, 'stable'), (1, 
+'experimental')
+Architecture: i386 (i686)
+Kernel: Linux 2.6.28.8-leviathan (PREEMPT)
+Locale: LANG=en_US.UTF-8, LC_CTYPE=en_US.UTF-8 (charmap=UTF-8) (ignored: LC_ALL 
+set to en_US.UTF-8)
+Shell: /bin/sh linked to /bin/bash
+Versions of packages cl-clg depends on:
+ii common-lisp-controller 6.17 Common Lisp source and compiler ma
+ii libgtk2.0-dev 2.14.7-4+b1 Development files for the GTK+ lib
+cl-clg recommends no packages.
+cl-clg suggests no packages.
+-- no debconf information
+diff -urN clg-0.94~20080506.old/tools/asdf-extensions.lisp clg-0.94~20080506/tools/asdf-extensions.lisp
+--- clg-0.94~20080506.old/tools/asdf-extensions.lisp 2009-03-25 23:42:30.000000000 +0500
++++ clg-0.94~20080506/tools/asdf-extensions.lisp 2009-03-25 23:44:12.000000000 +0500
+@@ -69,9 +69,9 @@
+(sb-alien:load-shared-object namestring)
+(unless absolute-p
+(let ((shared-object (find namestring sb-alien::*shared-objects* 
+- :key #'sb-alien::shared-object-file 
++ :key #'sb-alien::shared-object-namestring 
+:test #'equal)))
+- (setf (sb-alien::shared-object-file shared-object) name+type))))
++ (setf (sb-alien::shared-object-namestring shared-object) name+type))))
+#+cmu
+(progn
+(ext:load-foreign namestring)
+@@ -167,7 +167,7 @@
+(name+type (subseq namestring (length directory)))
+(stored-name (if (absolute-p lib) namestring name+type)))
+- #+sbcl(find stored-name sb-alien::*shared-objects* :key #'sb-alien::shared-object-file :test #'equal)
++ #+sbcl(find stored-name sb-alien::*shared-objects* :key #'sb-alien::shared-object-namestring :test #'equal)
+#+cmu(rassoc stored-name system::*global-table* :test #'equal)
+#+clisp(find stored-name *loaded-libraries* :test #'equal)))
+diff -urN clg-0.94~20080506.old/tools/asdf-extensions.lisp clg-0.94~20080506/tools/asdf-extensions.lisp
+--- clg-0.94~20080506.old/tools/asdf-extensions.lisp 2009-03-25 23:42:30.000000000 +0500
++++ clg-0.94~20080506/tools/asdf-extensions.lisp 2009-03-25 23:44:12.000000000 +0500
+@@ -69,9 +69,9 @@
+(sb-alien:load-shared-object namestring)
+(unless absolute-p
+(let ((shared-object (find namestring sb-alien::*shared-objects* 
+- :key #'sb-alien::shared-object-file 
++ :key #'sb-alien::shared-object-namestring 
+:test #'equal)))
+- (setf (sb-alien::shared-object-file shared-object) name+type))))
++ (setf (sb-alien::shared-object-namestring shared-object) name+type))))
+#+cmu
+(progn
+(ext:load-foreign namestring)
+@@ -167,7 +167,7 @@
+(name+type (subseq namestring (length directory)))
+(stored-name (if (absolute-p lib) namestring name+type)))
+- #+sbcl(find stored-name sb-alien::*shared-objects* :key #'sb-alien::shared-object-file :test #'equal)
++ #+sbcl(find stored-name sb-alien::*shared-objects* :key #'sb-alien::shared-object-namestring :test #'equal)
+#+cmu(rassoc stored-name system::*global-table* :test #'equal)
+#+clisp(find stored-name *loaded-libraries* :test #'equal)))

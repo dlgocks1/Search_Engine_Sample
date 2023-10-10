@@ -1,0 +1,72 @@
+Why do Perl and CPAN use so many different install directories? by glew (Initiate)
+glew has asked for the
+wisdom of the Perl Monks concerning the following question:
+BRIEF:
+Why do Perl and CPAN use so many different install directories?
+install/lib, install/lib/perl5, and install/lib/site_perl
+PERL version specific
+etc.
+DETAIL:
+I install a lot of stuff from CPAN. Because I do not have root, I usually install it in ~/.cpan/install - i.e. I have passed ~/.cpan/install as --install_base to various tools.
+I understand that I have to put stuff from the install path into PERL5LIB. I also understand that there are some macine specific components, like *.so, and Perl version specific components.
+But: why are there so many blamed directories where stuff gets put?
+Here is a highly edited directory tree:
+machine-name /users/glew/.cpan/ 52 : dtree install
+install
+" bin
+" lib
+" " 5.10.0
+... lots of modules
+" " " x86_64-linux
+... arch dependent stuff
+... lots of modules
+" " " " auto
+... lots of modules
+" " " " " B
+" " " " " " Lint
+" " " " B
+" " " " " Lint
+... Q: wy is B::Lint in both .../li
++b/5.10/0/x86_64-linux/B::Lint, and in auto?
+" " 5.8.5
+... lots of modules
+" " " x86_64-linux
+... lots of modules
+" " " " auto
+... lots of modules
+" " perl5
+" " " 5.8.3
+... lots of modules
+" " " " x86_64-linux-thread-multi
+" " " " " auto
+... lots of modules
+" " " File
+" " " " 5.8.3
+" " " x86_64-linux
+" " site_perl
+... lots of modules, but I'm tired of saying this
+" " " 5.10.0
+" " " " x86_64-linux
+" " " " " auto
+" " " 5.8.5
+" " " " i686-linux-64int
+" " " " x86_64-linux
+" " " " " auto
+" man
+" " man1
+" " man3
+" share
+" " man
+" " " man1
+" " " man3
+The overall pattern seems to be:
+a) there are 3 basc places where stuff gets put: install/lib, install/lib/perl5, and install/lib/site_perl
+b) there are subtrees according to Perl version under each, e.g. install/lib/PERL-VERSION or install/lib/site_perl/5.10.0
+c) there are arch specific subtrees under these, like x86_64. But the arch names are not always consistent, e.g. x86_64-linux and i686-linux-64int
+c') there are auto directories under some of the above, mainly the arch specific stff.
+As you can see, I have many different versions of Perl installed. Or at least my employer does. (Reason: always want to create old scripts running, even though may install new versions of Perl for new stuff.) Currently we have versions that include 5.6.1, several versions of 5.8.x, and 5.10.0. 32/64. Threaded/non.
+The default CPAN, Build.PL, etc. seem to create a lot of Perl version specific trees.
+It looks like I have to install modules like File::Spec::Links multiple times - in subtrees for each of the Perl versions for scripts that will need to use them.
+I understand why I need to do this if there are binaries or C libraries that need to be linked with. But why is this needed for straight scripts?
+Believe it or not, but I actually am running out of diskspace. Plus the hassle of having to install multiple times.
+When is it safe to put something like install/lib/5.8.5 on the PERL5LIB path for a perl 5.10.x script?

@@ -1,0 +1,6 @@
+基本的にはどちらでも動くんだけど（自分の作ったライブラリの場合は）文字コード周りは、1.9 からは NKF とか使わず、Encoding クラスを使うように方向転換したいと考えている*1。 どうやって場合分けをしようまず、Ruby のバージョンで判断を行う、というのは Disられそうなので却下。というわけで、テキトーにメソッドをコールして NoMethodError が出たら〜とか考えていたのですが、id:willnet さんの発言Twitter / willnet: @sugamasao method_missingが ... で、あぁ、respond_to? を使えばいいんじゃん、という結論に至った*2。 こんな感じにする
+#!ruby
+# vim:fileencoding=utf-8
+$USE_ENCODING = true if ''.respond_to? :encoding
+puts $USE_ENCODING
+$USE_ENCODING は、1.8 なら nil だし、1.9なら（encodingがあるなら） true になるようになる。毎回 encoding メソッドを使う局面で respond_to? を使うのは効率悪そう*3なので、共通メソッドなり initialize なりで一発呼んで、以降はグローバル変数を見るようにしようかと思う。Ruby でグローバル変数なんて滅多に使わないのだけどこいつはまぁ、例外ということで*4。 というわけで個人的にはそれなりにすっきり書けるようになるのでは、と思っているのですが、Ruby の識者方から見てこれはスジの悪い書き方なんでしょうか。不安で胸が押しつぶされそうです＞＜*5

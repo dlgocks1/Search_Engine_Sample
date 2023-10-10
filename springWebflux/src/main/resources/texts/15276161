@@ -1,0 +1,8 @@
+JDBCであるテーブルの外部キー(ForeignKey)情報を取得する場合は、DatabaseMetaData#getCrossReferenceメソッドを利用すればいいようです。
+あるテーブルを参照している外部キーの一覧を取得したい場合は後ろ３つの引数にnullをセット（『親テーブル』を指定）、あるテーブルが参照している外部キーの一覧を取得したい場合は前３つの引数にnullをセットすれば、欲しい情報が取得できるような感じです。
+例）testスキーマのsample1テーブルを参照している外部キー情報を取得する。 
+ResultSet result = metadata.getCrossReference(null,"test","sample1",null, null, null);
+例）hogeスキーマのfugaテーブルが参照している外部キー情報を取得する。 
+ResultSet result = metadata.getCrossReference(null,null, null, null,"hoge","fuga");
+2008/12/11追記 
+データベースによっては、DatabaseMetaData#getCrossReferenceにおいて、テーブル名にnullを指定できない（３つ目と６つ目の引数は、いずれもnull以外の値でなければならない）ものもあるようです（試した範囲では、PostgreSQLはnullを許容しますが、DB2は駄目でした）。そういう場合は、getImportedKeys（指定したテーブルが参照している外部キー情報を取得）あるいはgetExportedKeys（指定したテーブルを参照している外部キー情報を取得）を利用すればＯＫです・・・というか、こっちを使う方が正当派？（＾＾；

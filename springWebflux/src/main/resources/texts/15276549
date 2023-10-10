@@ -1,0 +1,150 @@
+Python, SQLAlchemy | 09:19 | データベース接続とテーブルの生成ソースコードは、こんな感じ database.py
+#!/usr/bin/env python
+#-*- coding: utf-8 -*-
+from sqlalchemy import create_engine
+from sqlalchemy import MetaData
+from sqlalchemy import Table, Column, Integer, String
+# 使用するDBエンジンの設定
+# - 第一引数:データベース
+# - 第二引数:ログの吐き出しの有無
+engine = create_engine('sqlite:///test.db', echo=True)
+# データベース - テーブルの紐付けを行うオブジェクト
+metadata = MetaData()
+# テーブル定義
+# - テーブル名
+# - メタオブジェクト
+# - フィールド名
+users_table = Table(
+'users', metadata,
+Column('id', Integer, primary_key=True),
+Column('name', String),
+Column('fullname', String),
+Column('password', String)
+)
+if __name__ == "__main__":
+# テーブルの作成
+# - engineデータベース内にTableクラスの第二引数にmetadataを指定している
+# - テーブルオブジェクトのテーブルを作成。
+metadata.create_all(engine)
+実行結果
+$ python database.py
+2009-08-11 09:25:48,612 INFO sqlalchemy.engine.base.Engine.0x...1130 PRAGMA table_info("users")
+2009-08-11 09:25:48,612 INFO sqlalchemy.engine.base.Engine.0x...1130 ()
+2009-08-11 09:25:48,614 INFO sqlalchemy.engine.base.Engine.0x...1130 
+CREATE TABLE users (
+id INTEGER NOT NULL, 
+name VARCHAR, 
+fullname VARCHAR, 
+password VARCHAR, 
+PRIMARY KEY (id)
+)
+2009-08-11 09:25:48,614 INFO sqlalchemy.engine.base.Engine.0x...1130 ()
+2009-08-11 09:25:48,616 INFO sqlalchemy.engine.base.Engine.0x...1130 COMMIT
+テーブルとクラスのマッピング modles.py
+#!/usr/bin/env python
+#-*- coding: utf-8 -*-
+from sqlalchemy.orm import mapper, sessionmaker
+from database import engine, users_table
+# テーブルに対応するクラスの定義
+class User(object):
+def __init__(self, name, fullname, password):
+self.name = name
+self.fullname = fullname
+self.password = password
+def __repr__(self):
+return "" % (self.name, self.fullname, self.password)
+# テーブルとクラスのマッピング
+mapper(User, users_table)
+if __name__ == '__main__':
+# ORM’sハンドラの作成
+Session = sessionmaker(bind=engine)
+session = Session()
+テーブルとクラスのマッピングdatabase.pyで定義したusers_tableをオブジェクトを介して操作したい。その為にまずクラスを定義する。
+class User(object):
+def __init__(self, name, fullname, password):
+self.name = name
+self.fullname = fullname
+self.password = password
+def __repr__(self):
+return "" % (self.name, self.fullname, self.password)
+しかし、定義しただけでは駄目で、mapper関数を使用して、users_table と User をマッピングしてやる。
+from sqlalchemy.orm import mapper
+mapper(User, users_table)
+ORMハンドラの作成上記でテーブルとクラスのマッピンができた。では、このクラスでInsertなどの処理が出来るようになったのかというとそうではない。データベースを操作する為には、それを担ってくれるオブジェクトであるSessionを作成しないといけない。
+from sqlalchemy.orm import sessionmaker
+from database import engine
+Session = sessionmaker(bind=engine)
+session = Session()
+sessionmaker関数にて、engine用のSessionクラスを作成した。そして、このクラスを基にオブジェクトを生成する。これでデータベースの操作が出来るようになった。 登録処理さて、今までで以下の処理を行った。データベース接続 テーブルの作成 テーブルとクラスのマッピング ORMハンドラの作成今回は、実際にテーブルにデータを登録してみる。 models.py
+#!/usr/bin/env python
+#-*- coding: utf-8 -*-
+from sqlalchemy.orm import mapper, sessionmaker
+from database import engine, users_table
+# テーブルに対応するクラスの定義
+class User(object):
+def __init__(self, name, fullname, password):
+self.name = name
+self.fullname = fullname
+self.password = password
+def __repr__(self):
+return "" % (self.name, self.fullname, self.password)
+# テーブルとクラスのマッピング
+mapper(User, users_table)
+if __name__ == '__main__':
+# ORM’sハンドラの作成
+Session = sessionmaker(bind=engine, autocommit=False)
+session = Session()
+# 単体の登録する時
+ed_user = User('ed', 'Ed Jones', 'edpassword')
+session.add(ed_user)
+# 複数の登録をする場合
+session.add_all([User('wendy', 'Wendy Williama', 'foobaa'),
+User('mary', 'Mary Contrary', 'xxf527'),
+User('fred', 'Fred Flinstone', 'blah'),])
+# 登録コミット待ちのオブジェクトを表示
+print session.new
+# コミット
+session.commit()
+登録処理 (自動トランザクション)
+# ORM’sハンドラの作成
+Session = sessionmaker(bind=engine)
+session = Session()
+# 単体の登録する時
+ed_user = User('ed', 'Ed Jones', 'edpassword')
+session.add(ed_user)
+# 複数の登録をする場合
+session.add_all([User('wendy', 'Wendy Williama', 'foobaa'),
+User('mary', 'Mary Contrary', 'xxf527'),
+User('fred', 'Fred Flinstone', 'blah'),])
+# コミット
+session.commit()
+登録処理 (手動トランザクション)
+# ORM’sハンドラの作成
+Session = sessionmaker(bind=engine, autocommit=True)
+session = Session()
+sesson.begin()
+# 単体の登録する時
+ed_user = User('ed', 'Ed Jones', 'edpassword')
+session.add(ed_user)
+# 複数の登録をする場合
+session.add_all([User('wendy', 'Wendy Williama', 'foobaa'),
+User('mary', 'Mary Contrary', 'xxf527'),
+User('fred', 'Fred Flinstone', 'blah'),])
+# コミット
+session.commit()
+sessionmaker関数の引数に
+autocommit=True 
+を指定してあげると、手動でトランザクションの開始を宣言できるようになります。
+sesson.begin()
+実行結果
+$ python models.py
+2009-08-11 14:01:38,776 INFO sqlalchemy.engine.base.Engine.0x...e810 BEGIN
+2009-08-11 14:01:38,777 INFO sqlalchemy.engine.base.Engine.0x...e810 INSERT INTO users (name, fullname, password) VALUES (?, ?, ?)
+2009-08-11 14:01:38,778 INFO sqlalchemy.engine.base.Engine.0x...e810 ['ed', 'Ed Jones', 'edpassword']
+2009-08-11 14:01:38,779 INFO sqlalchemy.engine.base.Engine.0x...e810 INSERT INTO users (name, fullname, password) VALUES (?, ?, ?)
+2009-08-11 14:01:38,779 INFO sqlalchemy.engine.base.Engine.0x...e810 ['wendy', 'Wendy Williama', 'foobaa']
+2009-08-11 14:01:38,780 INFO sqlalchemy.engine.base.Engine.0x...e810 INSERT INTO users (name, fullname, password) VALUES (?, ?, ?)
+2009-08-11 14:01:38,780 INFO sqlalchemy.engine.base.Engine.0x...e810 ['mary', 'Mary Contrary', 'xxf527']
+2009-08-11 14:01:38,781 INFO sqlalchemy.engine.base.Engine.0x...e810 INSERT INTO users (name, fullname, password) VALUES (?, ?, ?)
+2009-08-11 14:01:38,781 INFO sqlalchemy.engine.base.Engine.0x...e810 ['fred', 'Fred Flinstone', 'blah']
+2009-08-11 14:01:38,782 INFO sqlalchemy.engine.base.Engine.0x...e810 COMMIT

@@ -1,0 +1,110 @@
+Linux | 09:02サーバ間のデータミラーリングについて調べてみました。僕がやりたかったのは「別のサーバにデータをコピーしたい」ということでした。もう一つ条件があります。「簡単」にやりたい。データのバックアップのためとか、冗長化という意味合いもあると思うのですが、画像などの静的ファイルのみ別のサーバから配信することにします。ちょっとやっかいなことが、静的ファイルを生成するタイミングがバラバラということです。そして、すぐに別のサーバから配信されるようにしたいというのもありました。NFSやrsync、Unisonなどを使おうと考えていましたが、リアルタイムとなるとけっこう難しいものがあると思います。NFSだとちょっと設定や安定性が不安というのも・・・。あと遠隔地など物理的に距離があると難しそうです。rsyncやUnisonでリアルタイムに出来るのかな？と思いましたが、調べてみるとlsyncdというものを見つけました。これはrsyncを使ったものなのですが、Linuxのinotify機能というものを使い、ファイル更新時にリアルタイムでrsyncを実行する事が出来るそうです。なんとスバラシイのでしょうか。inotify機能についてManpage of INOTIFY今回はこのlsyncdを使ってみようと思います。使い方はいたって簡単です。まず二つのサーバ(ミラー元とミラー先)にrsyncをインストールします。CentOSを使っていたのでyumを使いました。
+# yum install rsync 
+まずはミラー先のサーバを設定します。
+# /usr/local/etc/rsyncd.conf を作成。設定内容は下記。
+# /etc/rsyncd.conf がある場合はそちらのほうがいいかも。
+# chrootしない。/etc/localtime が参照できないため、ログの時間がズレる
+# chroot先に/etc/localtime を作ってもOK
+use chroot = no
+# ログの保存先
+log file = /var/log/rsyncd.log
+# モジュール名
+[www]
+# rsyncを動かすときのユーザとグループ
+uid = nobody
+gid = nobody
+# ミラー先のパス
+path = /home/rsync
+# ローカルのみ許可
+hosts allow = 192.168.1.0/24
+# 書き込み許可
+read only = no
+パスワードの設定などもできますが使用する場合は、読み込みの権限など気をつけた方がいいかもしれません。あとは、rsyncdに設定ファイルを読み込ませて起動します。起動ファイルがない場合は下記参照。
+#!/bin/sh
+# Rsyncd This shell script takes care of starting and stopping the rsync daemon
+# description: Rsync is an awesome replication tool.
+#
+# chkconfig: 345 87 87
+# description: Rsync is an awesome replication tool.
+# Source function library.
+. /etc/rc.d/init.d/functions
+[ -f /usr/bin/rsync ] || exit 0
+start() {
+action "Starting rsyncd: " /usr/bin/rsync --daemon --config=/usr/local/etc/rsyncd.conf
+}
+stop() {
+action "Stopping rsyncd: " killall rsync
+}
+case "$1" in
+start)
+start
+;;
+stop)
+stop
+;;
+restart)
+stop
+sleep 1
+start
+;;
+*)
+echo "Usage: rsyncd {start|stop|restart}"
+exit 1
+esac
+exit 0
+次にミラー元サーバの設定をします。下記からlsyncdをダウンロードします。 lsyncd - Project Hosting on Google Code
+$ tar zxvf lsyncd-1.26.tar.gz
+$ cd lsyncd-1.26
+$ ./configure && make
+# make install
+# 展開したディレクトリの中にlsyncd.conf.xmlというサンプルがあるので、
+# その設定ファイルを/usr/local/etc/lsyncd.conf.xml に保存
+# cp lsyncd.conf.xml /usr/local/etc/
+lsyncdの設定をします。設定ファイルはXMLで記述するみたいです。
+# オプションが下記のようになっていたので、コメントアウトして次のように変更してみました
+#
+# rsyncのオプションが使えるらしい
+# からのセットで、同期ディレクトリを設定
+# いくつでも増やせるみたい
+# 同期元ディレクトリ
+# 同期先のサーバとモジュール名を指定
+# 192.168.0.2::www/hoge/dir こんな感じにモジュール名の後にもパスが書けます
+あとは起動するとすぐに同期（ミラーリング）が始まる模様。起動ファイルは下記のページを参考にちょっといじってみました。リアルタイムミラーリングツール導入(lsyncd+rsyncd) - Fedoraで自宅サーバー構築
+#!/bin/bash
+#
+# lsyncd
+#
+# chkconfig: - 99 20
+# description: lsyncd auto start script
+start() {
+/usr/local/bin/lsyncd --conf=/usr/local/etc/lsyncd.conf.xml
+}
+stop() {
+/bin/kill -9 `/sbin/pidof lsyncd`
+until [ -z $(/sbin/pidof lsyncd) ]; do :; done
+}
+case "$1" in
+start)
+start
+;;
+stop)
+stop
+;;
+restart)
+stop
+start
+;;
+status)
+pid=`pidof lsyncd`
+if [ $? -eq 0 ]; then
+echo "lsyncd (pid $pid) is running..."
+else
+echo "lsyncd is not running"
+fi
+;;
+*)
+echo "Usage: lsyncd {start|stop|restart|status}"
+exit 1
+esac
+exit $?
+見事にリアルタイムで同期されていました。安定性などはまだ分かりませんがしばらく使ってみようと思います。今回はローカル環境でしたので、認証や暗号などは一切しませんでしたが気になる方は、sshなどと併用してみるのもアリだと思います。

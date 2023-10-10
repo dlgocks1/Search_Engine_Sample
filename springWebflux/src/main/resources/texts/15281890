@@ -1,0 +1,5 @@
+本記事は、Microsoftの本社副社長であり、ASP.NETやSilverlightなどの開発チームを率いるScott Guthrie氏が公開している「NerdDinner Tutorial」を翻訳したものです。氏の許可を得て転載しています。
+［これは無償の"NerdDinner"アプリケーション・チュートリアルのステップ5で、ASP.NET MVCを使用して、小さいながらも完全なWebアプリケーションを構築する手順を紹介しています。］
+すでにコントローラとビューを紹介し、それらを使ってサイト上で夕食会の一覧／詳細表示を実装する方法についてカバーしました。次のステップは、DinnersControllerクラスにさらに踏み込んで、夕食会の編集、作成、削除をサポートできるようにします。
+DinnersControllerが処理するURL
+これまでに、アクション・メソッドをDinnersControllerに追加して、/Dinnersと/Dinners/Details/[id]の2つのURLをサポートする実装を行いました。

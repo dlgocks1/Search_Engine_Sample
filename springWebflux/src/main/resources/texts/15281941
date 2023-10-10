@@ -1,0 +1,150 @@
+窓関数は、有限の区間以外が0になるような関数です。 
+よくデジタル信号を扱う際に、膨大な信号波形からある一定区間を切り出す際に使用されます。 
+周期信号から適当にサンプルした信号に掛けてやることで、フーリエ変換した際に周波数解析しやすくなります。
+窓関数として使われるものは数多くあります。 
+例えば、 
+ハミング窓 
+ハニング窓
+ブラックマン窓
+矩形窓　１ 
+それぞれ、0≦n＜N 
+グラフにすると(N=256) 
+利用例 
+このような２つの周期的な関数を足し合わせた信号 
+から、 
+ある区間(N=256)を抜き出して 
+周波数スペクトルを求める場合は、 
+まず、窓関数をある区間に掛けます。 
+ハミング窓を掛けると 
+上の波形は、 
+このようになります。 
+フーリエ変換後の 
+窓関数を掛けたものと、掛けていないものを比べると一目瞭然です。 
+この場合、2つの周期的な関数が含まれた信号を使っているため、ピークはシャープに2つ出てこなければいけません。 
+ところが、窓関数を掛けていないスペクトルは、ピークの切り分けがうまく出来ていないことがわかります。 
+プログラム例 
+Windowing関数で窓を掛けています。
+// C言語でデジタル信号に窓関数を掛けた後フーリエ変換する
+#include "stdafx.h" // VisualStudio2008でCプログラムを作成するのに必要
+#include // malloc/callocといった動的メモリ確保のために必要
+#include // 数学関数を使用するためのヘッダ
+#include 
+using namespace std; // VisualStudio2008でCプログラムを作成するのに必要
+using namespace System;
+#define SIZE 256 // 信号サイズ
+#define PI 3.14159265 // 円周率
+// 窓関数列挙
+enum WindowFunc
+{
+Hamming,
+Hanning,
+Blackman,
+Rectangular
+};
+// ビットを左右反転した配列を返す
+int* BitScrollArray(int arraySize)
+{
+int i, j;
+int* reBitArray = (int*)calloc(arraySize, sizeof(int));
+int arraySizeHarf = arraySize >> 1;
+reBitArray[0] = 0;
+for (i = 1; i for (j = 0; j >= 1;
+}
+return reBitArray;
+}
+// FFT
+void FFT(double* inputRe,
+double* inputIm,
+double* outputRe,
+double* outputIm,
+int bitSize)
+{
+int i, j, stage, type;
+int dataSize = 1 int butterflyDistance;
+int numType;
+int butterflySize;
+int jp;
+int* reverseBitArray = BitScrollArray(dataSize);
+double wRe, wIm, uRe, uIm, tempRe, tempIm, tempWRe, tempWIm;
+// バタフライ演算のための置き換え
+for (i = 0; i // バタフライ演算
+for (stage = 1; stage > 1;
+butterflySize = butterflyDistance >> 1;
+wRe = 1.0;
+wIm = 0.0;
+uRe = cos(PI / butterflySize);
+uIm = -sin(PI / butterflySize);
+for (type = 0; type for (j = type; j // 1次元IFFT
+void IFFT(double* inputRe,
+double* inputIm,
+double* outputRe,
+double* outputIm,
+int bitSize)
+{
+int i;
+int dataSize = 1 for (i = 0; i for (i = 0; i double)dataSize;
+outputIm[i] /= (double)(-dataSize);
+}
+}
+// 窓関数を掛ける
+void Windowing(double* data, double* outdata, int size, enum WindowFunc windowFunc)
+{
+int i;
+double winValue = 0;
+for (i = 0; i // 各々の窓関数
+if (Hamming == windowFunc)
+{
+winValue = 
+0.54
+- 0.46 * cos(2 * PI * i / (size - 1));
+}
+else if (Hanning == windowFunc)
+{
+winValue =
+0.5
+- 0.5 * cos(2 * PI * i / (size - 1));
+}
+else if (Blackman == windowFunc)
+{
+winValue =
+0.42 - 0.5 * cos(2 * PI * i / (size - 1))
++ 0.08 * cos(4 * PI * i / (size - 1));
+}
+else if (Rectangular == windowFunc)
+{
+winValue = 1.0;
+}
+else
+{
+winValue = 1.0;
+}
+// 窓関数を掛け算
+outdata[i] = data[i] * winValue;
+}
+}
+int main(array ^args)
+{
+int i;
+double* data_re = (double*)calloc(SIZE, sizeof(double));
+double* windata_re = (double*)calloc(SIZE, sizeof(double));
+double* data_im = (double*)calloc(SIZE, sizeof(double));
+double* re = (double*)calloc(SIZE, sizeof(double));
+double* im = (double*)calloc(SIZE, sizeof(double));
+// 初期化
+for(i = 0; i // 窓を掛ける
+Windowing(data_re, windata_re, SIZE, Hamming);
+// フーリエ変換、データが256個なのでbitSizeは8を指定
+FFT(windata_re, data_im, re, im, 8);
+// 逆フーリエ変換
+//IFFT(re, im, data_re, data_im, 8);
+// 出力
+for(int i = 0; i "%lf %lf %lf\n", windata_re[i], re[i], im[i]);
+}
+free(data_re);
+free(data_im);
+free(re);
+free(im);
+}
+ちなみにC#で書くと 
+http://colnagow61s.me.land.to/window_function.zip 
+ソースコードを置いておきます。

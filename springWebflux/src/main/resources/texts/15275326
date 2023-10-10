@@ -1,0 +1,175 @@
+GLMM 推定関数 lmer() については「lmer 紹介」を参照してください
+質問: AIC の値などはどうやって取りだすか?
+質問: random effects のはいりかたの違い?
+質問: AIC の値などはどうやって取りだすか? 
+(いただいた質問)
+glmなどの結果のオブジェクトからは 
+res <- glm(...) 
+res$aic 
+などとしてAICや係数を単独で取り出せていたのですが、lmerでは同じように
+取り出すことができないよいようです。 
+結果objectの構造がどうなっているのかよくわからず、どうやって取り出せばいい
+のか模索しています。何か方法があるのでしょうか。
+(回答)
+R を起動して
+library(lme4)}
+example(lmer)
+すると lmer() の example が実行されて fm1, fm2 というところに lmer() の結果が入ります．
+この fm1 からどう情報をとるか? を考えてみましょう．
+回答1: generic function を適用する
+coef(fm1)
+AIC(logLik(fm1))
+回答2: summary() の「スロット」をみる
+s1 <- summary(fm1)
+slotNames(s1)
+とするとずらずらラベルがでますから，それを参考にして
+s1@coefs
+s1@coefs[, "Estimate"]
+s1@AICtab
+s1@AICtab$AIC
+とすればいろいろな値が得られます．
+「スロット」については RjpWiki 内の間瀬さんの解説「S4 クラスとメソッド入門 を読んでください
+質問: random effects のはいりかたの違い? 
+(いただいた質問)
+Rのhelp(lmer)を見てみると、例として以下のものがあります。 
+(fm1 <- lmer(Reaction ~ Days + (Days|Subject), sleepstudy)) 
+(fm2 <- lmer(Reaction ~ Days + (1|Subject) + (0+Days|Subject), sleepstudy)) 
+このデータはくり返し測定になっているのだと思うのですが、この中の 
+(Days | Subject) 
+(1 | Subject) + (0+Days | Subject) 
+の " | " という表現は、helpでは
+"The vertical bar character "|" separates an expression for a
+model matrix and a grouping factor." 
+となっています。 
+これは(Days | Subject)であれば、「Daysの効果を見ます 
+がSubjectごとに見てください」といったことでしょうか？
+そうするとその次の(1 | Subject) + (0+Days | Subject)はどう 
+読めばよいのでしょうか。
+(回答) これは R 自身に教えてもらえばよいのです．
+library(lme4)
+example(lmer)
+すると次のような出力が得られます
+(参照: help(lmer))．
+前者の (Days|Subject) に関しては
+lmer> (fm1 <- lmer(Reaction ~ Days + (Days|Subject), sleepstudy))
+Linear mixed-effects model fit by REML 
+Formula: Reaction ~ Days + (Days | Subject) 
+Data: sleepstudy 
+AIC BIC logLik MLdeviance REMLdeviance
+1754 1770 -872 1752 1744
+Random effects:
+Groups Name Variance Std.Dev. Corr 
+Subject (Intercept) 610.8 24.72 
+Days 35.1 5.92 0.067 
+Residual 655.1 25.59 
+number of obs: 180, groups: Subject, 18
+Fixed effects:
+Estimate Std. Error t value
+(Intercept) 251.41 6.82 36.9
+Days 10.47 1.55 6.8
+Correlation of Fixed Effects:
+(Intr)
+Days -0.137
+と出力されるので，Random effects をみればわかるように，
+Subject (被験者) ごとに (Intercept) と Days に random effects
+が入るわけですが，これらのあいだに相関 (Corr)
+があることがわかると思います．
+このことから，(Intercept) と Days の random effects の
+「事前分布」が多変量正規分布 (random effects なのでとうぜん平均はゼロ)
+であり，
+しかも分散・共分散を自由に選べるものなっています．
+ranef(fm1) (参照: help(ranef))
+の出力はこうなります．
+> ranef(fm1)
+An object of class "ranef.lmer"
+[[1]]
+(Intercept) Days
+308 2.27135 9.19670
+309 -40.38259 -8.62231
+310 -38.94034 -5.45219
+330 23.66564 -4.81006
+331 22.23913 -3.06629
+332 9.03250 -0.27098
+333 16.82778 -0.22148
+334 -7.22561 1.07338
+335 -0.35032 -10.74921
+337 34.87840 8.63021
+349 -25.18986 1.16997
+350 -13.05004 6.61075
+351 4.56976 -3.01385
+352 20.85390 3.53761
+369 3.27443 0.87238
+370 -25.58660 4.81795
+371 0.80490 -0.98778
+372 12.30756 1.28520
+一方で，
+後者の Dayes+(0+Days|Subject) に関しては
+lmer> (fm2 <- lmer(Reaction ~ Days + (1|Subject) + (0+Days|Subject), sleepstudy))
+Linear mixed-effects model fit by REML 
+Formula: Reaction ~ Days + (1 | Subject) + (0 + Days | Subject) 
+Data: sleepstudy 
+AIC BIC logLik MLdeviance REMLdeviance
+1752 1764 -872 1752 1744
+Random effects:
+Groups Name Variance Std.Dev.
+Subject (Intercept) 627.5 25.05 
+Subject Days 35.9 5.99 
+Residual 653.6 25.57 
+number of obs: 180, groups: Subject, 18; Subject, 18
+Fixed effects:
+Estimate Std. Error t value
+(Intercept) 251.41 6.89 36.5
+Days 10.47 1.56 6.7
+Correlation of Fixed Effects:
+(Intr)
+Days -0.184
+と出力されるので，今回の Random effects は Corr がありません．
+つまり，fm2 でも
+Subject (被験者) ごとに (Intercept) と Days に random effects
+が入るわけですが，
+それぞれの事前分布が独立した (一変量) 正規分布 (やはり平均ゼロ)
+であり，それぞれの分散が自由に選べるものなっています．
+とうぜん (Intercept) と Days の事前分布の共分散はゼロです．
+ranef(fm2) の出力はこうなります．
+> ranef(fm2)
+An object of class "ranef.lmer"
+[[1]]
+(Intercept)
+308 1.51280
+309 -40.37300
+310 -39.18013
+330 24.51820
+331 22.91380
+332 9.22173
+333 17.15568
+334 -7.45153
+335 0.57854
+337 34.76718
+349 -25.75365
+350 -13.86458
+351 4.91581
+352 20.92856
+369 3.25858
+370 -26.47508
+371 0.90561
+372 12.42146
+[[2]]
+Days
+308 9.32346
+309 -8.59929
+310 -5.38792
+330 -4.96853
+331 -3.19384
+332 -0.30846
+333 -0.28714
+334 1.11596
+335 -10.90592
+337 8.62771
+349 1.28059
+350 6.75632
+351 -3.07510
+352 3.51228
+369 0.87306
+370 4.98367
+371 -1.00529
+372 1.25845

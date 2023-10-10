@@ -1,0 +1,21 @@
+August 10th, 2009
+I’ve hosted email lists of one sort or another probably all the way back to 1995, when I first bought complete.org as an email-only domain fed off a UUCP connection on a long-distance dialup link.
+I’ve only used two mailing list hosting programs in that whole time: Majordomo and Ecartis (used to be known as Listar). Unfortunately, Ecartis has not seen upstream work in several years, and as a result was removed from Debian in May.
+That got me to thinking: what am I going to do with the mailing lists I host? I’m not pleased with my current list archives, which are very similar to what you get from Mailman: no search engine, and every thread is broken at the end of each month.
+I also want to preserve my archives.
+I’m presently looking at whether to continue hosting the lists myself, or turn to something like Google Groups or Nabble. Hosting it myself, the main choice is Mailman, which really has more features than I need in most areas, and fewer than I need for archiving.
+For other hosts, I’ve looked at Google Groups, Yahoo Groups, and Nabble. Google Groups looks like the best option, and even has a (somewhat hidden) way to subscribe via pure email without having a Google account. They can import and export subscriber lists, though not archives.
+I’m thinking I’ll also make sure all the lists have full archives at Gmane. Then, based on message IDs, I can generate a bunch of RedirectPermanent lines for Apache to links to the archives don’t get broken.
+My current thought for list hosting itself is Google Groups. It would be nice to be free of the hassle of administering a mailing list host, which is nothing special these days. Another benefit of Google Groups is that those people that like web forums (who ARE those people anyway?) get a forum-like interface to the list if they so choose.
+Nabble has some interesting features, and can optionally import a full history of a list, but it concentrates far more on the forum than the email aspects. It doesn’t even appear to have basic moderation settings.
+Categories: Online Life
+Leave a comment
+1 Comment
+Anonymous
+August 10th, 2009 
+I think you’ve hit on the right combination: you should host the mailing list yourself, but you should rely on gmane or similar for archives.
+Reply 
+Leave a comment
+Name (required)
+Mail (will not be published) (required)
+Website

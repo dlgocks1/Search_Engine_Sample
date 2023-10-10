@@ -1,0 +1,9 @@
+Instructions:
+1) Download 
+the logo graphic (right-click and "Save Target As" or "Save Link As") and upload it to your web server,
+in the same directory as the HTML files that will display the menu. 
+2) Paste the HTML code below into your web pages to display the logo.
+<img border="0" src="logo47424433.bmp" width="160" height="45" >
+OR:
+If you don't know how to upload to a web server, create a GRSites Folder instead 
+to host the logo and use the provided HTML code to display the logo.

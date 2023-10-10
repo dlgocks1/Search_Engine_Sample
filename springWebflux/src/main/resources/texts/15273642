@@ -1,0 +1,9 @@
+We have developed a small “shield” board for the Arduino Mini that allows us to easily prototype small battery-powered devices that contain motors, lights, speakers or sensors.  This shield adds the following features to the arduino board:
+Battery charging of a lithium polymer or lithium ion battery
+Voltage converter of battery voltage to 3.3V.  This will regulate any voltage in the range of 1.8-5.5V to 3.3V.  Without this the things that are powered would get less power as the battery dies (i.e. the lights would dim, motors would run slower)
+8 MOSFETs that allow I/O pins to control higher current loads.  The arduino can only source 40mA from a single pin.  This allows a pin to control up to 5A of current.  This is necessary for things like motors or large banks of LEDs
+The board can be snapped on top of the arduino board and looks like this when it’s all together:
+Here’s how to wire it up:
+We are currently talking to Spark Fun to see if we can have these made to be sold to the public.
+Until then, we have made the eagle files and bill of materials available if you want to make your own.
+Download the source

@@ -1,0 +1,7 @@
+The Ext folks released Ext version 3 a few weeks back, but we were holding back for their blog post on the matter. There is a lot of great stuff in this release, much of which has been covered in other posts on the release candidates. What is new about the full release though is process, and one cool tool.
+There is a new release cycle. Every 3 months a minor public release will be available (3.1, 3.2, etc) 
+and every month patch releases will be available to support subscribers (3.0.1, 3.0.2).
+On to the tool. The team has created an Ext Designer AIR application that lets you build Ext interfaces with a traditional toolbox interface:
+Constructing your interfaces in code will be a thing of the past. We are releasing a Designer Preview that will allow you to experiment with the designer interface and to explore how configs affect your layout. Soon, you will be able to build your application components using base Ext components and Certified User Extensions.
+Code generation is currently not available. Our intentions are to charge a fee for this service and to enable our community to create and sell their creations on our marketplace. Our goals are lofty. We want to be the iTunes of Web App Development.
+Definitely lofty goals. I know of at least three other designer tools like this, (we all know of Atlas of course) and some of them are planning on being open source. It is fantastic to see great web based tools coming out from the framework creators. The platform is maturing.

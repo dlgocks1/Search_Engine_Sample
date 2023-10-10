@@ -1,0 +1,30 @@
+I've already got Fedora 10 and want to upgrade to Fedora 11. How do I upgrade my computer from Fedora Linux 10 to Fedora Linux 11? 
+Fedora 11 can be directly upgraded over the Internet using the various methods available. Backup all your data (/home and other directories), config file and sql files. Use tools such as rsync or tar to make backup to CD / DVD or other server.
+Login as root user to perform upgrade.
+WARNING! It is not possible to upgrade directly from Fedora 9 to Fedora 11. To upgrade Fedora 9 to Fedora 11, upgrade to Fedora 10 first. Make sure you backup imporant data before using the information provided below. Also, the yum update step should NOT be run inside a gnome / kdep desktop session/gnome-terminal. It could result in a unusable install when gnome-terminal segfaults during the upgrade. Update should be run in a vty, runlevel 3, or a screen session.
+Apply Fedora 10 Patches and Software Updates
+Type the following command to apply existing update: 
+# yum update rpm 
+# yum -y update 
+# yum clean all 
+Reboot the system if a new kernel installed for Fedora 10 (otherwise skip to next step): 
+# reboot
+Upgrade Fedora 10 to Fedora 11
+Type the following commands to perform actual upgrade: 
+# yum install preupgrade 
+# preupgrade 
+If you need GUI tool, enter: 
+# preupgrade-gui
+How do I Upgrade Fedora 10 Server?
+Backup everything and type the following commands as root user: 
+# yum -y update 
+# yum install preupgrade 
+# preupgrade-cli 
+# reboot
+How Do I Upgrade Fedora 10 Using CD / DVD?
+Apply existing patches to fedora 10: 
+# yum -y update
+Backup all required data, config and sql files.
+Insert CD / DVD into CDROM and reboot the system. Make sure BIOS is configured to boot from CD / DVD. 
+To perform an upgrade, select Perform an upgrade of an existing installation. Click Next when you are ready to begin your upgrade.
+Want to read Linux tips and tricks, but don't have time to check our blog everyday? Subscribe to our daily email newsletter to make sure you don't miss a single tip/tricks. Subscribe to our weekly newsletter here!

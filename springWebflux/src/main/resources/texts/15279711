@@ -1,0 +1,97 @@
+jCoderZ Report
+Tools like PMD, Checkstyle, FindBugs, Emma, and Cobertura deliver high-quality code-analysis features. The jCoderZ report (JcReport) tool reads the XML output of the code-analysis tools and creates a single report which combines all findings in one file. The final HTML report renders the source file as HTML pages and shows the findings directly in the lines, reported by the tools. The coverage information is displayed in a column at the left of the HTML page.
+The report for the fawkeZ project can be found here. The findings section:
+Findings: (2932) error (5) warning (2222) info (705) in 325 files
+of the CruiseControl build result view provides another representation of the JcReport XML data.
+Usage
+The Ant task for the JcReport looks quite complex, but the structure is straight-forward and will hopefully become clear with the help of this introduction. As a sample you might check out the target in the build-report.xml of the fawkeZ project.
+Note: All path settings described below are taken from the jCoderz JcReport example. If you want to use the report in your own project then you need to adapt all the path locations! 
+The output of the JcReport tool is a file called jcoderz-report.xml, a file called summary.xml, and a set of HTML files which contain the browsable version of the JcReport XML files.
+<jcreport name="fawkez"
+dest="${base.dir}/build/doc/findings-report"
+wikibase="https://www.jcoderz.org/wiki/"
+webrcsbase="https://www.jcoderz.org/fawkez/browser/trunk"
+webrcssuffix=""
+packagebase="org.jcoderz"
+projectbase="${base.dir}"
+tempfolder="${base.dir}/build/jcreport"
+maxheap="128"
+debug="false">
+<classpath refid="jcreport.classpath"/>
+<!-- Reports Section -->
+<reports> 
+<report name="fawkez-test"
+level="test"
+sourcepath="${base.dir}/test/java"
+classpath="${build.dir}/classes"/>
+<report name="fawkez-prod"
+level="prod"
+sourcepath="${base.dir}/src/java"
+classpath="${build.dir}/classes"/>
+</reports>
+<!-- Tools Section -->
+<tools>
+<pmd config="${pmd.rules}"
+targetjdk="1.4"
+encoding="Cp1252">
+<classpath refid="pmd.classpath"/>
+</pmd>
+<cpd minimumtokens="100">
+<classpath refid="pmd.classpath"/>
+</cpd>
+<findbugs config="${findbugs.rules}"
+maxheap="512"
+effort="max"
+debug="false"
+warninglevel="low">
+<classpath refid="findbugs.classpath"/>
+<auxclasspath refid="findbugs.aux.classpath"/>
+<pluginlist refid="findbugs.plugins"/>
+</findbugs>
+<checkstyle config="${checkstyle.rules}"
+maxheap="512"> 
+<classpath refid="checkstyle.classpath" />
+</checkstyle>
+<cobertura datafile="junit.ser"/>
+<classpath refid="cobertura.classpath" />
+</cobertura>
+</tools>
+<!-- Filters Section -->
+<filters>
+<filter file="${filter.rules}"/>
+</filters>
+</jcreport> 
+jcreport
+The tag jcreport tag has the following attributes:
+name: The name of the report ("fawkez").
+dest: The folder where the report is stored ("${base.dir}/build/doc/findings-report").
+wikibase: The project's Wiki URL ("http://www.jcoderz.org/fawkez/wiki/").
+webrcsbase: The base URL of the WebRcs view ("http://www.jcoderz.org/fawkez/browser/trunk").
+webrcssuffix: The suffix to append to the WebRcs URLs (E.g. "?root=project").
+packagebase: The package prefix of the project ("org.jcoderz").
+projectbase: The project's base directory ("${base.dir}").
+tempfolder: A temporary folder ("${base.dir}/build/jcreport").
+maxheap: The heap size in MB ("128").
+debug: A debug mode flag ("false").
+oldReportFile: Point this to the jcoderz-report.xml of the last build to get historic findings list.
+cpus: The report will be executed in parallel using 'cpus' + 1 thread if possible. 
+The jcreport tag has the following child tags:
+reports
+tools
+filters
+reports
+The reports tag can contain multiple report child tags. Each report tag defines a set of files that are checked by the code-analysis tool-chain. The files can be separated by level, which marks findings in the XML report jcoderz-report.xml with a level attribute. This attribute can later be used for filtering findings from test code for example.
+The tag name is the name of the file collection, level is the name of the level (see ReportLevel for the possible values), sourcepath is the path to the source files of this collection, and classpath is the classpath that contain the classes for this file collection.
+tools
+The tools tag has the following child tags:
+pmd
+cpd
+findbugs
+checkstyle
+cobertura
+emma
+All tools have the attribute maxheap in common. The tools are forked by the JcReport because the tools have different requirements in terms of heap size. Therefore it is possible to set the maximum heap size of all tools independently.
+All tools have a child tag classpath in common which defines the classpath for the single tool. Because the tools are forked by the JcReport in the background the classpath must be the same as when launching the tools separately.
+Some tools have a debug attribute to turn on debug information. The output is dependent on what the tool provides in terms of debugging information.
+pmd
+The attributes of the pmd tag are defined by the PMD command line tool:

@@ -1,0 +1,12 @@
+Sunday, June 14, 2009
+ImageMagickとPHPで複数の円を放射状に描画する
+Imagickで複数の円を放射状に描画するには、以下のコードを実行します。 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"> <html xmlns="http://www.w3.org/1999/xhtml" lang="ja" xml:lang="ja" dir="ltr"> <head> <title>sample1126(ImageMagick6.5.2)</title> </head> <body> <?php /* */ $cx=100; $cy=100; $rad=10; $dr = 35; $noc = 6; $nol = 2; $im = new Imagick(); $im->newImage(200, 200, "white"); $idraw = new ImagickDraw(); $idraw->setFillColor("#bbddff"); $idraw->ellipse($cx,$cy,$rad,$rad,0,360); $sr = $dr; for($li=0;$li<$nol;$li++){ $pr = 360/$noc; for($lc=0;$lc<$noc;$lc++){ $px = $cx + cos(pi()*$pr*$lc/180)*$sr; $py = $cy + sin(pi()*$pr*$lc/180)*$sr; $idraw->ellipse($px,$py,$rad,$rad,0,360); } $sr += $dr; $noc *=2; } $im->drawImage($idraw); $im->writeImage('sample1126a.png'); $idraw->destroy(); $im->destroy(); ?> <img src="sample1126a.png" /><br /> </body> </html> 出力画像(sample1126a.png) 
+投稿者
+kyle
+場所
+5:12 AM
+ラベル:
+PHP
+0
+コメント:
+Post a Comment

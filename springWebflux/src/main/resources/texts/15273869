@@ -1,0 +1,8 @@
+Apache Software Foundationは8月8日、Java向けの数学・統計学コンポーネントライブラリ「Apache Commons Math 2.0」を公開した。マトリックス分解アルゴリズムなどが加わっている。
+Commons Mathは、Java言語やJava.lang拡張ライブラリ「Apache Commons Lang」の課題を補うものとして進んでいるプロジェクト。自己完結型の数学・統計学の軽量コンポーネント開発を目指す。
+メジャーアップデートとなる2.0では、マトリックス分解アルゴリズム、スパースマトリックス・ベクター、ジェネリックアルゴリズム、最新の最適化アルゴリズム、カーブフィッティングアルゴリズムなどが加わった。メルセンヌツイスタ疑似乱数生成アルゴリズム生成もあり、バグを修正、既存機能も強化された。
+最新版よりJava 5プラットフォームを最小要求とする。前バージョンとは、ソースコードとバイナリレベルでの互換性がないため注意が必要。
+Apache Software Foundation 
+http://www.apache.org/
+Apache Commons Math 
+http://commons.apache.org/math/

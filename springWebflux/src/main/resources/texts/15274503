@@ -1,0 +1,183 @@
+テーブルに対してデータを追加したり削除するにはSQL文を用意して実行します。SQL文が異なるだけでテーブルの作成の場合と同じく「SQLiteDatabase」クラスで用意されている「execSQL」メソッドを使います。念のためもう一度メソッドの説明を記述します。
+execSQL
+public void execSQL(String sql)
+Execute a single SQL statement that is not a query. For example, 
+CREATE TABLE, DELETE, INSERT, etc. Multiple statements separated 
+by ;s are not supported.
+Parameters:
+sql 実行するSQL文
+Throws:
+SQLException SQLException If the SQL string is invalid for some reason
+1番目の引数には実行するSQL文を記述します。
+このメソッドを実行する場合には例外として「android.database.SQLException」が発生する可能性があります。
+なおSQLiteにおけるSQL文の記述方法について詳しくは見ていきませんが、基本的なSQL文は次のようになります。
+データの追加：
+INSERT INTO table_name (column_name1, column_name1, ...)
+VALUES (data1, data2, ...);
+データの更新：
+UPDATE table_name SET column_name1 = data1, ... WHERE (条件式);
+データの削除：
+DELETE FROM table_name WHERE (条件式);
+具体的には次のように記述します。
+SQLiteDatabase db;
+try {
+db = openDatabase("db01_01", null);
+} catch (FileNotFoundException e) {
+db = null;
+}
+String sql = "insert into shouhin (name, price) values('PC', 3500);";
+try {
+db.execSQL(sql);
+} catch (SQLException e) {
+Log.e("ERROR", e.toString());
+}
+サンプルプログラム
+それでは実際に試してみます。プロジェクトを作成しソースコードを次のように変更しました。
+Test01_01.java
+package jp.javadrive.android;
+import android.app.Activity;
+import android.os.Bundle;
+import android.widget.LinearLayout;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.TextView;
+import android.widget.EditText;
+import android.widget.Button;
+import android.view.View.OnClickListener;
+import android.content.Context;
+import android.database.sqlite.SQLiteDatabase;
+import java.io.FileNotFoundException;
+import android.database.SQLException;
+import android.util.Log;
+public class Test01_01 extends Activity implements OnClickListener{
+private final int FP = ViewGroup.LayoutParams.FILL_PARENT; 
+private final int WC = ViewGroup.LayoutParams.WRAP_CONTENT; 
+private Button buttonInsert;
+private Button buttonUpdate;
+private Button buttonDelete;
+private EditText editId;
+private EditText editName;
+private EditText editPrice;
+private SQLiteDatabase db;
+private int DB_VERSION = 1;
+private int DB_MODE = Context.MODE_PRIVATE;
+private String DB_NAME = "db_data_01";
+private String TABLE_NAME = "product";
+@Override protected void onCreate(Bundle icicle) {
+super.onCreate(icicle);
+db = null;
+LinearLayout linearLayout = new LinearLayout(this);
+linearLayout.setOrientation(LinearLayout.VERTICAL);
+setContentView(linearLayout);
+LinearLayout dataLayout = new LinearLayout(this);
+dataLayout.setOrientation(LinearLayout.HORIZONTAL);
+linearLayout.addView(dataLayout, createParam(WC, WC));
+TextView textId = new TextView(this);
+textId.setText("id");
+dataLayout.addView(textId, createParam(WC, WC));
+editId = new EditText(this);
+editId.setWidth(40);
+dataLayout.addView(editId, createParam(WC, WC));
+TextView textName = new TextView(this);
+textName.setText("name");
+dataLayout.addView(textName, createParam(WC, WC));
+editName = new EditText(this);
+editName.setWidth(80);
+dataLayout.addView(editName, createParam(WC, WC));
+TextView textPrice = new TextView(this);
+textPrice.setText("price");
+dataLayout.addView(textPrice, createParam(WC, WC));
+editPrice = new EditText(this);
+editPrice.setWidth(80);
+dataLayout.addView(editPrice, createParam(WC, WC));
+LinearLayout buttonLayout = new LinearLayout(this);
+buttonLayout.setOrientation(LinearLayout.HORIZONTAL);
+linearLayout.addView(buttonLayout, createParam(WC, WC));
+buttonInsert = new Button(this);
+buttonInsert.setText("INSERT");
+buttonInsert.setOnClickListener(this);
+buttonLayout.addView(buttonInsert, createParam(WC, WC));
+buttonUpdate = new Button(this);
+buttonUpdate.setText("UPDATE");
+buttonUpdate.setOnClickListener(this);
+buttonLayout.addView(buttonUpdate, createParam(WC, WC));
+buttonDelete = new Button(this);
+buttonDelete.setText("DELETE");
+buttonDelete.setOnClickListener(this);
+buttonLayout.addView(buttonDelete, createParam(WC, WC));
+openDatabase();
+}
+private LinearLayout.LayoutParams createParam(int w, int h){
+return new LinearLayout.LayoutParams(w, h);
+}
+private void openDatabase(){
+try {
+db = openDatabase(DB_NAME, null);
+} catch (FileNotFoundException e) {
+try {
+db = createDatabase(DB_NAME, DB_VERSION, DB_MODE, null);
+createTable();
+} catch (FileNotFoundException e2) {
+db = null;
+Log.e("ERROR", e2.toString());
+}
+}
+}
+private void createTable(){
+String sql = "create table " + TABLE_NAME + " ("
++ "id integer primary key autoincrement, "
++ "name text not null, "
++ "price integer);";
+try {
+db.execSQL(sql);
+} catch (SQLException e) {
+Log.e("ERROR", e.toString());
+}
+}
+public void onClick(View v) {
+String id = editId.getText().toString();
+String name = editName.getText().toString();
+String price = editPrice.getText().toString();
+if (v == buttonInsert){
+String sql = "insert into " + TABLE_NAME
++ " (name,price)"
++ " values('" + name + "'," + price + ");";
+try {
+db.execSQL(sql);
+} catch (SQLException e) {
+Log.e("ERROR", e.toString());
+}
+}else if (v == buttonUpdate){
+String sql = "update " + TABLE_NAME + " set "
++ "name='" + name + "',price=" + price
++ " where id=" + id + ";";
+try {
+db.execSQL(sql);
+} catch (SQLException e) {
+Log.e("ERROR", e.toString());
+}
+}else if (v == buttonDelete){
+String sql = "delete from " + TABLE_NAME
++ " where(id=" + id + ");";
+try {
+db.execSQL(sql);
+} catch (SQLException e) {
+Log.e("ERROR", e.toString());
+}
+}
+editId.setText("");
+editName.setText("");
+editPrice.setText("");
+}
+}
+ビルド後にエミュレーター上で実行します。
+まずデータの追加を試してみます。「name」と「price」に値を入力して「INSERT」ボタンをクリックして下さい。
+データが追加されたかどうかシェルで確認してみます。
+あと2つほどサンプルデータを追加しておきます。
+では次にデータの更新を試してみます。「id」に変更したいレコードの「id」を指定します。そして新しい値を「name」と「price」に入力して「UPDATE」ボタンをクリックして下さい。
+データが更新されたかどうかシェルで確認してみます。
+更新されていることが確認できました。
+では次にデータの削除を試してみます。「id」に削除したいレコードの「id」を指定して「DELETE」ボタンをクリックして下さい。
+データが削除されたかどうかシェルで確認してみます。
+削除されていることが確認できました。
+以上です。

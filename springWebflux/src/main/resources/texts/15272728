@@ -1,0 +1,1 @@
+scan-buildでメモリリークを発見する方法のメモ 準備 　clangのインストール 　ダウンロードしたファイルを解凍 　中のフォルダとファイルをすべて/usr/local/binにコピーする 　（/usr/loca/bin/にパスが通っていることを前提） 使う 　コマンドでXcodeのプロジェクトファイルのパスに移動 　scan-build xcodebuild 　（解析結果は，htmlで書き出され，-oで出力先のパスを設定できる．デフォルトは/tmp．） 元情報：sonson@Picture&Software 感謝(^^ by thank you.

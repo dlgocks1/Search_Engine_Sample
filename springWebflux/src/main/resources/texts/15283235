@@ -1,0 +1,24 @@
+Scala is a gorgeous language, but it lacks proper IDE support right now. Sure, there is an Eclipse plugin, Netbeans plugin and even (hopefully still) IDEA plugin in the works, but given the current features, it is like running windows just to play solitair. It's much faster and easier to just use ViM and maven.
+So, the ViM tips - there are basically three things that I need for proper development
+syntax highliting
+compiler quickfix
+go to definition
+Syntax highliting is easy - it's included with scala package. There are some minor issues with indentation, no major problems. 
+For compiler support we need to take maven2 compiler plugin for vim and define errorformat for scala compiler. I kept the bases of maven2 compiler by Roman Tschalär and fixed the errorformat to:
+CompilerSet errorformat=
+\%-G[%\\(WARNING]%\\)%\\@!%.%#,
+\%E[WARNING]\ %f:%l:\ error:\ %m,
+\%W[WARNING]\ %f:%l:\ warning:\ %m,
+\%A%[%^[]%\\@=%f:%l:\ %s:\ %m,
+\%C[WARNING]\ %p^,
+\%C[WARNING]\ %m,
+\%-G%.%#
+Using it for a while now and it works just as supposed to 
+Now to the third point - how to go from usage to definition. I've been missing ctags for scala, because that would be the ViM's way. After a few months, I finally gave up waiting and a brief RTFM revealed, that to implement some basic scala support with exuberant ctags is literaly FREAKIN' EASY. All you need for basic support is to define a regexp to match all the def, class, val, var, trait keywords and an identifier.
+This is a quick hack that works well enough for me. Just put it into ~/.ctags:
+--langdef=scala
+--langmap=scala:.scala
+--regex-scala=/(val|var|def|class|trait|type)[ \t]+([^ =:;([]+)/\2/d,definition/
+There are admitedly a few problems - from the top of my head, the expression totally ignores backslashed identifiers and does not count ":" as valid id part. The second problem is something I'll look into later - if I just add ":" to the list of allowed characters, all the definitions like def reset: Unit = () end up being "reset:" instead of "reset", and Ctrl-] stops working. Does not bug me that much.
+ViM never ceases to amaze me. With these few hacks, I find it much more usable than all the current IDE plugin versions. Btw, using tags you have a poor man's autocompletion as well.
+Just my 2 cents

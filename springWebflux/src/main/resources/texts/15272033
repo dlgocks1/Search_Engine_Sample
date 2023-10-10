@@ -1,0 +1,67 @@
+Much of what constitutes a well-architected webpage is never displayed in the page itself. The contents of the <body> tag are what you see in a browser. But a webpage consists of two major elements, the <body> tag only being one. The content of the <head> tag (and for that matter, the document type declaration (DTD), which precedes the <body> tag in the page’s code, is just as important for search engine optimization (SEO). It includes information about the page for the browser and the search engine to use. The quality of that information, even its presence (or lack thereof), can make a big difference in how a page gets ranked.
+Just like the earlier posts in the Site Architecture and SEO series (including files/pages, link/URLs, and content), helping the search engine web crawler (also known as a robot or, more simply, a bot) crawl your site is a wise idea. If you spoon-feed it the information it needs to know about your pages, the better prepared it will be in ranking your pages for relevance to keywords users employ in their queries. This article is the last of this 4-part, Site Architecture series.
+But before we can get down and dirty in <head> tag optimizations, we must first address the issue of the page’s DTD. Once we settle on a doc type, many of the optimizations I will subsequently specify will come into play.
+Choosing between HTML and XHTML
+To cut to the chase, HyperText Markup Language (HTML) is so 20th century! The World Wide Web Consortium (W3C), the official body that manages the Web by creating public standards and guidelines, long ago determined that HTML was a limited-use language. It’s primary purpose was for displaying information on webpages. And as webpage content became ever more diverse, sophisticated, and filled with data, a new method of coding was needed. 
+EXtensible Markup Language (XML) is similar to HTML in that it is a text-based, markup language, but it differs in two key ways:  
+Whereas the purpose of HTML is to display information, the purpose of XML is to classify data. It’s similar to a tag-based database application. 
+Whereas HTML has a limited number of specific tags and attributes, XML is free-form. The XML user defines the tags to be used. 
+As a result of local control of tag definitions and the ability to classify data, XML can be a very tightly managed and powerful language. While its capabilities were compelling, its lack of a formal, preset structure precluded its direct use as a Web language. So back in 2000, the W3C approved the use of EXtensible HyperText Markup Language (XHTML), a hybrid of HTML and XML for use on the Web (who knew it has been around so long?).
+Why is this history lesson important? Because at the very top of each webpage you manage, there needs to be a DTD statement defining the page document type with a referral back to the standards definition for that type.
+While HTML was useful in its day, XHTML is the way to go today. The advantages of XHTML are numerous:
+XHTML is almost identical to and fully backward compatible with HTML 4.01 
+XHTML is more extensible than HTML 
+XHTML is HTML defined as an XML application 
+XHTML is a stricter and cleaner version of HTML 
+XHTML 1.0 has been a W3C Recommendation since 2000 
+The stricter and cleaner part of XHTML is key. Pages that adhere to the XHTML standard are considered “well-formed” and are readable by any Web browser. Modern, major Web browsers on computers are really sophisticated and can read poorly written HTML code and still pretty much make it work. However, smaller browsers, such as those on mobile devices and other, small platforms, are not as forgiving, and that can be a problem (and always think of search engine bots as small browsers!). XHTML code validation is tight, and if your XHTML code passes validation, it’s good on all browsers. And as new XHTML functionality is needed, it can quickly and easily be made available by the W3C. For more information on how to use XHTML, check out this XHTML tutorial.
+Tip: While XHTML tags are very much like those in HTML, they sometimes have different coding requirements. XHTML tags must always be written in lower case, properly nested (in order of last used, first closed, such as <x><y>text</y></x>), and require a proper close (the days of the missing </p> tag are over). Non-paired tags, such as the old HTML tags <BR> and <META>, must also be coded to indicate a close. Use the special indicator “/>”, as shown in <br />, to close these tags (the preceding space, which is not required, is often used anyway). 
+!DOCTYPE tag
+Now that you know why you want to use XHTML document types, you need to declare the proper DTD for it. As stated earlier, the DTD statement precedes the <head> tag. But a bot won’t even get that far if the DTD is not correctly formed. The very first thing in an XHTML file must be the DTD, an example of which is shown below:
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+The one shown above, Transitional, allows more of HTML’s presentation features. There are two other types of XHTML DTD statements. You can also use Strict instead if you want super-clean code (you’ll need to use CSS for presentation features, however), or you can use Frameset should you really want to be one of the Internet’s last adherents to frames on a webpage. <snark!>
+You’ll also need to modify your <html> tag if you switch to XHTML, which is positioned immediately after the opening DTD statement. In HTML, this tag was typically unadorned with attributes. In XHTML, however, you need to identify the path to the XHTML namespace definition. Use this code for that:
+<html xmlns="http://www.w3.org/1999/xhtml">
+Before moving on, be sure to validate your XHTML pages using a markup validation service and correct any errors you encounter before publishing your pages. You do want that well-formed code that works with any browser, right?
+Now that the references for document type and the namespace are set, let’s take a look at what you can do to optimize your webpages from the perspective of the code in the <head> tag. Most of these tags were discussed in an earlier post discussing keyword usage, but the information below on their usage is new.
+Title tag
+The key message with the <title> tag is still the same. The page title is a critical element for helping the search engine bot identify the contents of your page. The title is usually part of the standard blue link entry for a site in the search engine results pages (SERPs). If you omit this tag or leave the default tag content provided by a template in your development environment, such as New Page 1, folks who eventually find your site in the SERP will hardly be inclined to click your undefined link. And they may have trouble finding you anyway, because you will have missed a great opportunity to associate a few choice keywords and phrases with your page.
+When creating the title text, keep the following in mind: 
+The closer the word is to the start, the more heavily weighted it is as a keyword. This is true for the bot as well as the reader. (For information on the affect the Golden Triangle phenomenon of user scanning of a SERP, check out the new Bing white paper.) 
+Keep the title text between 5 and 65 characters in length 
+For greatest efficiency and consistency, write titles using this syntax: keyword phrase, category, website title (or brand) 
+Make the title text unique on every page 
+Don’t use any of the following special characters in title text: '"<>{}[]() 
+Meta description tag
+While search engines reserve the right to use a variety of inputs for filling out site description snippets in their SERPs, webmasters who provide unique, concise, compelling, and keyword-laden descriptions in their <meta> tag’s description attribute help guide the development of their websites’ SERP captions. 
+When creating the description text, remember the following: 
+Create unique descriptions for each page, using keywords specific to that page 
+Keep the description text between 25 and 150 characters in length 
+Do not copy title tag text content as a description; this is a wasted opportunity to develop more keywords and adds no value 
+Make the description text unique on every page 
+Don’t use any of the following special characters in description text: '"<>{}[]() 
+Meta keyword tag
+The <meta> tag’s keyword attribute is not the page rank panacea it once was back in the prehistoric days of Internet search. It was abused far too much and lost most of its cachet. But there’s no need to ignore the tag. Take advantage of all legitimate opportunities to score keyword credit, even when the payoff is relatively low. Fill in this tag’s text with relevant keywords and phrases that describe that page’s content. 
+When creating keyword text, remember the following: 
+Choose words that may be secondary keyword terms (save the primary keywords for use in the <title> and <meta> description tags), and even include a few, commonly seen typographical errors of primary keywords, just for good measure 
+Limit your keyword and key phrase text, separated by commas, to no more than 874 characters 
+Don’t repeat a keyword more than 4 times among the keywords and phrases in the list 
+Other useful <meta> tag options
+There are additional <meta> tags you might consider for your pages if they are appropriate for your target audience. Above all, consistency between pages is key. 
+Meta content-language tag
+If you are directing your website’s contents toward a specific language-speaking audience, you can specify the language of your content using the <meta> tag’s content-language attribute. For example, for a target audience of American English speakers, you would add the following tag to the <head> section of all your pages:
+<meta http-equiv="content-language" content="en-us" />
+You can specify other languages, of course! For information on creating specific language codes, see Language tags in HTML and XML. 
+Meta content-type tag
+You can also choose to specify the content type and character encodings used on your webpages using this the <meta> tag using the content-type attribute. Encoding for text/html content with the UTF-8 (8-bit Unicode) charset is the most common choice used. 
+UTF-8 allows the browser software to easily map the page’s character encodings to the user’s local language (which is of benefit to foreign language speakers, since Unicode has broad, international character support). An example of a <meta> tag showing the content-type encoded for text/html and UTF-8 is shown below:
+<meta http-equiv="content-type" content="text/html; charset=UTF-8" />
+For some webmasters who prefer to encode their pages for a specific language character set, refer to the full list of character encoding names registered by Internet Assigned Numbers Authority (IANA) for the appropriate charset attribute code. You can also choose different media types as appropriate.
+Meta robots tag
+You can choose to limit which pages your site makes available to search engine bots by invoking the Robots Exclusion Protocol (REP) referenced in the <meta> tag’s robots attribute. The details of this topic are extensive, and I will cover this in more detail in a later post. For now, however, you can get a jump on learning how to manage bots on a per-page basis by reading About the Robots <meta> tag. Below is an example line of code that will block a bot (one that adheres to REP) from indexing the content or following any of the links on the page.
+<meta name="robots" content="noindex, nofollow" />
+Link tags
+The <link> tag with the canonical attribute, previously discussed elsewhere in this blog, also falls within the <head> tag. It’s used to establish the canonical URL for a webpage (which is helpful for the search engines to know). To see the previous reference to this tag, check out the section Identify the canonical URL for each page in the blog article, Making links work for you. Below is a sample of the code for reference.
+<link rel="canonical" href="http://www.mysite.com/product.htm />
+Whew! That’s it! I know the articles in this four-part series were exceptionally long, and I applaud you if you got through them all! But all of this is important SEO information for webmasters to know. There’s still plenty to talk about, though, so be sure to come back for more soon. If you have any questions, comments, or suggestions, feel free to post them in our SEM forum. Later…
+-- Rick DeJarnette, Bing Webmaster Center

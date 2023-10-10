@@ -1,0 +1,5 @@
+MIDI（musical instrument digital interface）バスをパソコンのUSBポートに接続する方法を紹介する。図1の回路では、この接続に英FTDI（Future Technology Devices International）社のIC「FT232BM」を使用している。同製品は、USBとUART（universal asynchronous receiver transmitter）間のインターフェースを担うICであり、特にプログラミングを必要としないという特徴がある。
+この回路において、USBの信号はIC1（FT232BM）に直接接続する。IC1からMIDIバスへ、またMIDIバスからIC1へのシリアル送受信信号は、それぞれIC2、IC3によってMIDI用の電流信号に変換される。複数のMIDIバスを接続する場合には、IC4のEEPROMを利用する。 
+この回路を利用するに当たって、新たにプログラムを記述する必要はない。ただし、2種類のドライバソフトをパソコンにインストールしておく必要がある。1つはVCP（Virtual COM Port）ドライバであり、これはFTDI社のウェブサイトからダウンロードできる（http://www.ftdichip.com/Drivers/VCP.htm）。このドライバにより、FT232BMがCOMポートに割り当てられ、USBとのインターフェースが可能になる。同ドライバをインストールする際の注意点は、アーカイブデータに含まれるftdiport.infというファイルの中のボーレート（baud rate）に関する記述を書き換え、FT232BMのボーレ－トを3万1250ボーに設定することだ＊1)。その上で、3万8400ボーで動作するようVCPを設定する（実際のボーレートはftdiport.infによる設定のとおり3万1250になる）。
+もう1つインストールしなければならないのが、VCPシリアルポートがMIDIポートとして見えるようにし、接続されたMIDIバスを認識可能にするドライバである。このような目的のドライバはインターネット上で数多く見つけられる。その一例がローランドのシリアルMIDIドライバである（http://www.roland.it/dow_drivers/for_win/serial32_wxp2k.exe）。このMIDIドライバはCOM1またはCOM3に割り当てればよい。 
+リスト1はftdiport.infにおけるボーレートの設定を3万8400から3万1250に変更したものである。この変更は、VCPドライバのインストール前に行わなければならない。

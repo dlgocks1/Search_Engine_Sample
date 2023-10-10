@@ -1,0 +1,363 @@
+linux, baculaさて、これがいろいろな意味で一番の大物。とても強力なバックアップソフトで、いつのまにやら知名度もじりじり上がり、Bacula.jphttp://www.bacula.jp/なんてのもできていた。初心者も思わず手を伸ばしてしまいそうなデザインのサイトだが、断言する。きっとボッコボコにされる。bacula（特にwindows版）はユーザーフレンドリーとは言えず、設定に多々ややこしいところがあり、これをこのままの状態で普及させようとするのは明らかにヤバい。Bacula.jpはどういう意図で作られたのだろう、人柱募集だろうか？？ だがしかし、一度動く環境が作れたら至極まっとうに動く。エンタープライズ用途なので当たり前だが。家庭や小さなオフィスでも導入を考える価値は十分にあると思う。 baculaの仕組みbaculaはsd、fd、dirの3つから構成されるsdはストレージデーモン。ファイル倉庫。fdはファイルデーモン。ファイルをストレージデーモンに渡す。dirはディレクタ。ファイルデーモンからストレージデーモンへのやりとりを監督する。ストレージデーモン、ディレクタは1つづつあればよく、ファイルデーモンだけがバックアップ対象のマシンごとにインストールされる必要がある。重要なのはディレクタ。設定ファイルもディレクタだけが重要。ストレージデーモン、ファイルデーモンの設定ファイルは簡素なもの。 設定ファイル以下の記事を参考に。Bacula (4) bacula-fd.confhttp://lunatear.net/archives/001062.htmlBacula (5) bacula-sd.confhttp://lunatear.net/archives/001063.htmlBacula (6) bacula-dir.conf 1http://lunatear.net/archives/001067.htmlBacula (7) bacula-dir.conf 2http://lunatear.net/archives/001068.htmlBacula (8) bacula-dir.conf 3http://lunatear.net/archives/001069.htmlAutomated Disk Backuphttp://www.bacula.org/en/rel-manual/Automated_Disk_Backup.html インストール前に大体の設定ファイルを作成しておくといい。（windows版のクライアントはインストール時にディレクタの情報などを求めるため）まずパスワードの表を作っておくalice sd　　->　ALICE_SD_PASSWORDfd　　->　ALICE_FD_PASSWORDbelle fd　　->　BELLE_FD_PASSWORDchris dir　　->　CHRIS_DIR_PASSWORDfd　　->　CHRIS FD_PASSWORDclient1 fd　　->　CLIENT1_FD_PASSWORD表ができればfd、sdの設定ファイルの内容は自動的に決まる。 bacula-fd.confDirectorのPasswordにそれぞれのfdのパスワードを入力するところが間違えやすい。alice
+Director {
+Name = chris-dir
+Password = "ALICE_FD_PASSWORD"
+}
+FileDaemon {
+Name = alice-fd
+FDport = 9102
+WorkingDirectory = /var/lib/bacula
+Pid Directory = /var/run
+Maximum Concurrent Jobs = 20
+}
+Messages {
+Name = Standard
+director = chris-dir = all, !skipped, !restored
+}
+belle
+Director {
+Name = chris-dir
+Password = "BELLE_FD_PASSWORD"
+}
+FileDaemon {
+Name = belle-fd
+FDport = 9102
+WorkingDirectory = /var/lib/bacula
+Pid Directory = /var/run
+Maximum Concurrent Jobs = 20
+}
+Messages {
+Name = Standard
+director = chris-dir = all, !skipped, !restored
+}
+chris
+Director {
+Name = chris-dir
+Password = "CHRIS_FD_PASSWORD"
+}
+FileDaemon {
+Name = chris-fd
+FDport = 9102
+WorkingDirectory = /var/lib/bacula
+Pid Directory = /var/run
+Maximum Concurrent Jobs = 20
+}
+Messages {
+Name = Standard
+director = chris-dir = all, !skipped, !restored
+}
+client1
+Director {
+Name = chris-dir
+Password = "CLIENT1_FD_PASSWORD"
+}
+FileDaemon {
+Name = clinet1-fd
+FDport = 9102
+WorkingDirectory = "C:\\Documents and Settings\\All Users\\Application Data\\Bacula\\Work"
+Pid Directory = "C:\\Documents and Settings\\All Users\\Application Data\\Bacula\\Work"
+Maximum Concurrent Jobs = 20
+}
+Messages {
+Name = Standard
+director = chris-dir = all, !skipped, !restored
+}
+bacula-sd.conf同様に、DirectorのPasswordにはsd自身のパスワードを入れる。alice
+Storage {
+Name = alice-sd
+SDPort = 9103 # Director's port
+WorkingDirectory = "/var/lib/bacula"
+Pid Directory = "/var/run"
+Maximum Concurrent Jobs = 20
+}
+Director {
+Name = chris-dir
+Password = "ALICE_SD_PASSWORD"
+}
+Device {
+Name = FileStorage
+Media Type = File
+Archive Device = /disk/1/bacula
+LabelMedia = yes;
+Random Access = Yes;
+AutomaticMount = yes;
+RemovableMedia = no;
+AlwaysOpen = no;
+}
+Messages {
+Name = Standard
+director = chris-dir = all
+}
+bacula-dir.confこれが最難関。長いので分割して解説する。 DirectorのPasswordにはdir自身のパスワードを入れる。
+Director {
+Name = chris-dir
+DIRport = 9101
+QueryFile = "/usr/lib/bacula/query.sql"
+WorkingDirectory = "/var/lib/bacula"
+PidDirectory = "/var/run"
+Maximum Concurrent Jobs = 1
+Password = "CHRIS_DIR_PASSWORD"
+Messages = Standard
+}
+ジョブ。デフォルトのものを上書きしてそれぞれのfdのジョブを定義していく。
+#default job
+JobDefs {
+Name = "DefaultJob"
+Type = Backup
+Level = Incremental
+Client = chris-fd #上書きされるので特に意味はない
+FileSet = "Full Set"
+Schedule = "WeeklyCycle"
+Storage = File
+Messages = Standard
+Pool = Default #使用されることはないが、定義として必要
+Full Backup Pool = Full-Pool
+Incremental Backup Pool = Inc-Pool
+Differential Backup Pool = Diff-Pool
+Priority = 10
+}
+#alice job
+Job {
+Name = "alice_job"
+JobDefs = "DefaultJob"
+Client = alice-fd
+Write Bootstrap = "/var/lib/bacula/alice_job.bsr"
+}
+#belle job
+Job {
+Name = "belle_job"
+JobDefs = "DefaultJob"
+Client = belle-fd
+Write Bootstrap = "/var/lib/bacula/belle_job.bsr"
+}
+#chris job
+Job {
+Name = "chris_job"
+JobDefs = "DefaultJob"
+Client = chris-fd
+Write Bootstrap = "/var/lib/bacula/chris_job.bsr"
+}
+#client1 job
+Job {
+Name = "client1_job"
+JobDefs = "DefaultJob"
+Client = client1-fd
+FileSet = "client1 Set"
+Write Bootstrap = "/var/lib/bacula/client1_job.bsr"
+}
+#catalog backup(self job)
+Job {
+Name = "BackupCatalog"
+Type = Backup
+Client = chris-fd #dirが動いているのと同じマシンのfd
+FileSet="Catalog"
+Schedule = "WeeklyCycleAfterBackup"
+Storage = File
+Messages = Standard
+Pool = Default
+Full Backup Pool = Full-Pool
+Incremental Backup Pool = Inc-Pool
+Differential Backup Pool = Diff-Pool
+RunBeforeJob = "/usr/lib/bacula/make_catalog_backup bacula bacula"
+RunAfterJob = "/usr/lib/bacula/delete_catalog_backup"
+Write Bootstrap = "/var/lib/bacula/BackupCatalog.bsr"
+Priority = 11
+}
+#default restore job
+Job {
+Name = "RestoreFiles"
+Type = Restore
+Client= alice-fd
+FileSet="Full Set"
+Storage = File
+Pool = Default
+Full Backup Pool = Full-Pool
+Incremental Backup Pool = Inc-Pool
+Differential Backup Pool = Diff-Pool
+Messages = Standard
+Where = /bacula-restores
+}
+ファイルセット。バックアップ対象を定義する。linuxとwindowsでは全然違うので別に定義している。必要があればマシン、ジョブごとに定義する。
+#for linux
+FileSet {
+Name = "Full Set"
+Include {
+Options {
+signature = MD5
+Compression = GZIP
+}
+File = /usr
+File = /home
+File = /boot
+File = /var
+File = /opt
+#for alice, samba public dir
+File = /samba/safe
+}
+Exclude {
+File = /proc
+File = /tmp
+File = /.journal
+File = /.fsck
+}
+}
+#for client1@windows
+FileSet {
+Name = "client1 Set"
+Enable VSS = yes
+Include {
+File = "c:/"
+File = "d:/data/"
+File = "d:/tools/"
+Options {
+signature = MD5
+Compression = GZIP
+IgnoreCase = yes
+}
+}
+Include {
+Options {
+Exclude = yes
+IgnoreCase = yes
+#
+WildFile = "[a-z]:/hiberfil.sys"
+WildFile = "[a-z]:/pagefile.sys"
+WildDir = "c:/Documents and Settings/*/Cookies"
+WildDir = "c:/Documents and Settings/*/Recent"
+WildDir = "c:/Documents and Settings/*/Local Settings/History"
+WildDir = "c:/Documents and Settings/*/Local Settings/Temp"
+WildDir = "c:/Documents and Settings/*/Local Settings/Temporary Internet Files"
+}
+}
+}
+FileSet {
+Name = "Catalog"
+Include {
+Options {
+signature = MD5
+}
+File = /var/lib/bacula/bacula.sql
+}
+}
+スケジュール。
+Schedule {
+Name = "WeeklyCycle"
+Run = Full 1st sun at 23:05
+Run = Differential 2nd-5th sun at 23:05
+Run = Incremental mon-sat at 23:05
+}
+Schedule {
+Name = "WeeklyCycleAfterBackup"
+Run = Full sun-sat at 23:10
+}
+ファイルデーモンの定義。Passwordにはそれぞれのfdのパスワードを入力する。
+Client {
+Name = alice-fd
+Address = alice
+FDPort = 9102
+Catalog = MyCatalog
+Password = "ALICE_FD_PASSWORD" # password for FileDaemon
+File Retention = 30 days # 30 days
+Job Retention = 6 months # six months
+AutoPrune = yes # Prune expired Jobs/Files
+}
+Client {
+Name = belle-fd
+Address = belle
+FDPort = 9102
+Catalog = MyCatalog
+Password = "BELLE_FD_PASSWORD" # password for FileDaemon
+File Retention = 30 days # 30 days
+Job Retention = 6 months # six months
+AutoPrune = yes # Prune expired Jobs/Files
+}
+Client {
+Name = chris-fd
+Address = chris
+FDPort = 9102
+Catalog = MyCatalog
+Password = "CHRIS_FD_PASSWORD" # password for FileDaemon
+File Retention = 30 days # 30 days
+Job Retention = 6 months # six months
+AutoPrune = yes # Prune expired Jobs/Files
+}
+Client {
+Name = client1-fd
+Address = client1
+FDPort = 9102
+Catalog = MyCatalog
+Password = "CLIENT1_FD_PASSWORD" # password for FileDaemon
+File Retention = 30 days # 30 days
+Job Retention = 6 months # six months
+AutoPrune = yes # Prune expired Jobs/Files
+}
+ストレージデーモンの定義。Passwordには対象のsdのパスワードを。
+Storage {
+Name = File
+Address = alice # N.B. Use a fully qualified name here
+SDPort = 9103
+Password = "ALICE_SD_PASSWORD"
+Device = FileStorage
+Media Type = File
+}
+カタログの定義。ユーザー、パスワードなど変更したならそれを反映させておく。
+Catalog {
+Name = MyCatalog
+dbname = "bacula"; dbuser = "bacula"; dbpassword = ""
+}
+ストレージデーモンのプール設定。Label Formatが設定してあれば、Full-0001のようなラベルを自動生成してくれるので手間が掛からない。ただし、Maximum Volumesが上限なので、それ以上は生成されない。タスクの数が未定だとか増える予定があれば、Maximum Volumesは大きめに取っておくのがいい。
+Pool {
+Name = Default
+Pool Type = Backup
+Recycle = yes
+AutoPrune = yes
+Volume Retention = 60 days
+}
+Pool {
+Name = Full-Pool
+Pool Type = Backup
+Recycle = yes
+AutoPrune = yes
+Volume Retention = 2 months
+Maximum Volume Jobs = 1
+Label Format = Full-
+Maximum Volumes = 20
+}
+Pool {
+Name = Diff-Pool
+Pool Type = Backup
+Recycle = yes
+AutoPrune = yes
+Volume Retention = 40 days
+Maximum Volume Jobs = 1
+Label Format = Diff-
+Maximum Volumes = 40
+}
+Pool {
+Name = Inc-Pool
+Pool Type = Backup
+Recycle = yes
+AutoPrune = yes
+Volume Retention = 20 days
+Maximum Volume Jobs = 6
+Label Format = Inc-
+Maximum Volumes = 60
+}
+メッセージ設定。メールアドレスを入力しておけばメールが来る。
+Messages {
+Name = Standard
+mailcommand = "/usr/sbin/bsmtp -h localhost -f \"\(Bacula\) \\" -s \"Bacula: %t %e of %c %l\" %r"
+operatorcommand = "/usr/sbin/bsmtp -h localhost -f \"\(Bacula\) \\" -s \"Bacula: Intervention needed for %j\" %r"
+mail = your@mail.adress = all, !skipped
+operator = your@mail.adress = mount
+console = all, !skipped, !saved
+append = "/var/lib/bacula/log" = all, !skipped
+}
+インストール以下を参考に。http://beach-told.blogspot.com/2009/01/install-bacula-on-centos-52.htmlchris (dir, fd)CentOS 5.3 32bitなのでそれに適したものをインストールする。# wget http://dag.wieers.com/rpm/packages/rpmforge-release/rpmforge-release-0.3.6-1.el5.rf.i386.rpm# rpm -ivh rpmforge-release-0.3.6-1.el5.rf.i386.rpm# yum install mysql mysql-devel mysql-server gcc-c++ perl-DBI openssl-devel perl-DBD-Mysql glibc-devel libgomp libstdc++-devel krb5-devel zlib-devel glibc-headers e2fsprogs-devel php php-gettext php-pear qt4 qt4-devel wxGTK qwt-devel qwt# wget http://downloads.sourceforge.net/bacula/bacula-bat-2.4.2-1.el5.i386.rpm# wget http://downloads.sourceforge.net/bacula/bacula-gconsole-2.4.2-1.el5.i386.rpm# wget http://downloads.sourceforge.net/bacula/bacula-mtx-2.4.2-1.el5.i386.rpm# wget http://downloads.sourceforge.net/bacula/bacula-mysql-2.4.2-1.el5.i386.rpm//依存関係があるので注意# rpm -ivh bacula〜データベースを初期化する。必要があればパスワードなどを設定するよう書き換えてから# cd /usr/lib/bacula/# ./create_bacula_database# ./grant_bacula_privileges# ./make_bacula_tables alice (sd, fd)CentOS 5.3 64bitなのでそれに適したものをインストールする。# yum install mysql mysql-devel mysql-server gcc-c++ perl-DBI openssl-devel perl-DBD-Mysql glibc-devel libgomp libstdc++-devel krb5-devel zlib-devel glibc-headers e2fsprogs-devel php php-gettext php-pear qt4 qt4-devel wxGTK qwt-devel qwt# wget http://downloads.sourceforge.net/project/bacula/rpms-contrib-fschwarz/2.4.2/bacula-bat-2.4.2-1.el5.x86_64.rpm# wget http://downloads.sourceforge.net/project/bacula/rpms-contrib-fschwarz/2.4.2/bacula-gconsole-2.4.2-1.el5.x86_64.rpm# wget http://downloads.sourceforge.net/project/bacula/rpms-contrib-fschwarz/2.4.2/bacula-mtx-2.4.2-1.el5.x86_64.rpm# wget http://sourceforge.net/projects/bacula/files/rpms-contrib-fschwarz/2.4.2/bacula-mysql-2.4.2-1.el5.x86_64.rpm//依存関係があるので注意# rpm -ivh bacula〜書き込むディスクに権限を付加しておく。# mkdir /disk/1/bacula# chmod 666 /disk/1/bacula belle (fd)CentOS 5.3 32bitなのでそれに適したものをインストールする。# wget http://downloads.sourceforge.net/bacula/bacula-client-2.4.2-1.el5.i386.rpm# rpm -ivh bacula-client-2.4.2-1.el5.i386.rpm client1 (fd)windows XPなのでそれに適したものをインストールする。以下を参考に。Baculaクライアントのインストールhttp://www.bacula.jp/kouchiku-nyumon/windows-client.html ディレクタの情報など求められるので入力してインストールを進める。1つ注意が必要なのが、Tray-Monitorは不要なので入力しない　→　まんま空白でbacula-fd.confが生成される　→　エラー　→　サービスが立ち上がらない！となるということ。手動でbacula-fd.confを編集して当該部分を修正する必要がある。 bconsoleどのマシンからでもいいので、# bconsoleとすればコンソールに入ることができる。いろいろなコマンドが実行できて、マウントする最後の仕上げとして、sdのデバイスをマウントしておく。 * mountとりあえず全部のステータスを見る * status allジョブを走らせる * run 1これでalice_jobが始まる。ひととおりjobを走らせて問題が無いようなら構築は完了。素晴らしいバックアップ環境が手に入った。 その他のコマンドなど、詳しくはマニュアルを参照のこと。Bacula Consolehttp://www.bacula.org/en/dev-manual/Bacula_Console.html BATもしくはBacula Admin Toolで管理をする。# vi /etc/bacula/bat.conf
+Director {
+Name = chris-dir
+DIRport = 9101
+address = chris
+Password = "CHRIS_DIR_PASSWORD"
+}
+GUI画面で「アプリケーション」→「システムツール」「Bacula Admin Tool」で起動する。総合的な管理ツールで、リストアはこれでやるのが一番わかりやすい。テストも兼ねて、リストア動作の確認をしておくことをお勧めする。 サーバをリプレイスしたときのメモ１　ntfsからext3へhttp://d.hatena.ne.jp/ruby-U/20090728/1248721117サーバをリプレイスしたときのメモ２　xenの上に最小のCentOS 5.3をインストールするhttp://d.hatena.ne.jp/ruby-U/20090729/1248760935サーバをリプレイスしたときのメモ３　xenの上にwindows 2000をインストールするhttp://d.hatena.ne.jp/ruby-U/20090730/1248760993サーバをリプレイスしたときのメモ４　sambaをインストール、パフォーマンスを最適化するhttp://d.hatena.ne.jp/ruby-U/20090731/1248761382サーバをリプレイスしたときのメモ５　CentOS 5.3のtips（Domain-0, Domain-U 問わず）http://d.hatena.ne.jp/ruby-U/20090801/1248766003サーバをリプレイスしたときのメモ６　baculaの設定と運用http://d.hatena.ne.jp/ruby-U/20090802/1248774098

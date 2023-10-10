@@ -1,0 +1,39 @@
+サンプルコード 
+DrawingCacheQualitySample.java
+public class DrawingCacheQualitySample extends Activity {
+@Override
+public void onCreate( Bundle savedInstanceState) {
+super.onCreate( savedInstanceState);
+setContentView( R.layout.sample);
+Button drawingCacheQualityAuto = ( Button) findViewById( R.id.drawing_cache_quality_auto);
+Button drawingCacheQualityHigh = ( Button) findViewById( R.id.drawing_cache_quality_high);
+Button drawingCacheQualityLow = ( Button) findViewById( R.id.drawing_cache_quality_low);
+drawingCacheQualityAuto.setDrawingCacheEnabled( true);
+drawingCacheQualityHigh.setDrawingCacheEnabled( true);
+drawingCacheQualityLow.setDrawingCacheEnabled( true);
+}
+}
+サンプルコード(レイアウト)
+<LinearLayout
+android:layout_width="fill_parent"
+android:layout_height="fill_parent"
+android:orientation="vertical">
+<Button
+android:id="@+id/drawing_cache_quality_auto"
+android:layout_width="fill_parent"
+android:layout_height="wrap_content"
+android:text="@string/auto"
+android:drawingCacheQuality="auto" />
+<Button
+android:id="@+id/drawing_cache_quality_high"
+android:layout_width="fill_parent"
+android:layout_height="wrap_content"
+android:text="@string/auto"
+android:drawingCacheQuality="high" />
+<Button
+android:id="@+id/drawing_cache_quality_low"
+android:layout_width="fill_parent"
+android:layout_height="wrap_content"
+android:text="@string/low"
+android:drawingCacheQuality="low" />
+</LinearLayout>

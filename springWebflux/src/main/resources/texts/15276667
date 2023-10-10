@@ -1,0 +1,8 @@
+2009/02/11
+Android Dev Phone 1™ をファーム JFv1.41_RC33 にアップデート
+Gman How to upgrade your ADP1 to RC33 を参考に Android Dev Phone 1 ファームを JFv1.41_RC33 にアップデート。Model Number も Android Dev Phone 1 から T-Mobile G1 になった (^^; 注）本内容を試される方は、自己責任でお願いします。 　　あなたの Dev Phone 1 がレンガ化する恐れがあります。 JFv1.41_RC33.zip は、こちらから入手した。 xda-developers > Dream > Dream android development JFv1.41 New! RC33 version なお、JFv1.41_RC33 は、T-Mobile G1 オリジナル RC33 に JFv1.41 機能が追加されてる。主な機能は、Web Browser でのマルチタッチ。root にも入れる。また、root アクセスが塞がれない用 OTA による System updates が規制されてる (^^; ファームアップ時 ALT-W で wipe する為、データは消え Google Account 登録も必要。Google Account 登録は、ADP1 なので WiFi メニューを直接起動し Settings -> Data synchronization から可能 (^^) APD1 の WiFi 設定メニュー起動方法： ADP1 リブート後、PC より adb shell で root に入り以下を入力 am start -a android.intent.action.MAIN -n com.android.settings/.Settings なお、Bookmarks などの個人データは、MyBackup より復旧 (^^) JFv1.41 は、Terminal Emulator と Superuser Whitelist アプリもプリインストールされてる。 root アクセスをこの画面で確認出来る (^^) RC33 機能の紹介ビデオ： A video walk around the T-Mobile G1 RC33 update Web Browser から image ファイル・ダウンロードも可能です (^^)
+投稿者
+Touch
+時刻:
+12:33
+|

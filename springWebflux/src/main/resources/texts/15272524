@@ -1,0 +1,252 @@
+initrdの状態でLinuxを使う方法を試行錯誤してみた。例えば、initrdの環境でbashを使えるようにするとか、ちょっと遊んでみた。■ 先ずはinitrdについての基礎知識initrdはLinuxが起動するときに使う最初のファイルシステムでメモリ上に構築される。そのため"init（初期の）"の"rd（ram disk）"というのかなと思う*1。FedoraやUbuntuで標準のブートローダとして使われているgrubの設定ファイルでも"kernel"とともに"initrd"を指定する。grubローダはkernelをメモリ上に展開、次にinitrdをメモリ上に展開してrootfsとしてkernelに渡すようだ。kernelはHDD等のファイルシステムをいきなり使うのではなく、一旦initrdをルートファイルシステムとして動き出し、次のステップでHDD等のファイルシステムをマウントして"switch root"する。initrdにはLinuxとして最小限のファイルしか入っていない。（正確にはHDDのファイルシステムをマウントして制御を渡すまでに必要なファイルだけ。）initrdは次のコマンドで解凍と圧縮ができる。initrdの解凍：
+[root@f8 ~]# mkdir /tmp/initrd.f8
+[root@f8 ~]# cd /tmp/initrd.f8
+[root@f8 initrd.f8]# zcat /boot/initrd-2.6.25.6-27.fc8.img | cpio -i
+16442 blocks
+[root@f8 initrd.f8]# ls
+bin dev etc init lib lib64 proc sbin sys sysroot usr
+[root@f8 initrd.f8]# 
+initrdへの圧縮：
+[root@f8 initrd.f8]# ls
+bin dev etc init lib lib64 proc sbin sys sysroot usr
+[root@f8 initrd.f8]# find . | cpio -o -c | gzip -c > /tmp/initrd-new.img
+16443 blocks
+[root@f8 initrd.f8]# 
+Fedora 8（Linux Kernel 2.6.25.6）のinitrdに含まれるファイルは以下の通り（空のディレクトリは省略）。
+[root@f8 initrd.f8]# ls -RF
+.:
+bin/ dev/ etc/ init* lib/ lib64/ proc/ sbin@ sys/ sysroot/ usr/
+./bin:
+insmod* modprobe@ nash* rmmod*
+./dev:
+console null ram@ ram1 systty tty0 tty10 tty12 tty3 tty5 tty7 tty9 ttyS1 ttyS3
+mapper/ ptmx ram0 rtc tty tty1 tty11 tty2 tty4 tty6 tty8 ttyS0 ttyS2 zero
+./etc:
+ld.so.cache ld.so.conf ld.so.conf.d/
+./etc/ld.so.conf.d:
+qt-x86_64.conf
+./lib:
+ata_generic.ko ehci-hcd.ko firmware/ libata.ko ohci-hcd.ko pata_jmicron.ko scsi_wait_scan.ko uhci-hcd.ko
+ata_piix.ko ext3.ko jbd.ko mbcache.ko pata_acpi.ko scsi_mod.ko sd_mod.ko usb-storage.ko
+./lib64:
+ld-2.7.so* libcrypto.so.6@ libgcc_s.so.1@ libpopt.so.0.0.0* libuuid.so.1.2*
+ld-linux-x86-64.so.2@ libc.so.6@ libglib-2.0.so.0@ libresolv-2.7.so* libz.so.1@
+libblkid.so.1@ libdevmapper.so.1.02* libglib-2.0.so.0.1400.6* libresolv.so.2@ libz.so.1.2.3*
+libblkid.so.1.0* libdl-2.7.so* libm-2.7.so* libselinux.so.1*
+libc-2.7.so* libdl.so.2@ libm.so.6@ libsepol.so.1*
+libcrypto.so.0.9.8b* libgcc_s-4.1.2-20070925.so.1* libpopt.so.0@ libuuid.so.1@
+./usr/lib64:
+libbdevid.so.6.0.19* libdhcp6client-0.10.so.0* libnash.so.6.0.19* libnl.so.1.1* libparted-1.8.so.6.0.0*
+libdhcp4client-3.0.6.so.0* libdhcp.so.1* libnl.so.1@ libparted-1.8.so.6@
+[root@f8 initrd.f8]#
+このように必要最小限のコマンドしか入っていない。（/sbin は /binへシンボリックリンクされていて、initrdの環境では同一、というか混在。）kernelはこのinitrdを最初のファイルシステムとして使うが、その中からinitを探す。initrdではルートディレクトリのすぐ直下に配置されている。ただし、通常のLinuxのinitとは違い、initrdでは"nash"と呼ばれるLinux起動用コマンドへ手順（スクリプト）となっている。（nashは/binディレクトリに格納されている。）
+[root@f8 initrd.f8]# cat init
+#!/bin/nash
+mount -t proc /proc /proc
+setquiet
+echo Mounting proc filesystem
+echo Mounting sysfs filesystem
+mount -t sysfs /sys /sys
+echo Creating /dev
+mount -o mode=0755 -t tmpfs /dev /dev
+mkdir /dev/pts
+mount -t devpts -o gid=5,mode=620 /dev/pts /dev/pts
+mkdir /dev/shm
+mkdir /dev/mapper
+echo Creating initial device nodes
+mknod /dev/null c 1 3
+：
+：
+echo Creating root device.
+mkrootdev -t ext3 -o defaults,ro /dev/sda1
+echo Mounting root filesystem.
+mount /sysroot
+echo Setting up other filesystems.
+setuproot
+echo Switching to new root and running init.
+switchroot
+echo Booting has failed.
+sleep -1
+[root@f8 initrd.f8]#
+"nash"は"sh"という名前がついているが、（シェルとして機能も最小限は持っているが）シェルと言うよりは起動専用の簡易バッチ処理コマンドと考えた方がいい。initでは"mount"や"mkdir"、"mknod"などのお馴染のコマンド名が使われているが、initrdの/binの下にはnashの他にはinsmod、modprobe、rmmodの3つのコマンドしかないことから分かるように、mount、mkdirなどのコマンドはnashの内部コマンドである。（後述するように、外部コマンドも実行できる。）nashは通常のLinux環境でも /sbin/nash として収録されているので、"--force"オプションをつけることで通常環境でも実行することはできる。なお、Linux Kernelは起動すると最初に"init"を探し、最初のプロセスとして起動するが、initがバイナリオブジェクトであれば、そのまま実行し、何らかのスクリプトであればインタプリタを起動してからそのスクリプトを実行するようになっているらしい。一般的なinitrdでは、initはnashに対するスクリプトとして記述されているが、「PXEによるディスクレス・クライアント」で使ったディスクレス用のinitrdではbashを使ったシェルスクリプトで記述してあった。このinitを自由に書き換えることができれば、本番のLinuxを立ち上げる前に、色々と「技」が使えるようになったり、特定用途向け（例えばThin Clientなど）のメモリだけで動作するLinuxを作ることもできるだろう。■ initを変更してブートしてみる手始めとして、nashのinitをちょっと変更して、どのようになるか試してみた。先ずは、現行のLinuxのinitdを作業用ディレクトリに展開する：
+[root@f8 tmp]# mkdir initrd-adsaria
+[root@f8 tmp]# cd initrd-adsaria
+[root@f8 initrd-adsaria]# zcat /boot/initrd-2.6.25.6-27.fc8.img | cpio -i
+16539 blocks
+[root@f8 initrd-adsaria]# ls
+bin dev etc init lib lib64 proc sbin sys sysroot usr
+次にinitを変更してみる：
+[root@f8 initrd-adsaria]# vi init
+[root@f8 initrd-adsaria]# cat init
+#!/bin/nash
+mount -t proc /proc /proc
+#setquiet
+echo Mounting proc filesystem
+：
+：
+echo Creating root device.
+mkrootdev -t ext3 -o defaults,ro LABEL=/
+echo Mounting root filesystem.
+mount /sysroot
+echo Setting up other filesystems.
+setuproot
+echo Switching to new root and running init.
+#switchroot
+echo Booting has failed.
+sleep -1
+[root@f8 initrd-adsaria]#
+ここでは、nashが最後に実行するコマンド、"switchroot"をコメントアウトしてみる。次に、このinitを含むinitrdイメージファイルを作成する。くれぐれも現行のinitrdと同じ名前にしないように。
+[root@f8 initrd-adsaria]# find . | cpio -o -c | gzip -c > /boot/initrd-adsaria.img
+16539 blocks
+[root@f8 initrd-adsaria]# ls -l /boot
+total 9904
+-rw-r--r-- 1 root root 79661 2008-06-14 05:26 config-2.6.25.6-27.fc8
+drwxr-xr-x 2 root root 4096 2008-07-01 08:54 grub
+-rw------- 1 root root 3386923 2008-06-29 01:08 initrd-2.6.25.6-27.fc8.img
+-rw-r--r-- 1 root root 3407929 2008-07-01 08:59 initrd-adsaria.img
+-rw-r--r-- 1 root root 1139271 2008-06-14 05:26 System.map-2.6.25.6-27.fc8
+-rw-r--r-- 1 root root 2065112 2008-06-14 05:26 vmlinuz-2.6.25.6-27.fc8
+[root@f8 initrd-adsaria]#
+そして、今作成したinitrdを使ってシステムをブートできるように /boot/grub/grub.confを変更する。
+[root@f8 initrd-adsaria]# vi /boot/grub/grub.conf
+：
+：
+[root@f8 initrd-adsaria]# cat /boot/grub/grub.conf
+# grub.conf generated by anaconda
+#
+# Note that you do not have to rerun grub after making changes to this file
+# NOTICE: You do not have a /boot partition. This means that
+# all kernel and initrd paths are relative to /, eg.
+# root (hd0,0)
+# kernel /boot/vmlinuz-version ro root=/dev/sda1
+# initrd /boot/initrd-version.img
+#boot=/dev/sda
+default=0
+timeout=5
+splashimage=(hd0,0)/boot/grub/splash.xpm.gz
+hiddenmenu
+title Fedora (2.6.25.6-27.fc8)
+root (hd0,0)
+kernel /boot/vmlinuz-2.6.25.6-27.fc8 ro root=LABEL=/ rhgb quiet
+initrd /boot/initrd-2.6.25.6-27.fc8.img
+title Adsaria-Test
+root (hd0,0)
+kernel /boot/vmlinuz-2.6.25.6-27.fc8 ro root=LABEL=/ rhgb
+initrd /boot/initrd-adsaria.img
+[root@f8 initrd-adsaria]# 
+この例では、"Adsaria-Test"というエントリを追加（現行の"Fedora"をコピーして修正）してある。Kernelは通常のカーネルを使うが、initrdは特注品を指定している。これで準備ができたのでリブートする。先ずは、grubのメニュー画面でAdsaria-Testを選択する。起動途中で当然、失敗するので次のような画面でストップする。ここでnashの入力モードになるのかと思ったが、残念ながら何も受け付けない。仕方ないのでマシンをリセットしてリブートする。（今回はgrub画面で通常のブートをしてする。）■ initrdでbashを使えるようにする次にinitrdの環境でbashを使えるようにしてみた。まず、initrdの /binディレクトリにbashをコピーする。通常のLinux環境の/binからinitrdの/binにコピーする。
+[root@f8 initrd-adsaria]# ls
+bin dev etc init lib lib64 proc sbin sys sysroot usr
+[root@f8 initrd-adsaria]# ls bin
+insmod modprobe nash rmmod
+[root@f8 initrd-adsaria]# cp /bin/bash bin
+[root@f8 initrd-adsaria]# ls bin
+bash insmod modprobe nash rmmod
+[root@f8 initrd-adsaria]#
+しかし、このままではbashが使うライブラリファイルがinitrd環境に無いのでまだbashを使うことはできない。そこでまず、ライブラリのディレクトリにてinitrdの環境でインストールされているライブラリを確認する。（今回はx86_64アーキテクチャのカーネルを使ったので /lib64になっている。）
+[root@f8 initrd-adsaria]# cd lib64
+[root@f8 lib64]# ls
+ld-2.7.so libdl-2.7.so libpopt.so.0.0.0
+ld-linux-x86-64.so.2 libdl.so.2 libresolv-2.7.so
+libblkid.so.1 libgcc_s-4.1.2-20070925.so.1 libresolv.so.2
+libblkid.so.1.0 libgcc_s.so.1 libselinux.so.1
+libc-2.7.so libglib-2.0.so.0 libsepol.so.1
+libcrypto.so.0.9.8b libglib-2.0.so.0.1400.6 libuuid.so.1
+libcrypto.so.6 libm-2.7.so libuuid.so.1.2
+libc.so.6 libm.so.6 libz.so.1
+libdevmapper.so.1.02 libpopt.so.0 libz.so.1.2.3
+[root@f8 lib64]#
+次にbashが呼び出すライブラリを調べる。
+[root@f8 lib64]# ldd /bin/bash
+linux-vdso.so.1 => (0x00007fffe36d8000)
+libtinfo.so.5 => /lib64/libtinfo.so.5 (0x0000003b18a00000)
+libdl.so.2 => /lib64/libdl.so.2 (0x0000003b05200000)
+libc.so.6 => /lib64/libc.so.6 (0x0000003b04a00000)
+/lib64/ld-linux-x86-64.so.2 (0x0000003b04600000)
+[root@f8 lib64]#
+この内、initrdの環境にないものを（通常のLinux環境の）/lib64からコピーする。この場合はlibtinfo.so.5が足りない。
+[root@f8 lib64]# cp /lib64/libtinfo.so.5.6 .
+[root@f8 lib64]# ln -s /lib64/libtinfo.so.5.6 libtinfo.so.5
+[root@f8 lib64]# ls
+ld-2.7.so libdl.so.2 libresolv.so.2
+ld-linux-x86-64.so.2 libgcc_s-4.1.2-20070925.so.1 libselinux.so.1
+libblkid.so.1 libgcc_s.so.1 libsepol.so.1
+libblkid.so.1.0 libglib-2.0.so.0 libtinfo.so.5
+libc-2.7.so libglib-2.0.so.0.1400.6 libtinfo.so.5.6
+libcrypto.so.0.9.8b libm-2.7.so libuuid.so.1
+libcrypto.so.6 libm.so.6 libuuid.so.1.2
+libc.so.6 libpopt.so.0 libz.so.1
+libdevmapper.so.1.02 libpopt.so.0.0.0 libz.so.1.2.3
+libdl-2.7.so libresolv-2.7.so
+[root@f8 lib64]#
+ちなみに、私はlibtinfoの実体ファイルの"libtinfo.so.5.6"をコピーしてシンボリックリンクを構成したが、"libtinfo.so.5"としてコピーしてもOK。これで、bashがつかえるようになったので、initを変更してbashを呼び出すようにする。
+[root@f8 lib64]# cd ..
+[root@f8 initrd-adsaria]# vi init
+[root@f8 initrd-adsaria]# tail init
+echo Mounting root filesystem.
+mount /sysroot
+echo Setting up other filesystems.
+setuproot
+echo Start bash
+bash
+echo Switching to new root and running init.
+switchroot
+echo Booting has failed.
+sleep -1
+[root@f8 initrd-adsaria]#
+ここでは、先ほどのswitchrootのコメントを外して、その代りにswitchrootの直前でbashを呼び出すようにした。これで準備が出来た。initrdイメージを作成してリブートする。
+[root@f8 initrd-adsaria]# find . | cpio -o -c | gzip -c > /boot/initrd-adsaria.img
+18367 blocks
+[root@f8 initrd-adsaria]# reboot
+grubメニューで"Adsaria-Test"を指定すると、initrdの状態でbashのプロンプトが出る。しかし、"ls"コマンドとかは使えない。lsコマンドはinitrdの環境にはまだコピーしていないので。使えるのはbashの内部コマンド（cdやedho、pwdなど）だけだ。（"ls"が使えないときにファイル名を表示するにはここにあるように"echo *"を使う。昔、先輩から教えてもらった方法だが、こんなところでも役に立つとは。）initrdの/sysrootというディレクトリの下には通常の（HDDにインストールされている）Linuxのルートがマウントされている。もし、必要であれば自分の好きなコマンドをbashと同じ要領でコピーしてくれば使える。（もちろん、中には環境が複雑で、すべてをinitrd上で構築しないと使えないコマンドもあるだろう。）ちなみに、この環境ではbashを終了することでnashのスクリプトの続きが始まり、通常のLinuxが起動することになる。■ busyboxを使う上の方法でbash等のコマンドをinitrdで利用できるようになる。しかし、普段使っている全てのコマンドをコピーするのは大変だし、そのコマンドが使うライブラリをいちいち調べてコピーするのも大変である。何よりもHDDを使わずにメモリ空間だけで実現されるinitrdでは、多くのコマンドコピーするとファイルサイズが一気に増えてしまうので、コピーできるコマンドの数も限定される。そうした時に便利なのがbusyboxである。busyboxは1つのコマンドで普段よく使うlsやcat、shなど、250以上のコマンドの機能を実現している。まず、busyboxをインストールする。
+[root@f8 ~]# yum install busybox
+次に /sbin/busyboxをinitrdのbinディレクトリにコピーする。
+[root@f8 ~]# cd ~/tmp/initrd-adsaria
+[root@f8 initrd-adsaria]# ls
+bin dev etc init lib lib64 proc sbin sys sysroot usr
+[root@f8 initrd-adsaria]# cp /sbin/busybox bin
+[root@f8 initrd-adsaria]# ls bin
+busybox insmod modprobe nash rmmod
+[root@f8 initrd-adsaria]#
+busyboxはダイナミックリンク・ライブラリは使用せず、スタティックリンクで作られているので単独で実行が可能で、ライブラリのコピーは必要ない。次にbinディレクトリへ移動してシンボリックリンク・ファイルを作成する。busyboxを使う上で、シンボリックリンクを張ることは必ずしも必要ないが、よく使うコマンドに関してはこのようにしておけば、単に"ls"とか"mount"とか入力するだけで、busyboxのls機能やmount機能を呼び出せるので便利だ。
+[root@f8 initrd-adsaria]# cd bin
+[root@f8 bin]# ln -s busybox sh
+[root@f8 bin]# ln -s busybox ln
+[root@f8 bin]# ln -s busybox ls
+[root@f8 bin]# ln -s busybox cat
+[root@f8 bin]# ln -s busybox mount
+[root@f8 bin]# ls -l
+total 1984
+-rwxr-xr-x 1 root root 1851232 2008-08-04 19:52 busybox
+lrwxrwxrwx 1 root root 7 2008-08-04 19:53 cat -> busybox
+-rwxr-xr-x 1 root root 9760 2008-08-04 19:52 insmod
+lrwxrwxrwx 1 root root 7 2008-08-04 19:53 ln -> busybox
+lrwxrwxrwx 1 root root 7 2008-08-04 19:53 ls -> busybox
+lrwxrwxrwx 1 root root 10 2008-08-04 19:52 modprobe -> /sbin/nash
+lrwxrwxrwx 1 root root 7 2008-08-04 19:54 mount -> busybox
+-rwxr-xr-x 1 root root 100904 2008-08-04 19:52 nash
+-rwxr-xr-x 1 root root 14256 2008-08-04 19:52 rmmod
+lrwxrwxrwx 1 root root 7 2008-08-04 19:53 sh -> busybox
+[root@f8 bin]# ls
+busybox cat insmod ln ls modprobe mount nash rmmod sh
+[root@f8 bin]# 
+あとは、initrdのルートディレクトリにあるinitを変更する。ここでは持つsh機能を"sh"というシンボリックリンク・ファイルから使えるようにしているので次のように変更した。
+[root@f8 bin]# cd ..
+[root@f8 initrd-adsaria]# vi init
+[root@f8 initrd-adsaria]# tail init
+echo Mounting root filesystem.
+mount /sysroot
+echo Setting up other filesystems.
+setuproot
+echo Start sh
+sh
+echo Switching to new root and running init.
+switchroot
+echo Booting has failed.
+sleep -1
+[root@f8 initrd-adsaria]#
+これで準備は完了したので、initrdファイルを作成してリブートする。（/boot/grub/grub.confは上で作成したものをそのまま使う。）
+[root@f8 initrd-adsaria]# find . | cpio -o -c | gzip -c > /boot/initrd-adsaria.img
+20161 blocks
+[root@f8 initrd-adsaria]# reboot
+すると次の画面の通り、initrdの状態でbusyboxのsh機能が呼び出され、lsやmountなどのコマンド（実はbusyboxの機能）が利用できるようになる。なお、busyboxに関しては「3種類のbusyboxは何が違うのか？」が関連トピックとしてある。

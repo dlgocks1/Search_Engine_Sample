@@ -1,0 +1,38 @@
+scaffoldで作成したアプリは、そのままだと登録したレコードが全て一画面で表示されてしまい美しくありません。今回は「前ページ」「次ページ」といったページ制御を他力本願寺で実装してみます。 
+scaffoldでプロジェクト生成
+会員管理システムをいじるのも飽きてきたので、今回は新しくプロジェクトを作ります。 
+rails -d mysql pagetest 
+cd pagetest 
+rake db:create 
+ruby script\generate scaffold Human name:string age:integer 
+rake db:migrate 
+http://localhost:3000/humen/ を見て確認。今までの苦労が嘘のように簡単です。関係ないけどhumanの複数形はhumenなんですね・・・ふめん。 
+script/consoleを利用してダミーデータ作成
+ページ送りを確認するために数十件のダミーデータを登録したいのですが、手作業に入力するのは面倒です。実はRailsプロジェクトをセットアップすると、Railsの実行環境でRubyスクリプトを対話的に走らせられるコンソールができるらしいのです。そのコンソールを立ち上げてテストデータを作ります。 
+ruby script\console 
+>> 10.upto(50) {|i| Human.create(:name => "Taro#{i}", :age => i)} 
+Rubyって便利ですね。 
+wii_paginateのインストール
+ページ送りはwii_paginateというプラグインが良さそうです。GitHub上で管理されているので 
+gem sources -a http://gems.github.com/ 
+でGitHubをリポジトリとして追加して 
+gem install mislav-will_paginate 
+でインストール。バージョンは2.3.11でした。 
+次にconfig/environment.rbのconfig.gemがコメントアウトされて並んでるところの下あたりに以下の行を追加します。 
+config.gem 'mislav-will_paginate', :lib => 'will_paginate', :version => '~> 2.3' 
+これでプラグインが有効化されます。 
+コントローラの修正
+app/controllers/humen_controller.rb の 
+@humen = Human.all 
+となっているところを 
+@humen = Human.paginate(:page => params[:page], :per_page => 10) 
+と変更します。これで10レコードずつ取得するようにしています。現在のページはURLパラメータpageに入るようです。 
+ビューの修正
+app/views/humen/index.html.erb の好きな場所に 
+<%= will_paginate(@items) %> 
+と一行追加してやればページ送りのナビゲーションが追加されます。お手軽。 
+実行結果
+NoMethodError in HumenController#index 
+undefined method `paginate' for #<Class:0x38e1af4> 
+エラーが出ました。WEBrickを再起動するのを忘れてました。再起動して再実行。 
+ページ送りができました。なんてお手軽なんでしょう。

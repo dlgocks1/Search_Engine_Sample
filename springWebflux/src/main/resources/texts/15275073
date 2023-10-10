@@ -1,0 +1,19 @@
+Subversionは、COLLABNET社がライセンスを所有するソフトウェアですが、オープンソースとして無償で配布されております。
+プログラムは、オープンソースサイト（Tigris.org：COLLABNET社がスポンサーしています）でも配布されていますが、COLLABNET社において正式判？として配布しているバイナリ (CollabNet Subversion) が信頼できるかと思います。
+日本語サイトもあります＞ コラブネットジャパン
+CollabNet Subversionの製品紹介＞http://www.collab.net/jp/products/subversion/
+CollabNet Subversion Server and Client v1.5.4 (for Windows) 
+・サーバーとコマンドラインクライアントのセット (10.98MB) 
+ファイル名＞CollabNetSubversion-server-1.5.4-1.win32.exe
+CollabNet Subversion Command-Line Client v1.5.4 (for Windows) 
+・コマンドラインクライアントのみ (2.79MB) 
+ファイル名＞CollabNetSubversion-client-1.5.4-1.win32.exe
+※なお、CollabNet社サイトよりファイルをダウンロードする場合、利用者登録（無償）後、ログインが必要になりますが、メールアドレスと名前を登録する程度のもので、直ちにログインアカウントが発行されます。
+サーバー版を、Windows2003 Serverにインストールします。 なお、私が入手した 「CollabNet Subversion Server and Client v1.5 (CollabNetSubversion-server-1.5.4-1.win32.exe)」は、Apache 2.2.8 のバイナリが含まれており、説明ファイルを読むと、既に Apache がインストールされている場合は、削除してからインストールすることが前提となっているようです。
+インストーラーを起動すると途中で、SVNSERVE と Apache(MOD_DAV_SNV) のどちらをインストールするか？を尋ねられるます（デフォルトは両方インストール）。
+SVNSERVE 
+＞ 単体で動作するプログラム
+Apache(MOD_DAV_SNV) 
+＞ Apjache サーバーのプラグインとして動作するモジュール。これを選ぶと、Apache 本体もインストールされます。
+SVNSERVEだけでもサーバーとしての運用は可能ですが、Apacheと併用するほうが便利。CollabNet Subversion パッケージは、既にApacheが動作している環境にインストールすることは考えないほうが良いように思います。 インストーラーがSubversion用に適切な設定を行ったApache本体＋モジュールをインストールし、さらに環境に合わせた設定ファイル（httpd.conf）を自動生成します。
+« 前の記事:Windows サーバー

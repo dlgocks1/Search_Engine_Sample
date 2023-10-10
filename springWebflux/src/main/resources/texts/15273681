@@ -1,0 +1,25 @@
+Constant functions are a great feature introduced in Verilog 2001. In a nutshell, constant functions allow you to write functions that are used at elaboration time. That is when parameters are evaluated and generate statements are expanded. One great example of a constant function is the log2 function.
+function integer log2;
+input integer value;
+begin
+value = value-1;
+for (log2=0; value>0; log2=log2+1)
+value = value>>1;
+end
+endfunction
+The rules for constant functions are pretty simple. They can’t have any side effects. That is they can’t modify any global variables, and they can only call constant functions. Also, they can only have constants or parameters as inputs.
+So what are they good for? Consider a priority encoder. You pass in an n-bit input vector and produce a log2 n encoded result. Without constant functions, you need to specify both the input and output widths when instantiating the module. Now with constant functions, you just need to specify the input width. Something like this…
+module prioenc
+#(parameter width = 16) (
+input [width-1] d,
+output [log2(width)-1:0] enc
+);
+See my post on using recursion to implement a priority encoder to see the whole body of the module. A couple of things to note however, are that the function can be called before it is declared. Also, the function does not need to behave the RTL rules for synthesizable code. Many older tools can have problems with constant functions, although most recent releases have fixed this.
+One notable problem is with Xilinx XST (as of 10.1 SP3) which has a very strange bug with constant functions. The code above will not synthesize with XST. However if we change it to this, then everything works as expected.
+module prioenc
+#(parameter width = 16,
+parameter log_width = log2(width)) (
+input [width-1] d,
+output [log_width-1:0] enc);
+XST errors if you use a constant function in the port declaration but is fine if you use it in the right hand side of the parameter declaration.
+At any rate, constant functions are a huge and underutilized feature in Verilog 2001.

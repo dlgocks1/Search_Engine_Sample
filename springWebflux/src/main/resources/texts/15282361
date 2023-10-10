@@ -1,0 +1,11 @@
+「TortoiseSVN」をインストール †
+本来「Subversion」はコマンドラインで使うものなのですが、それをWindowsのGUIで操作できるソフト…それが「TortoiseSVN」です。 
+この中には既に必要最低限の「Subversion」のファイルが含まれていますので、これだけ入れれば使えるようになります。 
+「TortoiseSVN」と「Language packs(日本語化パッチ)」をダウンロードしてインストールする方法を説明していきます。 
+tortoisesvn.tigris.org 
+「TortoiseSVN」と「Language packs」が置いてあるページです 
+ここのページの左上にある「Download」を押します。 
+出てくる以下のページでダウンロード出来ます。 
+私は32bit版WindowsVistaなので「TortoiseSVN」の「TortoiseSVN-1.5.0.13316-win32-svn-1.5.0.msi」をダウンロードします。
+さらに下にスクロールすると、日本語化するためのパッチがありますのでこちらをダウンロードします。 
+先ほど32bit版をダウンロードしたので、同じくこちらも32bit版の「Language packs Japanese 32bit Setup」の「LanguagePack_1.5.0.13316-win32-ja.msi」をダウンロードします。

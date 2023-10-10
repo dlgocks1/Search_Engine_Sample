@@ -1,0 +1,11 @@
+iBATISからSQLを取得してDataAdapterで利用する方法
+10 月 25, 2008
+.NET, iBATIS, プログラミング
+No Comments
+iBATISはiBATISのまま使うのが一番だと思うのですが、政治的な都合やら諸般の事情やらで表題のようなことを行ってみたので、覚え書き程度に書いておきます。以下は、iBATISを使う上であくまでイレギュラーなことですので、それをご承知の上でご覧下さい。
+やりたいことは、SQLとDbCommandだけiBATISから取得して、SQLの発行はADO.NETのDataAdapterで行い、DataTableを取得するというものです。というわけで、以下のような段取りで行います。
+動的なSQLについて、iBATISのSQLMapで作成したものから取得する。
+iBATISから取得したSQLと、パラメータとで、DbCommandを作成する。
+作成したDbCommandをDataAdapterのSelectCommandに代入して、DataSetにFill()する。
+これを実装したのが以下のコードです。
+iBATISのソースコードに添付されているACCESSのMDBファイルに対してアクセスするようなコードを、NUnitで書いて動かしてみました。

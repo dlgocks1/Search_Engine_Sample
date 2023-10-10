@@ -1,0 +1,40 @@
+rails, ruby | セッション セッション あるユーザからのリクエストを、他ユーザのものと区別するための接続情報。 通常サーバは、複数のリクエストを受け取ったとき、すべて独立したものと見なします。 ユーザのログイン状態を保持したい場合などは、ユーザとサーバの接続状態を保つ仕掛け＝セッションが必要なのです。 クッキー ブラウザがハードディスクに保存する情報。 Railsでは、初めてアクセスしてきたユーザに対し、セッションIDをクッキーとして発行します。 ブラウザはこれを保存し、次回以降アクセスする際に、HTTPヘッダに含めて送信します。 サーバは、送られてきたクッキーをもとにユーザを判別します。 セッションデータの扱い Railsでは、session[:データ名]の形で簡単にセッションデータを扱うことができます。 複数のデータ名を用意すれば、複数のデータをセッションに持たせることもできます。
+session[:user_id] = user.id
+# セッションデータにユーザオブジェクトのIDを付与
+id = session[:user_id]
+# 現在アクセスしているユーザのセッションデータを変数idに取得
+session[:user_id] = nil
+# セッションを無効化（ログアウト処理etc.）
+セッションのオプション セッションのクッキーに関するオプションは、下記ファイルにて設定可能です。 config\environment.rb config\environments\***.rbキー値:session_domainクッキーを読み書きできるドメイン名:session_pathクッキーを読み書きできるパス名:session_expiresクッキーの有効期限:session_securetrueなら、HTTPSプロトコルのみクッキーの読み書きを許可:session_idセッションID:session_keyセッションID用のクッキーのデータ名 パスワードの扱い ソルト データを暗号化する際、元のデータに加えるランダムな文字列のこと。 SHA-1 ハッシュ関数（原文から固定長の擬似乱数を生成する演算手法）のひとつ。 ハッシュ関数によって生成されるハッシュ値は不可逆的であり、原文を再現することはできません。 Digest::SHA1.hexdigest(str)でハッシュ値を生成します。 プラグイン プラグイン Railsの機能を拡張するための仕組み。 vendor\plugins以下にプラグインを置き、WEBrickを再起動すれば利用可能になります。 ページネーション ページネーション WEBページで大量のデータを表示する際、一定数ごとにページを分けて表示する仕組み。
+@pages, @mdlnames = paginate(:mdlnames, # テーブル名
+:order => order, # ソート基準
+:per_page => per_page, # 1ページあたりのオブジェクト数
+:conditions => [conditions]) # 検索条件
+または
+@mdlnames = MdlName.find(:all,
+:order => order,
+:conditions => [conditions],
+:offset => (current_page - 1)*per_page, # 現在のページで表示するオブジェクトの始点
+:limit => per_page) # 1ページあたりのオブジェクト数
+@pages = Paginator.new(controller, # コントローラオブジェクト
+total, # オブジェクトの総数
+per_page, # 1ページあたりのオブジェクト数
+current_page) # 現在のページ番号
+pagination_links(@pages, :params => params) %>
+画像処理 MySQLでの画像保存 MySQLデータベースに画像を保存するには、フィールドのデータ型を画像用のものにします。型最大サイズbinary64KBmediumblob16MBlongblob4GB 64KBを超える画像の保存 create_tableメソッドやadd_columnメソッドでは、DBMS固有のデータ型を指定できないため、mediumblob型やlongblob型の指定は直接sql文で行います。 executeメソッドを使えば、マイグレーションスクリプトにsql文を直接記述できます。
+def self.up
+...
+...
+execute "alter table mdlnames modify column clmname LONGBLOB;"
+# mdlnamesテーブルのclmnameフィールドをlongblob型に変更
+end
+画像ファイルの送信 HTMLファイルの送信にはrenderメソッドを使用しましたが、バイナリファイルの送信にはsend_dataを使用します。
+def image
+send_data(image_data,
+:type => 'image/gif',
+# 'image/jpeg', 'image/png'
+:disposition => 'inline')
+# 'inline' => ブラウザに表示
+# 'attachment' => ダウンロード
+end
+image_tag(url_for(:action => 'image') %>

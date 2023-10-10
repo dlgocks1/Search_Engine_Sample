@@ -1,0 +1,43 @@
+trac4-5日前に Trac 0.11.x に対応した TraM という Trac 複数プロジェクトフロントエンドモジュールがリリースされました。TraM0.2をリリースしました | Ryuzee.comこの記事や README を読むと解るのですが mod_python での利用を前提としています。が、うちの環境では fastcgi でやっているので残念ながら使えません…。と、ここで断念するわけもなく tram/modpython_frontend.py を fastcgi に対応させた tram/fcgi_frontend.py を用意してあげればとりあえず動くだろうと考え(Trac はもともとそういう構造)、tram/fcgi_frontend.py を書くことにしました。まず trac/web/modpython_frontend.py と tram/modpython_frontend.py を見比べてみると、根本的なところは trac.web.main.dispatch_request の代わりに tram.main.dispatch_request を使うようにしていることのよう。次に trac/web/fcgi_frontend.py を見てみると trac.web._fcgi.WSGIServer() に trac.web.main.dispatch_request を渡して run() を呼び出しているだけの構造。ということで以下のようなものを tram/fcgi_frontend.py として配置しました。tram.main.dispatch_request を使うようにしただけです。
+#!/usr/bin/env python
+# -*- coding: utf-8 -*-
+import pkg_resources
+from trac import __version__ as VERSION
+from trac.web import _fcgi
+from tram.main import dispatch_request
+def run():
+_fcgi.WSGIServer(dispatch_request).run()
+if __name__ == '__main__':
+pkg_resources.require('Trac==%s' % VERSION)
+run()
+これで tram をインストールしました。
+$ python setup.py bdist_egg
+$ sudo /usr/bin/easy_install -Z dist/*.egg
+今度は trac.fcgi を変更して tram.fcgi_frontend を使うようにします。一応 tram.fcgi_frontend を import してみてダメだったら trac.web.fcgi_frontend を import するようにしておきました。
+#!/usr/bin/python
+# -*- coding: utf-8 -*-
+import os
+os.environ['LANG'] = 'POSIX'
+os.environ['TRAC_ENV_PARENT_DIR'] = '/var/lib/trac'
+try:
+try:
+from tram import fcgi_frontend
+except ImportError, e:
+from trac.web import fcgi_frontend
+fcgi_frontend.run()
+except SystemExit:
+raise
+except Exception, e:
+print 'Content-Type: text/plain\r\n\r\n',
+print 'Oops...'
+print
+print 'Trac detected an internal error:'
+print
+print e
+print
+import traceback
+import StringIO
+tb = StringIO.StringIO()
+traceback.print_exc(file=tb)
+print tb.getvalue()
+最後に trac.ini を変更して tracplugin.* = enabled を追加します。すべてプロジェクトに反映されるように inherit に指定している trac.ini に追加しておきました。これで準備は整いました。trac.fcgi を再起動させてみて確認です…。とりあえず手元ではすぐに見つかるような問題はなく動作しているようです。all というプロジェクトを作っていないのでいくつかのページで Environment not found と言われてしまいますが、プロジェクトを作成するのは何か気持ち悪いのでこのまま放っておきます。後は TraM 0.2 は clearsilver ベースなので genshi 前提にしたカスタマイズが効いてないとかありますが、それはおいおい解消されるでしょう。TraM + fastcgi はなんとなーく動いたと思います。Trac を mod_wsgi で運用している人もいるでしょうけど、そっちは気が向いたらということで。

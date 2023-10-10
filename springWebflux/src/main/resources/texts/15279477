@@ -1,0 +1,31 @@
+Revised Erica Utilities
+abquery Search your address book by name. Enter a search phrase that abquery matches to the address book name fields.
+appLoad. Force Springboard to acknowledge new applications in the standard locations (/Applications and /var/mobile/Applications).
+appSearch. Search the App Store from the command line. Enter a simple query phrase
+badge. Badge application icons on Springboard with names, numbers, whatever.
+deviceInfo. Query your iPod or iPhone for device attributes including platform name, processor, etc.
+findme Return your current location's latitude and longitude. New version returns XML.
+ip-print Show the current IP address used by your iPhone.
+itmsSearch. Launch an iTunes store search from the command line
+launch. Run an application from the command line as if it had been launched in Springboard. You must submit the application id, e.g. launch com.apple.Calculator
+notificationWatcher. Listen for standard and/or Core Telephony notifications. Notification watcher eavesdrops on these system-wide notifications, which are sent using the BSD notification system (aka "Darwin Notification Center").
+openURL. Launch a URL from the command line, e.g. openURL http://ericasadun.com or openURL tel://5055551212.
+play. Play an audio file. Takes one argument, the name of the file
+plutil. Property-list utility based on Apple's and expanded with extra functionality. Run without arguments for a usage maessage.
+recAudio Record audio from the onboard microphone.
+restart. A non-locking 2.0 safe version of restarting Springboard.
+sb. A springboard-specific utility that allows you to set, reset and query your springboard prefs. Run without arguments for usage message.
+sbar. Test status bar icons. Usage message gives info on how to use this utility.
+tweet. Send an update to twitter. Takes 3 arguments: username, password, and the tweet itself. Use quotes if necessary on the tweet, to keep it as one argument.
+urlclip Create a webclip (either normal or tel://) on springboard from the command-line
+Parent Directory
+EricaUtilitiesBeta-09.zip
+EricaUtilitiesBeta-10.zip
+EricaUtilitiesBeta-11.zip
+EricaUtilitiesBeta-12.zip
+EricaUtilitiesBeta-13.zip
+EricaUtilitiesBeta-14-fw21.zip
+HEADER.html
+PortedUtilities/
+README.html
+I am insanely grateful to all of you who visit and support my site. Thank you.

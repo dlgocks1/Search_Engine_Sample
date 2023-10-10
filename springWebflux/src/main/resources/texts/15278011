@@ -1,0 +1,8 @@
+Jest to ulepszona wersja dodatku Glasser. Proszę pamiętać, że dodatek będzie działał tylko w systemach z stylem graficznym Aero Glass (Windows Vista, Windows 7). Na starszych systemach dodatek nie uruchomi się (Windows 2000, XP, Server 2003). 
+Jest to nieoficjalna aktualizacja dodatku Glasser, dzięki której dodatek działa także w wersji 3.6. Dodałem także kilka ulepszeń. Między innymi przesunięte zaokrąglenie na pasku adresu dzięki czemu przycisk nie jest w kwadracie. Zmieniłem też ikony w pełnym ekranie. 
+NEW Glasser współpracuje bardzo dobrze z motywem Vista-Aero - http://addons.mozilla.org/firefox/addon/4988 
+W Windows Vista, podczas gdy zmaksymalizuje się okno przezroczystość znika. Aby temu zapobiec należy zainstalować program VistaGlazz (http://tinyurl.com/vistaglazz-download). Po zainstalowaniu kliknąć drugą ikonę i wybrać Patch Style. 
+イメージギャラリー
+サポート
+このアドオンのサポートは開発者のサイト (http://www.new-glasser.rox.pl/) で受けられます。メールによる連絡先 (jakobsen at za dot pl
+) も公開されています。

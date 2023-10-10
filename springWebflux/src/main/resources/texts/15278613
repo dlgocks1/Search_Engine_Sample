@@ -1,0 +1,13 @@
+2009年8月11日
+全テーブルの統計情報をサイズ順に一覧表示する
+MySQLにおいて、テーブルサイズやインデックスサイズ、レコード数、平均レコード長などの統計情報を知る上でshow table statusは定番です。ただ雑多な表示項目も多いので、たくさんのテーブルの統計を見る場合、必要な情報だけを返したいことは多いです。また全テーブルのうち、どのテーブルが一番大きいのかを知りたいとか、サイズが多い順に一覧表示したいとか、一目で分かるような情報がほしいことも多いです。 　こういうときはinformation_schema.tablesを使うと便利です。以下の例では、appデータベースの全テーブルについて、「テーブルサイズ+インデックスサイズ」の大きい順に、ストレージエンジン、レコード数、平均レコード長、テーブルサイズ(MB)、インデックスサイズ(MB)などを返しています。 use app; select table_name, engine, table_rows as tbl_rows, avg_row_length as rlen, floor((data_length+index_length)/1024/1024) as allMB, floor((data_length)/1024/1024) as dMB, floor((index_length)/1024/1024) as iMB from information_schema.tables where table_schema=database() order by (data_length+index_length) desc; +------------+--------+----------+------+-------+------+------+ | table_name | engine | tbl_rows | rlen | allMB | dMB | iMB | +------------+--------+----------+------+-------+------+------+ | stock | InnoDB | 9999831 | 381 | 3639 | 3639 | 0 | | order_line | InnoDB | 28493701 | 95 | 2593 | 2593 | 0 | | customer | InnoDB | 2972004 | 673 | 2130 | 1909 | 221 | | orders | InnoDB | 3000309 | 60 | 301 | 171 | 129 | | history | InnoDB | 2997455 | 82 | 236 | 236 | 0 | | new_order | InnoDB | 905600 | 37 | 48 | 32 | 15 | | item | InnoDB | 100160 | 110 | 10 | 10 | 0 | | district | InnoDB | 917 | 178 | 0 | 0 | 0 | | warehouse | InnoDB | 100 | 163 | 0 | 0 | 0 | +------------+--------+----------+------+-------+------+------+ 9 rows in set (0.84 sec) 　自分は、ここをスタートラインにして、怪しいテーブルに焦点をあててチューニングをすることが多いです。ただしshow table statusと同様、数値項目は概算値なので、毎回微妙に値が変わることに注意してください。
+投稿者
+Yoshinori Matsunobu
+時刻:
+18:50
+ラベル:
+mysql,
+tips
+0
+コメント:
+コメントを投稿

@@ -1,0 +1,42 @@
+明後日リリースするecサイトのプロジェクトで、CakePHPwithSSLを初めて経験したのでメモ。
+注文フロー（カート内と呼称）や、問い合わせフォーム、マイページなど、個人情報に関する入力フォームのあるactionはhttps(SSL)のアクセスとする。
+事前準備
+特定のコントローラ、アクションに対してSSLアクセス必須の定義をするために、 
+/app/app_controller.phpでSecurityコンポーネントを追加
+そのアクセスがSSLかどうかを判定するisSSLを使うために、 
+/app/app_controller.phpでRequestHandlerコンポーネントを追加
+/app/app_controller.phpに_sslFailメソッドを追加 
+参考：CakePHPクッキング – 投稿の詳細: 特定のURLのみSSL接続を必須にする方法 
+http://cakephp.blog16.jp/index.php/2008/08/08/p50
+// SSL呼出エラー処理
+function _sslFail($err) {
+if ($err === 'secure') {
+// リダイレクト先は$this->paramsからとってるけど、別のパラメータから取得した方がいいのかな？キャメライズされないのでいつもここからとってるんですが^^;
+$this->redirect("https://".BASE_URL."/".$this->params['controller']."/".$this->params['action']);
+exit;
+}
+}
+各コントローラのbeforeFIlterで必要に応じてSecurity::requireSecure();とコールバックをセット*1 。
+$this->Security->blackHoleCallback = '_sslFail';
+$this->Security->requireSecure("index", "preview", "demo", "demo_preview");
+http⇒https
+各コントローラでblackHoleCallback = _sslFailをセットしてるので、_sslFailメソッドでhttpsのurlにリダイレクトしてます。
+https⇒http
+各コントローラのbeforeFilterでセットしているSecurity::requireSecureを利用して、requreSecureをセットしていないコントローラでSSLアクセスならばhttpにリダイレクトとい処理を書いています。*2
+// Security::requireSecureをセットしていない"コントローラ"でhttpに戻す（actionを指定しているコントローラでは走らない）
+if (empty($this->Security->requireSecure)) {
+// チェックしたらこの処理じゃSSLページからpages/...を開けなくなってしまう...orzので取り急ぎpagesを回避
+<del datetime="2009-08-10T08:26:31+00:00">if ($this->RequestHandler->isSSL()) {</del>
+if ($this->RequestHandler->isSSL() && $this->params['controller'] !== "pages") {
+$this->redirect("http://".BASE_URL."/".$this->params['controller']."/".$this->params['action']);
+}
+}
+Security::requireSecureが!emptyの場合に、array_searchを使えばaction単位で制御できると思いますが、僕の場合はほとんどコントローラ単位の制御なので割愛しました。なんとなくやりすぎかなぁとも思うし。
+あと、今追い込みでテストしてますが、もしかしたら支障が出るようなこともあるかも。 
+例えば、通常ページからSSLのページにポストするとリダイレクトによって$this->dataが飛んじゃうんじゃないか？とか、試してませんしそれなら、その前からSSLアクセスしろよということになりますのであまりないと思いますけど。
+ちなみに僕の場合はそれがいいのかどうかはわかりませんが、POSTはすべて元のアクションに返して、if ($this->params['form']['submitのname']) {}で処理、その後次画面にリダイレクトするようにカートを作っているので上記のようなことはありません。 
+↑こういうのもCakePHPのセオリーから外れた方法なんでしょうかね？CakePHPは素晴らしい先人の方々が作ったソースがいくらでも読み放題なんだから、そこから学べばいいんでしょうが、今の今まで読まずに我流でやってきちゃいました。 
+正直、CakePHPの規約もあまり守らず好き勝手やってるし、だからというのもあるのですがコンソール？とか、テストもほとんど使ったことが無いんですよね～。 
+知らないって罪ですよね。ものすごく遠回りしていることがたくさんあるんだろうけど、忙しいからと学ぶことを後回しにしてしまう。 
+僕にもう少し、余裕が出てきたらCakePHPに関して積極的に活動されている憧れの皆さんの輪の中に、僕も入ってみたいと思っています。 *3
+SSLアクセスが必要の無いコントローラなら書かなくてＯＫ [↩]もっといい方法があると思いますがこんな方法で良いわけありませんが、僕のできる範囲、思いつく範囲ではこれが最善限界…^^;。更によい方法がお分かりになる方教えてくださいm_ _m [↩]この忙しい最中何を書いてるんだ俺は。。。orz [↩] «前の記事

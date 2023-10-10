@@ -1,0 +1,45 @@
+Google's Sneaky Launch of Latitude's Location-Sharing API
+by Brady Forrest| @brady
+| comments: 9
+Google has extended their location sharing service Latitude (Radar post) with the first set of Latitude Apps. One of them is a blog badge for sharing your location publicly on a website. The other updates your GTalk status for sharing your location to your IM network. Both have to be turned on explicitly and allow you to share your location at the city level or as accurately as possible. These have generated a lot of press, but I haven't seen much discussion about the first sighting of the Latitude API.
+On the blog badge page, below the fold there are two URLs that will show up *after* you turn on the blog badge (so it wasn't that sneaky, you just had to scroll below the fold or look on their Geo Developers blog to learn about it). Developers can get access to their own or other users' location with these URLs. The URLs let you access the data as KML or JSON. They look like:
+KML -> http://www.google.com/latitude/apps/badge/api?user=<ID>&type=kml
+JSON -> http://www.google.com/latitude/apps/badge/api?user=<ID>&type=json
+I've included the JSON file and some documentation after the jump.
+These are just the first signs of Google's Latitude API. This is a barebones release that I think is designed to see what developers do with it and how people react to public sharing (geo-broadcasting). These initial feeds do support multiple users (just add another ID separated by a comma) and could be used to build many types of apps. Let me know if you build one for yourself or others.
+This is not going to be the end all be all of the Latitude API. I theorize that we will see some of the following features added for a formal release of the API.
+User Control & OAuth - Right now a user can only turn the sharing on or off. Once they've shared out their badge or their user ID there is no way to know who else is tracking them. You can't even currently reset your User ID if you inadvertently share it - your only option to block a rogue app is to turn off sharing completely. I am hoping that in a future version Google adds OAuth and let's you turn on/off access to different apps. These apps should also be able to receive different levels of accuracy (some should get my city, others my exact location).
+iPhone Client - This isn't tied to the release of the API, but it's got to be sticking in Google's craw that Latitude isn't on the iPhone yet. The Latitude site has said "Coming Soon" for months. I am hoping that it will be sneaked into the 3.0 release or shortly thereafter. (my understanding is that it is not in the current Developer release). 
+Location History - If Google is tracking my location then I want them to store it and analyze it. I want to know where I've been and be able to reflect upon the trends in my life. They can use this for targeting ads and services at me all they want. Google does not currently store my data and if they don't decide to then many will just turn to third-party developers and sites for the service.
+Data Control - I want Google to track and store my location for its and my use, but I also want to be able to export it or delete it. I want to be able to delete a certain period of time or all of my data. When I press delete it should immediately be purged from their servers. I like the principles of data ownership that were developed by MIT/SenseNetwork's Sandy Pentland. I hope Google (and all other LBS providers) follow their lead.
+Additional Inputs - Currently Google Latitude only accepts Google client inputs. Those won't always be the most accurate way to track my location. Yahoo's Fire Eagle, a location brokering service, will accept inputs from any service I authorize. This is the right way to do it.
+For a developer release this has several important features that deserve more discussion:
+Accuracy Control - You can currently set your location to be shared at the city-level or as accurately as possible. Personally I'd like to have neighborhood added as an option. I can't personally picture ever needing more privacy than city-level and still wanting to have Latitude on -- plus you can always lie via Latitude. 
+Reminders - Google will remind you that you are sharing your location on a weekly or monthly basis (or never). This is an important feature as location-sharing is realtime and not something that people should leave running without being checked.
+App Gallery - There is already a Latitude App Gallery. It's populated with the two new releases. I am sure it will be filing up shortly.
+This is just the first step in a Google location-sharing API and Apps. Latitude will end up in a place very similar to FireEagle, Yahoo's location broker (Radar post). Latitude is significant not just because it comes from Google, but because of its wide reach. Google has clients available for almost every mobile platform and many browsers. People just want a service like Latitude to work and currently Google is one of the only companies that can deliver (though I am sure Facebook and MySpace are working on something internally). 
+Google's Steven Lee of the Latitude team is speaking at Where 2.0 in two weeks. Use whr09rdr for 25% off registration. I am sure that there will be announcements about Latitude at either Where 2.0 or Google I/O. 
+Here's what they tell developers:
+Both the KML and JSON feeds support multiple users. Alter the user parameter to use a comma-separated list of user identifiers instead of a single one.
+The KML link is composed of per-user placemarks, using the user's photo to anchor each point.
+The JSON feed adheres to the GeoJSON 1.0 specification. In addition to the point containing latitude and longitude, GeoJSON properties include the user id, accuracyInMeters, timeStamp, reverseGeocode, photoUrl, photWidth, photoHeight, placardUrl, placardWidth, placardHeight. For city-level location feeds, the latitude and longitude will be the city center, and accuracy will be 0.
+Here is an example of the JSON:
+{ "type": "FeatureCollection",
+"features": [
+{ "type": "Feature",
+"geometry": {"type": "Point", "coordinates": [-162.347276, 49.620973]},
+"properties": {
+"id": "<ID>",
+"accuracyInMeters": 0,
+"timeStamp": 1239071045,
+"reverseGeocode": "Seattle, WA, USA",
+"photoUrl": "http://www.google.com/latitude/apps/badge/api?type=photo&photo=ia3-UKFZP9VUqRTi8fZIM-Trlg.1Y4MyJarcVUp9lPVLbqUBg",
+"photoWidth": 96,
+"photoHeight": 96,
+"placardUrl": "http://www.google.com/latitude/apps/badge/api?type=photo_placard&stale=true&lod=4&format=png",
+"placardWidth": 56,
+"placardHeight": 59
+}
+}
+]
+}

@@ -1,0 +1,157 @@
+VisionBib.Com 
+Computer Vision Information Pages
+I received a suggestion about RSS feeds of bibliography updates. As long as 
+the change could be automated, I decided it might work. So, I now have a
+set of 
+RSS feeds for recently added papers, 
+divided by the same sections used in the contents page. 
+The 
+Facebook application for Conferences (e.g. CVPR) 
+is working as expected with over 140 different users a month and over 400
+total.
+You get a Facebook notification on changes or approaching deadlines for the
+conferences you express an interest in, and can see who else is interested
+(at least those who allow public viewing of their name).
+Since the Facebook programming experiment went fairly well (but Facebook
+is constantly changing), I decided to explore Word Press and so there
+is now another useless 
+addition -- my blog. It will 
+mostly have comments and news on additions and
+changes to the Bibliography and Conference pages, but will include other
+things I find of interest.
+The annotated 
+Computer Vision Bibliography
+with indexes for Author, Journal/Conference, Keyword, Words in title, and
+Authors by year was last modified on
+Monday, July 27, 2009, 10:11 pm.
+This bibliography, which has been an internet resource since 1994,
+provides access to information on 102,000+ scientific papers
+in the field of computer vision, image processing, character recognition and 
+other related topics. 
+(See the 
+totals of authors, titles, and other references.)
+This is the official mirror site for
+the original
+USC Iris Vision Bibliography, and contains
+some enhancements. Several subsets of useful information have been extracted
+into separate web sites. These are mentioned below.
+If you know what you are looking for, you can try the 
+"Jump directly to the index" option for 
+Authors, words in title (KWIC), and Journals. 
+The top level bibliography page has pointers for finding papers by
+author (including author arranged by year to reduce your effort in creating
+annual reports), conference or journal names, keywords, and a KWIC index.
+The historical 
+Rosenfeld Bibliography data 
+is also available,
+but it is incomplete (i.e. it ends in 1998)
+and is the result of an automatic translation so there are errors.
+General Resource Listing for Computer Vision
+A more complete description of the following items can be found
+in the 
+Extended Computer Vision Resources Listing, which
+provides more information on these various resource lists.
+Research Groups in Computer Vision
+If you want to find pointers to a particular research group, I have these
+arranged somewhat geographically. Some companies are categorized
+as vendors rather than research groups.
+The Full Research Group Listing has all of the groups collected in
+one place.
+The Research People Listing collects people by the research institution.
+(There may be multiple groups at one place.) This list may have many
+missing due to the use of host names for determining where to list.
+For other listings see:
+Research Groups in the US
+for Universities and corporate groups in the US.
+Research Groups in the Americas.
+lists research groups in the Americas other than the US
+(especially Canada, but includes Mexico and south).
+Research Groups in Europe .
+lists research groups in Europe.
+Research Groups in Asia, Australia, Oceania .
+lists the rest of the world.
+Vendors, Code and Datasets for Computer Vision Related Products
+For some products I have assembled a list of vendors -- sometimes 
+these overlap
+research groups, sometimes not. 
+This list has been extracted in a separate listing in
+Vision Bibliography Vendor Listing.
+Code is harder, but a number of implementations are
+available. Many of these are spread throught the bibliography, and 
+are collected in the
+Vision Bibliography Code Lising.
+Or see the discussion under:
+Code Resource Section
+Data is available in bits and pieces and in several
+larger repositories,
+The references I have available are best found in the 
+Vision Bibliography Dataset Lising.
+References made to "database" are generally for database systems or research.
+Patents cover a number of large and small developments. Many
+have related papers, others do not. 
+The pointers to a very non-exhaustive list of
+patents in this field can be found at:
+Patent Discussion. This should only be the starting point for any
+search. Use one of the several patent searches to find the ones that claim to 
+do what you want, but probably do not solve your problem.
+The Complete 
+Conference Listing for Computer Vision and Image Analysis
+lists current events with information on
+future meetings, dates for paper submission, locations, websites,
+and also contains archives of this information on past meetings.
+Conference deadlines for about the next 3 months are also
+available.
+In Association with Amazon: 
+You may also search this site -- either the conferences or the bibliography:
+Stereo, Human and Computer
+Stereo, the use of 2 or more images to provide three-dimensional information
+or displays, has a long history. Stereo for sound (music) came much later.
+I have assembled some stereo pairs, which can be viewed on the screen. Most of
+these are scenery, but there are some with buildings. 
+Yosemite
+Why Yosemite? It is a place I enjoy. I have included some pictures
+and pointers to the usual places, and some not so usual. Enjoy.
+And the picture at the top, it is correct. This is not the usual view of Half
+Dome from the Valley or Glacier Point, it is the view from Clouds Rest so
+the half part of the dome is on the "wrong" side.
+Sequoia-Kings Canyon
+Sequoia and Kings Canyon are not quite Yosemite, but together they
+have more to offer than just the trees (remember, they are
+sequoias, not redwoods). 
+I have included some pictures
+and pointers to the usual places. Enjoy.
+Grand Canyon
+A lot of places claim to be the Grand Canyon of something-or-the-other, but 
+there is only one Grand Canyon. Grand Canyon is timeless, yet provides a
+record of time; changeless, yet is different by the hour. Other canyons may
+be longer, deeper, wider, steeper, but none have all the qualities that
+make this canyon Grand.
+Los Angeles
+A really interesing site about 
+Architecture in Los Angeles, from someone who
+spends vacations here. 
+(The LA Times story of April 11, 2007
+says it best.)
+Are the billboards in Los Angeles getting you down? Last spring 
+Christine Pelisek wrote an article in LA Weekly:
+Billboards Gone Wild: 4,000 Illegal Billboards Choke L.A.'s Neighborhoods
+which included 4 listings of billboards for 3 of the major companies in LA. 
+These are available for browsing 
+at 
+my LA Billboard Information Site
+(including maps showing locations) and adding 
+new information. This resource should help understand how widespread the 
+problem has become. Please add information on other locations and provide 
+some of the missing information on those that are included.
+Comments
+For comments you can try:
+The general Comments Form
+But email usually works best, though I may be away from email for a week at a
+time.
+Keith Price
+Contact
+keith@visionbib.com
+A lot of this has been derived from my work with the
+Computer vision group at USC.
+This file was last modified: 
+Saturday, May 23, 2009, 1:00 AM

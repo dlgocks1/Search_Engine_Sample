@@ -1,0 +1,17 @@
+I was asked if it’s possible to intercept IE’s HTTPS requests. It is, it’s not difficult, and you don’t need admin rights to do it on your own processes. In other words, a malware doesn’t even need admin rights to spy on your IE process, if said malware is also running under your user account.
+We need to hook the API calls to WinINet functions, like HTTPOpenRequest. We can do this by patching the Delayed Import Address Table of executables calling WinINet functions. In our case, to spy on IE, we need to patch the DIAT of urlmon.dll. One simple way to hook these API calls, is to develop a DLL that will patch the DIAT, diverting the calls to our own functions. Our functions will just call the original functions while intercepting the data.
+Here is an example for HTTPOpenRequest:
+HookHTTPOpenRequestA is our hook function for HTTPOpenRequest. It will just output the flags, verb and objectname parameters to the debugger, and then call the original HTTPOpenRequest function with unmodified arguments (which we saved in variable OriginalHTTPOpenRequestA). BTW, if the declaration and use of OriginalHTTPOpenRequestA looks confusing to you, read the explanation of function pointers in C.
+Patching the DIAT is easy, use the PatchDIAT function that I provide with my Basic Process Manipulation Tool Kit (it’s in iat.c).
+PatchDIAT needs the name of the executable we want to patch (urlmon.dll), the name of the API to patch (wininet.dll), the name of the function to patch (HttpOpenRequestA), the address of our hooking function (HookHttpOpenRequestA) and a variable to store the address of the original function (OriginalHttpOpenRequestA). PatchDIAT returns S_OK when patching was successful.
+We package everything in a DLL, while hooking some other functions, like InternetReadFile (to intercept actual data), and then inject this DLL in IE with my toolkit:
+I’ve stored a test file on my server: https://DidierStevens.com/files/temp/test.txt. When you browse to this test file with the patched IE, you’ll see this in Sysinternal’s DebugView:
+Lines 0 to 4 indicate the patching IE was successful.
+Line 5 shows IE opening a connection to didierstevens.com on port 443 (that’s 1BB in hexadecimal).
+Line 6 shows the preparation of an HTTPS GET request to file /files/temp/test.txt. Flags 00C00000 indicate HTTPS and keep-alive.
+Line 7 shows that the call to InternetReadFile was successful and read 25 bytes (0×19).
+Line 8 shows the actual data retrieved by IE: This is just a text file.
+The next lines indicate we unloaded our DLL with success (thus undoing the patch).
+As you can see, we can intercept data before it is encrypted by the HTTPS connection (/files/temp/test.txt) and after it is decrypted (This is just a text file.). This works because we patch the executable before it calls API functions that handle the encryption/decryption, so we get access to the unencrypted data.
+I kept my demo DLL very simple to show you the basic principles. A complete spying program would have to hook more functions and tie all the data together to present it in a user friendly way.
+It’s also simple to adapt my IE spying DLL to tamper with the data. For example, it could redirect IE to another web site by changing the lpszServerName argument before it calls the original InternetConnect function.

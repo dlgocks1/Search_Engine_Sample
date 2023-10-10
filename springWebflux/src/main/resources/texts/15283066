@@ -1,0 +1,30 @@
+All of the old System sounds from the Classic days, converted and ready to add to your system.
+Included Sounds:
+bip*
+boing
+chutoy
+clink-klank
+droplet
+indigo
+laugh
+logjam
+monkey
+moof
+newbip**
+pong2003
+quack
+single clip
+sosumi
+temple
+uh oh
+voltage
+whit
+wild eep
+*Bip is not actually a sound file. It calls to hardware to make a noise using a simple sound command. So far, OS X refuses to use it as a System Sound, but it will work as an alert in other Apps (i.e. Mail).
+**NewBip is a recording of Bip using wiretap. the original Bip is still included to be true to the original intention of the Classic Sound Pack (after all, it is possible that hardware beeps on different machines may sound different).
+Version 1.4:
+Includes the sound Moof (the call of the long lost Mac mascot - Clarus the Dogcow).
+WAV files are included for use under other Unix-based OSes (including Linux and BSD) or Windows
+(installation instructions for other OSes are not included)
+Special Thanks
+I would like to thank Karl Laurent and Ginger Lindsey for help in locating and converting some of these sounds.

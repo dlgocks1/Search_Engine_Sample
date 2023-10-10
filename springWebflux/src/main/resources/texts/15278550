@@ -1,0 +1,65 @@
+From: Hyrum K. Wright <hyrum_at_hyrumwright.org>
+Date: Thu, 6 Aug 2009 15:04:05 -0500 
+Subversion 1.5.7 has been released, available from:
+http://subversion.tigris.org/downloads/subversion-1.5.7.tar.bz2
+http://subversion.tigris.org/downloads/subversion-1.5.7.tar.gz
+http://subversion.tigris.org/downloads/subversion-1.5.7.zip
+http://subversion.tigris.org/downloads/subversion-deps-1.5.7.tar.bz2
+http://subversion.tigris.org/downloads/subversion-deps-1.5.7.tar.gz
+http://subversion.tigris.org/downloads/subversion-deps-1.5.7.zip
+THIS IS A SECURITY RELEASE, addressing the issue described at:
+http://cve.mitre.org/cgi-bin/cvename.cgi?name=2009-2411
+The CVE page may not be public yet when you read this, but will be soon.
+The full text of the advisory is available at:
+http://subversion.tigris.org/security/CVE-2009-2411-advisory.txt
+This security issue affects both clients and servers. Clients with commit
+access to a vulnerable server can cause a remote heap overflow. Servers
+can cause a heap overflow on vulnerable clients that try to do a checkout
+or update. Subversion 1.5.7 differs from 1.5.6 only in the fix for this
+issue. Upgrading to Subversion 1.5.7 (or Subversion 1.6.4, released
+simultaneously) is therefore strongly recommended for Subversion client
+and server installations on all platforms.
+The MD5 checksums are:
+abb42850da71f34d566e78733b597cca subversion-1.5.7.tar.bz2
+43b0df7bce8b060e7b424ac17cf6c43c subversion-1.5.7.tar.gz
+6db7a462a6ae796d863befa63ab6f7b2 subversion-1.5.7.zip
+639c3954e5f4267e027ee468e93ffe04 subversion-deps-1.5.7.tar.bz2
+216ed06fdae91bba05b3bdb9496b5e92 subversion-deps-1.5.7.tar.gz
+ebe4d31e1000b6ba0afa5efd89f7cf2f subversion-deps-1.5.7.zip
+The SHA1 checksums are:
+1fecff77387a48f0d48fd87c59fe5deb87407f16 subversion-1.5.7.tar.bz2
+7d4d9752e360fa8903b10e5c9b4a018fab7d1c02 subversion-1.5.7.tar.gz
+267419e8796ddd806ff7610e19fdc7df2686053a subversion-1.5.7.zip
+2989653a404f9d718fced2ba1fe24eb3a034769a subversion-deps-1.5.7.tar.bz2
+d05cb5faaf85fec0a0f4e30af39a62dbf8e0425a subversion-deps-1.5.7.tar.gz
+54d626492ce6b9b31123e16a4bc328c08db2967b subversion-deps-1.5.7.zip
+PGP Signatures are available at:
+http://subversion.tigris.org/downloads/subversion-1.5.7.tar.bz2.asc
+http://subversion.tigris.org/downloads/subversion-1.5.7.tar.gz.asc
+http://subversion.tigris.org/downloads/subversion-1.5.7.zip.asc
+http://subversion.tigris.org/downloads/subversion-deps-1.5.7.tar.bz2.asc
+http://subversion.tigris.org/downloads/subversion-deps-1.5.7.tar.gz.asc
+http://subversion.tigris.org/downloads/subversion-deps-1.5.7.zip.asc
+For this release, the following people have provided PGP signatures:
+Senthil Kumaran S [1024D/6CCD4038] with fingerprint:
+8035 16A5 1D6E 50E2 1ECD DE56 F68D 46FB 6CCD 4038
+Paul T. Burba [1024D/53FCDC55] with fingerprint:
+E630 CF54 792C F913 B13C 32C5 D916 8930 53FC DC55
+Bert Huijben [1024D/9821F7B2] with fingerprint:
+2017 F51A 2572 0E78 8827 5329 FCFD 6305 9821 F7B2
+Hyrum K. Wright [1024D/4E24517C] with fingerprint:
+3324 80DA 0F8C A37D AEE6 D084 0B03 AE6E 4E24 517C
+Stefan Sperling [1024D/F59D25F0] with fingerprint:
+B1CF 1060 A1E9 34D1 9E86 D6D6 E5D3 0273 F59D 25F0
+Daniel Shahaf [1024D/C0903C70] with fingerprint:
+A41B 0B40 5E2D 66A8 066F 0F4F 4780 436C C090 3C70
+Release notes for the 1.5.x release series may be found at:
+http://subversion.tigris.org/svn_1.5_releasenotes.html
+You can find the list of changes between 1.5.7 and earlier versions at:
+http://svn.collab.net/repos/svn/tags/1.5.7/CHANGES
+Questions, comments, and bug reports to users_at_subversion.tigris.org.
+Thanks,
+- The Subversion Team
+------------------------------------------------------
+http://subversion.tigris.org/ds/viewMessage.do?dsForumId=462&dsMessageId=2381029
+Received on 2009-08-06 22:05:19 CEST

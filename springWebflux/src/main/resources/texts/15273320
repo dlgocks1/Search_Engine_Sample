@@ -1,0 +1,13 @@
+いつも頭を痛めているInternet?Explorer対策なんですが、Internet Explorer 6.0に対してスマートに透過PNG画像を表示できるようにならないかと思っていました。これまでCSSハックを施して対応してましたが、Javascriptのブラウザセレクタを利用することにしました。読者側でJavascriptが有効になっていなければ意味がないですが…。
+利用するのはこの２つ。
+iepngfix.js
+CSS Browser Selector
+設置方法:
+<head>
+<script src="css_browser_selector.js" type="text/javascript"></script>
+<script src="iepngfix.js" type="text/javascript"></script>
+<style type="text/css">
+.ie6 img { behavior: expression(IEPNGFIX.fix(this)); }
+</style>
+</head>
+セレクタはご利用の環境に合わせて書き換えてください。

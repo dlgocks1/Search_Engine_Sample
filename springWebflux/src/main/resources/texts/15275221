@@ -1,0 +1,67 @@
+Version 1.0 
+Author: Falko Timme <ft [at] falkotimme [dot] com> 
+Follow me on Twitter 
+Last edited 05/27/2009
+This guide explains how you can run virtual machines with Sun xVM VirtualBox 2 on a headless Debian Lenny server. Normally you use the VirtualBox GUI to manage your virtual machines, but a server does not have a desktop environment. Fortunately, VirtualBox comes with a tool called VBoxHeadless that allows you to connect to the virtual machines over a remote desktop connection, so there's no need for the VirtualBox GUI. 
+I do not issue any guarantee that this will work for you!
+1 Preliminary Note
+I have tested this on a Debian Lenny server (host system) with the IP address 192.168.0.100 where I'm logged in as a normal user (user name administrator in this example) instead of as root. 
+If you only have a root account, but no normal user account, create one as follows (user administrator, group administrator)...
+# groupadd administrator 
+# useradd -d /home/administrator -m -g administrator -s /bin/bash administrator
+... create a password for the new user...
+# passwd administrator
+... and log in as that user. 
+2 Installing VirtualBox
+To install VirtualBox 2 on our Debian Lenny server, we need root privileges, therefore we run 
+$ su
+Then we add the VirtualBox repository to our apt configuration:
+# echo "deb http://download.virtualbox.org/virtualbox/debian lenny non-free" > /etc/apt/sources.list.d/virtualbox.list 
+Then we download Sun's public key...
+# wget -q http://download.virtualbox.org/virtualbox/debian/sun_vbox.asc -O- | apt-key add -
+... and update our package database:
+# aptitude update
+Now we bring our system up to date:
+# aptitude safe-upgrade
+(It is possible that the kernel gets updated. If this is the case, reboot the system...
+# reboot
+... log in as the normal user again and become root:
+$ su
+)
+Afterwards, we install VirtualBox 2 as follows:
+# aptitude install linux-headers-$(uname -r) build-essential virtualbox-2.2
+Creating group 'vboxusers' 
+Users of VirtualBox must be members of that group. Host network interfaces will be assigned to that group. <-- Ok
+Unable to find a precompiled module for the current kernel![...] 
+Should the vboxdrv kernel module be compiled now? <-- Yes
+Now we must add the user that will run VirtualBox (administrator in this example) to the vboxusers group:
+# adduser administrator vboxusers
+VirtualBox is now installed and ready to be used.
+Type
+# exit
+to leave the root account and become a normal user (administrator) again. 
+3 Using VirtualBox On The Command Line
+3.1 Creating A VM
+To create a VM on the command line, we can use the VBoxManage command. See
+$ VBoxManage --help
+for a list of available switches and (highly recommended!) take a look at chapter 8 (VBoxManage reference) in the VirtualBox 2.2 user manual. 
+I will now create a Debian Lenny Server VM with 256MB memory and a 10GB hard drive from the Debian Lenny Netinstall iso image (which I have stored in /home/debian-500-i386-netinst.iso):
+$ VBoxManage createvm -name "Debian Lenny Server" -register 
+$ VBoxManage modifyvm "Debian Lenny Server" -memory "256MB" -acpi on -boot1 dvd -nic1 nat 
+$ VBoxManage createvdi -filename "Debian_Lenny_Server.vdi" -size 10000 -register 
+$ VBoxManage modifyvm "Debian Lenny Server" -hda "Debian_Lenny_Server.vdi" 
+$ VBoxManage registerimage dvd /home/debian-500-i386-netinst.iso 
+$ VBoxManage modifyvm "Debian Lenny Server" -dvd /home/debian-500-i386-netinst.iso
+3.2 Importing An Existing VM
+Let's assume you have a VM called examplevm that you want to reuse on this host. On the old host, you should have a directory Machines/examplevm in the VirtualBox directory; Machines/examplevm should contain the examplevm.xml file. Copy the examplevm directory (including the examplevm.xml file) to your new Machines directory (if your user name is administrator, this is /home/administrator/.VirtualBox/Machines - the result should be /home/administrator/.VirtualBox/Machines/examplevm/examplevm.xml).
+In addition to that copy the examplevm.vdi file from the old VDI directory to the new one (e.g. /home/administrator/.VirtualBox/VDI/examplevm.vdi).
+Afterwards, you must register the imported VM:
+$ VBoxManage registervm Machines/examplevm/examplevm.xml
+3.3 Starting A VM With VBoxHeadless
+Regardless of if you create a new VM or import and old one, you can start it with the command:
+$ VBoxHeadless -startvm "Debian Lenny Server"
+(Replace Debian Lenny Server with the name of your VM.)
+VBoxHeadless will start the VM and a VRDP (VirtualBox Remote Desktop Protocol) server which allows you to see the VM's output remotely on another machine. 
+To learn more about VBoxHeadless, take a look at
+$ VBoxHeadless --help
+and at chapter 7.4 (Remote virtual machines (VRDP support)) in the VirtualBox 2.2 user manual.

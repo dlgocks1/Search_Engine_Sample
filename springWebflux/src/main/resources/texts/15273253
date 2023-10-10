@@ -1,0 +1,6 @@
+φ（．．）メモメモ．．．
+g++ -Wall -o sample main.cpp -std=gnu++0x -I "C:\Program Files\boost\boost_1_39_0"
+なぜかうまくいかなかった例
+g++ -Wall -o sample main.cpp -std=gnu++0x -I "/cygdrive/c/Program Files/boost/boost_1_39_0/"
+g++ -Wall -o sample main.cpp -std=gnu++0x -I /cygdrive/c/progra~1/boost/boost_1_39_0/
+g++ -Wall -o sample main.cpp -std=gnu++0x -I /cygdrive/c/Program\ Files/boost/boost_1_39_0/

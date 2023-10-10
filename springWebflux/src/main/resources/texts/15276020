@@ -1,0 +1,530 @@
+Notes Domino Symphony Strategy August 2009 - Presentation Transcript
+Lotus Notes and Domino
+Product family strategy and update
+Ed Brill
+Director, Product Management
+IamLUG
+August 4, 2009
+A catalyst for productivity – More than just an inbox
+Social networking—
+blogs, mashups,
+activities
+Instant Personal
+messaging content library
+Documents,
+Feeds,
+presentations,
+My Widgets,
+spreadsheets Live Text
+E-mail, calendar, Collaborative and
+contacts business applications
+Consistent pattern of frequent Notes/Domino releases
+September, August,
+2002: September, 2007: January 6,
+2005: Notes and
+Notes and Notes and 2009: Notes/
+Domino 8
+Domino 6 Domino 7 Domino 8.5
+September, February,
+October, 2008:
+2003:
+2006: Notes and
+Notes and
+Notes and Domino 8.0.1
+Domino 6.5
+Domino 7.0.2
+Notes/Domino 8 upgrades ahead of historical trend
+Notes/Domino Ecosystem
+Lotus Notes - an Integrated Platform
+Compelling to users
+• End user productivity
+• Desktop choice: Linux, Windows, Mac
+• Mobility: Nokia, BlackBerry, Windows
+Mobile, web (Lotus iNotes)
+Rapid Application Development
+• Eclipse-based Designer
+• XPages to modernize web applications
+• Leverages existing expertise, apps
+Cost savings 30+%
+• Admin 30% / Storage 50%
+• IBM saves 70+ petabytes = $M
+Launch of Notes/Domino 8.5 – Macworld 2009
+Lotus Domino – Platform choice and flexibility
+ Platform choices evolve to meet customer needs and provide flexibility
+ Wide variety of Domino platform choices:
+– AIX, OS/390, Linux, Solaris, Windows
+ Platforms are not a 'one size fits all' solution, customers can choose based on:
+– Cost, scalability, available expertise, hardware, etc.
+ Compatibility for 32bit platforms
+– Further leveraging customer investment (e.g.: hardware, other solutions)
+ 64 bit versions of Lotus Domino (AIX, Windows, zLinux) provide:
+– Additional scalability
+– Greater memory addressability
+Lotus Domino 8.5 – Top ten improvements
+10.Notes Shared Login
+9. LZ1 compression inside databases
+8. Domino router enhancements
+7. Transaction log improvements (up to 50% CPU reduction)
+6. Domino Configuration Tuner
+5. Domino Designer in Eclipse
+4. Notes ID vault
+3. XPages
+2. Document compression (introduced in 8.0.1 as well)
+1. Domino Attachment and Object Service (DAOS) + I/O improvements
+Notes/Domino 8.x survey results – March/April 09
+Notes/Domino 8.5
+35%
+Areas of TCO savings experienced (% of Total responses)
+30%
+25%
+20%
+15%
+10%
+5%
+0%
+Disk savings Server App Dev Improved service Other (DAOS/
+~40-60% consolidation modernized quality ODS,
+support,training
+Disk Storage Requirements: Domino 8.5 Vs. Major Competitor
+700
+Compression With DAOS Configured 682
+650
+Disk Storage Per E-Mail Message (KB)
+Major Competitor
+600 Domino 8.5 – Uncompressed
+550 Domino 8.5 – LZ1 Attachment 539
+Domino 8.5 – Doc Body & LZ1
+500 Attachment
+450
+411
+400
+350 344
+300 280
+267
+250 232 227
+217 221
+200 193 189
+177
+153 156 151
+150 131 136 132
+108 98 117 113
+100 93
+50
+0
+15% Attachments 20% Attachments 25% Attachments 30% Attachments 40% Attachments 50% Attachments
+Workload: Percentage Of Messages With Attachments
+12
+12
+Projected upgrade savings for one 70K user organization
+$1,430,206 in annual TCO savings (a 23% reduction) through centralization,
+server reduction and modernization of Lotus Notes and Domino Software.
+Lotus Notes & Domino – LotusLive Notes
+ A cost effective way to provide organizations with a complete
+messaging solution
+– Ideal for organizations with < 10,000 – 15,000 users
+ Reduce overhead (e.g.: hardware, administration)
+– IBM is responsible for the infrastructure, customers have control of their
+environment
+ Generate predictable costs without capital expenditures
+– Fixed per user pricing: US$8 - $14 per user per month
+ Rapidly roll out your messaging infrastructure
+– IBM provides the infrastructure and administration
+ Secure & reliable
+– Benefit from IBM security standards framework and resources
+Lotus Foundations Start is an all-in-one software appliance
+Email and collaboration
+Choice of email clients: Lotus Remote
+Notes®, Lotus iNotes and support for Access
+Backup AntiSpam
+Microsoft® Outlook®
+AntiVirus
+Lotus SymphonyTM office
+productivity tools: spreadsheets,
+presentation and documents
+Network infrastructure, firewall, VPN, Firewall Web
+secure remote access VPN Server
+File management
+Backup, Disaster Recovery
+File
+AntiVirus and AntiSpam & Print Office
+Server Mail Productivity
+VM Ware Hypervisor
+(Run MS Windows Applications) Server
+Lotus Foundations Branch Office
+ Support deployment of Lotus Foundations Start as branch office solution for
+organizations with existing Lotus Domino infrastructure at head office.
+ Deploy Lotus Foundations in branch office but manage Lotus Foundations
+Domino server as another Domino server in the enterprise
+ Lotus Domino systems and user administration for Foundations - done from
+Lotus Domino enterprise server
+ Lotus Foundations administration - done either from branch office or locally
+ External mail is routed to enterprise node.
+ Domino users local to the Lotus Foundations Domino instance can be
+automatically provisioned with user access to capabilities such as file server
+etc
+Just released
+www.linkedin.com/lotus
+www.tripit.com/lotus
+ ﻿ rganize all of your upcoming itineraries
+O
+ Click on a trip name to display detailed travel
+information
+ Add trips to your Lotus Notes calendar with
+one click
+ Access shared trips and network updates
+ ﻿ et your email and LinkedIn updates all in one
+G
+place
+ Quickly learn more about people who send you
+email
+ Search for people you want to contact and
+work with
+ Share your status, see what your connections
+are working on
+Notes / Domino Proven in Production
+Release to business-process-driven applications that enable people Applications share and track information
+Security-rich, Release Compatibility = Longer Lasting to collect, organize,
+Domino Developers...
+● Spend less time on
+maintenance
+● Spend more time on
+the fun stuff
+– Responding to user
+requirements
+– New functional
+enhancements
+– Learning and
+leveraging new
+technologies
+“Notes and Domino Applications just don't break” Developer, LCTY Cincinatti
+8.5 Application Development Themes
+ Provide developers with a modern development
+tool IDE
+Do for developers what Notes 8 did for end users
+– Improve usability and productivity
+– Address various developer pain points from previous
+versions
+Attract new developers to the platform
+ The Web Has Never looked better
+Allow developers to build attractive, modern web apps
+that leverage Web 2.0 technologies with less work
+Provide means to incrementally update existing
+Domino Web applications
+Domino 8.5 –Introducing XPages
+ What are XPages?
+– A new design element for Domino Designer
+– A runtime designed to generate modernWeb applications
+ Brings State-of-the-Art Web technology to Domino 8.5
+– Leverages Java Server Face based, proven Java runtime,
+from Lotus Component Designer
+– XPages are designed for generating modern Web
+applications
+• Built-in Web 2.0 features
+ Solves problems expressed by the Domino community
+– Known limitations are addressed
+• UI/data separation, HTML generation control, server state,
+localization, extensibility, etc.
+– Same modern rendering technology can target multiple
+clients
+"We finished our target goal too quickly so
+we had time to add unplanned functionality"
+TJ Witte - Salesplace.com "Equivalent transactions that were taking a full
+second (or more) to complete in a Java agent are
+now completing in 20 - 40 milliseconds. And we
+haven't even optimized it yet to use any explicit
+scope caching; that 50x performance boost is just
+from running it in a servlet context instead of in
+agents"
+"XPage technology drastically reduces the time it
+takes us to develop Domino applications. We no Tim Tripcony - Lotus 911
+longer need to spend time developing client side
+JavaScript/Ajax code since many of things we built in
+this manner are now core features of XPages.
+Additionally, the ability to more easily leverage
+standard techniques like CSS makes building a
+compelling user experience much easier." ...People had a good feeling of what they saw. They
+appreciated that 'Cloud' widget, and the good look &
+Bruce Elgort - Eljugi software llc feel already provided...
+...Some were already asking when we could deliver
+the first eLite running with xPages.”
+Pierre Verscheure - Jacobs Engineering Group Inc
+Domino Web Apps 2009
+Easy to use: Compelling User Experience
+Custom
+Branding Styles
+Themes
+Improved usability
+Discussion 8.5
+XPage showcase
+• Compelling U/I
+• Quick to Customize
+Faster Add your own • Easy to Deploy
+Navigation copyright
+Domino Discussion Application - From out of the box, to out on the web, in minutes
+Reinvigorating & Expanding Developer Ecosystem
+● OpenNTF is an open source community dedicated to the development
+of Lotus Notes/Domino applications.
+● Provides a framework for the creation open source applications and
+distribution using widely accepted licensing terms.
+● Catalog of applications & other
+code assets
+– Download and use
+– Try it on-line
+● Strong development community
+– 60,000 registered users
+– 10,000 downloads / month
+Alloy by IBM and SAP – Released March 2009
+Reports management
+• Give Users information to make
+good decisions
+Travel Management
+• Request, review & approve trip
+details quickly
+Workflow Decisions Management
+• Manage and expose SAP
+Workflow decision steps in Notes
+Leave Management
+• Manage vacations from Lotus
+notes calendar
+Custom Integration
+• Add contextual information to
+facilitate better decisions
+Summary – do you know Notes/Domino app dev?
+Lotus knows development
+- Industry proven web technology (JavaServer faces) delivered
+for the application Designer
+- industry standard Dojo toolkit delivers the most advanced UI
+widgets and experience
+- 3-tier MVC app architecture coupled with a simple and robust
+- Run on cloud, on-premise, or local.
+Lotus knows composite applications.
+- Capture components from your existing apps - Notes, Web,
+Native, and more
+- Drag, drop and wire. No programming required.
+- Integrate business processes and disparate technologies faster
+than ever before.
+- Connect the dots of all the systems and applications you
+employees need.
+Notes and Domino 8.5.1 and beyond
+Lotus Notes Traveler 8.5.1 supports the Apple iPhone
+ New protocol support - ActiveSync
+ Email (including attachments)
+ Calendar
+ Contacts
+ Adds to existing Traveler support
+for Windows Mobile and Symbian
+S60-based Nokia and Samsung
+devices
+ Available for test drive on Lotus
+Greenhouse
+(greenhouse.lotus.com) or as part
+of 8.5.1 managed beta
+ Very positive feedback from beta
+testers
+Lotus Notes 8.5.1 enhancements
+ Series of incremental enhancements to the client overall
+Action buttons for common activities e.g. Creating a URL link
+More consistent availability of “open in new window”
+ New spell-checker engine (LanguageWare)
+Uses common IBM dictionaries
+Allows for plug-in of third-party dictionaries and spell checkers
+– For example, in languages where Notes is not formally translated
+Will eventually allow for a single dictionary across Lotus products
+Auto-correct behavior for “teh”, TWo capital letters, etc.
+ Admin/management enhancements
+Desktop policy to push Notes client contact synchronization
+Upcoming partner integration
+www.openspan.com/lotus
+Lotus Client
+Native Windows
+Applications
+Connector provides Toolbar and Menu
+Point and Click integration of native Windows integration to keep data in sync
+applications into Lotus composite solutions
+Meetings made Simple.
+Tungle takes the time and complexity out of
+answering: ”What time is good for you?”
+Domino 8.5.1 updates
+ SPENGO (Windows single sign-on for web applications)
+ DAOS updates:
+Don't send “known” attachments from client to server
+– Forwarding mail with attachment contained
+– Reply with history
+Don't send “known” attachments from server to server during
+replication
+– DAOS key is sent from the client (or server) during object
+allocation
+ Gzip for Domino Web Server
+Domino Designer 8.5.1
+ New LotusScript Editor
+ New Java Editor
+ Component design element
+ Used for iWidgets and composite
+application components
+ Performance improvements
+ Database open from client (cold) 79%
+ Database open in designer (cold) 89%
+ Help pre-indexed
+ Designer Extensibility APIs LotusScript Editor
+ Enables Eclipse plugins to contribute to
+Designer UI and function
+ API maps between Eclipse resources and design elements
+ Usability Enhancements
+ Working set management
+ Design list filtering
+ XPage dialog – create data source when creating XPage
+Xpages updates in 8.5.1
+ XPages on the client
+ Build once and run on browser and Notes
+ Take Web 2.0 applications offline
+ Integrate into Composite Applications
+ Performance and scalability enhancements
+ Easier to leverage other
+Dojo widgets
+ Publish as an iWidget
+ Surface Domino content in
+Lotus Mashups
+ Active Content Filtering
+ Removes malicious code
+from HTML
+XPages in Notes Client
+Choices for mail in the cloud
+More
+LotusLive Notes
+Full Mail services plus:
+Organizational calendar
+Function LotusLive iNotes PKI Encryption
+Application Integration
+Social Software integration
+Customization and Extensibility
+Integrated realtime services
+Reliable scalable mail Document management Integration
+Calendar Transaction logging
+Less
+Cost per user per month
+Shared unde
+What is LotusLive Notes Version 2?
+ Cloud based Domino Mail, PIM and advanced collaboration service
+ Available by annual subscription for organizations with fifty to one
+million mailboxes
+ Provides economical hybrid model that can be integrated with on-
+premise IT environment
+ Supports rich, browser and mobile client access from a wide variety
+of platforms
+ Can be augmented with additional LotusLive capabilities, data
+migration, compliance and other custom services
+Shared unde
+What are my client options?
+ iNotes for web access from PC, Mac or mobile device with Internet
+Explorer, Firefox or Safari
+ Industry leading offline support with Notes client (8.5.1) on
+Windows XP, Vista, Mac OS X, Ubuntu, Novell and Red Hat Linux
+ Optional support for sync with RIM, Windows Mobile, Nokia and
+other ActiveSync devices such as iPhone
+ Support for spreadsheets, presentations and documents with Lotus
+Symphony
+ Surface mail through Portal
+Shared unde
+Directions for Notes – Notes “9”
+ Improve Search -Total Recall; simplified way of finding
+things more easily
+ Group Calendar
+ Intelligent subscription of feeds within mail inbox
+ Work with others more seamlessly – Contacts and Mail
+Federation
+ Track work more efficiently – Unified Task Management
+Lotus Symphony
+IBM Lotus Symphony
+Frustrated with business productivity tool costs and upgrades? Could your time and budget be better spent elsewhere?
+Documents
+ Integrated office productivity tools
+ No additional charge
+ Based on Lotus Symphony software
+Presentations – Helps reduce ongoing licensing costs and
+dependence on a single software vendor
+– Available to virtually anyone and everyone
+– Use at work and at home
+Spreadsheets
+Five Themes of Lotus Symphony Development
+ Lotus Symphony is part of a long-term, key investment strategy by IBM
+– Promote use of ODF to help facilitate innovation in market
+– Long term: Advance IBM's position as market leader in new, dynamic models for
+document creation and manipulation
+Beyond Breakthrough document manipulation experience
+Office
+Programmable Programmability for ISVs, extensible and open
+Extensible
+Cross integration with Lotus portfolio,
+Linked Value with Portfolio first choice for office tools of Lotus users
+Usability, capability, stability,
+interoperability, deployability and
+Meet Needs of Users, Deployable platform support
+Lotus Symphony is award-winning
+ Infoworld US:
+ “Lotus Symphony is the most polished of this
+particular pack of productivity suites.”
+ CNET:
+ “Microsoft is not just overpriced – for most users
+it’s overkill. That’s why I’ve been increasingly
+recommending IBM Lotus Symphony, a rounded
+office suite that just so happens to be free.”
+ CRN:
+ “With so many great products entering the
+Channel this year, choosing which ones could be
+deemed product of the year was not an easy
+decision. But our winners this year certainly
+stood out as the best of the best, and we
+congratulate all of our winners of the CRN Test
+Center product of the year award.”
+IBM Lotus Symphony – Roadmap (2009-2010)
+Focus Areas:
+ MS Office Interoperability -- MS Office 2007 Support, VB Support
+ Code re-base to Open Office 3
+ Programmability
+ ODF 1.2 Support
+Symphony 2.x
+2H 2010
+VB Macro cont'd
+Solution Enablement
+Linked Value
+Symphony 2.0
+1H 2010
+OO 3.x code base
+Symphony 1.3 ODF 1.2
+Q2 2009 VB Macro
+MS Office 2007 Support MS Office 2007 Support cont'd
+DataPilot Tables cont'd
+Enhanced LotusScript APIs
+Resources
+Resources
+●
+Notes and Domino home page at http://ibm.com/notes
+or http://ibm.com/domino (plus advertising at http://
+ibm.com/lotusnotes )
+● Notes 8 training materials at ibm.com/developerworks/
+lotus/notes
+● Notes/Domino 8.5 now available at ibm.com/lotus/
+notesanddomino
+● Access all Notes/Domino-related bloggers at
+www.planetlotus.org
+IBM Multimedia Library for Lotus Notes
+A comprehensive collection of more than 1,000 Lotus tutorials and video clips
+showing users how to perform essential tasks.
+Target Audience:
+• Enterprises with end users
+Benefits:
+• Affordable solution for Lotus customers
+• Support for 11 languages
+• Reduced tech support calls and costs
+• Individual clips can be “drip fed” to
+employees via e-mail to prepare for a
+product rollout or upgrade.
+• Clips include step-by-step text instructions
+• Can be embedded right into the Notes
+client
+* English, French, Canadian French, Spanish, Latin American Spanish, Brazilian Portuguese, Italian, German, Japanese, Chinese Simplified
+and Chinese Traditional
+Thank you!
+ed_brill@us.ibm.com
+www.edbrill.com
+Twitter: @edbrill

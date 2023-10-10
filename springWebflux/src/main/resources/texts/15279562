@@ -1,0 +1,65 @@
+タイトル長くてすみません。PHP5.2.10＋PHPUnit3.3.17で、setcookie関数を呼び出すクラスをテストすると、何ともつれないメッセージが。。。
+$ phpunit AClassTest.php
+NULL
+PHPUnit 3.3.17 by Sebastian Bergmann.
+E.....
+Time: 3 seconds
+There was 1 error:
+1) testNormal(AClassTest)
+Cannot modify header information - headers already sent by (output started at /usr/local/lib/php/PHPUnit/Util/Printer.php:96)
+/path/to/AClass.class.php:118
+/path/to/AClass.class.php:73
+/path/to/AClassTest.php:47
+FAILURES!
+Tests: 6, Assertions: 11, Errors: 1.
+$ 
+ググってみても、あまり情報がないですが、#291 (Cannot test output if headers are sent) – PHPUnitにあるPHPUnit_TextUI_TestRunnerクラスの修正内容
+:
+if ($this->printer === NULL) {
+if (isset($arguments['printer']) &&
+$arguments['printer'] instanceof PHPUnit_Util_Printer) {
+$this->printer = $arguments['printer'];
+} else {
+$this->printer = new PHPUnit_TextUI_ResultPrinter(
+'php://stderr', $arguments['verbose'], $arguments['colors'], $arguments['debug']
+^^^^^^^^^^^^^^
+);
+}
+}
+を試してみました。が、今度は
+Warning: fwrite(): 1145 is not a valid stream resource in /usr/local/lib/php/PHPUnit/Util/Printer.php on line 171
+ということで撃沈。。。なんで
+fopen('php://stderr', 'wt');
+が動作せんのんじゃいっ！で、PHPUnit_TextUI_ResultPrinterのコンストラクタの第1引数にはストリームを渡せそうだったので
+:
+if ($this->printer === NULL) {
+if (isset($arguments['printer']) &&
+$arguments['printer'] instanceof PHPUnit_Util_Printer) {
+$this->printer = $arguments['printer'];
+} else {
+$this->printer = new PHPUnit_TextUI_ResultPrinter(
+STDERR, $arguments['verbose'], $arguments['colors'], $arguments['debug']
+);
+}
+}
+とすると、今度はうまく動作しました。パッチは次の通り。
+*** /usr/local/lib/php/PHPUnit/TextUI/TestRunner.php.org 2009-08-11 18:12:37.000000000 +0900
+--- /usr/local/lib/php/PHPUnit/TextUI/TestRunner.php 2009-08-11 18:25:22.000000000 +0900
+***************
+*** 191,197 ****
+$this->printer = $arguments['printer'];
+} else {
+$this->printer = new PHPUnit_TextUI_ResultPrinter(
+! NULL, $arguments['verbose'], $arguments['colors'], $arguments['debug']
+);
+}
+}
+--- 191,197 ----
+$this->printer = $arguments['printer'];
+} else {
+$this->printer = new PHPUnit_TextUI_ResultPrinter(
+! STDERR, $arguments['verbose'], $arguments['colors'], $arguments['debug']
+);
+}
+}
+ま、"NULL"を"STDERR"にしただけなんですが。

@@ -1,0 +1,102 @@
+NetCDF User's Guide - ncsetfill and NCSFIL
+Go to the previous, next section.
+Set Fill Mode for Writes
+These calls are intended for advanced usage, to optimize writes under
+some circumstances described below. The function ncsetfill (or
+NCSFIL for FORTRAN) sets the fill mode for an netCDF file
+open for writing and returns the current fill mode. The fill mode can
+be specified as either NC_FILL or NC_NOFILL (NCFILL
+or NCNOFILL for FORTRAN). The default behavior corresponding to
+NC_FILL is that data is pre-filled with fill values, that is fill
+values are written when you create non-record variables or when you
+write a value beyond data that hasn't been written yet. This makes it
+possible to detect attempts to read data before it was written.
+See section Missing Values, for more information on the use of fill values.
+See section Attribute Conventions for information about how to define your
+own fill values.
+The behavior corresponding to NC_NOFILL overrides the default
+behavior of prefilling data with fill values. This can be used to
+enhance performance, because it avoids the duplicate writes that occur
+when the netCDF library writes fill values that are immediately
+overwritten with data.
+A value indicating which mode the netCDF file was already in is
+returned. You can use this value to temporarily change the fill mode of
+an open netCDF file and then restore it to the previous mode.
+After you turn on NC_NOFILL mode for an open netCDF file, you
+must be certain to write valid data in all the positions that will later
+be read. Note that NC_NOFILL mode is only a transient property
+of a netCDF file open for writing: if you close and reopen the file, it
+will revert to the default behavior. You can also revert to the default
+behavior by calling ncsetfill (or NCSFIL for FORTRAN)
+again to explicitly set the fill mode to NC_FILL.
+There are three situations where it is advantageous to set nofill mode:
+Creating and initializing a netCDF file. In this case, you should set
+nofill mode before calling ncendef (NCENDF for FORTRAN),
+and then write completely all non-record variables and the
+initial records of all the record variables you want to initialize.
+Extending an existing record-oriented netCDF file. Set nofill mode
+after opening the file for writing, then append the additional records
+to the file completely, leaving no intervening unwritten records.
+Adding new variables that you are going to initialize to an existing
+netCDF file. Set nofill mode before calling ncendef
+(NCENDF for FORTRAN), then write all the new variables
+completely.
+If the netCDF file has an unlimited dimension and the last record was
+written while in NC_NOFILL mode, then the file will be 4 bytes
+longer than if NC_NOFILL mode wasn't set, but this will be
+completely transparent if you access the data only through the netCDF
+interfaces.
+In case of an error, ncsetfill returns -1; NCSFIL returns a
+nonzero value in rcode. Possible causes of errors include:
+The specified netCDF ID does not refer to an open netCDF file.
+The specified netCDF ID refers to a file open for read-only access.
+The fillmode argument is neither NC_NOFILL nor NC_FILL
+(neither NCNOFILL nor NCFILL for FORTRAN).
+ncsetfill: C Interface
+int ncsetfill(int ncid, int fillmode);
+ncid
+NetCDF ID, returned from a previous call to ncopen or nccreate.
+fillmode
+Desired fill mode for the file, either NC_NOFILL or
+NC_FILL.
+ncsetfill
+Returns the current fill mode of the file before this call, either
+NC_NOFILL or NC_FILL.
+Here is an example using ncsetfill to set nofill mode for
+subsequent writes of a netCDF file named `foo.nc':
+#include "netcdf.h"
+...
+int ncid;
+...
+ncid = ncopen("foo.nc", NC_WRITE); /* open for writing */
+... /* write data with default prefilling behavior */
+ncsetfill(ncid, NC_NOFILL); /* set nofill mode */
+... /* write data with no prefilling */
+NCSFIL: FORTRAN Interface
+INTEGER FUNCTION NCSFIL(INTEGER NCID, INTEGER FILLMODE,
++ INTEGER RCODE)
+NCID
+NetCDF ID, returned from a previous call to NCOPN or NCCRE.
+FILLMODE
+Desired fill mode for the file, either NCNOFILL or
+NCFILL.
+RCODE
+Returned error code. If no errors occurred, 0 is returned.
+NCSFIL
+Returns the current fill mode of the file before this call, either
+NCNOFILL or NCFILL.
+Here is an example using NCSFIL to set nofill mode for
+a netCDF file named `foo.nc':
+INCLUDE 'netcdf.inc'
+...
+INTEGER NCID, RCODE, OMODE
+...
+NCID = NCOPN('foo.nc', NCWRITE, RCODE)
+...
+* write data with default prefilling behavior
+...
+OMODE = NCSFIL(NCID, NCNOFILL, RCODE)
+...
+* write data with no prefilling
+...
+Go to the previous, next section.

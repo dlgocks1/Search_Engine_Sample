@@ -1,0 +1,84 @@
+Option Explicit
+Private Declare Sub RtlMoveMemory Lib "kernel32" (pDest As Any, pSource As Any, ByVal dwLength As Long)
+Private Declare Function GlobalLock Lib "kernel32" (ByVal hMem As Long) As Long
+Private Declare Function GlobalFree Lib "kernel32" (ByVal hMem As Long) As Long
+Private Declare Function GlobalAlloc Lib "kernel32" (ByVal uFlags As Long, ByVal dwBytes As Long) As Long
+Private Declare Function GlobalUnlock Lib "kernel32" (ByVal hMem As Long) As Long
+Private Declare Function OleLoadPicture Lib "olepro32" (pStream As Any, ByVal lSize As Long, ByVal fRunmode As Long, riid As Any, ppvObj As Any) As Long
+Private Declare Function CLSIDFromString Lib "ole32" (ByVal lpsz As Any, pclsid As Any) As Long
+Private Declare Function CreateStreamOnHGlobal Lib "ole32" (ByVal hGlobal As Long, ByVal fDeleteOnRelease As Long, ppstm As Any) As Long
+'//------------------------------------------------------//
+'// Create an IPicture from a byte array with win32 API //
+'//------------------------------------------------------//
+Function PictureFromBits(Bits() As Byte) As IPicture
+'//------------------------------------------------------//
+Dim vStream As IUnknown
+Dim vIID(15) As Byte
+Dim vSize As Long
+Dim vMem As Long
+Dim vPtr As Long
+vSize = 1 + UBound(Bits)
+vMem = GlobalAlloc(2, vSize)
+If (vMem = 0) Then Exit Function
+vPtr = GlobalLock(vMem)
+If vPtr Then
+RtlMoveMemory ByVal vPtr, Bits(0), vSize
+GlobalUnlock vMem
+If (CreateStreamOnHGlobal(vMem, 1, vStream) = 0) Then
+If (CLSIDFromString(StrPtr("{7BF80980-BF32-101A-8BBB-00AA00300CAB}"), vIID(0)) = 0) Then
+OleLoadPicture ByVal ObjPtr(vStream), vSize, 0, vIID(0), PictureFromBits
+End If
+End If
+End If
+GlobalFree vMem
+End Function
+Private Sub Command1_Click()
+Dim Data() As Byte
+Open App.Path & "\screen.jpg" For Binary As #1
+ReDim Data(LOF(1) - 1)
+Get #1, , Data
+Close #1
+Set Picture = PictureFromBits(Data)
+End Sub
+Option Explicit
+Private Declare Sub RtlMoveMemory Lib "kernel32" (pDest As Any, pSource As Any, ByVal dwLength As Long)
+Private Declare Function GlobalLock Lib "kernel32" (ByVal hMem As Long) As Long
+Private Declare Function GlobalFree Lib "kernel32" (ByVal hMem As Long) As Long
+Private Declare Function GlobalAlloc Lib "kernel32" (ByVal uFlags As Long, ByVal dwBytes As Long) As Long
+Private Declare Function GlobalUnlock Lib "kernel32" (ByVal hMem As Long) As Long
+Private Declare Function OleLoadPicture Lib "olepro32" (pStream As Any, ByVal lSize As Long, ByVal fRunmode As Long, riid As Any, ppvObj As Any) As Long
+Private Declare Function CLSIDFromString Lib "ole32" (ByVal lpsz As Any, pclsid As Any) As Long
+Private Declare Function CreateStreamOnHGlobal Lib "ole32" (ByVal hGlobal As Long, ByVal fDeleteOnRelease As Long, ppstm As Any) As Long
+'//------------------------------------------------------//
+'// Create an IPicture from a byte array with win32 API //
+'//------------------------------------------------------//
+Function PictureFromBits(Bits() As Byte) As IPicture
+'//------------------------------------------------------//
+Dim vStream As IUnknown
+Dim vIID(15) As Byte
+Dim vSize As Long
+Dim vMem As Long
+Dim vPtr As Long
+vSize = 1 + UBound(Bits)
+vMem = GlobalAlloc(2, vSize)
+If (vMem = 0) Then Exit Function
+vPtr = GlobalLock(vMem)
+If vPtr Then
+RtlMoveMemory ByVal vPtr, Bits(0), vSize
+GlobalUnlock vMem
+If (CreateStreamOnHGlobal(vMem, 1, vStream) = 0) Then
+If (CLSIDFromString(StrPtr("{7BF80980-BF32-101A-8BBB-00AA00300CAB}"), vIID(0)) = 0) Then
+OleLoadPicture ByVal ObjPtr(vStream), vSize, 0, vIID(0), PictureFromBits
+End If
+End If
+End If
+GlobalFree vMem
+End Function
+Private Sub Command1_Click()
+Dim Data() As Byte
+Open App.Path & "\screen.jpg" For Binary As #1
+ReDim Data(LOF(1) - 1)
+Get #1, , Data
+Close #1
+Set Picture = PictureFromBits(Data)
+End Sub

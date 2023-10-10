@@ -1,0 +1,115 @@
+The term "cloud computing" is being bandied about a lot these days, mainly in the context of the "future of the web." But cloud computing's potential doesn't begin and end with the personal computer's transformation into a thin client - the mobile platform is going to be heavily impacted by this technology as well. At least that's the analysis being put forth by ABI Research. Their recent report, Mobile Cloud Computing, theorizes that the cloud will soon become a disruptive force in the mobile world, eventually becoming the dominant way in which mobile applications operate.
+You may be wondering: what does the term "mobile cloud computing" really mean? Basically, it refers to an infrastructure where both the data storage and the data processing happen outside of the mobile device. Today, there are already some good examples of mobile cloud computing applications including mobile Gmail, Google Maps, and some navigation apps. However, the majority of applications today still do most of the data storage and processing on the mobile devices themselves and not in the cloud. In a few years, that could change. 
+Why Mobile Cloud Computing?
+With a Western-centric view of the world, it can sometimes be hard to remember that not everyone owns a smartphone. There are still a large number of markets worldwide where the dominant phone is a feature phone. While it's true that smartphones will grow in percentage and feature phones will become more sophisticated in time, these lower-end phones are not going away anytime soon. And it's their very existence which will help drive the mobile cloud computing trend.
+Not only is there a broader audience using feature phones in the world, there are also more web developers capable of building mobile web applications than there are developers for any other type of mobile device. Those factors, combined with the fact that feature phones themselves are becoming more capable with smarter built-in web browsers (and more alternative browsers available for download), will have an impact on mobile cloud computing's growth. 
+How Will Mobile Cloud Computing Become a Disruptive Force?
+There are two primary reasons why ABI believes cloud computing will become a disruptive force in the mobile world. The first is simply the number of users the technology has the power to reach: far more than the number of smartphone users alone. The second reason has to do with how applications are distributed today. Currently, mobile applications are tied to a carrier. If you want an iPhone app, for example, you have to first have a relationship with the mobile operator who carries the iPhone. If you want a Blackberry app, the same rule applies. But with mobile clouding computing applications, as long as you have access to the web, you have access to the mobile application. 
+Moves by PaaS Players Could Change Everything
+When you think of Plaform-as-a-Service (PaaS), one of the first companies that springs to mind is probably Salesforce. With their Force.com platform, business applications can be built and run "in the cloud." But Salesforce is not the only major PaaS player out there today - Amazon Web Services (AWS) and Google's App Engine are also two platforms that could have a major impact on this trend. 
+Currently, AWS is used by over half a million developers and Google's App Engine hosts 45,000 applications. Now imagine if those two companies along with Force.com all of a sudden started aggressively marketing their mobile capabilities. Today, neither AWS nor Google offers this, and Salesforce's mobile offering is limited to smartphones (Windows Mobile, Blackberry, and iPhone). But if the companies decided to make building for the mobile web as easy as building for the web, you could have a mobile revolution on your hands. 
+But People Like Apps!
+Saying that "mobile cloud computing" is the future doesn't mean phones will be filled with links to websites that work in any browser instead of special, downloadable applications, some of which you can even purchase. Instead, mobile applications will exist in both formats. As for the downloadable applications themselves, they will still appear to be your typical mobile app - end users won't even notice a difference. However, there will be a difference - it will just be on the back-end. Mobile applications will begin to store your data in the cloud as opposed to on the mobile device, and the applications will become more powerful as processing power is also offloaded to the cloud. 
+The first mobile apps powered by the cloud will likely be business-focused mobile productivity applications where collaboration, data sharing, multitasking, and scheduling are key factors. For consumers, though, navigation and mapping applications will be the most obvious examples of the trend. Plus, there are some specialty applications today which already function as mobile cloud apps - for example, Schlage offers a remote keyless entry system which lets you mobilely control your home from a distance. You can let someone into your house, manage your lights, your thermostat, your camera system, etc. There are also a few applications in the iPhone app store that let you remotely manage your PC and your DVR, too. 
+Potential Problems
+Of course, there are some potential issues that could be barriers to this shift in mobile computing. The most notable problem is the lack of speedy mobile Internet access everywhere. Here in the US, for example, 3G coverage is spotty outside urban areas, leading to intermittent connection issues and slow speeds. Other markets may have it even worse. 
+However, new technologies like HTML5, which does local caching, could help mobile cloud apps get past those sorts of issues. And there's even a chance that the browser could one day be replaced - at least in some markets - with another technology altogether which provides a better way to access the mobile web. ABI Research mentions initiatives like OMA's Smartcard Web Server, essentially a souped-up SIM card that connects directly with the carrier to push applications to mobile phones. There's also TokTok, a technology that allows access to web services like Gmail and Google Calendar by voice. With voice-enabled search like this, mobile apps could talk directly to the service itself which sits on the edge of the network, as opposed to needing the user to launch a web browser and navigate through the mobile web. 
+When Will Mobile Cloud Computing Really Take Off?
+According to ABI, this change is only a few years away. By 2010, we'll see one or all of the major PaaS players marketing their mobile capabilities, they say. But first, API standards from open-source mobile collaboration group BONDI will go into effect. Later, in 2011, we'll see more of HTML5, and the OneAPI standard will come into play. (OneAPI involves standardized apps for networks allowing developers to consistently access parts of network providers' capabilities, such as location services). All these factors combined will help drive the move to the cloud. 
+The changes will occur with differing speeds depending on the market. Markets with higher Internet participation will obviously lead the way, as will markets with higher subscriber penetration. That includes Western Europe, North America, and parts of Asia. Other markets will then follow. By 2014, mobile cloud computing will become the predominant application development strategy. By that time, our PCs will be more like thin client devices than they are today, and now it seems our phones will too. 
+Comments
+Subscribe to comments for this post OR Subscribe to comments for all ReadWriteWeb posts
+Absolutely agree with this. Smartphones/mobile phones are likely to move to SaaS/PaaS faster than desktop computers due to the following reasons: 
+1. Mobile phones have, and will always have much less power than desktop computers. 
+2. There are more dominant mobile platforms than dominant desktop platforms. It means that you have to develop for more platforms to cover the whole market. J2ME + Symbian OS + iPhone OS + Blackberry OS + Windows Mobile + Android + [possibly, Palm WebOS] vs Windows + Mac OS X + Linux. Thus, for mobile phones market, it's more tempting to create a web app and instantly go cross-platform. 
+3. Mobile broadband networks evolve much faster than landlines, especially in third world countries. 
+4. Mobile browsers evolve faster than their desktop counterparts.
+I think that mobile web apps, not cloud-using specific platform apps will dominate future mobile phones. In the long term, who wins developers, wins the game, and it is much easier to develop mobile web application than it is to develop an application for multiple mobile platforms. 
+Posted by: Pavlo Zahozhenko |
+August 4, 2009 10:14 AM
+Great article, could not agree more with your comments, as some important trends are favoring mobile cloud apps and services (smartphones, cloud computing, mobile social networking, broadband wireless, html5). Plus, companies such as Apple, Google, Nokia, Microsoft and Palm, among others, are already working hard on their mobile cloud services. If anyone is interested, there's a free white paper that compares 12 mobile cloud services, downloadable from www.funambol.com. 
+Posted by: Hal Steger |
+August 4, 2009 10:20 AM
+As long as fast and reliable Internet is still spotty all over globe this whole cloud thing will never mature
+Posted by: Legalcomplex |
+August 4, 2009 10:38 AM
+Hells yeah - Great post Sara!!!
+Posted by: Todd |
+August 4, 2009 10:59 AM
+Great points in this article. I've been working on and writing about using Amazon's SimpleDB web service as a backend for mobile applications.
+For a technical view of connecting an Android phone to Amazon's SimpleDB web service, see: 
+http://talkingandroid.com/2009/06/29/amazon-simpledb-ideal-for-social-and-mobile-applications/
+For 2 short videos showing a mobile phone querying Amazon's SimpleDB see: 
+http://talkingandroid.com/2009/06/28/android-app-to-browse-amazon-simpledb/
+http://talkingandroid.com/2009/06/29/android-simpledb-app-voice-demo/
+Carmen 
+http://twitter.com/CarmenDelessio
+Posted by: CarmenDelessio |
+August 4, 2009 11:48 AM
+Cloud computing is going to be relevant for everything as it is the most economical way to access resources. Makes sense that mobile moves into that space as well. I guess future will show if this will be a good or bad thing.
+Posted by: Alex Sysoef |
+August 4, 2009 4:37 PM
+I believe everything that is done is for the future and the technology is going to keep on changing and changing, so I think if you see http://www.ClubDistrict.com Nightlife Simplified its the new social scene.....
+Posted by: Alexas |
+August 4, 2009 8:34 PM
+I dont agree!
+My reasons are common sense.
+1. If mobiles have to leverage the cloud, they will need speedy Internet connection. Wont we need a mobile with better CPU to utilize the faster networks?
+2. Storage is getting dirt cheap. A GB of memory is the bare minimum one can expect in ordinary phones. Better phones offer 8, 16, 32 GB from the word go. I don't see any need for the user to look out for cloud option for storage. He might want to back up in the cloud. But then that will consume data plans. He might be better off uploading from wired Broadband rather than choppy and costly WAN broadband.
+3. For most of our tasks while we are on the move, the smart phones of today are highly capable. Can you give one example for which mobile processing of today is incapable where cloud cab add value? Video processing is the most complex task I can think of today. If we are to offload this to the cloud, wont we need massive bandwidth and to be able to use that bandwidth wont we need a a very capable processor that can pump / consume at those high speeds?
+I think we will have to make a strong effort to separate the hype from value.
+Cloud has great potential. What is needed is careful application.
+Posted by: Manish Jalan |
+August 4, 2009 8:52 PM
+I will recommend using Email Charger for all bulk email marketing needs. Its the best email marketing software I have used so far. 
+Posted by: Bulk Email Software |
+August 5, 2009 1:36 AM
+Article 1, Commenter 0
+CPU performance is already adequate for good 3G and 4G throughput. Throw away that ARM7 phone.
+Data in the cloud is superior to local data in availability and reliability metrics. Local only beats on performance. When a device is lost (or even battery is dead), ask the user which is more important. Many users will depend primarily upon Wifi, not their 3G connection for primary consumption anyway.
+There are far more examples of cloud benefits than local storage ones. Accessibility of data on the user's other devices is one of the most important. I don't need my media, my latest report, my resume on my phone when they are in the cloud available for sideloading upon demand.
+People only call the cloud hype when they don't understand it.
+Posted by: Zunguri |
+August 5, 2009 1:40 AM
+@Zunguri Surely even more superior would be a local app that stores data on the phone but syncs it with the cloud. What happens when you have no signal?
+I see the cloud as a big help in pushing people like apple to have more open standards, as eventually they will have to, however, I can't really see how it can completely take over local apps. Are apps in the cloud really going to be able to access a phones internal APIs and do things like the way google voice will intercept an sms you are sending and send it from your google voice number? Even if the browser could do something like that, is it going to be possible to do it when you are not on the webpage when you are sending the sms? In other words, how will 'background apps' work when the app is simply a webpage. Even if people can agree on a set of standards it seems like it would lead to all sorts of security issues.
+Secondly, in the short term using apps rather than websites reduces the amount of data that has to be sent to and from the network. Until we have blazing HSDPA everywhere this is going to be an important concern to everyone.
+Posted by: Brendan |
+August 5, 2009 3:49 AM
+You're saying apps are better than having a web page open? You don't understand how the concept works then. Cloud computing is just where the processing and storage occurs away from the local device. But this doesn't mean that it has to be done in a web page, you could still load an app which just looks completely normal but all the processing is going on over your data connection. 
+And pfft, where do you guys live, the sticks? I've never got no connection whatever, sure sometimes i lose my 3g but never the whole connection. Maybe you need to change networks. 
+Posted by: Chappas |
+August 5, 2009 6:31 AM
+The main premise of this article, that cloud computing will somehow turn feature phones into powerful computing platforms, seems ridiculous. I'm sorry but this is just not going to happen. Smartphone screens are just big enough to do useful work on, and most of these feature phones you're talking about have much smaller less capable screens, and will just never allow people to do useful work.
+And cloud computing itself is a trap that would be well avoided as much as possible. Sure, it's the holy grail for people who want to control your data and lock you into subscription services from which there is no escape, but the "advantages" are an over-hyped illusion. It would be more aptly named "fog computing", mainly for the power it seems to have to cloud the minds of otherwise rational people.
+Posted by: Anon |
+August 5, 2009 7:19 AM
+Just reading your article and wanted to leave this reply.
+ScreamingToaster uses cloud computing to make the Wicked Bologging App for BlackBerry- http://screamingtoaster.com/?page_id=429
+We tie mobile, web, desktop software together using the ScreamingToaster ONE platform (the cloud).
+Insights from our CEO, and the making of Wicked App: http://screamingtoaster.com/?p=1001
+Please download Wicked and try it out for 14 days for free, here's the OTA dl link- http://screamingtoaster.com/bb/
+Thanks, 
+Izabel 
+Chief Customer Experience Officer, ScreamingToaster 
+http://twitter.com/Izabel_Idris_ST
+Posted by: Izabel Idris |
+August 5, 2009 12:07 PM
+Our PaaS actually offers iPhone users complete capability to use and access their data anywhere anytime. That is the power of the cloud and platform as a service. www.workxpress.com 
+Posted by: Jake Burns |
+August 5, 2009 12:52 PM
+I use Egnyte and think its a great product. Egnyte has taken the idea of cloud computing and made it very user friendly with iphone and netbook options. Their local cloud is another piece that makes them a leader.
+Posted by: colton |
+August 5, 2009 2:11 PM
+Thanks for the mention, we are excited about the possibilities of enabling web access in phone calls. Please note that toktok is a voice web service offered by Ditech Networks (www.ditechnetworks.com), we recently updated our logo and toktok is currently an invite Beta service, though you can sign up to get on our invite list now . 
+Posted by: mike lambert |
+August 5, 2009 5:34 PM
+I couldn't agree more with your article, specifically that the power of Cloud Computing will enable mobile devices to really be your mobile computer. In particular, I have SalesForce and Gmail on my Blackberry and WOW, it gives me complete access to all my contacts and emails, but the power of it all really being in the cloud as far as computing power makes that little mobile device unbelievably powerful. Can't wait to see what new things start to pop up for mobile that takes advantage of what's really housed on the web.
+Posted by: David Durick |
+August 5, 2009 7:55 PM
+@ Manish Jalan
+You are missing the point. What happens when the user no longer has a data connection? The HTML 5 standard will lead the way in terms of unobtrusive applications that work the same way whether connected or not. Think GMAIL.
+Manish Jalan
+On another note, I predict that there will no longer be a desktop computer. What you will have instead is a mobile device that is always web aware and connects to your monitor via a built-in docking unit. Once docked, the mobile device switches from mobile mode to desktop mode. The Palm Pre, IMHO, is the ancestor of what the mobile device I am talking about will be. It will be an operating system that uses web standards. Maybe a cross between WebOS and Chrome OS.
+Posted by: Jason Cochran |
+August 5, 2009 10:20 PM

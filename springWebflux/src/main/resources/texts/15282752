@@ -1,0 +1,37 @@
+1. 前準備
+[1.1] 必須作業
+「startx」をする前に root になり, 以下の作業を行ってください.
+$ sudo -s 
+# cd /usr/X11R6/lib/X11/xinit
+# cp xserverrc xserverrc-org
+# vi xserverrc
+xserverrc ファイル中の
+exec /usr/bin/X11/X -dpi 100 -nolisten tcp
+を下記のように書き換えます.
+exec /usr/bin/X11/X -dpi 100
+次に, 前回の授業で編集した /etc/hosts.allow
+が以下のようになっていることを念のため確認して下さい. 
+# vi /etc/hosts.allow
+... (コメント文)
+ALL: 192.168.16.1?? 
+(または ALL: ALL)
+# exit
+< cat を用いて /etc/hosts.allow を見る
+< 全てのデーモンに対して, 192.168.0.1?? からのアクセスのみを許可
+(?? は隣の実験機番号)
+< root を抜ける
+作業が終了したら, 
+$ startx
+[1.2] 任意での作業
+今回の実習で用いる X クライアントとしては xeyes を上げていますが,
+もしも他の X クライアントを使いたいのであれば自由に変更してください.
+以下に, 簡単に使える X クライアントをとりあえずリストしておきます.
+中にはパッケージ (= コマンド名) をインストールする必要があるものも
+あるかもしれません.
+(何が出るかはお楽しみ)
+xlogo, xclock, xfontsel, xload, xcalc, oneko, xsnow, xearch,
+xteddy, xpenguins
+2. X クライアントを表示するサーバと画面の選択
+[2.1] xhost によるアクセス許可
+まず X サーバの制御プログラム「xhost」を使って 3n+1 or 3n+2 の X クライアント
+からのアクセスを許可します.

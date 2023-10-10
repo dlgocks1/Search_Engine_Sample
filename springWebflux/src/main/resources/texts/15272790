@@ -1,0 +1,19 @@
+Jun 3, 2009
+Quick Tip: Nginx and cap deploy:web:disable
+If you've followed my instructions for installing Ruby on Rails in Ubuntu you may have felt ambitious and also gotten Capistrano working too. The only issue is that, by default, nginx doesn't work with Capistrano's web:disable task. In order to get that working, you'll need to get your system folder setup, add a snippet of code below your server block and then restart nginx. 1. First let's add that snipped of code to nginx. If you installed nginx via phusion, then your configuration file is in /opt/nginx/conf/nginx.conf. Use any editor to add these lines within the server{} block: if (-f $document_root/system/maintenance.html) { rewrite ^(.*)$ /system/maintenance.html break; } 2. Now that this is done, give nginx a restart: sudo /etc/init.d/nginx stop sudo /etc/init.d/nginx start You can now try disabling the application using the capistrano task: cap deploy:web:disable 3. If you get an error, that says: Net::SFTP::StatusException (Net::SFTP::StatusException open /var/www/my_app/shared/system/maintenance.html (2, "no such file")) Then you'll need to create a system folder. So log into your remote server and make sure that the you have a system folder with the right permissions setup. mkdir -p /var/www/my_app/shared/system Try it again: cap deploy:web:disable If it worked this time then you're done! Just don't forget to enable the server again using: cap deploy:web:enable Otherwise, be sure to check out the error message (most like a permission issue). 
+I'm reading: Quick Tip: Nginx and cap deploy:web:disableTweet this!
+Posted by
+vince
+at
+11:31 PM
+Labels:
+jaunty jackalope,
+nginx,
+rails,
+ubuntu
+1 comments:
+Anonymous
+said...
+Hi, I am new to ruby and nginx. This links has some instructions which I followed. Turns out that ngnix always picks up the index.html from /opt/nginx directory and not my application. This is the server block in my /opt/nginx/nginx.conf server { listen 80; server_name domain.com; root /var/www/myapp/current/public; passenger_enabled on; index index.html index.htm; client_max_body_size 50M; ---snip--- In my /var/www/myapp/current directory I have the following: $ ls nginx public railsapp when i type domain.com in the browser, I see "Welcome to nginx" How to make nginx to point to myappl in /var/www/myapp/current/public
+July 17, 2009 12:31 PM
+Post a Comment

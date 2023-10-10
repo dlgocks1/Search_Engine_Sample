@@ -1,0 +1,22 @@
+Cellar Heat is a wordpress theme by evaneckard designs. I really liked the themes design for a sweetcron life stream.
+Sweetcron is a free and open source solution for creating a self-hosted Lifestream; a blog-like website that shows your activity across the various websites you visit, entirely automatically.
+Since there arent very much free sweetcron themes available yet (only theme i know is a theme aailable at sweetcronthemes.com) , i thought of sweetcroning it. Took me like 4 hours to accomplish the mission. Looks good i guess. 
+Tutorial
+Please Download the Theme to continue (Cellar Heat – A Free Sweetcron theme for download)
+Upload the contents of the theme to sweetcron themes folder. (/system/application/views/themes/)
+Go to your sweetcron admin pannel (/admin), log in and chose cellar heat theme.
+Now its time to setup comments. I prefer DISQUS, i tried some other commenting systems, but they makes page load really slow.
+After signing up click “Add Website” can be found on the top right corner.
+Fill the form and and as you reach the page saying Website Integration, select “Generic Code” from the drop down box.
+Copy the code snippet #1. 
+Open comments.php file with some code editor or notepad and replace the “Use DISQUS commenting code here.” with the copied code snippet #1. It should look like this when done. 
+Open “_activity_feed.php” and goto line no.39. It will be as follows
+<span class="lower-meta"><a href="<?php echo $item->get_permalink()?>/<?php echo $item->get_name()?>" title="Comments">Comments</a></span>
+Paste #disqus_thread just after ?>/<?php echo $item->get_name()?>. The Final Code should look like this.
+<span class=”lower-meta”><a href=”<?php echo $item->get_permalink()?>/<?php echo $item->get_name()?>#disqus_thread
+" title="Comments">Comments</a></span>
+Copy the code snippet #2 from disqus page and paste it on the same line (No.39) replacing the “Comments”. The final code set should look like this. 
+Pasting this code will show the number of comments posted in that particular item on the front page.
+Now you are done. Re upload the two edited files. That should do.
+If you are using this theme please post your link here as a comment. And enjoy.
+Theme demo

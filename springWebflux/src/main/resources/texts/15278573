@@ -1,0 +1,205 @@
+カテゴリーもそうですが、ページにも階層があります。そうなるとあるページを表示させた場合に、そのページの子ページの一覧をサイドバーに表示させる要件がでてきます。むしろ、ビジネスサイトだとページを主につかって構成することの方が多いんじゃないでしょうか。
+以下、実現に向けた紆余曲折です。いろいろと試していたら、とても長いエントリーになってしまいました。自分への覚書のようなエントリーみたいになってしまったので、結論だけ知りたい場合は一番下のコードをご覧下さい。
+■パターン１ 
+単純に、自分の親IDを取得し、その親ID以下の子ページリストを出力
+<?php
+if (is_page()){
+if($post->post_parent)
+$children = wp_list_pages("title_li=&depth=0&child_of=".$post->post_parent."&echo=0"); else
+$children = wp_list_pages("title_li=&depth=0&child_of=".$post->ID."&echo=0");
+if ($children) { ?>
+<div class="sub_box">
+<ul>
+<?php echo $children; ?>
+</ul>
+</div>
+<?php } ?>
+<?php } ?>
+※3,4行目で使っているwp_list_pagesの引数depthで何階層下まで表示させるかを指定しています。
+もっともシンプルだと思う子ページリストの表示。ただし、自分の親以下のページしか対象になりません。例えば見ているページが3階層目にいるとした場合、2階層目以下のページリストしか表示できません。
+■パターン２ 
+パターン１で問題になった3階層目で2階層目以下のページリストしか取れない場合の対策。 
+参考：http://ja.forums.wordpress.org/topic/960
+<?php
+$parent_id = $post->post_parent;
+if ($parent_id) {
+$parent = get_post($parent_id);
+$gparent_id = ($parent->post_parent);
+$children = wp_list_pages("title_li=&depth=0&child_of=".$gparent_id."&echo=0");
+if ($children) { ?>
+<div class="sub_box">
+<ul>
+<?php echo $children; ?>
+</ul>
+</div>
+<?php } ?>
+<?php } ?>
+単純に親ページの親ページまで探して、そこから以下のページを表示させます。 
+これで3階層目にいても1階層目からのリストをつくれますが、もっと増えた場合には、親の親の親の・・・とする部分を追加でコードを書かないといけません。
+■パターン２の別解 
+ネット検索中に違う書き方で実現されていました。 
+参考：（引用先のアドレスを失念してしましました。）
+<?php
+if (is_page()){
+global $wp_query;
+if( empty($wp_query->post->post_children) ) {
+$parent = $wp_query->post->ID;
+} else {
+$parent = $wp_query->post->post_children;
+} ?>
+<?php if(wp_list_pages("title_li=&child_of=$parent&echo=0")): ?>
+<br />
+メニュー
+<div class="sub_box">
+<ul>
+<?php wp_list_pages("title_li=&child_of=$parent"); ?>
+</ul>
+</div>
+<?php endif; ?>
+<?php } ?>
+■パターン３ 
+パターン２までの流れで一番上の親ページIDを再帰関数で取得すれば汎用的になるのでは、と考えました。 
+ちょうど、カテゴリーで同じようなことをしていたのでその応用です。 
+（参考：get_query_varと親カテゴリーを探す再帰関数を作って特定カテゴリの以下のカテゴリ一覧を表示する方法）
+関数化したため、functions.phpを用意しています。また、引数の使い方の違いから3例作ってみました。
+＜例1＞ 
+【sidebar.php】
+<?php
+$post_id = luwp_get_post_id_top($post->ID);
+if ($post_id) {
+$children = wp_list_pages("title_li=&child_of=".$post_id."&echo=0");
+if ($children) { ?>
+<div class="sub_box">
+<ul>
+<?php echo $children; ?>
+</ul>
+</div>
+<?php } ?>
+<?php } ?>
+【functions.php】
+function luwp_get_post_id_top($post_id) {
+if($post_id != 0){
+$post = get_post($post_id);
+$parent_id = $post->post_parent;
+if($parent_id){
+$parent = get_post($parent_id);
+$post_id = ($parent->post_parent);
+if($post_id != 0){
+$post_id = luwp_get_post_id_top($post_id);
+} else {
+$post_id = $parent_id;
+}
+}
+}
+return $post_id;
+}
+IDを引数にし、IDを戻り値にしています。これだと、呼び出し元に$postがあるにも関わらず、関数先でget_postを呼び出している。その点、富豪プログラムになっている気が・・・ 
+だだし、IDを渡してIDが戻る、という部分でみると一貫性があるのかな・・・。
+＜例2＞ 
+【sidebar.php】
+<?php
+$post_id = luwp_get_post_id_top($post);
+if ($post_id) {
+$children = wp_list_pages("title_li=&child_of=".$post_id."&echo=0");
+if ($children) { ?>
+<div class="sub_box">
+<ul>
+<?php echo $children; ?>
+</ul>
+</div>
+<?php } ?>
+<?php } ?>
+【functions.php】
+function luwp_get_post_id_top($post) {
+if($post){
+$parent_id = $post->post_parent;
+echo $parent_id;
+if($parent_id || $parent_id != 0 ){
+$parent = get_post($parent_id);
+$post_id = ($parent->post_parent);
+if($post_id != 0){
+$post_id = luwp_get_post_id_top($post_id);
+} else {
+$post_id = $parent_id;
+}
+return $post_id;
+}
+return $post->ID;
+}
+}
+引数に配列を渡して、IDが戻り値。これだと、前述の例1のように、関数内で最初のget_postが除かれる形に。負荷的に最適化されたと言っていいのかな・・・？
+＜例3＞ 
+【sidebar.php】
+<?php
+$post_top = luwp_get_post_top($post);
+$post_id = $post_top->ID;
+if ($post_id) {
+$children = wp_list_pages("title_li=&child_of=".$post_id."&echo=0");
+if ($children) { ?>
+<br />luwp_get_post_top
+<div class="sub_box">
+<ul>
+<?php echo $children; ?>
+</ul>
+</div>
+<?php } ?>
+<?php } ?>
+【functions.php】
+function luwp_get_post_top($post) {
+if($post){
+$parent_id = $post->post_parent;
+if($parent_id && $parent_id != 0 ){
+$parent = get_post($parent_id);
+$post_id = ($parent->post_parent);
+if($post_id != 0){
+$post = luwp_get_post_top($parent);
+} else {
+$post = $parent;
+}
+return $post;
+}
+return $post;
+}
+return $post;
+}
+こっちは、配列で渡して配列で戻しています。どのタイプがいいのか悩みます。
+という具合でページのリストについて勉強を重ねていたところ、get_post_ancestorsという関数があることを知りました。
+そして、打ちのめされたわけです。
+この関数を使えば、自分（ページ）の祖先全てが配列で値が返ってきるのです。 
+つまり、functions.phpに再帰関数などを用意しなくていい、と。
+その瞬間の脱力感というか、新しい発見の喜びというか、たいへん複雑でした。 
+このエントリーもほぼ平行して下書きをしていたため、内容をどうするか悩みましたが、自分の今後のために一部始終を記録としてまとめておくことにしました。
+とういわけで、大変長くなりましたが、最終的に辿りついたページのリストをサイドバーに出す方法です。 
+■get_post_ancestorsを使う方法 
+参考：http://ja.forums.wordpress.org/topic/1204
+<?php
+if (is_page()){
+if($post->ancestors){
+foreach($post->ancestors as $post_anc_id){
+$post_id = $post_anc_id;
+}
+} else {
+$post_id = $post->ID;
+}
+if ($post_id) {
+$children = wp_list_pages("title_li=&child_of=".$post_id."&echo=0");
+if ($children) { ?>
+<div class="sub_box">
+<ul>
+<?php echo $children; ?>
+</ul>
+</div>
+<?php } ?>
+<?php } ?>
+<?php } ?>
+自分（ページ）の祖先データを$post->ancestorsで返ってきた配列をループでまわします。そいて、一番最後の値が一番上に位置するページです。
+そして最後の最後で嫌がらせのように（自分にとって）次のページを見つけました。 
+参考（てゆーか答え）：http://ja.forums.wordpress.org/topic/1056 
+■最後の最後（引用させてもらいました）
+<!-- 選択ページの最上位$ancestorを取得 -->
+<?php $ancestor = array_pop(get_post_ancestors($post->ID)); ?>
+<?php if(empty($ancestor)) { /*選択ページが最上位*/
+wp_list_pages('depth=0&child_of='.$post->ID.'&title_li=');}
+else { /*選択ページが最上位以外*/
+wp_list_pages('depth=0&child_of='.$ancestor.'&title_li=');}?>
+以上、関数を知らないと大変なことになりますね。orz

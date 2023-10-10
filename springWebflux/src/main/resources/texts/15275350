@@ -1,0 +1,26 @@
+くわしいことはコチラから。俺もちょっとハマってしまったのでメモ。[as3][flex] TabNavigatorでコンテナの中身の子オブジェクトのインス - f_world21の日記とりあえず、どういう現象が起こるか。
+?xml version="1.0" encoding="utf-8"?>
+mx:Application xmlns:mx="http://www.adobe.com/2006/mxml" layout="vertical" creationComplete="init(event)">
+mx:Script>
+![CDATA[
+private function init(event:Event):void {
+//こちらは OK
+this.textInput1.text = "ほげほげ";
+//こちらは NG
+this.textInput2.text = "ほげほげ";
+} 
+]]>
+mx:Script>
+mx:TabNavigator id="myTab" width="200" height="200">
+mx:Canvas id="tabCanvas1" label="タブ 1" width="100%" height="100%">
+mx:TextInput id="textInput1" width="100%" />
+mx:Canvas>
+mx:Canvas id="tabCanvas2" label="タブ 2" width="100%" height="100%">
+mx:TextInput id="textInput2" width="100%" />
+mx:Canvas>
+mx:Canvas id="tabCanvas3" label="タブ 3" width="100%" height="100%">
+mx:TextInput id="textInput3" width="100%" />
+mx:Canvas>
+mx:TabNavigator>
+mx:Application>
+こんな感じのコードを書くと、this.textInput2.text のところで下記のような実行時例外が発生する。TypeError: Error #1009: null のオブジェクト参照のプロパティまたはメソッドにアクセスすることはできません。例外出て吹っ飛ぶところで、デバッガで覗いてみる。確かに textInput2 だけ null になっている。というよりは、Application の creationComplete のタイミングでは、TabNavigator に設置した各タブのオブジェクトと最初に表示されるタブの Canvas の子のオブジェクトだけが生成されている。この動作だと困るのは、TabNavigator の初期化時にすべてのタブの子に関して何かしら処理を施したい場合。というわけで手っ取り早くこの状態を解消するにはどうすればいいか。mx.containers.Container#creationPolicy というプロパティに all を設定する。以下、Container#creationPolicy から抜粋。creationPolicy が ContainerCreationPolicy.ALL である場合、ナビゲータコンテナは、子が選択されるまで待たずに各子の子孫を直ちに作成します。mx.containers.Container#creationPolicy より抜粋とまぁ、そういうことです。デフォルトの動作に関してもリファレンスに書いてある。コンテナに creationPolicy が指定されていない場合、そのコンテナは親の creationPolicy を継承します。 Application に creationPolicy が指定されていない場合、デフォルトは ContainerCreationPolicy.AUTO になります。creationPolicy が ContainerCreationPolicy.AUTO の場合、必要になるまでコンテナの一部またはすべての子孫の作成が遅延されます（遅延インスタンス化）mx.containers.Container#creationPolicy より抜粋というわけで null になるのは Flex の仕様通りの動作ということですな。もうちょっと詳しい話は creationPolicy プロパティについて で解説されている。同じコンテナでも、単一ビューコンテナの VBox と複数ビューコンテナの TabNavigator や Accordion では若干異なる動作するようです。queued の動きというか用途がちょっとわからんな、と思ったのだけど。順序付き生成の使用 に書いてあった。リンク先にある例のように、グラフを多用したりと描画に手間がかかる場合にお鉢の回ってくる設定のようだ。

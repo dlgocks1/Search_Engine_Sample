@@ -1,0 +1,229 @@
+Ruby1.9.1、Python3.1、Java1.6.0の実行速度比較 Python2.5.1、 Ruby1.8.6、Ruby1.9.1　に Smalltalk 勢として愚直な Squeak3.9 と、精鋭の VisualWorks7.6NC とを加えて速度比較を行なってみました。Java にはあえて抜けてもらったり、元ページで活躍の Python3.1 がまだインストールしてないので試せていないのと、それぞれ使用した処理系が微妙に古い点はどうかお許しを。たんにインストール and/or アップデートをサボっているだけです、すみません。すみませんっ。その代わりと言ってはなんですが、ハード（MacBook 2.4GHz 相当品）は変えずに OS を Mac OS X と Boot Camp で動かしている Win Vista (Smalltalk 以外は Cygwin)の、それぞれで計測してみました（単位は秒）。Python と Ruby は MW さんのコードをほぼそのまま（と、Python がメモリ不足になるので空ループのみ回数を一桁落として）使わせていただき、Smalltalk 向けには Ruby 版を直訳気味に変換しながら、一部は Java 版を参考にしつつ書いたものを do it しています。 商用Smalltalk である VisualWorks がぶっちぎりか！と思いきや、必ずしもそうでもなくてショボーンなところとか、Vista と XP との違いか、MW さんの結果とは傾向が違っていたり、Mac と Win で二倍以上差が出たりすることもあったりで、いろいろと興味深いですね。 
+"Squeak Smalltalk (Squeak3.9, 3.10) 向け"
+| simpleLoop fib1 fib2bChild fib2b fib2m bubblesortLinearsearch outputFile |
+simpleLoop := [:cnt |
+Transcript cr; tab; show: [cnt timesRepeat: []] timeToRun
+].
+"フィボナッチ数（ループ版）"
+fib1 := [:cnt |
+Transcript cr; tab; show: [
+| j k l |
+j := 0.
+k := 0.
+l := 1.
+cnt timesRepeat: [
+j := k + l.
+k := l.
+l := j
+]
+] timeToRun
+].
+"フィボナッチ数（ブロック再帰版）"
+fib2bChild := nil.
+fib2bChild := [:cnt |
+(cnt = 1 or: [cnt = 2]) ifTrue: [
+1
+] ifFalse: [
+(fib2bChild copy fixTemps value: cnt - 2) + (fib2bChild copy fixTemps value: cnt - 1 )
+]
+].
+fib2b := [:cnt |
+Transcript cr; tab; show: [fib2bChild copy fixTemps value: cnt] timeToRun
+].
+"フィボナッチ数（メソッド再帰版）"
+Integer compile: 'fib2mChild
+^(self = 1 or: [self = 2]) ifTrue: [1] ifFalse: [(self - 2) fib2mChild + (self - 1) fib2mChild]'.
+fib2m := [:cnt |
+Transcript cr; tab; show: [cnt fib2mChild] timeToRun
+].
+"ランダム配列生成、バブルソート、バイナリサーチ"
+bubblesortLinearsearch := [:cnt |
+| list |
+"ランダムな数値リストを作成する"
+list := OrderedCollection new.
+Transcript cr; tab; show: [cnt timesRepeat: [list add: 2147483647 atRandom]] timeToRun.
+"バブルソート"
+Transcript cr; tab; show: [
+| size |
+size := list size.
+1 to: size do: [:i |
+| j |
+j := size + 1.
+[j > (i + 1)] whileTrue: [
+j := j - 1.
+(list at: j) at: j - 1) ifTrue: [
+list swap: j with: j - 1.
+]
+]
+]
+] timeToRun.
+"全要素を使ってリニアサーチ"
+Transcript cr; tab; show: [
+| size |
+size := list size.
+1 to: size do: [:i |
+[:break |
+1 to: size do: [:j |
+(list at: i) = (list at: j) ifTrue: [
+break value
+]
+]
+] valueWithExit
+]
+] timeToRun
+].
+"ファイル出力"
+outputFile := [:fileNum :charNum |
+| writeStrings |
+FileDirectory default assureExistenceOfPath: 'test'.
+"ランダムな書き込み用文字列を生成する"
+writeStrings := #() writeStream.
+Transcript cr; tab; show: [
+writeStrings := Array streamContents: [:ss |
+fileNum timesRepeat: [
+| str |
+str := '' writeStream.
+charNum timesRepeat: [
+str nextPut: (96 + 26 atRandom) asCharacter
+].
+ss nextPut: str contents
+]
+]
+] timeToRun.
+Transcript cr; tab; show: [
+1 to: fileNum do: [:i |
+StandardFileStream fileNamed: ('test\\test{1}.txt' format: {i}) do: [:file |
+file nextPutAll: (writeStrings at: i)
+]
+]
+] timeToRun
+].
+World findATranscript: nil.
+Transcript cr; show: 'simpleLoop value: 10000000'.
+simpleLoop value: 10000000.
+Transcript cr; show: 'fib1 value: 200000'.
+fib1 value: 200000.
+Transcript cr; show: 'fib2b value: 35'.
+fib2b value: 35.
+Transcript cr; show: 'fib2m value: 35'.
+fib2m value: 35.
+Integer removeSelector: #fib2mChild.
+Transcript cr; show: 'bubblesortLinearsearch value: 1000'.
+bubblesortLinearsearch value: 1000.
+Transcript cr; show: 'outputFile value: 10000 value: 100'.
+outputFile value: 10000 value: 100.
+"Cincom Smalltalk (VisualWorks7.6NC) 向け"
+| simpleLoop fib1 fib2bChild fib2b fib2m bubblesortLinearsearch outputFile |
+simpleLoop := [:cnt |
+Transcript cr; tab; show: (Time millisecondsToRun: [cnt timesRepeat: []]) printString
+].
+"フィボナッチ数（ループ版）"
+fib1 := [:cnt |
+Transcript cr; tab; show: (Time millisecondsToRun: [
+| j k l |
+j := 0.
+k := 0.
+l := 1.
+cnt timesRepeat: [
+j := k + l.
+k := l.
+l := j
+]
+]) printString
+].
+"フィボナッチ数（ブロック再帰版）"
+fib2bChild := nil.
+fib2bChild := [:cnt |
+(cnt = 1 or: [cnt = 2]) ifTrue: [
+1
+] ifFalse: [
+(fib2bChild value: cnt - 2) + (fib2bChild value: cnt - 1 )
+]
+].
+fib2b := [:cnt |
+Transcript cr; tab; show: (Time millisecondsToRun: [fib2bChild value: cnt]) printString
+].
+"フィボナッチ数（メソッド再帰版）"
+Integer compile: 'fib2mChild
+^(self = 1 or: [self = 2]) ifTrue: [1] ifFalse: [(self - 2) fib2mChild + (self - 1) fib2mChild]'.
+fib2m := [:cnt |
+Transcript cr; tab; show: (Time millisecondsToRun: [cnt fib2mChild]) printString
+].
+"ランダム配列生成、バブルソート、バイナリサーチ"
+bubblesortLinearsearch := [:cnt |
+| list rand |
+"ランダムな数値リストを作成する"
+list := OrderedCollection new.
+rand := Random new.
+Transcript cr; tab; show: (Time millisecondsToRun: [
+cnt timesRepeat: [list add: (2147483647 * rand next) ceiling]]) printString.
+"バブルソート"
+Transcript cr; tab; show: (Time millisecondsToRun: [
+| size |
+size := list size.
+1 to: size do: [:i |
+| j |
+j := size + 1.
+[j > (i + 1)] whileTrue: [
+j := j - 1.
+(list at: j) at: j - 1) ifTrue: [
+list swap: j with: j - 1.
+]
+]
+]
+]) printString.
+"全要素を使ってリニアサーチ"
+Transcript cr; tab; show: (Time millisecondsToRun: [
+| size |
+size := list size.
+1 to: size do: [:i |
+[:break |
+1 to: size do: [:j |
+(list at: i) = (list at: j) ifTrue: [
+break value
+]
+]
+] valueWithExit
+]
+]) printString
+].
+"ファイル出力"
+outputFile := [:fileNum :charNum |
+| dir writeStrings |
+(dir := 'c:\test\' asFilename) exists ifFalse: [dir makeDirectory].
+"ランダムな書き込み用文字列を生成する"
+Transcript cr; tab; show: (Time millisecondsToRun: [
+| ss rand |
+ss := Array new writeStream.
+rand := Random new.
+fileNum timesRepeat: [
+| str |
+str := String new writeStream.
+charNum timesRepeat: [
+str nextPut: (96 + (26 * rand next) ceiling) asCharacter
+].
+ss nextPut: str contents
+].
+writeStrings := ss contents.
+]) printString.
+Transcript cr; tab; show: (Time millisecondsToRun: [
+1 to: fileNum do: [:i |
+| file |
+file := ('c:\test\test.txt' expandMacrosWith: i) asFilename writeStream.
+[file nextPutAll: (writeStrings at: i)] ensure: [file close]
+]
+]) printString
+].
+Transcript cr; show: 'simpleLoop value: 10000000'.
+simpleLoop value: 10000000.
+Transcript cr; show: 'fib1 value: 200000'.
+fib1 value: 200000.
+Transcript cr; show: 'fib2b value: 35'.
+fib2b value: 35.
+Transcript cr; show: 'fib2m value: 35'.
+fib2m value: 35.
+Integer removeSelector: #fib2mChild.
+Transcript cr; show: 'bubblesortLinearsearch value: 1000'.
+bubblesortLinearsearch value: 1000.
+Transcript cr; show: 'outputFile value: 10000 value: 100'.
+outputFile value: 10000 value: 100.

@@ -1,0 +1,12 @@
+2009-08-11
+My dear iceweasel,
+WTH are you doing with all this memory? $ top -b -n 1 | egrep "xulrunner|PID" PID USER PR NI VIRT RES SHR S %CPU %MEM TIME+ COMMAND 3907 morph 20 0 2349m 859m 15m S 14 21.7 2013:33 xulrunner-stubsay goodbye, you're going to die; mew
+Pubblicato da
+Sandro Tosi
+a
+16:46
+Etichette:
+Debian
+0
+commenti:
+Post a Comment

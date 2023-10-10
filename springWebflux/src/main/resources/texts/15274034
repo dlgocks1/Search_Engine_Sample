@@ -1,0 +1,14 @@
+Objectives
+Learn how to use BIOS INT 10h to display text.
+Topics:
+IBM-PC BIOS
+INT 10h
+Using Text Mode
+Using Graphics Mode
+Lab Assignment
+IBM-PC BIOS
+Most of what the BIOS does is related to Input/Output, where its function is to
+present the programmer with simpler, more machine and device independent I/O
+operations.  The IBM-PC BIOS uses software interrupts 10h ~ 1Ah, 40h to accomplish various
+operations. Therefore, the INT 10h ~ INT 1Ah and INT 40h instructions provide
+the interface to BIOS. The following table summarizes the BIOS services:

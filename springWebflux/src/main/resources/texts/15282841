@@ -1,0 +1,21 @@
+Case Study: 3D Lens Flare
+Here's a practical application of a layer space transform (there are many). Here's the setup: You've constructed an elaborate 3D comp and you animate a light moving through it. You would like to make the light itself visible some how. You get the brilliant idea that if you could only position a lens flare on top of the light you could achieve the effect. The problem, of course, is that the Lens Flare Effect is a 2D effect that you apply to a 2D layer. So what we need is a way to map the position of the light in 3D space to the 2D plane that represents the camera view.
+This is the perfect job for the "toComp" layer space transform. We use "toComp" instead of "toWorld" in this case because we want the Lens Flare to follow the light's position in the camera view (which is what "toComp" does), not in world space. 
+Remember that when you use "toComp" you want to start with a point that's represented in the layer's space coordinates (i.e. relative to the layer's upper left hand corner). For most layers, the anchor point is the logical choice for this because the anchor point is always expressed in the layer's coordinate system. To verify this, just create a layer of any size and you notice that the x-coordinate of the anchor point is always half the layer's width and the y-coordinate is half the layer's height.
+Unfortunately, lights and cameras don't have anchor points. That's OK, because all that we really need is to know where, expressed in the light's coordinate system, the light is. It turns out to be [0,0,0]. So all we need to do is write an expression for the "Flare Center" parameter that maps it to the "toComp" transform of the light's position. Here's the code:
+L = thisComp.layer("Light 1");
+L.toComp([0,0,0]);
+Deceptively simple, actually.
+The first line just sets the variable "L" equal to the layer object "Light 1". It's not really necessary to do this for a simple example like this. We could just as easily have written the code in one line like this:
+thisComp.layer("Light 1").toComp([0,0,0]);
+But I like to do it this way because most of the time you end up needing to refer to the layer more than once in your expression and I think it makes in more readable because you can just substitute "L" anywhere you would normally write "thisComp.layer("Light 1")".
+The second line of the expression is where all the magic happens - the point [0,0,0] in the light's space is translated to the equivalent position in the camera view's space. This value is now suitable to use to position the lens flare.
+OK - we've just got one other problem to solve. In our animation, the light moves away from the camera. To really sell the effect, we need the lens flare to diminish as the light moves away. Unfortunately, the Lens Flare effect doesn't have a "size" parameter. However, it turns out that for our purposes an expression for the "Flare Brightness" parameter that makes the brightness diminish as the light moves away works just fine. Here's the code for that:
+factor = 150;
+C = thisComp.layer("Camera 1");
+L = thisComp.layer("Light 1");
+d = length(C.position,L.position);
+d1 = length(C.position,L.position.valueAtTime(0));
+d1/d*factor
+This expression calculates the initial distance between the light and the camera (d1), divides that by the current distance between the light and the camera (d) and multiplies that by the maximum value of flare brightness that we want (factor).
+So there you have it. A pretty nice effect implemented with very little code.

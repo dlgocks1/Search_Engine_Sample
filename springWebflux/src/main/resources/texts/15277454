@@ -1,0 +1,29 @@
+DataCore Software is a leading independent software vendor specializing in storage virtualization, storage management, and storage networking. DataCore's software provides the best in High Availability, Disaster Recovery and Time and Money Saving software storage solutions.Plug-and-play, Virtual SAN Appliance for Citrix® Essentials™
+Use your existing disks – No extra hardware needed 
+Citrix® StorageLink™ Technology Enabled
+Fully operational in just a few minutes!
+Perfect for virtual server environments running:
+Microsoft Windows Server® 2008 Hyper-V® 
+Microsoft Hyper-V Server
+Citrix XenServer™
+* Grayed-out functions and Fibre Channel support are not included in this evaluation version.
+With this evaluation version you can:
+Try Citrix Essentials with StorageLink Technology enabled iSCSI SAN created from your server’s internal disks. No need for new hardware! 
+Pool up to 1 Terabyte of disk space 
+“Thin Provision” storage to your virtual machines. See how much capacity it saves! 
+Speed up application performance using surplus server memory to cache I/Os from the virtual SAN 
+Snapshot: Instant Volume Cloning and Fast Disk-to-Disk Backups 
+Experience a full blown SAN without having to roll in expensive new SAN disk arrays. 
+This downloadable VHD image is pre-configured and fully operational for 30 days. 
+SYSTEM REQUIREMENTS:
+Windows Server 2008 Hyper-V or Citrix XenServer to host the VHD image 
+10 GB available disk space for SANmelody Virtual Appliance 
+Additional disk space for storage pools (up to 1 TB max)
+IP connection between application servers and SANmelody Virtual Appliance
+iSCSI initiator software required to connect application servers to SANmelody Virtual SAN Appliance 
+DataCore™ Adapter for Citrix® StorageLink™ Technology is required to use StorageLink. Download Adapter now
+IMPORTANT NOTES: 
+This evaluation package may not be upgraded to a production version. 
+Download size: 1.8 GB, for setup instructions and password information see README file
+DO NOT use the evaluation software for operational or production data purposes. Once the 30-day evaluation period expires, you will no longer be able to use the software or access any of the data previously under the evaluation software's control.
+Download too large? Please see our: SANmelody 30day Trial (Download size = 48MB, Note: This trial version is not a preconfigured Virtual SAN appliance. For StorageLink compatibility, please be sure to download SANmelody Version 3.0 for Microsoft ® Windows Server 2008).

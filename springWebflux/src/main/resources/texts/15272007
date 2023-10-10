@@ -1,0 +1,62 @@
+Re: Notification/callback of successful CGEventPost?
+Subject: Re: Notification/callback of successful CGEventPost?
+From: Peter N Lewis <email@hidden>
+Date: Thu, 18 Jun 2009 09:34:52 +0800
+Delivered-to: email@hidden
+Delivered-to: email@hidden
+On 17/06/2009, at 9:22 , Dave DeLong wrote:
+I have this mostly working, but it's not a satisfactory solution. 
+My problem is with posting the CGEvents for a command-v operation. 
+I've found that if I do everything inline (snapshot, replace, paste, 
+restore snapshot), then the restore operation executes before the 
+CGEvent gets processed. It posts just fine, but it seems like the 
+execution of the event is asynchronous. 
+My unsatisfactory solution is to put "sleep(2);" in between the 
+paste and restore phase. This works, but I'm not happy with it. 
+What I'd really like is some sort of notification that my event has 
+actually posted so that I don't have to use the sleep command. Is 
+there a way to do this? I know that I could also use a CGEventTap 
+and watch for my event to pass by myself, but is there a better 
+alternative?
+Unfortunately, there is no good solution to this. The keyboard event 
+gets posted to the event queue, but there is no guarantee as to when 
+the key will be read by the target application, nor how long after 
+that the event might be processed. 
+So you are stuck doing a delay, and if the delay is too short then the 
+old clipboard is restored before the paste. If the delay is too long, 
+the user has a chance to select something else and copy it, and then 
+their copy is overwritten, resulting in potential data loss. 
+A further complication is that the time delay required is dependent on 
+system speed which varies over time. 
+On 17/06/2009, at 9:49 , Ken Thomases wrote: 
+What if you only put a promise on the pasteboard? When the 
+pasteboard server asks you to fulfill the promise, you can be 
+reasonably certain that it was because the paste operation in the 
+other app is underway. You can fulfill the promise and then 
+schedule the restoration of the original pasteboard contents with a 
+0 delay (or maybe 0.2, or something).
+This is very clever, but it will definitely fail if there are any 
+clipboard history programs running (of which, there are over a dozen 
+different variants on the Mac). Then both the clipboard history 
+program and your target app will read the clipboard, and whichever 
+reads first will "win". 
+This problem is actually the reason I implemented clipboard history in 
+Keyboard Maestro, so I could remove the "restore the snap shot" part 
+of the action while still preserving the old clipboard and allowing 
+the user to control the delay if they needed the clipboard restored. 
+It was also a driving force for allowing the option of inserting text 
+by typing instead of pasting, which might be an option for you 
+depending on what you want to "paste". 
+Enjoy,
+Peter. 
+--
+Clipboard Switching and Macros with Keyboard Maestro 
+Keyboard Maestro <http://www.keyboardmaestro.com/> Macros for your Mac
+<http://www.stairways.com/> <http://download.stairways.com/> 
+_______________________________________________ 
+Cocoa-dev mailing list (email@hidden) 
+Please do not post admin requests or moderator comments to the list.
+Contact the moderators at cocoa-dev-admins(at)lists.apple.com 
+Help/Unsubscribe/Update your Subscription:
+http://lists.apple.com/mailman/options/cocoa-dev/email@hidden 
+This email sent to email@hidden

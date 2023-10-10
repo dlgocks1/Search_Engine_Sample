@@ -1,0 +1,220 @@
+W3C Recommendation 26 November 2008This version:
+http://www.w3.org/TR/2008/REC-xml-20081126/
+Latest version:
+http://www.w3.org/TR/xml/
+Previous versions:
+http://www.w3.org/TR/2008/PER-xml-20080205/
+http://www.w3.org/TR/2006/REC-xml-20060816/
+Editors:Tim Bray, Textuality and Netscape <tbray@textuality.com>Jean Paoli, Microsoft <jeanpa@microsoft.com>C. M. Sperberg-McQueen, W3C <cmsmcq@w3.org>Eve Maler, Sun Microsystems, Inc. <eve.maler@east.sun.com>François YergeauPlease refer to the errata for this document, which may
+include some normative corrections.The previous errata for this document, are also available.See also translations.This document is also available in these non-normative formats: XML and XHTML with color-coded revision indicators.Copyright © 2008 W3C® (MIT, ERCIM, Keio), All Rights Reserved. W3C liability, trademark and document use rules apply.
+AbstractThe Extensible Markup Language (XML) is a subset of SGML that is completely
+described in this document. Its goal is to enable generic SGML to be served,
+received, and processed on the Web in the way that is now possible with HTML.
+XML has been designed for ease of implementation and for interoperability
+with both SGML and HTML.
+Status of this DocumentThis section describes the status of this document at the time of its publication.
+Other documents may supersede this document. A list of current W3C publications and the
+latest revision of this technical report can be found in the W3C technical reports index at
+http://www.w3.org/TR/.This document specifies a syntax created by subsetting an existing, widely
+used international text processing standard (Standard Generalized Markup Language,
+ISO 8879:1986(E) as amended and corrected) for use on the World Wide Web.
+It is a product of the XML Core Working Group
+as part of the XML Activity.
+The English version of this specification is the only normative version. However,
+for translations of this document, see http://www.w3.org/2003/03/Translations/byTechnology?technology=xml.This document is a W3C Recommendation. This fifth edition is not a new version of XML. As a convenience to readers,
+it incorporates the changes dictated by the accumulated errata (available at
+http://www.w3.org/XML/xml-V10-4e-errata) to the Fourth
+Edition of XML 1.0, dated 16 August 2006. In particular, erratum [E09]
+relaxes the restrictions on element and attribute names, thereby providing in XML 1.0 the major end user benefit
+currently achievable only by using XML
+1.1. As a consequence, many possible
+documents which were not well-formed according to previous editions of this
+specification are now well-formed, and previously invalid documents
+using the newly-allowed name characters in, for example, ID
+attributes, are now valid.This edition supersedes the previous W3C Recommendation
+of 16 August 2006.Please report errors in this document to
+the public xml-editor@w3.org mail list; public
+archives are available. For the convenience of readers,
+an XHTML version with color-coded revision indicators is
+also provided; this version highlights each change due to an erratum published in the
+errata
+list for the previous edition, together with a link to the particular
+erratum in that list. Most of the
+errata in the list provide a rationale for the change. The errata
+list for this fifth edition is available at http://www.w3.org/XML/xml-V10-5e-errata.An implementation report is available at http://www.w3.org/XML/2008/01/xml10-5e-implementation.html.
+A Test Suite is maintained to help assessing conformance to this specification.This document has been reviewed by W3C Members, by software developers, and by other W3C groups and interested parties, and is endorsed by the Director as a W3C Recommendation. It is a stable document and may be used as reference material or cited from another document. W3C's role in making the Recommendation is to draw attention to the specification and to promote its widespread deployment. This enhances the functionality and interoperability of the Web.W3C maintains a public list of
+any patent disclosures made in connection with the deliverables of
+the group; that page also includes instructions for disclosing a patent.
+An individual who has actual knowledge of a patent which the individual
+believes contains Essential
+Claim(s) must disclose the information in accordance with 
+section 6 of the W3C Patent Policy.
+Table of Contents1 Introduction 
+1.1 Origin and Goals 
+1.2 Terminology 
+2 Documents 
+2.1 Well-Formed XML Documents 
+2.2 Characters 
+2.3 Common Syntactic Constructs 
+2.4 Character Data and Markup 
+2.5 Comments 
+2.6 Processing Instructions 
+2.7 CDATA Sections 
+2.8 Prolog and Document Type Declaration 
+2.9 Standalone Document Declaration 
+2.10 White Space Handling 
+2.11 End-of-Line Handling 
+2.12 Language Identification 
+3 Logical Structures 
+3.1 Start-Tags, End-Tags, and Empty-Element Tags 
+3.2 Element Type Declarations 
+3.2.1 Element Content 
+3.2.2 Mixed Content 
+3.3 Attribute-List Declarations 
+3.3.1 Attribute Types 
+3.3.2 Attribute Defaults 
+3.3.3 Attribute-Value Normalization 
+3.4 Conditional Sections 
+4 Physical Structures 
+4.1 Character and Entity References 
+4.2 Entity Declarations 
+4.2.1 Internal Entities 
+4.2.2 External Entities 
+4.3 Parsed Entities 
+4.3.1 The Text Declaration 
+4.3.2 Well-Formed Parsed Entities 
+4.3.3 Character Encoding in Entities 
+4.4 XML Processor Treatment of Entities and References 
+4.4.1 Not Recognized 
+4.4.2 Included 
+4.4.3 Included If Validating 
+4.4.4 Forbidden 
+4.4.5 Included in Literal 
+4.4.6 Notify 
+4.4.7 Bypassed 
+4.4.8 Included as PE 
+4.4.9 Error 
+4.5 Construction of Entity Replacement Text 
+4.6 Predefined Entities 
+4.7 Notation Declarations 
+4.8 Document Entity 
+5 Conformance 
+5.1 Validating and Non-Validating Processors 
+5.2 Using XML Processors 
+6 Notation 
+AppendicesA References 
+A.1 Normative References 
+A.2 Other References 
+B Character Classes 
+C XML and SGML (Non-Normative) 
+D Expansion of Entity and Character References (Non-Normative) 
+E Deterministic Content Models (Non-Normative) 
+F Autodetection of Character Encodings (Non-Normative) 
+F.1 Detection Without External Encoding Information 
+F.2 Priorities in the Presence of External Encoding Information 
+G W3C XML Working Group (Non-Normative) 
+H W3C XML Core Working Group (Non-Normative) 
+I Production Notes (Non-Normative) 
+J Suggestions for XML Names (Non-Normative) 
+1 IntroductionExtensible Markup Language, abbreviated XML, describes a class of data
+objects called XML documents and partially
+describes the behavior of computer programs which process them. XML is an
+application profile or restricted form of SGML, the Standard Generalized Markup
+Language [ISO 8879]. By construction, XML documents are conforming
+SGML documents.XML documents are made up of storage units called entities,
+which contain either parsed or unparsed data. Parsed data is made up of characters, some of which form character
+data, and some of which form markup.
+Markup encodes a description of the document's storage layout and logical
+structure. XML provides a mechanism to impose constraints on the storage layout
+and logical structure.
+[Definition: A software module called
+an XML processor is used to read XML documents and provide access
+to their content and structure.]
+[Definition: It
+is assumed that an XML processor is doing its work on behalf of another module,
+called the application.] This specification describes
+the required behavior of an XML processor in terms of how it must read XML
+data and the information it must provide to the application.
+1.1 Origin and GoalsXML was developed by an XML Working Group (originally known as the SGML
+Editorial Review Board) formed under the auspices of the World Wide Web Consortium
+(W3C) in 1996. It was chaired by Jon Bosak of Sun Microsystems with the active
+participation of an XML Special Interest Group (previously known as the SGML
+Working Group) also organized by the W3C. The membership of the XML Working
+Group is given in an appendix. Dan Connolly served as the Working Group's contact with
+the W3C.The design goals for XML are:XML shall be straightforwardly usable over the Internet.XML shall support a wide variety of applications.XML shall be compatible with SGML.It shall be easy to write programs which process XML documents.The number of optional features in XML is to be kept to the absolute
+minimum, ideally zero.XML documents should be human-legible and reasonably clear.The XML design should be prepared quickly.The design of XML shall be formal and concise.XML documents shall be easy to create.Terseness in XML markup is of minimal importance.This specification, together with associated standards (Unicode [Unicode]
+and ISO/IEC 10646 [ISO/IEC 10646] for characters, Internet BCP 47
+[IETF BCP 47] and the Language Subtag Registry [IANA-LANGCODES] for language
+identification tags), provides
+all the information necessary to understand XML Version 1.0 and
+construct computer programs to process it.This version of the XML specification may be distributed freely, as long as
+all text and legal notices remain intact.
+1.2 TerminologyThe terminology used to describe XML documents is defined in the body of
+this specification. The key words MUST, MUST NOT,
+REQUIRED, SHALL, SHALL NOT,
+SHOULD, SHOULD NOT, RECOMMENDED,
+MAY, and OPTIONAL, when EMPHASIZED,
+are to be interpreted as described in [IETF RFC 2119]. In addition, the terms defined
+in the following list are used in building
+those definitions and in describing the actions of an XML processor:error
+[Definition: A violation of the rules of this specification;
+results are undefined. Unless otherwise specified, failure to observe a prescription of this specification indicated by one of the keywords MUST, REQUIRED, MUST NOT, SHALL and SHALL NOT is an error. Conforming software MAY detect and report an error
+and MAY recover from it.]
+fatal error
+[Definition: An error which a conforming XML processor
+MUST detect and report to the application.
+After encountering a fatal error, the processor MAY continue processing the
+data to search for further errors and MAY report such errors to the application.
+In order to support correction of errors, the processor MAY make unprocessed
+data from the document (with intermingled character data and markup) available
+to the application. Once a fatal error is detected, however, the processor
+MUST NOT continue normal processing (i.e., it MUST NOT continue to pass character
+data and information about the document's logical structure to the application
+in the normal way).]
+at user option
+[Definition: Conforming software
+MAY or MUST (depending on the modal verb in the sentence) behave as described;
+if it does, it MUST provide users a means to enable or disable the behavior
+described.]
+validity constraint
+[Definition: A rule which applies to
+all valid XML documents. Violations of validity
+constraints are errors; they MUST, at user option, be reported by validating XML processors.]
+well-formedness constraint
+[Definition: A rule which applies
+to all well-formed XML documents. Violations
+of well-formedness constraints are fatal errors.]
+match
+[Definition: (Of strings or names:) Two strings
+or names being compared are identical. Characters with multiple possible
+representations in ISO/IEC 10646 (e.g. characters with both precomposed and
+base+diacritic forms) match only if they have the same representation in both
+strings. No
+case folding is performed. (Of strings and rules in the grammar:) A string
+matches a grammatical production if it belongs to the language generated by
+that production. (Of content and content models:) An element matches its declaration
+when it conforms in the fashion described in the constraint [VC: Element Valid].]
+for compatibility
+[Definition: Marks
+a sentence describing a feature of XML included solely to ensure
+that XML remains compatible with SGML.]
+for interoperability
+[Definition: Marks
+a sentence describing a non-binding recommendation included to increase
+the chances that XML documents can be processed by the existing installed
+base of SGML processors which predate the WebSGML Adaptations Annex to ISO 8879.]
+2 Documents
+[Definition: A data object is an XML
+document if it is well-formed,
+as defined in this specification. In addition, the XML document is
+valid if it meets certain further constraints.]
+Each XML document has both a logical and a physical structure. Physically,
+the document is composed of units called entities.
+An entity may
+refer to other entities to
+cause their inclusion in the document. A document begins in a "root"
+or document entity. Logically, the document
+is composed of declarations, elements, comments, character references, and
+processing instructions, all of which are indicated in the document by explicit
+markup. The logical and physical structures MUST nest properly, as described
+in 4.3.2 Well-Formed Parsed Entities.

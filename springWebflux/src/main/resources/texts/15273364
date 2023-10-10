@@ -1,0 +1,54 @@
+Support for LINQ based O/R mappers Out of the box, ASP.NET Dynamic Data has support for both Linq To Sql and Entity Framework.  In addition, it has a provider model which allows additional O/R mappers to be supported.  For instance, we have a sample provider that supports ADO.NET Data Services (aka Astoria).  There is also a provider for LLBLGen. Note that all those scenarios are some things in common: They are based on some form of data context: it's called various things in the different O/R mappers (DataContext, ObjectContext, DataServiceContext), but essentially it's a class that has a property for each Entity Set. They support LINQ: the Entity Set properties on the data context class implement IQueryable<T>, which allows LINQ to be used on them.   Support for scenarios that use ObjectDataSource While having this extensibility is great, it doesn't cover a whole range of scenarios where users have their own data layer, with no LINQ and no data context in sight.  For a simple example of such scenario, see the sample attached to this MSDN page.  The key aspects are: Entity class: you have a strongly typed some entity class (NewData in the MSDN sample).  It just defines the fields you care about, with no real  logic attached. Business layer class: you have a class that has various methods to perform your CRUD operations (the class is named AggregateData in that sample). ObjectDataSource: your page uses an ObjectDataSource to have ASP.NET interact with your entity and business layer classes.  You tell the data source exactly which method to call for each CRUD operation. Quite a few people use this technique, as it is very flexible and can work with fairly arbitrary business layer. So how does this all work when you want to use Dynamic Data in this type of scenarios?  It actually integrates very nicely, by using some simple functionality that's available as part of the Dynamic Data Futures on CodePlex.  If you download that solution, it includes a fully functional sample based on the MSDN sample above. Here is more details on what it all looks like. The business layer class This remains pretty unchanged, except that you have the ability to throw an exception when you see invalid data come in, e.g. public class AggregateData {
+// Unchanged pieces omitted
+public DataTable Select() {
+return (table == null) ? CreateData() : table;
+}
+public int Insert(NewData newRecord) {
+if (newRecord.Name.Length < 3) {
+throw new ValidationException("The name must have at least 3 characters");
+}
+table.Rows.Add(new object[] { newRecord.Name, newRecord.Number, newRecord.Date });
+return 1;
+}
+}
+Here, it's saying that the name must have at least 3 characters.  What's really nice is that the exception you throw here gets shown exactly where you expect it: in the ASP.NET validation summary.
+The Entity class
+Let's now look at the entity class.  Again, it's mostly unchanged from the original, except that we now have the ability to annotate it using Dynamic Data attributes:
+public class NewData {
+[RegularExpression(@"[A-Z].*", ErrorMessage="The name must start with an upper case character")]
+[Required]
+[DisplayName("The name")]
+public string Name { get; set; }
+[Range(0, 1000)]
+[UIHint("IntegerSlider")]
+[DefaultValue(345)]
+public int Number { get; set; }
+[DataType(DataType.Date)]
+[UIHint("DateAjaxCalendar")]
+[Required]
+public DateTime Date { get; set; }
+}
+I won't go over the details of what each attribute means, as they are the standard Dynamic Data attributes and they're fairly self-explanatory.  The key point is that everything works exactly in the same way as they would when you use Dynamic Data with Linq To Sql: the rendering goes through the field templates, the UIHint is used to select the template, the validation attributes become ASP.NET validators, ...
+The aspx page
+Finally, let's look at the ASP.NET page.  Again, it's not all that different from the original sample:
+<asp:ValidationSummary ID="ValidationSummary1" runat="server" EnableClientScript="true"
+HeaderText="List of validation errors" />
+<asp:DynamicValidator runat="server" ID="DetailsViewValidator" ControlToValidate="DetailsView1" Display="None" />
+<asp:DetailsView ID="DetailsView1" runat="server" AllowPaging="True" AutoGenerateInsertButton="True"
+DataSourceID="ObjectDataSource1" EnableModelValidation="true">
+</asp:DetailsView>
+<asp:DynamicObjectDataSource ID="ObjectDataSource1" runat="server" DataObjectTypeName="DynamicDataFuturesSample.NewData"
+InsertMethod="Insert" SelectMethod="Select" TypeName="DynamicDataFuturesSample.AggregateData">
+</asp:DynamicObjectDataSource>
+The most notable change is that ObjectDataSource became a DynamicObjectDataSource, and that we added a DynamicValidator.
+So let's see it run!
+Here is what it looks like with the above metadata:
+Some notable things:
+The header for the name says 'the name' thanks to the DisplayName on the Name property 
+It complains that the name doesn't start with an upper case, per the RegularExpression attribute 
+The Number's UI shows up as an AJAX slider, thanks to the UIHint 
+Likewise, the Date UI uses an AJAX calendar 
+Conclusion
+Even though it wasn't a scenario that we originally intended to cover, it turns out that using Dynamic Data with ObjectDataSource scenarios is quite easy and works very well.  It really opens up a whole new range of scenarios that don't force users to switch to a different O/R mapper.
+It does have a notable limitation: it is not meant to support the full site scaffolding that you get with Linq To Sql or Entity Framework.  This comes from the fact that without a data context, there is no easy way to know what the set of relevant tables is, and what relationships they have with each other.  Of course, you still get the scaffolding aspect at the page level, in so far as the UI for your DetailsView/GridView is completely model driven, which is the main appeal of Dynamic Data.
+One of our users Dan Meineck just blogged about this as well, so check out what he had to say!

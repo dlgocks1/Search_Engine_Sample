@@ -1,0 +1,29 @@
+次の例では、これらのガイドラインが show policy-map interface の出力に適用された場合を示しています（4 つのキー カウンタは太字で示されています）。
+7206# show policy-map interface atm 1/0.1 
+ATM1/0.1: VC 0/100 - 
+Service-policy output: cbwfq (1283) 
+Class-map: A (match-all) (1285/2) 
+28621 packets, 7098008 bytes 
+5 minute offered rate 10000 bps, drop rate 0 bps 
+Match: access-group 101 (1289) 
+Weighted Fair Queueing 
+Output Queue: Conversation 73 
+Bandwidth 500 (kbps) Max Threshold 64 (packets) 
+(pkts matched/bytes matched) 28621/7098008 
+(depth/total drops/no-buffer drops) 0/0/0 
+Class-map: B (match-all) (1301/4) 
+2058 packets, 148176 bytes 
+5 minute offered rate 0 bps, drop rate 0 bps 
+Match: access-group 103 (1305) 
+Weighted Fair Queueing 
+Output Queue: Conversation 75 
+Bandwidth 50 (kbps) Max Threshold 64 (packets) 
+(pkts matched/bytes matched) 0/0 
+(depth/total drops/no-buffer drops) 0/0/0 
+Class-map: class-default (match-any) (1309/0) 
+19 packets, 968 bytes 
+5 minute offered rate 0 bps, drop rate 0 bps 
+Match: any (1313)
+次の表に、太字で示されたカウンタを定義します。
+カウンタ
+説明

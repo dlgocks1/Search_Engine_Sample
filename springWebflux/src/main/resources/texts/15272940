@@ -1,0 +1,34 @@
+Photo by pnoeric
+いま、PhotoShareで使うために、高速なEvent Driven方式のネットワークライブラリ、EventMachineを調べています。
+このEventMachine、ほとんどの場合はサーバを作るときに使われていますが、HTTPクライアントの機能も実装されており、実はクローラの様な物を作るときにも利用することができます。
+今回はこっちを使いたかったのですが、ググってもほとんど情報が出てこなかったので、Seattle.rbで相談したところ、Aaronさん(RubyKaigi 2008でプレゼンしているのをustで見てコンタクトしました)からサンプルが貰えたので、それを元に、同時接続する様にしてみました。
+このコードだけだと役には立ちませんが、情報が少なかったので参考に上げておきます。
+require 'rubygems'
+require 'eventmachine'
+CONCURRENCY = 2
+TARGET_URL = 'http://localhost:3000/'
+def create_connection
+puts ">>>> create"
+uri = URI.parse(TARGET_URL)
+request = Net::HTTP::Get.new(uri.request_uri)
+client = EventMachine::Protocols::HttpClient.send(:request,
+:host => uri.host,
+:port => uri.port,
+:request_obj => request)
+client.callback do |result|
+$queue.delete client
+$queue << create_connection if $queue.size < CONCURRENCY
+puts ">>>> callback"
+p result
+end
+client.errback do
+# TODO
+end
+client
+end
+$queue = []
+EventMachine.run do
+CONCURRENCY.times do
+$queue << create_connection
+end
+end

@@ -1,0 +1,32 @@
+「TIPS：My拡張をパッケージ化して再利用するには？」では、独自に拡張したVB（Visual Basic）のMy機能（以降、My拡張）を、パッケージ化して、Visual Studio 2008で利用する方法を紹介した。このMy機能パッケージは、他の開発者に配布することもできる。
+実際にMy機能パッケージをVisual Studio向けに配布する場合、Visual Studioコンテンツ・インストーラが便利だ。Visual Studioコンテンツ・インストーラとは、開発者同士がVisual Studio向けのコンテンツを受け渡ししやすいように用意されたインストーラだ。インストーラ・ファイルの拡張子は「.vsi」だが、中身は単なる.zipファイルなので、ZIP圧縮可能なツール、もしくはWindows Vistaなどに付属するWindowsエクスプローラがあれば作成できる。
+以下では、「TIPS：My拡張をパッケージ化して再利用するには？」の例で作成したMy拡張パッケージ（MyAtmarkitExtention.zipファイル）を配布するための.vsiファイルを作成する。
+■1. Visual Studioコンテンツ（.vscontent）ファイルの作成
+まず、Visual Studio コンテンツ・インストーラの内容を定義する「Visual Studioコンテンツ（.vscontent）ファイル」を作成する必要がある。
+.vscontentファイルは、単なるXMLファイルである。本稿の例では、「MyAtmarkitExtention.vscontent」という名前（実際には名前は任意）のテキスト・ファイルを新規に作成し、下記のコードを記述した。なお、ファイルの文字コードを「UTF-8（BOMなし）」として保存するよう注意すること。
+<VSContent xmlns="http://schemas.microsoft.com/developer/vscontent/2005"> 
+<Content> 
+<FileName>MyAtmarkitExtention.zip</FileName> 
+<DisplayName>My.Atmarkit Extension</DisplayName> 
+<Description>＠IT／Insider.NET 作成の My 拡張</Description> 
+<FileContentType>VSTemplate</FileContentType> 
+<ContentVersion>1.0</ContentVersion> 
+<Attributes> 
+<Attribute name="TemplateType" value="Item"/> 
+</Attributes> 
+</Content> 
+</VSContent>
+上記コードの内容を説明しておこう。
+<FileName>タグ内には、My拡張パッケージのファイル名（本稿の例では「MyAtmarkitExtention.zip」）を指定する。
+<DisplayName>タグ内には、（ほかの開発者が見ても分かりやすい）My拡張パッケージの表示名を指定。
+<Description>タグ内には、My拡張パッケージの説明を指定。
+<FileContentType>タグ内は、「VSTemplate」（Visual Studioテンプレート）を指定。
+<ContentVersion>タグ内は、任意のバージョンを指定。
+<Attribute>タグは、テンプレートの種類が「項目テンプレート」であることを指定している。My拡張パッケージの中身は、基本的に項目テンプレートと同じである。
+より詳しくは「MSDN：Visual Studio コンテンツ インストーラのスキーマ リファレンス」を参照されたい。
+■2. Visual Studioコンテンツ・インストーラ（.vsi）ファイルの作成
+あとは、My拡張パッケージ（本稿の例では「MyAtmarkitExtention.zip」）と、いま作成した.vscontentファイル（本稿の例では「MyAtmarkitExtention.vscontent」）を、.zipファイルとしてまとめて、拡張子を「.vsi」に変えるだけだ。
+具体的には、Windowsエクスプローラで2つのファイルを選択して右クリック。表示されるコンテキスト・メニューから［送る］−［圧縮 (zip 形式) フォルダ］をクリックすればよい。これにより、.zipファイルが生成されるので、ファイル名を「MyAtmarkitExtention.vsi」にするなど、拡張子を「.vsi」に変更する。
+以上で.vsiファイルの作成は完了だ。
+■3. Visual Studioコンテンツ・インストーラ（.vsiファイル）の実行
+実際に.vsiファイルを実行してみよう。すると、次の画面のようなインストーラが表示されるので、インストールを進める。

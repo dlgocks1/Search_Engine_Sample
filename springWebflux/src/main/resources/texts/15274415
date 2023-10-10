@@ -1,0 +1,16 @@
+Program Filesの下にReference Assembliesというディレクトリがある。この中にスタイルライブラリが含まれている。使い方はこちらに分かりやすい解説がある。　で、これらのスタイルは貼り付けたコントロールに適用されることになるのだが、スタイルを改変したい場合がある。例えばXPとVistaでフォントが異なる（XpではMSPゴシック、Vistaではメイリオが選ばれる）ので統一させたいといったケースだ。別のStyleを定義して当ててしまうとAeroテーマの外観でなくなってしまう。　これを解決するためには、BasedOnでAeroのスタイルを引き継いだStyleを定義して使うと良い。テーマライブラリのResourceDictionaryのXaml内では、一通りの標準コントロールのスタイル定義がされているが、それらのスタイルのKeyにはコントロール型そのものが使われている。そのため次のようにBasedOnを指定すれば良い。
+.Resources>
+Source="/presentationframework.Aero;component/themes/aero.normalcolor.xaml"/>
+.Resources>
+.Resources>
+.Resources>
+Style="{StaticResource SampleButton}">サンプル
+:
+上記例ではAeroスタイルのボタンにフォントだけMS明朝にしたものになる。残念ながら個々のコントロールのStyleに新設したものを自動的に設定することはできない。１つ１つStyleで指定しないとならない。しんどい。　ちなみに、テーマライブラリは、Reference Assembliesという名前で推測できるとおり、.NET Frameworkが入っているマシンに標準インストールされる類のものではない。このため、プロジェクト参照に追加したテーマライブラリはローカルコピーをTrueにする必要がある。単独実行したときに「テーマアセンブリがない！」というエラーになるからだ。IDE上からの実行(.vshost経由の実行)では参照解決済みのため問題が出ないので、うっかりしてビルドしたものをそのまま配布しやすいので注意が必要だ。追記　Style属性を指定しなくてもＯＫな方法が分かった！　Keyが重複してはいけないのは同一要素のResourcesの中だけの話なので、親要素から辿ったものを継承さえすればKeyは再定義できる。↑のXamlは↓のようにできる。
+.Resources>
+Source="/presentationframework.Aero;component/themes/aero.normalcolor.xaml"/>
+.Resources>
+.Resources>
+.Resources>
+サンプル
+:

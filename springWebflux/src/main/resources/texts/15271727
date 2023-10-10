@@ -1,0 +1,8 @@
+本日、開発者さま向けの機能として、はてなブックマーク件数取得API にGET による件数の取得が可能な新しい API を追加しました。今までは XMLRPC による件数取得が可能でしたが、新しい API ではシンプルな GET による件数取得を行うことができます。
+URL の例
+http://api.b.st-hatena.com/entry.count?url=http%3A%2F%2Fwww.hatena.ne.jp%2F
+また、JSONP のコールバックによるブックマークの件数取得も可能になっています。
+http://api.b.st-hatena.com/entry.count?url=http%3A%2F%2Fwww.hatena.ne.jp%2F&callback=MyCallbackFunction
+API の仕様など詳しい解説は以下のドキュメントをご覧ください。
+はてなブックマーク件数取得APIとは - はてなキーワード
+どうぞご利用ください。

@@ -1,0 +1,50 @@
+In one of my previous articles I spoke about the need for client-side error logging. In that article I elaborate a bit on why you need to. Here I explain one way to go about doing it.
+The core logic is that client-side code calls out to the server-side passing some parameters to it. The server-side logs those values and makes them available via a report. 
+In the solution I architected in my diagram below I chose to use a cache server that we have already in place that monitors and handles HTTP requests. I also chose to utilize an existing reporting suite that our Operations department uses. So the only server-side code that we needed to write was a Ruby (at first, then later converted to Perl because that's what was already installed on the production box) script to pull down the logs from where the cache server left them, parse them up and feed them to the reporting agent in a format that it was comfortable with.
+Your implementation could just as easily replace the cache server piece with custom server-side code or a web service.
+For my client-side implementation, initially I was concerned with tracking errors and heart-beats in our video player, which is all AS3, so I created an ActionScript class to encapsulate all of the needed functionality. I made it a singleton so I could subclass it for additional implementations.
+import flash.display.Loader;
+import flash.events.IOErrorEvent;
+import flash.external.ExternalInterface;
+import flash.net.URLRequest;
+public class MessageLogger
+{
+private var loggingURL:String;
+private const DEFAULT_LOG_URL:String = [your server-side script];
+private static var _instance:MessageLogger = null;
+private var errMsg:String
+private var errSrc:String
+private var loader:Loader
+public function MessageLogger(src:String)
+{
+errSrc = src
+}
+public static function getInstance(src:String):MessageLogger 
+{
+if(_instance==null){
+_instance = new MessageLogger(src);
+} 
+return _instance;
+}
+private function assembleURL():void
+{
+loggingURL = DEFAULT_LOG_URL + errSrc + "&errMsg="+errMsg + "&url="
+try{
+loggingURL+=ExternalInterface.call('window.location.href.toString');
+}catch(e:*){}
+} 
+private function onIOError(e:IOErrorEvent):void
+{
+}
+public function logMessage(msg:String):void
+{
+errMsg = msg
+assembleURL()
+loader = new Loader();
+loader.contentLoaderInfo.addEventListener( IOErrorEvent.IO_ERROR, onIOError)
+try
+{
+loader.load(new URLRequest(loggingURL))
+}catch (e:Error){}
+}
+}

@@ -1,0 +1,84 @@
+Pixel Art
+Recently i decided to have a dabble in Pixel art. I was very pleasantly surprised!...
+It's a really accessible form of ...
+Read Article 
+Sexy CSS Hover Button
+November 27, 2006 at 3:21 pm, Category: Photoshop, by Mike
+I needed to make a big button which gave the illusion of being pressed in when a user hovered the mouse over it for a client. As always, I reached for my copy of Photoshop and started to play. 3 hours, 2 cigarettes and 1 mixed fruit smoothie later I came up with an image that worked, and the code to go with it.
+The Image 
+Ok, to start with we need to make an image in two different states. State number one will be the natural state and state number two will be the hover state.
+1) Begin by creating a new document in Photoshop using the following settings.
+For this example I am going to fill the background layer with a dark blue (#0B415F), but feel free to experiment.
+2) Create a new layer called ‘Button’ and with the ‘Rounded Rectangle Tool’ draw a rectangle path that fills the canvas. Then click on the ‘Paths’ tab in the layers pallete, right click on the rectangle path you just created and select ‘Make Selection’ from the dropdown. You can now delete the path you created.
+3) With the selection you just created still highlighted, select your ‘Gradient Tool’ and input the following settings (left-colour: #003D5B, right-colour: #00547E).
+4) Make sure your button layer is selected and using a linear gradient, drag from the bottom of the selection to the top and deselect. You should now have something that looks a little like this.
+5) Now we need to make it look pretty! Right click on your ‘Button’ layer and select ‘Blending Options.’ In the window that opens, select ‘Bevel and Emboss’ and input the following settings.
+6) With a little luck, you should now have something that resembles this
+7) Save this document as button.psd. Now, go back to your bevel settings and invert the bevel direction as shown below.
+Save this document as hover.psd. You should now have two buttons like this
+9) Now it’s time to pimp them to your liking. I used some text and an icon to create these.
+The Code
+Now that you have your images ready to go, we need to integrate them into your website. I used the following code, but there are various ways to achieve this same effect.
+CSS
+#bigbuttons {
+padding: 50px 0 0 0;
+margin: 0;
+width: 200px;
+}
+#bigbuttons li{
+list-style: none;
+padding: 0 0 50px 0;
+margin: 0;
+.gallery {
+background-image: url(hover image path);
+background-repeat: no-repeat;
+height: 75px;
+width: 200px;
+}
+.gallery a{
+background-image: url(normal image path);
+background-repeat: no-repeat;
+height: 75px;
+width: 200px;
+display: block;
+}
+.gallery a:hover{
+background: none;
+}
+.contact {
+background-image: url(hover image path);
+background-repeat: no-repeat;
+height: 75px;
+width: 200px;
+}
+.contact a{
+background-image: url(normal image path);
+background-repeat: no-repeat;
+height: 75px;
+width: 200px;
+display: block;
+}
+.contact a:hover{
+background: none;
+}
+XHTML
+<ul id="bigbuttons">
+<li class="gallery"> <--put your link in here--> </li>
+<li class="contact"> <--put your link in here--> </li>
+</ul>
+The Result
+Voila! A Press in button. See it in action on this test site
+If anyone uses these for anything cool, please let me know 
+I would suggest a different method where you have 1 background image containing both the hover and normal state underneath each other (having a button of 30px height, it would result in an image of 60px height) 
+>> Less images and above all less css code 
+HTML: 
+- create a normal ul with your list items them 
+- in each list item add your a element and give it an id
+CSS: 
+- style your ul and li’s as you normal would 
+- assign background images to each a (using the id) with “background-position: 0 0;” 
+- apply a rule to “ul#bigbuttons li a:hover” with “background-position: 0 30px;”
+The last rule will be applied to all a elements in that list, so no repetition of any css code will be needed for each element (you can simply add new elements by inserting them in the html and giving it a background image via the css)
+Happy coding!
+B!
+(oh, quickly found an example: http://www.wellstyled.com/files/css-nopreload-rollovers/example.html)

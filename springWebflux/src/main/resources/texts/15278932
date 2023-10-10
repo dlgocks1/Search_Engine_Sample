@@ -1,0 +1,23 @@
+サーバの稼働状態を監視する「Nagios」を導入する。 
+「Nagios」ではシステムの異常を検知するとメールで報告する機能などを備え、Webインタフェースによるステータス閲覧やレポート出力もできる。 
+なお、「Apache」の設定は完了済みとする。 
+また、ここでは「Nagios」のバージョンは2.10とする。 
+3.0.4の場合はこちらを参照。
+yumでも「Nagios」をインストールできるが、WEBインタフェース等を日本語化する為、SRPMにパッチを当ててインストールする。
+GDライブラリのインストール
+「Nagios」を日本語で利用する為にはGDライブラリをEUCコード対応でコンパイルする必要がある。 
+その為、GDライブラリをEUCコード対応でコンパイルする。
+[root@Fedora ~]# yum -y install libpng-devel libjpeg-devel gettext-devel <= GDライブラリのコンパイルに必要なライブラリのインストール
+[root@Fedora ~]# mkdir /usr/local/src/gd <= 作業用ディレクトリの作成
+[root@Fedora ~]# chmod 777 /usr/local/src/gd <= 作業用ディレクトリのパーミッション変更
+[root@Fedora ~]# exit <= 一般ユーザになる
+[kaz@Fedora ~]$ cd /usr/local/src/gd <= 作業用ディレクトリへ移動
+[kaz@Fedora gd]$ wget http://www.libgd.org/releases/gd-2.0.35.tar.gz <= GDライブラリのソースをダウンロード
+[kaz@Fedora gd]$ tar xzf gd-2.0.35.tar.gz <= ダウンロードした日本語マニュアルの展開
+[kaz@Fedora gd]$ cd gd-2.0.35 <= 展開したディレクトリに移動
+[kaz@Fedora gd-2.0.35]$ export CFLAGS=-DJISX0208
+[kaz@Fedora gd-2.0.35]$ ./configure | tee configure.log 2>&1
+[kaz@Fedora gd-2.0.35]$ make | tee make.log 2>&1 <= コンパイル
+[kaz@Fedora gd-2.0.35]$ su <= スーパーユーザになる
+Password: <= パスワードの入力
+[root@Fedora gd-2.0.35]# make install | tee make-install.log 2>&1 <= インストール

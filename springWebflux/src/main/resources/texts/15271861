@@ -1,0 +1,17 @@
+tomcat 起動時の設定
+Tomcat を起動する時の CATALINA_OPTS 変数に次の記述を追加する。 
+例えば、/etc/tomcat6/tomcat6.conf で次のように記述する。 
+CATALINA_OPTS="$CATALINA_OPTS -Dcom.sun.management.snmp.port=1161 -Dcom.sun.management.snmp.acl.file=/etc/tomcat6/snmp.acl"
+/etc/tomcat6/snmp.acl 作成
+ファイルを作成する。
+acl = {
+{
+communities = public
+access = read-only
+managers = localhost
+}
+}
+さらに、snmp.acl のパーミッションを 600 に変更する。 
+# chown roo:root snmp.acl
+# chmod 600 snmp.acl
+ここまで設定が終わったら、Tomcat を起動する。

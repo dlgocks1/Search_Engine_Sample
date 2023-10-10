@@ -1,0 +1,12 @@
+The Canvas 3D project aims to add support for low-level hardware accelerated (where possible) 3D rendering via the HTML canvas element. Some of the original ideas and thoughts surrounding the 3D canvas are available on historical notes page, and more recent thoughts and plans are at various other documents below.
+The Canvas 3D context(s) will be delivered in the form of a Firefox addon, with the possibility of shipping by default with Firefox 3. Please see the Roadmap for schedule and release plans. Discussion around both the development of the canvas 3D addon as well as for applications taking advantage of the 3D capabilities can take place at the 3D Discussion Forum at Mozilla Labs.
+Contents 
+Canvas 3D Discussion Forum at Mozilla Labs
+Roadmap
+Notes from 3D session at Boston Developer Day, March 2007
+Historical notes (original Canvas 3D documentation)
+JavaScript library implementation work
+Firefox extension source code
+Related Links 
+OpenGL Home Page
+OpenGL ES Home Page and Specifications

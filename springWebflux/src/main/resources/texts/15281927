@@ -1,0 +1,87 @@
+■ [ruby] ruby-talkウォッチ
+しばらく見てなかったruby-talkのANN関係で気になったものを。
+後に行くほどおもしろい…かも知れない。
+allgems
+RubyForgeの全gem(?)のrdocが見れる。テーマにはhannaを使用(インクリメンタル検索があるやつ)。
+looksee
+pみたいな「lp」メソッドを提供するライブラリ。あるオブジェクトに対して呼べるメソッドを、Class/Module別に表示する。
+irb(main):001:0> lp []
+=> Array
+& concat frozen? push taguri
+* count hash rassoc taguri=
+...
+jake
+js用のRake？ JavaScriptのライブラリのパッケージを作るためのツールらしい。
+gibbler
+Gitのようなハッシュ(例：c8027100ecc54945ab15ddac529230e38b1ba6a1)をオブジェクトに付加するライブラリ。
+オブジェクトの変更履歴を残したりもできるらしい。
+sequence
+Enumerableの拡張版のような、Sequenceというクラスを提供する。
+RedParse
+Pure RubyのRuby言語パーサ。まだ100%ではないけど、99%のRubyスクリプトはパースできるそうな。
+RubyMacros
+RubyにLisp的マクロを追加するプリプロセッサ。README。マクロスとは関係ないw
+macro loop(body)
+:(while true
+^body
+end
+)
+end
+マクロの例。
+Rubyの場合、requireをフックすればかなり透過的にプリプロセッサを噛ませられるんだね。
+LiveConsole
+ネットワーク越しのIRBを提供する。
+Ruby Beutifier
+ビューティファイアー。Rubyスクリプトの自動整形を行うらしい。
+hijack
+動いているRubyスクリプトを乗っ取る(笑)。
+$ ruby hijack 16451
+=> Hijacking...
+=> Mirroring: 100%
+=> Hijacked 16451 (my_script.rb) (ruby 1.8.7 [i686-darwin9])
+>>
+乗っ取られる側にhijackのコードを埋め込む必要は*ない*らしい。どうなってんのこれ!? (gdbを使ってなんかするらしいが…)
+BitStruct
+Rubyでバイナリデータを扱うためのライブラリ。もうpack/unpackは嫌だお！という人に。
+class IP < BitStruct
+unsigned :ip_v, 4, "Version"
+unsigned :ip_hl, 4, "Header length"
+unsigned :ip_tos, 8, "TOS"
+unsigned :ip_len, 16, "Length"
+retrograph
+「late-80s 8-bit game」みたいな描画方式を実現するライブラリらしい。READMEにメモリマップが載ってるw
+string19
+最後は、ライブラリではなくドキュメント…なのだが、Rubyスクリプト。
+Ruby1.9の文字列クラスについて、「動くスクリプト」を例にしながら解説したもの。
+感想
+世にライブラリの種は尽きまじ！
+■ [ruby] Rubyの拡張ライブラリをgem化する方法
+まずextconf.rb → make → make install でインストールできるようにする。
+それができたら、あとは gemspecのextensionに["ext/foo/extconf.rb"]とか設定するだけ。
+すると、gemのインストール時に
+$ cd ext/foo
+$ ruby extconf.rb
+$ make
+$ make install
+的なコマンドが実行されるようになる。
+「的」というのは、ソース読めばわかるのだが(lib/rubygems/ext/builder.rb)、こんなことをしてたりするからだｗ
+mf = File.read('Makefile')
+mf = mf.gsub(/^RUBYARCHDIR\s*=\s*\$[^$]*/, "RUBYARCHDIR = #{dest_path}")
+mf = mf.gsub(/^RUBYLIBDIR\s*=\s*\$[^$]*/, "RUBYLIBDIR = #{dest_path}")
+File.open('Makefile', 'wb') {|f| f.print mf}
+この辺の話を仕様に書いといてほしいな、と思った。
+ちなみにextconf.rb以外にも、以下のようなバリエーションがある。
+/configure/パターン
+sh configure --prefix=なんちゃら
+make
+make install
+/rakefile/iパターン
+rake
+/mkrf_conf/iパターン
+ruby mkrf_conf
+rake
+まあextconf.rbが一般的かな、と思う。
+extensionでコンパイルできるのはライブラリだけで、実行コマンドをCで書くことはできないことに注意
+(少なくとも簡単にはできないと思う)。
+まあコンパイルまではできるので、実行コマンド用のRubyスクリプトを書いて(bin/foo)、execしてやればいいんじゃないかな。
+…という方法でとりあえずrsdlのgem化には成功した。最終的には gem install rubysdl でrsdlコマンドがインストールされるようにしたい。

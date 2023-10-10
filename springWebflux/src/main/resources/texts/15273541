@@ -1,0 +1,126 @@
+Overview
+When writing applications in the Standard Widget Toolkit (SWT),
+you may need to use layouts to give your windows a specific look.
+A layout controls the position and size of children in a Composite.
+Layout classes are subclasses of the abstract class Layout.
+SWT provides several standard layout classes, and you can write custom
+layout classes.
+In SWT, positioning and sizing does not happen automatically.
+Applications can decide to size and place a Composite's
+children initially, or in a resize listener. Another option is to
+specify a layout class to position and size the children. If children
+are not given a size, they will have zero size and they cannot be seen.
+The diagram below illustrates a few general terms that are used
+when discussing layouts. The Composite (in this case, a TabFolder)
+has a location, clientArea and trim. The size of
+the Composite is the size of the clientArea plus the
+size of the trim. This Composite has two
+children that are laid out side by side. A Layout is
+managing the size and position of the children. This Layout
+allows spacing between the children, and a margin
+between the children and the edges of the Layout. The size
+of the Layout is the same as the size of the Composite's
+clientArea.
+The preferred size of a widget is the minimum size needed
+to show its content. In the case of a Composite, the
+preferred size is the smallest rectangle that contains all of its
+children. If children have been positioned by the application, the Composite
+computes its own preferred size based on the size and position of the
+children. If a Composite is using a layout class to
+position its children, it asks the Layout to compute the
+size of its clientArea, and then it adds in the trim
+to determine its preferred size.
+Standard Layouts
+The standard layout classes in the SWT library are:
+FillLayout lays out equal-sized widgets in a
+single row or column
+RowLayout lays out widgets in a row or rows, with
+fill, wrap, and spacing options
+GridLayout lays out widgets in a grid
+FormLayout lays out widgets by creating
+attachments for each of their sides
+To use the standard layouts, you need to import the SWT layout
+package:
+import org.eclipse.swt.layout.*;
+Layouts are pluggable. To set a Composite widget's
+layout, you use the widget's setLayout(Layout) method. In
+the following code, a Shell (a subclass of Composite)
+is told to position its children using a RowLayout:
+Shell shell = new Shell();
+shell.setLayout(new RowLayout());
+A layout class may have a corresponding layout data class: a
+subclass of Object that contains layout data for a specific
+child. By convention, layout data classes are identified by substituting
+"Data" for "Layout" in the class name. For example,
+the standard layout class RowLayout has a layout data class
+called RowData, the layout class GridLayout
+uses a layout data class called GridData, and the layout
+class FormLayout has a layout data class called FormData.
+A widget's layout data class is set as follows:
+Button button = new Button(shell, SWT.PUSH);
+button.setLayoutData(new RowData(50, 40));
+Examples in this Document
+Most of the snapshots in this document were taken by running
+variations on the following example code. We may change the type of
+layout, the options used, or the type or number of children.
+import org.eclipse.swt.SWT;
+import org.eclipse.swt.layout.RowLayout;
+import org.eclipse.swt.widgets.Button;
+import org.eclipse.swt.widgets.Display;
+import org.eclipse.swt.widgets.Shell;
+public class LayoutExample {
+public static void main(String[] args) {
+Display display = new Display();
+Shell shell = new Shell(display);
+// Create the layout.
+RowLayout layout = new RowLayout();
+// Optionally set layout fields.
+layout.wrap = true;
+// Set the layout into the composite.
+shell.setLayout(layout);
+// Create the children of the composite.
+new Button(shell, SWT.PUSH).setText("B1");
+new Button(shell, SWT.PUSH).setText("Wide Button 2");
+new Button(shell, SWT.PUSH).setText("Button 3");
+shell.pack();
+shell.open();
+while (!shell.isDisposed()) {
+if (!display.readAndDispatch()) display.sleep();
+}
+}
+}
+Running the above code results in the following:
+If the user resizes the shell so that there is no longer room for
+Button 3 on the right, the RowLayout wraps Button 3 to the
+next row, as follows:
+Using layouts is closely tied with resize, as we shall see.
+Consequently, most of the examples in this document show what would
+happen if the Composite becomes smaller or larger, in order
+to illustrate how the Layout works.
+FillLayout
+FillLayout is the simplest layout class. It lays out
+widgets in a single row or column, forcing them to be the same size.
+Initially, the widgets will all be as tall as the tallest widget, and as
+wide as the widest. FillLayout does not wrap, and you
+cannot specify margins or spacing. You might use it to lay out buttons
+in a task bar or tool bar, or to stack checkboxes in a Group.
+FillLayout can also be used when a Composite
+only has one child. For example, if a Shell has a single Group
+child, FillLayout will cause the Group to
+completely fill the Shell.
+Here is the relevant portion of the example code. First we create
+a FillLayout, then (if we want vertical) we set its type
+field to SWT.VERTICAL, and set it into the Composite
+(a Shell). The Shell has three push button
+children, "B1", "Wide Button 2", and "Button
+3". Note that in a FillLayout, children are always the
+same size, and they fill all available space.
+FillLayout fillLayout = new FillLayout();
+fillLayout.type = SWT.VERTICAL;
+shell.setLayout(fillLayout);
+new Button(shell, SWT.PUSH).setText("B1");
+new Button(shell, SWT.PUSH).setText("Wide Button 2");
+new Button(shell, SWT.PUSH).setText("Button 3");
+The following table shows the differences between a horizontal
+and vertical FillLayout, initially and after the parent has
+grown.

@@ -1,0 +1,31 @@
+libtar is a C library for manipulating POSIX tar files.
+It handles adding and extracting files to/from a tar archive.
+Download libtar
+libtar Features
+Planned Features for the Future
+libtar Mailing List
+Download libtar
+The current version of libtar is libtar-1.2.11.
+The libtar source code is available from:
+ftp://ftp.feep.net/pub/software/libtar/libtar-1.2.11.tar.gz
+Binaries of libtar are available as Encap packages for a variety of platforms.
+libtar Features
+libtar offers the following features:
+Flexible API - you can manipulate individual files or just extract a whole archive at once.
+Allows user-specified read() and write() functions, such as zlib's gzread() and gzwrite().
+Supports both POSIX 1003.1-1990 and GNU tar file formats.
+Planned Features for the Future
+Here are some of the features and changes planned for future releases
+of libtar:
+Ability to remove/replace a given file from an archive.
+Ability to manipulate order of files within an archive.
+libtar Mailing List
+To subscribe to the libtar mailing list, you can go to the
+following web page:
+https://lists.feep.net:8080/mailman/listinfo.cgi/libtar
+The libtar mailing list has a number of uses:
+Announcing new versions of libtar.
+Submitting bug reports on libtar.
+Discussing ideas for new features of libtar.
+Questions about the libtar program or API.
+Mark D. Roth <roth@feep.net>

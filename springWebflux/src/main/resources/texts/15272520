@@ -1,0 +1,54 @@
+かずのこのブログかずのこの日常をダラダラのっけるブログ。
+仕事場が自宅なことが多いので、結構ダラダラいろいろやってます。気ままブログ/アラサーSH-06A NERV 用　動画エンコードヱヴァ
+SH-06A NERVはヱヴァンゲリヲン携帯です！
+このケータイに、エヴァが全話入っているのは、至極当然です！
+しかも、1.11序を再生したら、めっちゃキレーじゃないですか！！！
+ついでに○○の○○○版も入れてみたら、PCと変わらない感じで再生！！！！
+こりゃーやるしかないっ！
+用意いたしましたのは、
+AnyDVD HD / DVD Decrypter / Virtual Clone Drive / Hand Break / 携帯動画変換君
+です。
+携帯動画変換君の設定のみ手間取ったので、掲載。
+あとはWiki
+を見ればなんとかなるさ。
+[Info] 
+Title=機種別設定：mp4ファイル, SH-06A向け設定 
+TitleE=Model: mp4, for SH-06A 
+Description=SH-06Aに向けた設定です。 
+DescriptionE=Setting adjusted for docomo SH-06A.
+[Item0] 
+Title=16:9 854x480/H264/crf 30/AAC/AQ 450 
+Command0=""<%AppPath%>\cores\ffmpeg2" -y -i "<%InputFile%>" -timestamp "<%TimeStamp%>" -vcodec libx264 -threads 0 -flags bitexact -s 854x480 -aspect 16:9 -re -crf 30 -acodec libfaac -ac 2 -aq 500 -f mp4 "<%OutputFile%>.mp4""
+[Item1] 
+Title=4:3 640x480/H264/crf 30/AAC/AQ 450 
+Command0=""<%AppPath%>\cores\ffmpeg2" -y -i "<%InputFile%>" -timestamp "<%TimeStamp%>" -vcodec libx264 -threads 0 -flags bitexact -s 640x480 -aspect 16:9 -re -crf 30 -acodec libfaac -ac 2 -aq 450 -f mp4 "<%OutputFile%>.mp4""
+[Item2] 
+Title=4:3⇒16:9 854x480/crf 30/AQ 450 
+Command0=""<%AppPath%>\cores\ffmpeg3" -y -i "<%InputFile%>" -timestamp "<%TimeStamp%>" -vcodec libx264 -threads 0 -flags bitexact -s 960x720 -croptop 90 -cropbottom 90 -re -crf 1 -acodec libfaac -ac 2 -aq 450 -f mp4 "<%TemporaryFile%>_.mp4"" 
+Command3=""<%AppPath%>\cores\ffmpeg3" -y -i "<%TemporaryFile%>_.mp4" -timestamp "<%TimeStamp%>" -vcodec libx264 -threads 4 -flags bitexact -s 854x480 -aspect 16:9 -re -crf 30 -acodec copy -f mp4 "<%OutputFile%>.mp4"" 
+Command6="rm "<%TemporaryFile%>_.mp4""
+[Item3] 
+Title=16:9 854x480/crf 30/Nero 320kbps 
+Command0=""<%AppPath%>\cores\ffmpeg3" -y -i "<%InputFile%>" -vn -acodec pcm_s16le -ac 2 "<%TemporaryFile%>.wav"" 
+Command1=""<%AppPath%>\cores\neroAacEnc" -if "<%TemporaryFile%>.wav" -lc -br 320000 -of "<%TemporaryFile%>.aac" 
+Command2=""<%AppPath%>\cores\ffmpeg3" -y -i "<%TemporaryFile%>.aac" -acodec copy -i "<%InputFile%>" -timestamp "<%TimeStamp%>" -vcodec libx264 -threads 0 -flags bitexact -s 854x480 -aspect 16:9 -re -crf 30 -f mp4 "<%OutputFile%>.mp4"" 
+Command3="rm "<%TemporaryFile%>.wav"" 
+Command4="rm "<%TemporaryFile%>.aac""
+[Item4] 
+Title=4:3 640x480/crf 30/Nero 320kbps 
+Command0=""<%AppPath%>\cores\ffmpeg3" -y -i "<%InputFile%>" -vn -acodec pcm_s16le -ac 2 "<%TemporaryFile%>.wav"" 
+Command1=""<%AppPath%>\cores\neroAacEnc" -if "<%TemporaryFile%>.wav" -lc -br 320000 -of "<%TemporaryFile%>.aac" 
+Command2=""<%AppPath%>\cores\ffmpeg3" -y -i "<%TemporaryFile%>.aac" -acodec copy -i "<%InputFile%>" -timestamp "<%TimeStamp%>" -vcodec libx264 -threads 0 -flags bitexact -s 640x480 -aspect 4:3 -re -crf 30 -f mp4 "<%OutputFile%>.mp4"" 
+Command3="rm "<%TemporaryFile%>.wav"" 
+Command4="rm "<%TemporaryFile%>.aac""
+[Item5] 
+Title=4:3⇒16:9 854x480/crf 30/Nero 320kbps 
+Command0=""<%AppPath%>\cores\ffmpeg3" -y -i "<%InputFile%>" -vn -acodec pcm_s16le -ac 2 "<%TemporaryFile%>.wav"" 
+Command1=""<%AppPath%>\cores\neroAacEnc" -if "<%TemporaryFile%>.wav" -lc -br 320000 -of "<%TemporaryFile%>.aac" 
+Command2=""<%AppPath%>\cores\ffmpeg3" -y -i "<%TemporaryFile%>.aac" -acodec copy -i "<%InputFile%>" -timestamp "<%TimeStamp%>" -vcodec libx264 -threads 0 -flags bitexact -s 960x720 -croptop 90 -cropbottom 90 -re -crf 1 -f mp4 "<%TemporaryFile%>_.mp4"" 
+Command3=""<%AppPath%>\cores\ffmpeg3" -y -i "<%TemporaryFile%>_.mp4" -timestamp "<%TimeStamp%>" -vcodec libx264 -threads 0 -flags bitexact -s 854x480 -aspect 16:9 -re -crf 30 -acodec copy -f mp4 "<%OutputFile%>.mp4"" 
+Command4="rm "<%TemporaryFile%>.wav"" 
+Command5="rm "<%TemporaryFile%>.aac"" 
+Command6="rm "<%TemporaryFile%>_.mp4"" 
+microSDHC　class 6 16GB をフルに埋めるべく、
+どしどし動画を入れて外でもエヴァ祭りだぜぃ！

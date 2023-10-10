@@ -1,0 +1,13 @@
+Friday, May 22, 2009
+ImageMagickとPHPで画像にストライプ枠をつける
+Imagickで画像にストライプ枠をつけるには、以下のコードを実行します。 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"> <html xmlns="http://www.w3.org/1999/xhtml" lang="ja" xml:lang="ja" dir="ltr"> <head> <title>sample1096(ImageMagick6.5.2)</title> </head> <body> <?php /* 枠の幅 */ $padx = 10; $pady = 10; $im = new Imagick("sf.jpg"); /* ストライプを作成 */ $idraw = new ImagickDraw(); $idraw->pushPattern('tile', 0, 0, 20, 20); $idraw->setFillColor("white"); $idraw->rectangle(0,0,19,9); $idraw->setFillColor("#99aaff"); $idraw->rectangle(0,10,19,19); $idraw->popPattern(); /* タイルパターンにして配置 */ $idraw->setFillPatternURL('#tile'); $im2 = new Imagick(); $im2->newPseudoImage($im->getImageWidth()+$padx*2, $im->getImageHeight()+$pady*2, "xc:none"); $idraw->rectangle(0, 0, $im->getImageWidth()+$padx*2, $im->getImageHeight()+$pady*2); $im2->drawImage($idraw); /* ストライプを回転 */ $im2->setImageVirtualPixelMethod( Imagick::VIRTUALPIXELMETHOD_TILE); $points = array(60); //$im->distortImage(Imagick::DISTORTION_SCALEROTATETRANSLATE, // $points, false); // ScaleRotateTranslateDistortion in distort.h $im2->distortImage(3, $points, false); $im2->compositeImage($im, Imagick::COMPOSITE_OVER, $padx, $pady, Imagick::CHANNEL_ALL); $im2->writeImage('sample1096a.png'); $idraw->destroy(); $im2->destroy(); $im->destroy(); ?> <img src="sample1096a.png" /> </body> </html> 元画像(sf.jpg) 出力画像(sample1096a.png) 関連項目 ImageMagickとPHPで画像に3D枠をつける ImageMagickとPHPで立体的な角丸四角の枠をつける ImageMagickとPHPで画像に半透明ガラスの枠をつける ImageMagickとPHPで、画像に半透明角丸四角の枠をつける ImageMagickとPHPで、画像に枠をつける (シンプルな単色枠) ImageMagickで画像にストライプ枠をつける　（convertコマンドによる同様の処理）
+投稿者
+kyle
+場所
+6:10 AM
+ラベル:
+PHP,
+修飾
+0
+コメント:
+Post a Comment

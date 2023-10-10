@@ -1,0 +1,59 @@
+WindowsとLinuxを共存させる場合、 
+さまざまなブート方法が考えられるが、 
+Windowsをメインに利用しているユーザのために、 
+Bootpartを利用して、 
+Windowsブートローダ(NTLDR)からLinuxを起動する方法を紹介する。
+通常、Linux上でブートセクタをファイル化してWindowsにコピーするが、 
+この方法では、Windows上でそれを実施する。 
+従って、Linuxインストール時、起動ディスクを作成する必要はない。
+①Windowsをインストールする 
+②Linuxを別パーティションにインストールする 
+→このインストールのときにブートローダ(GRUB)をMBRではなく、 
+Linuxをインストールしたブートパーティションの最初のセクタに 
+指定すること。RHEL3のインストーラであれば、ブートローダの 
+インストール時にオプションを選択してブートローダの格納先を 
+変更できる。 
+③Linuxインストール後、再起動してWindowsを起動 
+④Bootpartをダウンロードして、bootpart.exeをC:\に置く。 
+⑤DOSプロンプトで以下のように実行する。
+C:\>bootpart
+Boot Partition 2.60 for WinNT/2K/XP (c)1995-2005 G. Vollant (info@winimage.com)
+WEB : http://www.winimage.com and http://www.winimage.com/bootpart.htm
+Add partition in the Windows NT/2000/XP Multi-boot loader
+Run "bootpart /?" for more information
+Physical number of disk 0 : d353d353
+0 : C:* type=7 (HPFS/NTFS), size= 30716248 KB, Lba Pos=63
+1 : C: type=f (Win95 XInt 13 extended), size= 125564040 KB, Lba Pos=61432560
+2 : C: type=7 (HPFS/NTFS), size= 51199123 KB, Lba Pos=61432623
+3 : C: type=5 (Extended), size= 71682030 KB, Lba Pos=163830870
+4 : C: type=83 (Linux native), size= 71681998 KB, Lba Pos=163830933
+5 : C: type=5 (Extended), size= 2096482 KB, Lba Pos=307194930
+6 : C: type=82 (Linux swap), size= 2096451 KB, Lba Pos=307194993
+上記より、ファイル化したいブートセクタを番号で選択する(ここではLinuxパーティションの4)。 
+以下のように、ブートローダに表示される名前を指定して、実行する。 
+この実行により、C:\boot.ini が自動的に更新される。
+C:\>bootpart 4 c:\bootsect.pdr "RedHat Enterprise Linux 3 ES"
+Boot Partition 2.60 for WinNT/2K/XP (c)1995-2005 G. Vollant (info@winimage.com)
+WEB : http://www.winimage.com and http://www.winimage.com/bootpart.htm
+Add partition in the Windows NT/2000/XP Multi-boot loader
+Run "bootpart /?" for more information
+Physical number of disk 0 : d353d353
+0 : C:* type=7 (HPFS/NTFS), size= 30716248 KB, Lba Pos=63
+1 : C: type=f (Win95 XInt 13 extended), size= 125564040 KB, Lba Pos=61432560
+2 : C: type=7 (HPFS/NTFS), size= 51199123 KB, Lba Pos=61432623
+3 : C: type=5 (Extended), size= 71682030 KB, Lba Pos=163830870
+4 : C: type=83 (Linux native), size= 71681998 KB, Lba Pos=163830933
+5 : C: type=5 (Extended), size= 2096482 KB, Lba Pos=307194930
+6 : C: type=82 (Linux swap), size= 2096451 KB, Lba Pos=307194993
+Writing a boot sector using LBA position 163830933 (0x9c3dc95)
+c:\bootsect.pdr written
+C:\BOOT.INI updated
+また、boot.ini の timeout や default を変更することにより、 
+ブートローダのタイムアウト値やデフォルトで起動するOSを変更可能。
+下記は、RHEL3をデフォルトで起動するboot.iniの設定。
+[boot loader]
+timeout=5
+default=c:\bootsect.pdr
+[operating systems]
+multi(0)disk(0)rdisk(0)partition(1)\WINDOWS="Windows Server 2003, Enterprise" /fastdetect
+c:\bootsect.pdr="RedHat Enterprise Linux 3 ES"

@@ -1,0 +1,32 @@
+python前回、何とかlolipopでpythonのCGIを動かす方法までは、わかったがどうやら普通にprint文で日本語を記述してもエラーになって表示できないことがわかった。原因は、標準出力がパイプ扱いになってエンコードの指定が無視されてしまうことによるものらしい。
+#!/usr/bin/python
+# -*- coding: utf-8 -*-
+import sys, locale, codecs
+print "Content-Type: text/html\n\n"
+print 'sys.stdout.encoding: %s\n\n' % sys.stdout.encoding
+print 'sys.stdin.encoding: %s\n\n' % sys.stdin.encoding
+print '%s\n\n' % sys.getfilesystemencoding()
+print '%s\n\n' % sys.stdin.encoding
+print '%s\n\n' % sys.stdout.encoding
+print '%s\n\n' % sys.stderr.encoding
+print '%s\n\n' % sys.getdefaultencoding()
+を実行すると,下記の結果になる。
+sys.stdout.encoding: None
+sys.stdin.encoding: None
+ANSI_X3.4-1968
+None
+None
+None
+ascii 
+そこで、強制的にエンコードを使って、print文に若干の小細工を実施する必要がある。
+#!/usr/bin/python
+# -*- coding: utf-8 -*-
+import sys, locale, codecs
+print "Content-Type: text/html\n\n"
+a = u"いろいろ考えて苦労してようやく、日本語が表示できました。"
+Writer = codecs.getwriter('utf-8')
+stdout = Writer(sys.stdout)
+print >>stdout, u"%s, %d" % (a,10) 
+結果として下記の行が表示される。
+いろいろ考えて苦労してようやく、日本語が表示できました。, 10 
+これで、まずは日本語の課題がクリアできた。

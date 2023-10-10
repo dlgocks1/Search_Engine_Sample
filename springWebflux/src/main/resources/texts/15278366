@@ -1,0 +1,136 @@
+In this tutorial I will show you how to create a green grunge layout. There are over 60 steps, so it may take quite a few hours to finish. Before we begin, take a moment to download some grunge brushes for use with Photoshop. There are a lot of them on many websites on the internet. Here are some high quality brushes that you can use:
+Free High-Res Photoshop Brushes: Grungy Watercolor
+Grunge Brush Pack 
+You will also need to download some leaf images. Here are some leafs that will do the job. Now let’s get started!
+Step 1
+Create a new document in Photoshop with the dimensions 1200px by 490px. Then select the Paint Bucket Tool (G) and fill the background with the color #274618.
+Step 2
+Create a new layer and use the Rectangular Marquee Tool (M) to create a selection like I did. Then select the Gradient Tool (U) and drag a gradient from the top of your selection to the bottom, using the colors #de6d00 and #912b00. Name this layer “orange bar.”
+Step 3
+Create a new group (Layer > New > Group) and name it “brushes.” Create a new layer inside this group, set the foreground color to white, select a grunge brush and paint with it over your orange bar. Set the opacity of this layer to Overlay and name it “grunge brush overlay.” Then you can use the Rectangular Marquee Tool (M) to select the areas that are outside of your orange bar and delete them.
+Step 4
+Repeat the previous step using a different brush and the color #d46300. Then use the Rectangular Marquee Tool (M) to select the area of this brush which is over your orange bar and delete it. Set the blend mode of this layer to Soft Light and name it “grunge brush soft light.”
+Step 5
+Use the Rectangular Marquee Tool (M) to create a selection like I did. Then go to Layer > New Fill Layer > Gradient and use the settings from the following image. Set the blend mode of this layer to Soft Light 54% and name it “black gradient.”
+Step 6
+Use the Rectangular Marquee Tool (M) and create a selection at the top of your document. Then go to Layer > New Fill Layer > Gradient and use the settings from the following image. Set the blend mode of this layer to Overlay and name it “white gradient.”
+Step 7
+Select the Line Tool (U), set the weight to 1px and create a horizontal line at the top of your orange rectangle using the color #140c06. Name this layer “1px black line.”
+Step 8
+Use the Line Tool (U) again to create a horizontal white line with the weight of 1px beneath the black line. Set the blend mode of this layer to Overlay 22% and name it “1px white line.”
+Step 9
+Create a new group and name it “brushes.” Create a new layer, set the foreground color to white, select a grunge brush and paint with it on your canvas. You can use as many brushes and layers as you want. Then set the blend mode of each layer to Overlay.
+Step 10
+Now we are going to create the background for our navigation bar. Create a new group and name it “navigation bar.” Create another group and name this one “navigation bar brushes.”
+Create a new layer inside the “navigation bar brushes” and paint with a white grunge brush beneath your orange bar. You can use as many brushes and layers as you want. Then set the blend mode of each layer to Overlay.
+Step 11
+Create a new layer and use the Rectangular Marquee Tool (M) to create a selection like I did. Select the Gradient Tool (G) and use the settings from the following image to create a new gradient. Then drag this gradient from the top of your selection to the bottom. Name this layer “navigation bar.”
+Step 12
+Select the Eraser Tool (E), select a big soft brush and erase the left and right side of your navigation bar.
+Step 13
+Now we are going to add a light effect above the navigation bar. First, use the Rectangular Marquee Tool (M) to create a selection like I did. Then create a new layer, select a white soft brush (B) with a diameter around 200px and paint with this brush over the bottom area of your selection. Take a look at the following image for reference. Set the blend mode of this layer to Overlay and name it “highlight.”
+Step 14
+Repeat the previous step, but this time set the opacity of the layer to 60% and name it “highlight 2.”
+Step 15
+Select the Line Tool (U) and create a horizontal line with the weight of 1px at the top of your navigation bar, leaving a distance of 1px between the navigation bar and this line. Then select the Eraser Tool (E) and erase the left and right side of the line. Double-click on this layer to open the Layer Style window and use the settings from the following image. Name this layer “1px green line.”
+Step 16
+Select the Type Tool (T), set the foreground color to white and write the text for your navigation menu items. Then double-click on this layer to open the Layer Style window and use the settings from the following image.
+Step 17
+Use the Rectangular Marquee Tool (M) to create a selection like I did. Then create a new layer, and drag a gradient from the top of your selection to the bottom, using the colors #6fb600 and #479501.
+Create a new layer, and use the Rectangular Marquee Tool (M) to create a smaller selection, like I did. Then drag a gradient from the top of your selection to the bottom using the colors #b9f100 and #65bc05.
+Put this layer beneath the text layer that you have created at the previous step.
+Step 18
+Create a new group and name it “header.” Now we are going to create a logo. First, select the Type Tool (T) and write the word “FIKED” using the white color. The font which I have used is called Impact. Double-click on this layer to open the Layer Style window and use the settings from the following image.
+Step 19
+Now we are going to include some stars in our logo. Select the Custom Shape Tool (U), right-click on your image, select the “5 Point Star” shape, hold down the Shift key and create a star using the color #dedede. Name this layer “star 1.”
+Create two more stars like I did, using the colors #c0c0c0 and #a8a8a8. Then name these layers “star 2″ and “star 3.”
+Step 20
+Ctrl-click on the vector mask of the “star 1″ layer to select that star. Go to Select > Modify > Expand and expand the selection by 3 pixels. Then click on the “star 2″ layer and go to Layer > Layer Mask > Hide Selection.
+Step 21
+Ctrl-click on the vector mask of the “star 2″ layer to select that star. Go to Select > Modify > Expand and expand the selection by 3 pixels. Then click on the “star 3″ layer and go to Layer > Layer Mask > Hide Selection.
+Step 22
+Ctrl-click on the thumbnail of the “Fiked” text layer to select the text, go to Select > Modify > Expand and expand the selection by 5 pixels. Then click on the mask of the “star 2″ layer and fill the selection with black. Take a look at the following image for reference.
+Step 23
+Add a subtle shadow to each star using the settings from the following image, then change the color of each star to white.
+Step 24
+Select the Type Tool (T), set the foreground color to white and write “LIVE EXTREME” beneath the “FIKED” word. Double-click on this layer and use the settings from the following image for Drop Shadow.
+Step 25
+Use the Rectangular Marquee Tool (M) to create a selection like I did. Go to Layer > New Fill Layer > Solid Color and set the color to white. Then set the blend mode of this layer to Overlay and put it beneath the “Fiked” layer.
+Step 26
+Create a new layer and use the Rectangular Marquee Tool (M) to create a selection like I did. Then drag a white to transparent gradient from the left side of your selection to the right side. Name this layer “gradient” and set its blend mode to Overlay.
+Step 27
+Use the Type Tool (T) to add more texts in your header. In the following image you can see the settings of each layer style that I have applied to my text layers.
+Step 28
+Group all the layers created so far (without the background) and name the group “header & navigation.” Now we are going to increase the size of our canvas, so we can create the rest of the layout. Go to Image > Canvas Size and use the settings from the following image. Then fill the background with the color #274618.
+Step 29
+Create a new layer and paint with a black grunge brush (B) beneath your navigation bar. Then set the blend mode of this layer to Soft Light and name it “black grunge.”
+Step 30
+Select the Rectangle Tool (U) and create a big white rectangle, like I did. Then double-click on this layer to open the Layer Style window and use the settings from the following image for Stroke. Name this layer “content bg.”
+Step 31
+Use the Rounded Rectangle Tool (U) to create a small rounded rectangle in the upper left corner of your big white rectangle. Then drag a gradient over this rounded rectangle from the left to the right side, using the colors #8ecf3b and #639029. Put this layer beneath the “content bg” layer, leaving only a half of the rounded rectangle visible. Then name this “rounded rectangle.”
+Step 32
+Select the Line Tool (U), set the weight to 4px and create a white line with the same height as your big white rectangle. Then set the blend mode of this layer to Overlay and name it “white line.”
+Step 33
+Now we are going to create two vertical dotted lines. First, select the Pencil Tool (B), open the Brushes palette (F5) and set the spacing to 236%. Then set the foreground color to #639029, hold down the Shift key and draw a vertical dotted line from the top of your big white rectangle to the bottom. Put this line in the left side of your white rectangle, duplicate it (Ctrl+J) and then put the new line in the right side.
+Step 34
+Select the Rounded Rectangle Tool (U), set the radius to 20px and create a rounded rectangle at the bottom of your big white rectangle, using the color #639029. Then use the Rectangular Marquee Tool (M) to select the top part of this rounded rectangle and delete it.
+Step 35
+Select the Type Tool (T), set the foreground color to white and write the text for your navigation menu items on your green rounded rectangle. Then double-click on the text layer to open the Layer Style window and use the settings from the following image for Drop Shadow.
+Step 36
+Add two horizontal dotted lines at the bottom of your big white rectangle – one using the color #639029 and another one using the color #182b0e.
+Step 37
+Use the Rectangular Marquee Tool (M) to create a selection like I did. Then drag a radial gradient from the center of your selection to the left edge, using the colors #366121 and #1f3713. Put this layer beneath the green rounded rectangle layer.
+Step 38
+Create a new layer, select a black grunge brush and paint with it over the footer of your layout. Then double-click on this layer and use the settings from the following image. Name this layer “grunge brushes” and set its blend mode to Soft Light 66%.
+Step 39
+Download this orange bar image, open it in Photoshop and move it into your document using the Move Tool (V). Put this bar in the footer of your layout and name this layer “orange bar.” Then select the Type Tool (T) and write a copyright statement.
+Step 40
+Now we are going to create an advertisement spot. Select the Rectangle Tool (U) and create a rectangle with the dimensions 250px by 250px, using the color #cad7ba. Then double-click on this layer and use the settings from the following image for Stroke. Name this layer “250×250.”
+Step 41
+Select the Type Tool (T) and write “250×250 Advert spot” on your rectangle using the color #494949. Then use the the Line Tool (U) with the settings from the following image to create two arrows, like I did.
+Step 42
+Now we are going to create a shadow beneath the advertisement spot. Use the Rounded Rectangle Tool (U) with a radius of 5px to create a selection. Then use a black soft brush to create a shadow like I did. Set the blend mode of this layer to Soft Light 65% and name it “shadow.”
+Step 43
+Create a new layer and use the Rectangular Marquee Tool (M) to create a selection like I did. Then drag a black to transparent gradient from the left side of your selection to the right side. Set the blend mode of this layer to Soft Light 50%, name it “gradient” and move it beneath the 250×250 rectangle layer.
+Step 44
+Now we are going to create a green bar next to the big white rectangle. First, create a new group and name it “green bar.” Then you can take a look at the following image for reference and use the Pen Tool (P) to create your own bar, or you can click here to download mine.
+If you chose to create your own bar, use the Burn Tool to create a subtle shadow and make your bar look like it’s 3D. Then use the Rectangular Marquee Tool (M) to select the area of your green bar that is over your 250×250 advertisement spot and delete it. Double-click on this layer and use the settings from the following image for Drop Shadow.
+Step 45
+Duplicate the green bar layer and move the new layer next to the original one. Ctrl-click on the thumbnail of this new layer to select it and fill the selection with black. Then set the opacity of this layer to 15%.
+Step 46
+Create a new layer, select a soft brush (B) with the diameter of 1px and set the foreground color to #98a15e. Select the Pen Tool (P) and create a path in the middle of your green bar, like I did. Then right-click on your image, select Stroke Path, then select Brush, make sure that the Simulate Pressure option is not checked and click OK. Use the Burn Tool to make some areas of this line darker.
+Duplicate this layer and move the new layer 1px to the left.
+Step 47
+Ctrl-click on the thumbnail of any of the two layers that you have created at the previous step to select that line. Then go to Layer > New Adjustment Layer > Brightness/Contrast and use the settings from the following image. Then hit Ctrl+J to duplicate this adjustment layer.
+Step 48
+Create a new layer, Ctrl-click on the thumbnail of the green bar layer to select the bar and paint with some black grunge brushes over your green bar. Set the blend mode of this layer to Overlay.
+Step 49
+Use the Pen Tool (P) to create some grass at the bottom of your green bar. To create shadows use the Burn Tool.
+Step 50
+Add some leafs into your image and put them above your green bar.
+Step 51
+Select the Brush Tool (B), select a soft brush with the diameter of 2px and set the foreground color to #606442. Then use the Pen Tool (P) to create some kind of rope at the top and at the bottom of your green bar. To do this, create your path with the Pen Tool (P), then right-click on your image, select Stroke Path, select “Brush” from that list and click OK. Then use the Burn Tool to add some shadows to your ropes. Use the Eraser Tool (E) to erase some parts of the ropes, to look like they are surrounding the green bar.
+Step 52
+Create a new group and name it “content.” Create a new layer inside this group, select the Rounded Rectangle Tool (U), set the radius to 5px and create a rounded rectangle using the color #cad7ba. Then select the Line Tool (U), set the weight to 3px and create a white line in the right side of the rounded rectangle. Take a look at the following image for reference.
+Step 53
+Create a new layer and use the Rounded Rectangle Tool (U) to create a rounded rectangle at the bottom of your layout. This will be the area for the latest videos. Then use the Rectangle Tool (U) and the Line Tool (U) to create some white rectangles and lines. Select the Type Tool (T) and write “LATEST VIDEOS” in the right side of your rounded rectangle.
+Step 54
+Use the Rectangle Tool (U) to create two white rectangles with the dimensions 468px by 60px. Put one rectangle at the top of the content area and one at the bottom. Then add a stroke to these rectangles using the settings from the following image and use the Type Tool (T) to write “468×60″ in the lower left corner of each rectangle.
+Step 55
+Create a rounded rectangle beneath the first advertising spot, using the color #cad7ba. Then add a horizontal white line with the weight of 6px at the bottom of this rounded rectangle.
+Step 56
+Create a small white rounded rectangle in the lower right corner of the green rounded rectangle. Then download this star image, open it in Photoshop, move it into your document using the Move Tool (V) and duplicate it four times. Arrange all these stars and write the word “Ratings” in front of your white rounded rectangle, using the color #92a080.
+Step 57
+Use the Type Tool (T) to write the word “Screenshots” in the upper right corner of your green rectangle. Then add three square images beneath the text with the dimensions 100px by 100px.
+Step 58
+Select the Rectangle Tool (U) and create a rectangle with the dimensions 320px by 260px, using the color #768268. Then select the Type Tool (T) and write “Video Spot” in the center of this rectangle, using the color #a0ae8e. Then use the Type Tool (T) again add more text beneath your rectangle.
+Step 59
+Use the Rectangle Tool (U) and the Type Tool (T) to create a search bar and a login panel in the upper left corner of your content area. In the following image you can see the settings of each layer style that I have applied to my rectangles.
+Step 60
+Now we are going to create the “Products” area. Create a white rounded rectangle and write the word “Products” on it, using the color #a0ae8e. Use the Line Tool (U) to create a white line with the weight of 4px beneath the rounded rectangle. Then add five images with the dimensions 180px by 78px and add a stroke to each of these images using the settings from the following image.
+Step 61
+Add nine square images beneath your video area. Then add an Outer Glow to each of these images using the following settings. Select the rectangle Tool (U) and create a rectangle with the dimensions 100px by 16px at the bottom of each image, using the color #dfdfdf.
+Step 62
+Create a new layer and use the Pencil Tool (B) to create two white dotted lines at the top and at the bottom of your orange bar. Set the blend mode of this layer to Overlay and use the Erase Tool (E) to erase the right side of these two lines.
+Final Result
+Well, that’s it! You can view the final image preview bellow, or view a larger version here. I hope you enjoyed this tutorial.

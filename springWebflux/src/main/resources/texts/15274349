@@ -1,0 +1,13 @@
+Microsoft watcher Mary Jo Foley's blog covers the products, people and strategies that make Microsoft tick.Posted by Mary Jo Foley @ 8:41 am
+Categories: Azure, Code names, Corporate strategy, Database, Office 2010/Office 14, SQL Server, Utility/cloud computing
+Tags: Microsoft SQL Server, Microsoft Corp., SQL Server Team, Microsoft SQL Server 2008, Databases, Enterprise Software, Software, Data Management, Mary Jo Foley
+The SQL Server team is unleashing the first widespread test builds of the next version of Microsoft’s database, a k a SQL Server 2008 R2 (codenamed “Kilimanjaro”).
+Earlier this year, Microsoft officials said to watch for a Community Technology Preview (CTP) test build of SQL Server 2008 R2 sometime this summer. On Twitter on August 10, Jason Coombes (databasejase), a SQL Server database administrator, tweeted:
+“SQL Server 2008 R2 Enterprise Evaluation & SQL Server 2008 R2 Express Edition CTP have just appeared on MSDN”
+Update: On the “Microsoft Data Platform Insider” blog, the Softies are saying the SQL Server 2008 R2 bits are downloadable by MSDN and TechNet subscribers. The public will get access to the test build on Wednesday, August 12, according to the Softies. And there’s more coming, according to the team. From that August 10 blog posting:
+“SQL Server 2008 R2 August CTP is only the first in a string of CTPs launching this month. In the coming weeks we’ll also launch CTPs for low latency complex event processing now called StreamInsight, the first CTP for SQL Azure Database, a limited preview of Project ‘Gemini’ Excel and SharePoint add-ins and a private technology preview of Project Madison, Microsoft’s massively scalable data warehousing solution, with a select group of customers. Stay tuned to this page, where we’ll be announcing new CTPs as they become available.”
+Microsoft officials have said to expect the final release of SQL Server 2008 R2 in the first half of 2010. Given the tight ties between Office 2010 and SQL Server 2008 R2, I’d speculate that the final releases of both products might be around the same time — May/June 2010.
+Microsoft is touting “self-service business intelligence” as one of the biggest selling points of SQL Server 2008 R2. (The self-service tools in SQL Server 2008 R2 are codenamed “Gemini.”) The newest database release also will incorporate Microsoft’s “Bulldog” master data management technology.
+Mary Jo has covered the tech industry for more than 20 years. Don't miss a single post. Subscribe via Email or 
+RSS. You can also follow Mary Jo on Twitter.
+Got a tip? Send Mary Jo your rants, rumors, tips and tattles. For disclosure on Mary Jo's industry affiliations, click here or to see Mary Jo's full profile click here.

@@ -1,0 +1,49 @@
+Overview
+JQuery offers a very practical and easy way to build plugins, as well as a very good documentation on this subject. However, it could be useful to see how a plugin is written step-by-step.
+Basic Structure
+The basis of creating a plugin for jQuery is actually quite simple. You don’t have to be a jQuery ninja, nor do you have to sweat blood to make it work. It’s as easy as script writing!
+Following the jQuery plugin authoring guidelines is a good idea. Bear in mind that 1) plugins files should be named jquery.PLUGINNAME.js and 2) always attach your plugins to jQuery instead of $, so aliases can be easily set using the noConflict() method.
+The structure required to extend the jQuery.fn object is…
+jQuery.fn.firstPlugin = function () {
+return this.each (function () {
+alert (this.id);
+});
+}
+You’d now be able to call your plugin as you normally would call any other plugin
+$('#test').firstPlugin ();
+This would display a “nice” alert box showing the element id.
+One Step Further: Parameters
+Ok, I agree the above example was a bit lame, so let’s find out how a more complex plugin can be developed. You can code your plugin to require some parameters and accept other options as well. If your plugin needs two numbers, you could write it in the following way:
+jQuery.fn.secondPlugin = function (number1, number2, options) {
+myoptions = jQuery.extend ({
+operation: "sum",
+label: "The result is"
+}, options);
+$(this).html (myoptions.label + " (" + myoptions.operation + ")" + myoptions.number1+myoptions.number2);
+}
+In the above code, check out the way we provide default settings in case the two strings are not passed to the plugin function. This way we can call either
+$('#test').secondPlugin (1, 2);
+to get
+<span id="test The result is (sum) 3</span>
+or
+$('#test').secondPlugin (1, 2, { operation: "sums two numbers together", label: "We got" });
+if you prefer
+<span id="test We got (sums two numbers together) 3</span>
+The jQuery Object: Custom Functions and Selectors
+Until now, we’ve messed with the jQuery.fn object, which is responsible for elements interaction, and we never mentioned the jQuery object itself, which handles internal processing. By extending it, we are thus allowed to create our own functions and even selectors for others to use! Here’s how new methods can be added:
+jQuery.fn.extend ({
+myFirstFunction : function () { alert ("first function") },
+thisIsTheSecond : function (message) { alert ("2nd: "+ message) }
+});
+and then called without any problems
+$.myFirstFunction ();
+$.thisIsTheSecond ("hello");
+In a very similar fashion you can create your own selectors, provided they don’t exist yet.
+jQuery.expr[":"].startsWith = function (element, index, tokens) { 
+if (!tokens[3]) return false;
+return eval ("/^[/s]*" + tokens[3] + "/i").test ($(element).text());
+};
+As you can see, the function takes three arguments, being: 1) the matched element, 2) the index of the element and 3) an object that contains parse tokens; the first element of the array is the full filter string (including parameters), the second one is the “:”, the third one is the filter name and, finally, the fourth is the parameter.
+You should always check whether the parameter has been passed or not, since the filter could stop working in the latter case.
+Wrapping It Up
+These are some tips to get you started writing your own jQuery plugins. It’s only by diving in that you’ll fully learn all the things you can do.

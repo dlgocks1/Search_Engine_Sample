@@ -1,0 +1,17 @@
+Posted by David N. Welton
+Tue, 11 Aug 2009 10:22:00 GMT
+I seem to have gotten it to work, more or less consistently (although I'll keep my fingers crossed).
+The first step is: do everything this guy says, and thank him profusely, as he seems to have blazed a path for everyone else to follow.
+http://www.slashdev.ca/2008/03/27/blackberry-simulator-in-linux-sort-of/
+Keep in mind that newer versions of the JDE (mine is 4.7) have different devices, so create, for instance, a 9500.sh instead of the 8800.sh.
+These points bear repeating, as gleaned from the comments on the above post.
+Make sure you have the very latest Wine that you can find and is somewhat stable. I used this: deb http://wine.budgetdedicated.com/apt intrepid main
+Get gdiplus.dll (search for it with Google) and install it in your .wine/drive_c/windows/system32/ directory. (From Cay in the comments).
+Get msxml.msi (Google, again) and run it like so: wine start msxml.msi, which should install it in wine for you. (From Patrick).
+Edit your shell script to make wine stick with one processor: task -c 0 wine fledge.exe .... (From Andrey in the comments)
+To load up your hello world application, select the file menu, "load java program", and then in the emulator, go to the 'downloads' section (double clicking on the main screen should get you to the applications). Your app should be there.
+So far so good, although the whole thing is a gigantic pain in the neck compared to development with platforms like Java ME or Android, where Linux versions exist.
+Trackbacks
+Use the following link to trackback from your own site: 
+http://journal.dedasys.com/trackbacks?article_id=running-the-blackberry-emulator-on-linux&day=11&month=08&year=2009
+Leave a comment

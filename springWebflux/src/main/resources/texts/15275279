@@ -1,0 +1,24 @@
+API やツールもいくつかベータ版ながら公開していきたいと思います。
+ブックマークレット
+今みているページを Twitter でつぶやきたい時にこのブックマークレットを使ってみてください。
+短縮したページの URL とタイトルが自動的にフォームに挿入されます。
+また、Twitter に投稿したメッセージに日本語が含まれた場合、
+おそらくすぐに Twib のタイムラインに反映されるでしょう。
+以下のボタンをブラウザのブックマークバーにドラッグ＆ドロップして、
+つぶやきたい時にこのボタンを押してください。
+tweets数画像表示API
+今までTwibで収集したURLを含んだつぶやきを利用して、
+指定したページが何件つぶやかれている＝tweetsされているかを画像で取得するAPIを実験的に公開します。
+http://image.twib.jp/counter/WebページのURL
+というURLを指定するとtweets数を画像で取得することができます。
+例えば Twib の場合だと
+http://image.twib.jp/counter/http://twib.jp/
+となります。
+そのまま img タグで埋め込むことができますね。
+<img src="http://image.twib.jp/counter/http://twib.jp/" />
+以下が表示例です。
+ブログ等からリンクを貼る場合は以下のようにしてみてください。
+<a href="http://twib.jp/url/WebページのURL">
+<img src="http://image.twib.jp/counter/WebページのURL"
+alt="このWebページのtweets" />
+</a>

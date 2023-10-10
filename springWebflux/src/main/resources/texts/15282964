@@ -1,0 +1,21 @@
+Some
+people
+complained about the insane memory usage of firefox.
+It must be a misunderstanding. They probably are not aware of how to trigger
+the excellent garbage collector shipped with the browser.
+Let's navigate heavily a bit, opening several new tabs, click click click
+around, then closing those tabs:
+$ top -b -n 1 | egrep "firefox|PID"
+PID USER PR NI VIRT RES SHR S %CPU %MEM TIME+ COMMAND
+6842 enrico 20 0 882m 398m 17m S 2 19.9 24:29.55 firefox-bin
+Indeed Firefox memory usage quickly grew. I've seen it grow to a gigabyte and a
+half after keeping it open for a month.
+Now let's trigger the garbage collector:
+$ kill -9 6842
+$ # Rerun firefox
+$ # Click on "Restore previous session"
+$ # Wait for the various open tabs to reload
+And voilà! Now Firefox uses much less memory than before:
+$ top -b -n 1 | egrep "firefox|PID"
+PID USER PR NI VIRT RES SHR S %CPU %MEM TIME+ COMMAND
+5242 enrico 20 0 656m 205m 25m S 0 10.3 0:14.49 firefox-bin

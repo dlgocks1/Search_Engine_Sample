@@ -1,0 +1,27 @@
+CL-GTK2 is a Common Lisp GUI library that provides access to the Gtk+ cross-platform GUI library in idiomatic Lisp style.
+CL-GTK2 should portably work in most modern Lisps that support CFFI and MOP (see Compatibility).
+Messages regarding development, feature requests, bug reports should be posted to cl-gtk2-devel mailing list.
+clgtk2 blog contains news on development of CL-GTK2.
+Features:
+Provides Gtk+ API in a Lispy way
+(Almost) Complete Gtk+ API
+Objects and classes are mapped into CLOS objects and classes
+Gtk+ objects are garbage collected
+Error in objects' signal handlers are restartable
+Provides some higher-level abstractions over Gtk+ facilities:
+Calling code in GUI thread (call-within-main-loop, call-within-main-loop-and-wait)
+Displaying progress-bar for long-running code (with-progress-bar)
+Displaying errors (with-gtk-message-error-handler)
+CL-GTK2 is not yet complete. To do:
+Better implementation of type mapping Done
+Change weak references to toggle references
+Better support for subclassing objects and defining GObject classes implemented in lisp
+Complete API binding
+Support for wide range of Lisp compilers and interpreters
+Support for Gtk+ on Microsoft Windows and Mac OS X
+Write documentation and tutorial
+High-level API for user interface building
+An introductory screencast
+Changes:
+2009.08.08. Rewrote GBoxed type mapping.
+2009.07.18. Added GObject documentation to the site.

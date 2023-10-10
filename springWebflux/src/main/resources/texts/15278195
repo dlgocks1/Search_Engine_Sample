@@ -1,0 +1,96 @@
+singular value decomposition; SVD / SVD 特異値分解 †
+A mxn matrix A can be decomposed into
+a product of tree matices as follows; /
+mxn行列Aは三つの行列の積に分解できる。
+where W is a diagonal matrix whose diagonal elements are singular values,
+and U and V are matrices that have orthogonal columns; /
+ここでWは特異値を対角要素に持つ対角行列、UとVは
+正規直交の列を持つ行列である。
+↑
+with and without LAPACK / LAPACKを使う使わない †
+Usually it is determined if LAPACK is used or not when install. Even if you install LTI-Lib with LAPACK, you can switch wheter LAPACK is actually used or not by specifing parameters. 
+通常はLAPACKが使われるのかどうかはインストール時に決まる。
+しかしもしLAPACKを使うようにLTI-Libをインストールしていても、
+パラメータを変えることで実際にLAPACKを使うのかどうかを切替えることができる。
+↑
+simple SVD / 単純なSVD †
+For normal usage. Using LAPACK or not is subject to the information of install. / 通常の場合。LAPACKを使うかどうかはインストール時の設定を使う。
+↑
+matrixSample.cpp †
+#include <iostream>
+#include <ltiMatrix.h>
+#include <ltiUnifiedSVD.h>
+int main(int argc, char *argv[])
+{ 
+double a_data[] = {
+1,2,3,
+4,5,6,
+7,8,9,
+10,11,12
+}; 
+lti::matrix<double> A(4,3, a_data);
+cerr << "A=" << endl << A << endl;
+lti::matrix<double> U, V;
+lti::vector<double> W;
+lti::unifiedSVD<double> svd;
+svd.apply(A, U, W, V);
+cerr << "U=" << endl << U << endl;
+cerr << "W=" << W << endl;
+cerr << "V=" << endl << V << endl;
+return 0;
+}
+↑
+matrixSample.cpp †
+#include <iostream>
+#include <ltiMatrix.h>
+#include <ltiUnifiedSVD.h>
+int main(int argc, char *argv[])
+{ 
+double a_data[] = {
+1,2,3,
+4,5,6,
+7,8,9,
+10,11,12
+}; 
+lti::matrix<double> A(4,3, a_data);
+cerr << "A=" << endl << A << endl;
+lti::matrix<double> U, V;
+lti::vector<double> W;
+lti::unifiedSVD<double>::parameters svdParm;
+svdParm.svdType = 
+lti::unifiedSVD<double>::parameters::SVD; // without LAPACK
+lti::unifiedSVD<double> svd(svdParm);
+svd.apply(A, U, W, V);
+cerr << "U=" << endl << U << endl;
+cerr << "W=" << W << endl;
+cerr << "V=" << endl << V << endl;
+return 0;
+}
+↑
+matrixSample.cpp †
+#include <iostream>
+#include <ltiMatrix.h>
+#include <ltiUnifiedSVD.h>
+int main(int argc, char *argv[])
+{ 
+double a_data[] = {
+1,2,3,
+4,5,6,
+7,8,9,
+10,11,12
+}; 
+lti::matrix<double> A(4,3, a_data);
+cerr << "A=" << endl << A << endl;
+lti::matrix<double> U, V;
+lti::vector<double> W;
+lti::unifiedSVD<double>::parameters svdParm;
+svdParm.svdType = 
+lti::unifiedSVD<double>::parameters::FastSVD; // with LAPACK
+lti::unifiedSVD<double> svd(svdParm);
+svd.apply(A, U, W, V);
+cerr << "U=" << endl << U << endl;
+cerr << "W=" << W << endl;
+cerr << "V=" << endl << V << endl;
+return 0;
+}
+↑

@@ -1,0 +1,30 @@
+説明 
+rename コマンドは、file...に指定したファイル名の
+from に最初にマッチする部分を to に置き換えてくれます。
+例）ファイル名「 hoge_01.txt 」を「 HOGE_01.txt 」へ変更する。
+[hoge@localhost ~]$ ls
+hoge_01.txt
+[hoge@localhost ~]$ rename hoge HOGE hoge_01.txt　← rename コマンド
+[hoge@localhost ~]$ ls
+HOGE_01.txt　←ファイル名が変更された
+例）複数ファイルを指定する場合。
+[hoge@localhost ~]$ ls -1
+hoge_01.txt
+hoge_02.txt
+↓ スペース区切りでファイルを続けて書く
+[hoge@localhost ~]$ rename hoge HOGE hoge_01.txt hoge_02.txt
+[hoge@localhost ~]$ ls
+HOGE_01.txt
+HOGE_02.txt　←両方共ファイル名が変更された
+2. renameコマンドで複数ファイル名を一括変換する
+もっとたくさんの複数ファイルに対して変更を行う場合は、file...の部分をワイルドカード等で指定するだけです。
+[hoge@localhost ~]$ ls -1
+hoge_01.txt
+hoge_02.txt
+hoge_03.txt
+↓「 * 」でhoge_全ファイルを指定する
+[hoge@localhost ~]$ rename hoge HOGE ./hoge_*
+[hoge@localhost ~]$ ls -1
+HOGE_01.txt
+HOGE_02.txt
+HOGE_03.txt　← ファイル名が全て変換される

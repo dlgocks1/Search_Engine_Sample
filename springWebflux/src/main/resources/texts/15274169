@@ -1,0 +1,60 @@
+I was playing with SOAP for the last few days. I must say, it looks somewhat complicated in some areas. After some google-ing on SOAP vs REST stuff I decided to write this simple ZendFramework REST how to. Actualy this is a PHP part of tutorial since I was working on a PHP and C# solution using Mono framework for C# part can be found on my site. My desire was to create a web service in PHP environment and consume that service in C# environment.Getting started with REST using ZendFramework. Here’s the PHP REST server part.
+Basic example is really, really simple. Aren’t they always. Seriously, it’s not my intention to go into outermost details.
+Creating a REST server in ZendFramework can be simple as 3 lines of code. For the sake of simplicity, let’s suppose we’ll place all of our code logic in one file, the IndexController.php. The basic building block of each and every Zend Framework application. Code for creating a REST server looks like
+public function restAction() 
+{ 
+$server = new Zend_Rest_Server(); 
+$server->setClass(’CustomTestClass’); 
+$server->handle(); 
+exit; 
+}
+Notice the CustomTestClass? This is the name of the class we wish to make availabe trough REST server. For the sake of simplicity, this class is placed in same file as our IndexController class. Below is the sample of class body
+class CustomTestClass 
+{ 
+/** 
+* Write to a file 
+* 
+* @param string $string 
+* @return string Some return message 
+*/ 
+public function sayHello($name) 
+{ 
+$message = ‘Hello ‘.$name; 
+return $message; 
+} 
+}
+Now all that’s left is to make a call to our REST server using GET method. Since our REST server code is placed inside restAction function in IndexController, it can be accessed using url like
+http://localhost/myzendapp/index.php/index/rest
+And the result should look like
+<?xml version=”1.0″ encoding=”UTF-8″?> 
+<rest generator=”zend” version=”1.0″> 
+<response> 
+<message>No Method Specified.</message> 
+</response> 
+<status>failed</status> 
+</rest>
+Although these are error messages, it’s ok, it means our REST server is working. Now if we were to enter url like
+http://localhost/myzendapp/index.php/index/rest?method=sayHello
+we would get response error message like 
+<?xml version=”1.0″ encoding=”UTF-8″?> 
+<CustomTestClass generator=”zend” version=”1.0″> 
+<sayHello> 
+<response> 
+<message>Invalid Method Call to sayHello. Requires 1, 0 given.</message> 
+</response> 
+<status>failed</status> 
+</sayHello> 
+</CustomTestClass>
+This too is ok. It simply means we omited the parametars we were supose to pass to function. Remember, our sayHello function has signature like
+public function sayHello($name)
+meaning we should pass it a parametar $name. Now if we were to type into our browser url like
+http://localhost/myzendapp/index.php/index/rest?method=sayHello&name=Branko
+We would get response like
+<?xml version=”1.0″ encoding=”UTF-8″?> 
+<CustomTestClass generator=”zend” version=”1.0″> 
+<sayHello> 
+<response>Hello Branko</response> 
+<status>success</status> 
+</sayHello> 
+</CustomTestClass>
+As I said, simple example, more like proof of concept. Hope you find it usefull as a entry point to REST-full Zend development.

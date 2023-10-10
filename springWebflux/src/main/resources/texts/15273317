@@ -1,0 +1,1 @@
+i have taken fileupload control and image  fileupload1.saveas(@"D:\images\"+fileupload1.filename); image1.imageurl=@"D:\images\prs"+fileupload1.filename; but image is not displayed

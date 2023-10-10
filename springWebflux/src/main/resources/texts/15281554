@@ -1,0 +1,7 @@
+イナズマtvログさんのエントリーを経由してFlintのオンラインエディタを見つけた。
+イナヅマtvログ » Flint Particle System, リアルタイムプレビュー可能なエディター登場 
+FlexMonkey: ParticleLab – Node Based Particle System Editor
+エディタは英国人のSimon Gladmanさんが作られたFlexアプリケーション。 
+2Dのemitterだけだけれど主要な設定は大体組み込まれているっぽい。ちょっと重いかなぁ…。
+Quartz ComposerみたいなインターフェースでFlintの各種設定が出来てその場でプレビュー表示されるところがGood。Flintは組み合わせでパーティクルの動きを設計していく感じなんで、いろいろ試してざっくりとアニメーションを確認するには便利そうですね。
+というわけで、これを使えば僕のFlint関連のエントリーを見るより遥かに直感的にわかりますので、Flintをお試しの際は是非Simon Gladmanさんのエディタをお試しください。

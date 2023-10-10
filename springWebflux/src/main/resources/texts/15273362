@@ -1,0 +1,14 @@
+While cleaning out my desk, I found an old copy of a PHP Quick Reference I helped make a few years ago. On the front page are a few performance and security tips that I thought I'd share. (Performance tips are from George Schlossnagle.)
+Top 5 Performance Tips
+Use a Compiler Cache. Completely transparent to your application, a compiler cache is the closest you'll get to a fast = true ini setting.
+Profile Early; Profile Often. Big and small systems alike can behave in unexpected ways. Quantitative tools help you understand where your bottlenecks are. This is critical for targeting your tuning efforts.
+Cache Whenever Possible. The vast majority of performance optimizations involve caching data in one form or another. Whether caching content or just intermediate data during complex procedures, intelligent use of caching techniques can dramatically improve your performance.
+Be Mindful of Using External Data Sources. The top performance bottleneck in almost every application we analyze is making too many (or too complex) database queries. Always optimize your queries, and structure your most frequently accessed data to be efficiently fetched.
+Don't Over-Optimize. As Donald Knuth said, "Premature optimization is the root of all evil." Optimization is (at least after the initial stages) a matter of trading flexibility for performance. By over-optimizing your code, you can render it brittle to future functionality changes.
+Top 5 Security Tips
+Trust Nothing. Most security vulnerabilities can be traced back to a misplaced trust in suspect data, primarily input provided by third parties. When in doubt, verify your assumptions to be sure.
+Filter Input. Inspect any data you receive from a third party to be sure it meets your expectations, rejecting anything that doesn't. Don't try to massage input in order to be accommodating, and err on the side of caution by allowing only what you know is safe rather than rejecting only what you know is not.
+Escape Output. When outputting data, be sure your data is represented in such a way that it is preserved in its new context. In PHP, we often mix data with HTML, SQL, and the like. Escaping helps preserve the distinction and prevent misinterpretation.
+Use Prepared Statements. By using prepared statements, you can preserve the distinction between an SQL query and the data to be bound to it. This offers strong protection against SQL injection.
+Reduce, Reuse, Recycle. Use mature, existing solutions. Not only are they likely to be more thorough than your own, but you can also simplify your code, making it easier to understand and less error-prone.
+Got anything you'd add to these lists? Please share in the comments. :-)Posted Thu, 06 Aug 2009 22:03:07 GMT in Chris Shiflett’s Blog

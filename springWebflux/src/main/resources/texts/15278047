@@ -1,0 +1,415 @@
+10 オブジェクト、LOBおよびコレクションのロード
+この章の内容は、次のとおりです。
+列オブジェクトのロード
+オブジェクト表のロード
+REF列のロード
+LOBのロード
+BFILE列のロード
+コレクション（ネストした表およびVARRAY）のロード
+動的および静的SDF指定
+親表を子表から分割してのロード
+列オブジェクトのロード
+制御ファイルの列オブジェクトは、その属性によって記述されています。列オブジェクトの基になるオブジェクト型がNOT FINALであると宣言されると、制御ファイルの列オブジェクトは、基になるオブジェクト型から導出されたサブタイプの（導出および宣言された）属性によって記述されます。データ・ファイルでは、列オブジェクトの各属性に対応するデータは、単純なリレーショナル列に対応するデータ・フィールドと同様の形式でデータ・ファイルに記述されています。
+注意:
+SQL*Loaderによる列オブジェクトなどの複合データ型のサポートによって、制御ファイル内に、2つの同じフィールド名が存在する可能性があります。1つは列に対応し、もう1つは列オブジェクトの属性に対応する場合です。制御ファイルに同名のフィールドが存在する場合、特定の句がフィールド（たとえば、WHEN、NULLIF、DEFAULTIF、SID、OID、REF、BFILEなど）を参照できるため、名前の重複が発生する場合があります。
+そのため、フィールドを参照する句を使用する場合は、フルネームで指定する必要があります。たとえば、フィールドfld1がCOLUMN OBJECTに指定されており、そこにフィールドfld2が含まれる場合、NULLIFなどの句でfld2を指定する場合は、フィールドのフルネームfld1.fld2を使用する必要があります。 
+次に、列オブジェクトのロードに関する例を示します。
+ストリーム・レコード形式への列オブジェクトのロード
+可変レコード形式への列オブジェクトのロード
+ネストした列オブジェクトのロード
+導出サブタイプを使用した列オブジェクトのロード
+オブジェクトに対するNULL値の指定
+ユーザー定義コンストラクタを使用した列オブジェクトのロード
+ストリーム・レコード形式への列オブジェクトのロード
+例10-1に、事前にサイズが決まっているフィールドにデータがある例を示します。終了文字は、物理レコードの終わりを示します。オペレーティング・システムのファイル処理句（os_file_proc_clause）のカスタム・レコード・セパレータを使用して、物理レコードの終わりを示すこともできます。
+例10-1    ストリーム・レコード形式への列オブジェクトのロード
+Control File Contents
+LOAD DATA
+INFILE 'sample.dat'
+INTO TABLE departments
+(dept_no POSITION(01:03) CHAR,
+dept_name POSITION(05:15) CHAR,
+1 dept_mgr COLUMN OBJECT
+(name POSITION(17:33) CHAR,
+age POSITION(35:37) INTEGER EXTERNAL,
+emp_id POSITION(40:46) INTEGER EXTERNAL) )
+Datafile (sample.dat)
+101 Mathematics Johny Quest 30 1024
+237 Physics Albert Einstein 65 0000
+注意
+この列オブジェクトの型指定は、ネストした列オブジェクトの記述にも繰り返し使用できます。
+可変レコード形式への列オブジェクトのロード
+例10-2に、デリミタ・フィールドにデータがある例を示します。
+例10-2    可変レコード形式への列オブジェクトのロード
+Control File Contents
+LOAD DATA
+1 INFILE 'sample.dat' "var 6"
+INTO TABLE departments
+FIELDS TERMINATED BY ',' OPTIONALLY ENCLOSED BY '"'
+2 (dept_no
+dept_name, 
+dept_mgr COLUMN OBJECT
+(name CHAR(30), 
+age INTEGER EXTERNAL(5), 
+emp_id INTEGER EXTERNAL(5)) )
+Datafile (sample.dat)
+3 000034101,Mathematics,Johny Q.,30,1024,
+000039237,Physics,"Albert Einstein",65,0000,
+注意
+"var"文字列には、各レコードの先頭にある長さフィールドのバイト数（この例では6）が含まれます。値が指定されない場合、デフォルトは5バイトです。可変レコードの最大サイズは、2の32乗-1で、それ以上の値を指定するとエラーになります。
+位置を指定しなくても、一般構文では同じ結果（列オブジェクトの名前の後に、カッコで囲まれた属性のリストが続く）になります。また、省略された型指定については、デフォルトで長さが255のCHAR型になります。
+最初の6バイト（斜体で示した部分）に、次のレコードの長さを指定します。これらの長さ指定には、emp_idフィールドの後の終了記号のために無視される改行文字も含まれます。
+ネストした列オブジェクトのロード
+例10-3に、ネストした列オブジェクト（他の列オブジェクト内にネストした1つの列オブジェクト）の制御ファイルの記述方法を示します。
+例10-3    ネストした列オブジェクトのロード
+Control File Contents
+LOAD DATA
+INFILE `sample.dat'
+INTO TABLE departments_v2
+FIELDS TERMINATED BY ',' OPTIONALLY ENCLOSED BY '"'
+(dept_no CHAR(5), 
+dept_name CHAR(30), 
+dept_mgr COLUMN OBJECT
+(name CHAR(30), 
+age INTEGER EXTERNAL(3),
+emp_id INTEGER EXTERNAL(7),
+1 em_contact COLUMN OBJECT
+(name CHAR(30), 
+phone_num CHAR(20))))
+Datafile (sample.dat)
+101,Mathematics,Johny Q.,30,1024,"Barbie",650-251-0010,
+237,Physics,"Albert Einstein",65,0000,Wife Einstein,654-3210,
+注意 
+このエントリでは、列オブジェクトにネストした列オブジェクトを指定します。
+導出サブタイプを使用した列オブジェクトのロード
+例10-4に、NOT FINALのベース・オブジェクト型を拡張して新しく導出されたサブタイプを作成する例を示します。表定義の列オブジェクトは、ベース・オブジェクト型であると宣言されますが、サブタイプがベース・オブジェクト型から導出される場合は、SQL*Loaderによってサブタイプを列オブジェクトにロードできます。
+例10-4    サブタイプを使用した列オブジェクトのロード
+Object Type Definitions
+CREATE TYPE person_type AS OBJECT
+(name VARCHAR(30),
+ssn NUMBER(9)) not final;
+CREATE TYPE employee_type UNDER person_type
+(empid NUMBER(5));
+CREATE TABLE personnel
+(deptno NUMBER(3),
+deptname VARCHAR(30),
+person person_type);
+Control File Contents
+LOAD DATA
+INFILE 'sample.dat'
+INTO TABLE personnel
+FIELDS TERMINATED BY ',' OPTIONALLY ENCLOSED BY '"'
+(deptno INTEGER EXTERNAL(3),
+deptname CHAR,
+1 person COLUMN OBJECT TREAT AS employee_type
+(name CHAR,
+ssn INTEGER EXTERNAL(9),
+2 empid INTEGER EXTERNAL(5)))
+Datafile (sample.dat)
+101,Mathematics,Johny Q.,301189453,10249,
+237,Physics,"Albert Einstein",128606590,10030,
+注意
+TREAT AS句で指定すると、SQL*Loaderでは、実際の宣言型がperson_typeである列オブジェクトpersonが、導出型employee_typeであると宣言されたかのように処理されます。
+empid属性はemployee_typeの属性であるため、ここで使用できます。TREAT AS句が指定されていない場合、この属性は、列の宣言型の属性ではないためエラーを返します。
+オブジェクトに対するNULL値の指定
+非スカラー・データ型でNULL値を指定する場合、スカラー・データ型で指定するよりも複雑です。オブジェクトは、その属性のサブセットをNULLにするか、すべての属性をNULL（NULLオブジェクトにかぎります）にするか、またはオブジェクト自身をNULL（アトミックNULLオブジェクト）にできます。
+NULL属性の指定
+オブジェクト列に対応するフィールドでは、NULLIF句を使用して、特殊属性をNULLに初期化するフィールド条件を指定できます。例10-5に例を示します。
+例10-5    NULLIF句を使用したNULL属性の指定
+Control File Contents
+LOAD DATA
+INFILE 'sample.dat'
+INTO TABLE departments
+(dept_no POSITION(01:03) CHAR,
+dept_name POSITION(05:15) CHAR NULLIF dept_name=BLANKS,
+dept_mgr COLUMN OBJECT
+1 ( name POSITION(17:33) CHAR NULLIF dept_mgr.name=BLANKS,
+1 age POSITION(35:37) INTEGER EXTERNAL NULLIF dept_mgr.age=BLANKS,
+1 emp_id POSITION(40:46) INTEGER EXTERNAL NULLIF dept_mgr.emp_id=BLANKS))
+Datafile (sample.dat)
+2 101 Johny Quest 1024
+237 Physics Albert Einstein 65 0000
+注意
+各属性に対応するNULLIF句は、属性値をNULLにする条件を示します。
+dept_mgrのage属性の値はNULLです。dept_nameの値もNULLです。
+アトミックNULLの指定
+列オブジェクトがNULL値（アトミックNULL）を取る条件を制御ファイルで指定するには、NULLIF句で使用するオブジェクトの名前は、マップ・フィールドの論理的な組合せに基づいている必要があります（たとえば、例10-5では、指定されたマップ・フィールドは、dept_no、dept_name、name、ageおよびemp_idです。dept_mgrは、データ・ファイルのどのフィールドにも対応していない（マップされていない）ため、指定されたマップ・フィールドではありません）。
+前述の方法は使用可能ですが、オブジェクトがNULL値を取るための条件が、マップ・フィールドに依存していない場合は、理想的な方法ではありません。このような場合は、FILLERフィールドを使用できます。
+FILLERフィールドをデータ・ファイルのフィールドにマップし（列オブジェクトがアトミックNULLかどうかを示す）、そのFILLERフィールドを列オブジェクトのNULLIF句のフィールド条件で使用できます。この例を例10-6に示します。
+例10-6    FILLERフィールドを使用したデータのロード
+Control File Contents
+LOAD DATA
+INFILE 'sample.dat'
+INTO TABLE departments_v2
+FIELDS TERMINATED BY ',' OPTIONALLY ENCLOSED BY '"'
+(dept_no CHAR(5),
+dept_name CHAR(30),
+1 is_null FILLER CHAR,
+2 dept_mgr COLUMN OBJECT NULLIF is_null=BLANKS
+(name CHAR(30) NULLIF dept_mgr.name=BLANKS, 
+age INTEGER EXTERNAL(3) NULLIF dept_mgr.age=BLANKS,
+emp_id INTEGER EXTERNAL(7) 
+NULLIF dept_mgr.emp_id=BLANKS,
+em_contact COLUMN OBJECT NULLIF is_null2=BLANKS
+(name CHAR(30) 
+NULLIF dept_mgr.em_contact.name=BLANKS, 
+phone_num CHAR(20) 
+NULLIF dept_mgr.em_contact.phone_num=BLANKS)),
+1 is_null2 FILLER CHAR)
+Datafile (sample.dat)
+101,Mathematics,n,Johny Q.,,1024,"Barbie",608-251-0010,,
+237,Physics,,"Albert Einstein",65,0000,,650-654-3210,n,
+注意
+FILLERフィールド（データ・ファイルがマップされており、対応する列がない）はCHAR型（デリミタ付きフィールドであるため、CHARのデフォルトはCHAR(255)）のフィールドです。NULLIF句は、FILLERフィールド自体には使用できません。
+is_nullフィールドが空白の場合は、NULL（アトミックNULL）の値を取得します。
+ユーザー定義コンストラクタを使用した列オブジェクトのロード
+Oracleデータベースでは、すべてのオブジェクト型に対してデフォルトのコンストラクタが自動的に提供されます。このコンストラクタを使用するには、コンストラクタに対するコールで、その型のすべての属性を引数として指定する必要があります。オブジェクトの新しいインスタンスが作成されると、その属性は引数リスト内の対応する値を取ります。このコンストラクタは、属性値コンストラクタと呼ばれます。SQL*Loaderでは、列オブジェクトのロード時に、デフォルトで属性値コンストラクタが使用されます。
+1つ以上のユーザー定義コンストラクタを作成することによって、属性値コンストラクタを上書きできます。ユーザー定義コンストラクタを作成する場合、オブジェクトの新しいインスタンスが作成されると、常に、ユーザー定義論理を実行する型本体を指定する必要があります。ユーザー定義コンストラクタの引数リストは、属性値コンストラクタと同じ場合もありますが、型本体で実装される論理は異なります。
+ユーザー定義コンストラクタのファンクションの引数リストが属性値コンストラクタの引数リストと一致する場合、従来型パスとダイレクト・パスではSQL*Loaderの動作が異なります。従来型パス・モードでは、ユーザー定義コンストラクタがコールされます。ダイレクト・パス・モードでは、属性値コンストラクタがコールされます。この相違点を例10-7に示します。
+例10-7    一致するコンストラクタを使用した列オブジェクトのロード
+Object Type Definitions
+CREATE TYPE person_type AS OBJECT
+(name VARCHAR(30),
+ssn NUMBER(9)) not final;
+CREATE TYPE employee_type UNDER person_type
+(empid NUMBER(5),
+-- User-defined constructor that looks like an attribute-value constructor
+CONSTRUCTOR FUNCTION
+employee_type (name VARCHAR2, ssn NUMBER, empid NUMBER)
+RETURN SELF AS RESULT);
+CREATE TYPE BODY employee_type AS
+CONSTRUCTOR FUNCTION
+employee_type (name VARCHAR2, ssn NUMBER, empid NUMBER)
+RETURN SELF AS RESULT AS
+--User-defined constructor makes sure that the name attribute is uppercase.
+BEGIN
+SELF.name := UPPER(name);
+SELF.ssn := ssn;
+SELF.empid := empid;
+RETURN;
+END;
+CREATE TABLE personnel
+(deptno NUMBER(3),
+deptname VARCHAR(30),
+employee employee_type);
+Control File Contents
+LOAD DATA
+INFILE *
+REPLACE
+INTO TABLE personnel
+FIELDS TERMINATED BY ',' OPTIONALLY ENCLOSED BY '"'
+(deptno INTEGER EXTERNAL(3),
+deptname CHAR,
+employee COLUMN OBJECT
+(name CHAR,
+ssn INTEGER EXTERNAL(9),
+empid INTEGER EXTERNAL(5)))
+BEGINDATA
+1 101,Mathematics,Johny Q.,301189453,10249,
+237,Physics,"Albert Einstein",128606590,10030,
+注意
+この制御ファイルが従来型パス・モードで実行された場合、名前フィールドのJohny Q.およびAlbert Einsteinは、両方とも大文字でロードされます。これは、従来型パス・モードではユーザー定義コンストラクタがコールされるためです。これに対し、この制御ファイルがダイレクト・パス・モードで実行された場合、名前フィールドは入力データに表示されているとおりにロードされます。これは、ダイレクト・パス・モードでは属性値コンストラクタがコールされるためです。
+引数リストが属性値コンストラクタと一致しないユーザー定義コンストラクタの作成もできます。この場合は、従来型パス・モードおよびダイレクト・パス・モードの両方で、属性値コンストラクタがコールされます。例10-8に示す定義について考えてみます。
+例10-8    一致しないコンストラクタを使用した列オブジェクトのロード
+Object Type Definitions
+CREATE SEQUENCE employee_ids
+START WITH 1000
+INCREMENT BY 1;
+CREATE TYPE person_type AS OBJECT
+(name VARCHAR(30),
+ssn NUMBER(9)) not final;
+CREATE TYPE employee_type UNDER person_type
+(empid NUMBER(5),
+-- User-defined constructor that does not look like an attribute-value 
+-- constructor
+CONSTRUCTOR FUNCTION
+employee_type (name VARCHAR2, ssn NUMBER)
+RETURN SELF AS RESULT);
+CREATE TYPE BODY employee_type AS
+CONSTRUCTOR FUNCTION
+employee_type (name VARCHAR2, ssn NUMBER)
+RETURN SELF AS RESULT AS
+-- This user-defined constructor makes sure that the name attribute is in
+-- lowercase and assigns the employee identifier based on a sequence.
+nextid NUMBER;
+stmt VARCHAR2(64);
+BEGIN
+stmt := 'SELECT employee_ids.nextval FROM DUAL';
+EXECUTE IMMEDIATE stmt INTO nextid;
+SELF.name := LOWER(name);
+SELF.ssn := ssn;
+SELF.empid := nextid; 
+RETURN;
+END;
+CREATE TABLE personnel
+(deptno NUMBER(3),
+deptname VARCHAR(30),
+employee employee_type);
+例10-7で説明した制御ファイルがこれらの定義に従って使用された場合、名前フィールドは、入力データに表示されているとおりに（大文字と小文字の組合せで）ロードされます。これは、従来型パス・モードおよびダイレクト・パス・モードの両方で属性値コンストラクタがコールされるためです。
+SQL式でユーザー定義コンストラクタを明示的に参照することによって、従来型パス・モードを使用してこの表をロードすることもできます。例10-9に例を示します。
+例10-9    コンストラクタが一致しない場合のSQLを使用した列オブジェクトのロード
+Control File Contents
+LOAD DATA
+INFILE *
+REPLACE
+INTO TABLE personnel
+FIELDS TERMINATED BY ',' OPTIONALLY ENCLOSED BY '"'
+(deptno INTEGER EXTERNAL(3),
+deptname CHAR,
+name BOUNDFILLER CHAR,
+ssn BOUNDFILLER INTEGER EXTERNAL(9),
+1 employee EXPRESSION "employee_type(:NAME, :SSN)")
+BEGINDATA
+1 101,Mathematics,Johny Q.,301189453,
+237,Physics,"Albert Einstein",128606590,
+注意
+この場合、従業員列オブジェクトが、SQL式を使用してロードされます。この式によって、正しい数の引数が含まれているユーザー定義コンストラクタが起動されます。名前フィールドのJohny Q.およびAlbert Einsteinは、両方とも小文字でロードされます。また、各行の従業員列オブジェクトの従業員識別子は、employee_ids順序番号から値を取ります。
+例10-9に示した制御ファイルがダイレクト・パス・モードで使用された場合は、次のエラーが通知されます。
+SQL*Loader-951: Error calling once/load initialization
+ORA-26052: Unsupported type 121 for SQL expression on column EMPLOYEE.
+オブジェクト表のロード
+オブジェクト表のロードに必要な制御ファイルの構文は、典型的なリレーショナル表のロードの場合とほぼ同じです。例10-10に、主キーOIDを使用したオブジェクト表のロード例を示します。
+例10-10    主キーOIDを使用したオブジェクト表のロード
+Control File Contents
+LOAD DATA
+INFILE 'sample.dat'
+DISCARDFILE 'sample.dsc'
+BADFILE 'sample.bad'
+REPLACE
+INTO TABLE employees 
+FIELDS TERMINATED BY ',' OPTIONALLY ENCLOSED BY '"'
+(name CHAR(30) NULLIF name=BLANKS,
+age INTEGER EXTERNAL(3) NULLIF age=BLANKS,
+emp_id INTEGER EXTERNAL(5))
+Datafile (sample.dat)
+Johny Quest, 18, 007,
+Speed Racer, 16, 000,
+前述の制御ファイルを見ただけでは、ロードされる表がシステム生成OIDを持つオブジェクト表か、主キーOIDを持つオブジェクト表か、またはリレーショナル表かを判断できません。
+すでにシステム生成OIDを含むデータをロードし、新しいOIDを生成するのではなく、データ・ファイル内の既存のOIDを使用するように指定する必要がある場合もあります。そのような場合は、INTO TABLE句に続けてOID句を使用します。
+OID (fieldname)
+この場合、fieldnameには、システム生成実OIDを含むデータ・ファイルにマップされた、フィールド指定リストのフィールド名（通常はFILLERフィールド）を指定します。SQL*Loaderでは、その指定されたOIDが、正しい形式で、グローバルな独自性を保持したOIDであるとみなされます。そのため、OracleのOIDジェネレータを使用してOIDを生成し、ロードされたOIDの一意性を確保する必要があります。
+また、そのOID句は、主キーOIDではなく、システム生成のOIDでのみ使用できます。
+例10-11に、行オブジェクトを使用したシステム生成OIDのロード例を示します。
+例10-11    OIDのロード
+Control File Contents
+LOAD DATA
+INFILE 'sample.dat'
+INTO TABLE employees_v2 
+1 OID (s_oid)
+FIELDS TERMINATED BY ',' OPTIONALLY ENCLOSED BY '"'
+(name CHAR(30) NULLIF name=BLANKS,
+age INTEGER EXTERNAL(3) NULLIF age=BLANKS,
+emp_id INTEGER EXTERNAL(5),
+2 s_oid FILLER CHAR(32))
+Datafile (sample.dat)
+3 Johny Quest, 18, 007, 21E978406D3E41FCE03400400B403BC3,
+Speed Racer, 16, 000, 21E978406D4441FCE03400400B403BC3,
+注意
+OID句には、s_oidのロード・フィールドがOIDを含むように指定します。カッコが必要です。
+s_oidに有効な16進数が含まれていない場合、そのレコードは拒否されます。
+データ・ファイルのOIDは文字列で、32バイトの16進数として解釈されます。32バイトの16進数は、後で16バイトのRAWに変換されてオブジェクト表に格納されます。
+サブタイプを使用したオブジェクト表のロード
+オブジェクト表の列オブジェクトがNOT FINALに基づいている場合、SQL*Loaderによって導出サブタイプをオブジェクト表にロードできます。前述のとおり、オブジェクト表に導出サブタイプをロードする場合に必要な構文は、典型的なリレーショナル表のロードの場合とほぼ同じです。ただし、この場合、実際に使用するサブタイプがオブジェクト表で有効であるかどうかをSQL*Loaderで判断できるように、サブタイプに名前を指定する必要があります。この概念を例10-12に示します。
+例10-12    サブタイプを使用したオブジェクト表のロード
+Object Type Definitions
+CREATE TYPE employees_type AS OBJECT
+(name VARCHAR2(30),
+age NUMBER(3),
+emp_id NUMBER(5)) not final;
+CREATE TYPE hourly_emps_type UNDER employees_type
+(hours NUMBER(3));
+CREATE TABLE employees_v3 of employees_type;
+Control File Contents
+LOAD DATA
+INFILE 'sample.dat'
+INTO TABLE employees_v3
+1 TREAT AS hourly_emps_type
+FIELDS TERMINATED BY ','
+(name CHAR(30),
+age INTEGER EXTERNAL(3),
+emp_id INTEGER EXTERNAL(5),
+2 hours INTEGER EXTERNAL(2))
+Datafile (sample.dat)
+Johny Quest, 18, 007, 32,
+Speed Racer, 16, 000, 20,
+注意
+TREAT AS句で指定すると、SQL*Loaderでは、実際の宣言型がemployee_typeであるオブジェクト表が、hourly_emps_type型であると宣言されたかのように処理されます。
+hours属性はhourly_emps_typeの属性であるため、ここで使用できます。TREAT AS句が指定されていない場合、この属性は、オブジェクト表の宣言型の属性ではないためエラーを返します。
+REF列のロード
+SQL*Loaderは、システム生成OIDのREF列、主キーREF列および主キーを使用可能な有効範囲なしREF列をロードできます。
+システム生成OID型のREF列
+システム生成REF列をロードする場合、SQL*Loaderでは、REF列を構築する実OIDが残りのデータとともにデータ・ファイル内にあるとみなされます。REF列に対応するフィールドの記述は、列名の後にREF句を記述することによって行います。
+REF句には、引数として表名とOIDを取ります。その引数は、定数として、または（FILLERフィールドを使用して）動的に指定できます。適切な構文については、「ref_spec」を参照してください。例10-13に、システム生成OID型のREF列のロード例を示します。
+例10-13    システム生成REF列のロード
+Control File Contents
+LOAD DATA
+INFILE 'sample.dat'
+INTO TABLE departments_alt_v2
+FIELDS TERMINATED BY ',' OPTIONALLY ENCLOSED BY '"'
+(dept_no CHAR(5),
+dept_name CHAR(30),
+1 dept_mgr REF(t_name, s_oid),
+s_oid FILLER CHAR(32),
+t_name FILLER CHAR(30))
+Datafile (sample.dat)
+22345, QuestWorld, 21E978406D3E41FCE03400400B403BC3, EMPLOYEES_V2,
+23423, Geography, 21E978406D4441FCE03400400B403BC3, EMPLOYEES_V2,
+注意
+指定した表が存在しない場合、レコードは拒否されます。また、dept_mgrフィールド自体には、データ・ファイルのフィールドはマップされません。
+主キーREF列
+主キーREF列をロードするには、SQL*Loader制御ファイルのフィールドで列名の後にREF句を記述する必要があります。REF句には、カンマで区切ったフィールド名および定数値のリストが引数として必要です。最初の引数は表名で、その後にロードするREF列の基になる主キーOIDを指定する引数を記述します。適切な構文については、「ref_spec」を参照してください。
+SQL*Loaderでは、引数の順序は、参照されている表で主キーOIDを作成する列の相対順序に一致しているとみなされます。例10-14に、主キーREF列のロード例を示します。
+例10-14    主キーREF列のロード
+Control File Contents
+LOAD DATA
+INFILE 'sample.dat'
+INTO TABLE departments_alt
+FIELDS TERMINATED BY ',' OPTIONALLY ENCLOSED BY '"'
+(dept_no CHAR(5),
+dept_name CHAR(30),
+dept_mgr REF(CONSTANT 'EMPLOYEES', emp_id),
+emp_id FILLER CHAR(32))
+Datafile (sample.dat)
+22345, QuestWorld, 007,
+23423, Geography, 000,
+主キーが使用可能な有効範囲なしREF列
+主キーが使用可能な有効範囲なしREF列によって、システム生成および主キーの両方の型のREFを参照できます。このようなREF列をロードするための構文は、システム生成OID型のREF列または主キーREF列にロードする場合と同じです。例10-13「システム生成REF列のロード」および例10-14「主キーREF列のロード」を参照してください。
+主キーが使用可能な有効範囲なしREF列をロードする場合は、次の制限が適用されます。
+単一表へのロード中は、この列からシステム生成または主キーのいずれかの型のREFのみを参照できます。両方は参照できません。両方の型の参照を試行すると、データ行が拒否され、参照表名が無効であることを示すエラー・メッセージが表示されます。
+この列に有効範囲なし主キーREFをロードする場合、単一表へのロード中は、1つのオブジェクト表のみ参照できます。複数の有効範囲なし主キーREF（いくつかのREFはオブジェクト表Xを指し、別のREFはオブジェクト表Yを指す）をロードする場合、次のいずれかの操作を実行する必要があります。
+単一表へのロードを2回実行します。
+有効範囲なし主キーREFのオブジェクト表名など、WHEN句によってデータのいくつかの要素が指定されている複数のINTO TABLE句を使用して、ロードを1回実行します。次に例を示します。
+LOAD DATA 
+INFILE 'data.dat' 
+INTO TABLE orders_apk 
+APPEND 
+when CUST_TBL = "CUSTOMERS_PK" 
+fields terminated by "," 
+( 
+order_no position(1) char, 
+cust_tbl FILLER char, 
+cust_no FILLER char, 
+cust REF (cust_tbl, cust_no) NULLIF order_no='0' 
+) 
+INTO TABLE orders_apk 
+APPEND 
+when CUST_TBL = "CUSTOMERS_PK2" 
+fields terminated by "," 
+( 
+order_no position(1) char, 
+cust_tbl FILLER char, 
+cust_no FILLER char, 
+cust REF (cust_tbl, cust_no) NULLIF order_no='0' 
+) 
+この2つの方法のいずれも使用しない場合、データ行が拒否され、参照されている表の名前が無効であることを示すエラー・メッセージが表示されます。
+コレクション内の有効範囲なし主キーREFは、SQL*Loaderではサポートされていません。
+このREF列にシステム生成のREFをロードする場合は、「システム生成OID型のREF列」で説明されている制限も適用されます。
+このREF列に主キーREFをロードする場合は、「主キーREF列」で説明されている制限も適用されます。
+LOBのロード
+LOBは、ラージ・オブジェクト型です。SQL*Loaderでは、次のLOB型がサポートされています。
+BLOB: 非構造化バイナリ・データを含む内部LOB。
+CLOB: 文字データを含む内部LOB。
+NCLOB: 各国語キャラクタ・セットの文字を含む内部LOB。
+BFILE: サーバー側のオペレーティング・システム・ファイルのデータベース表領域外に格納されるBLOB。
+LOBは列データ型で、NCLOB以外は、オブジェクトの属性データ型です。LOBは実際の値を持ち、その値はNULLでも「値なし（空）」でもかまいません。LOBに格納される長さ0のフィールドがある場合は、SQL*Loaderによって空のLOBが作成されます。（他のデータ型の場合は、このデータ型とは異なり、長さ0の文字列に対して、列はSQL*LoaderによってNULLに設定されます。）つまり、NULL値をLOB列にロードする方法は、NULL句を使用する方法のみです。
+XML列は、SYS.XMLTYPE型であると宣言された列です。SQL*Loaderは、XML列をCLOBと同様に処理します。次の項で説明するプライマリ・データ・ファイルまたはLOBFILESからのLOBデータのロード方法は、XML列のロードに適用できます。

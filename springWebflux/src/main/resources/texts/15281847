@@ -1,0 +1,31 @@
+On my searching about OSX on virtualization, I find some interesting tutorial on pcwizxomputer.com. And base on that I manage sucessfully to install and running iAtkos v5i on VMWare Player 2.5.1 and VMWare Workstation 6.5.1.
+Here is my stories : 
+My Host Machine is acer aspire 4920G with 2G rams, running Ubuntu 8.10 x86_64 with the latest upgrade. 
+Virtualization application that I used is VMWare Player 2.5.1. 
+(note: I found a windows software to configure VMware VMX configuration file and VMDK disk image, you can google it for key VMX Builder)
+The VMware configuration is: 
+1. Virtual Disk should be IDE type, and minimal 8 GB. 
+2. OS type selection is "other" and the version is "FreeBSD64" 
+3. Ethernet mode is bridge (I tried NAT mode but I can't make it running) and make sure that the bridged ethernet on the host is the active link. 
+4. I use the iso disk images as the source of CD / DVD.
+OSX Custom Install: 
+SMBIOS28, Kernel 9.2.0 TOH and Intel Ethernet driver
+So you can power on the virtual machine. 
+On StartUp Boot Message press "F8", and boot prompt should come up.
+If the virtual machine is working, you should see boot sequence some message on the screen.
+finally the "welcome message screen for iAtkos v5i" should come up
+select utilities->disk util, erase and setup the disk, I set single partition (just select erase tab and set the Volume name, and click "erase" 
+you will see the volumes and you can quit disk util.
+click continue and select the destination volume, continue and than click "customize", select the customisation of this installation as state on the top.
+and the click install
+the installation progress should come up 
+on my machine it's take about 30 minutes, and the machine should restart automaticaly on the end of installation. 
+after restarted if you press "F8" on the boot up message you will see
+if you set "-v -f" you will see some boot up sequence, and this is good to see if some thing wrong happen.
+if not you wll see 
+after a while on my machine it's about 10 minutes (but next boot up sequence is only take 3 minutes), if there is no error, the "Welcome Message Screen" is up
+and you can start with customisation of your OSX ..... and the end your Desktop will come up.
+If you have Ethernet connected to internet you can start the Ethernet assistant to setup the ethernet automatically. 
+(Your LAN/WLAN on the host machine should connected to dhcp server).
+DONE!!! 
+my vmx/vmdkOriginal post blogged on b2evolution.

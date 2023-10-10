@@ -1,0 +1,24 @@
+考慮しなければならないのは、1ページに表示する件数取得するレコードの開始位置表示するレコードの内容を切り替える「前/次ページへのリンク」の作成 　となります。　この点を踏まえて、検索条件を処理して検索結果を表示するページを作ります。
+<?php
+//文字コードの指定
+header("Content-Type: text/html;charset=utf-8");
+//APIのインクルード
+include_once('FileMaker.php');
+//レコード取得開始位置の指定 ※1
+if(isset($_GET['skip'])){
+$skip = $_GET['skip'];
+}else{
+$skip = 0;
+}
+//レコード取得件数の指定 ※2
+$max = 10;
+//FileMakerに接続
+$fm = new FileMaker();
+$fm->setProperty('database', 'Catalog');
+$fm->setProperty('hostspec', 'http://localhost');
+$fm->setProperty('username', 'web');
+$fm->setProperty('password', 'pass');
+//検索オブジェクトの作成 ※3
+$findCommand =& $fm->newFindCommand('web_catalog');
+//レコードの取得範囲の指定。※4
+$findCommand->setRange($skip,$max);

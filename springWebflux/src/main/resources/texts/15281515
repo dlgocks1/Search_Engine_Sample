@@ -1,0 +1,22 @@
+Monitor & Manage VMs on the Go
+Introducing the first and only heterogeneous hypervisor mobile management tool – Virtualization Mobile Manager (VMM)
+VMM supports VMware, Xen and Hyper-V hypervisor platforms. Affordable, easy to use, and workable even on simple cell phones. 
+Features
+Monitor and manage on the go
+Monitor multiple host and VM performance stats (CPU, Memory)
+Understand datacenter health
+Configure based on server type, server name, or browser type
+Read VMM Product Documentation
+Mobile
+Monitor Host and VM Performance Statistics (CPU, Memory)
+Control VMs and Take Action on the Go (start, stop, pause, reset, disable network)
+Optimized for Mobile Devices (Apple iPhone, Blackberry, Google Android and Windows Mobile Devices)
+Supported Hypervisors
+VMware Server 2
+VMware Infrastructure 3.5 Hosts (VMware ESX 3.5, ESXi 3.5, VirtualCenter 2.5)
+VMware vSphere 4
+Microsoft Hyper-V
+Citrix XenServer 5
+Supported Platforms
+VMM is hosted as an Apache Tomcat Web application
+Windows, Linux, and Mac OS X

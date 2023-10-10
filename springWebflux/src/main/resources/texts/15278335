@@ -1,0 +1,88 @@
+Grails, Groovy, Spring, vmwareGrails 1.2-M2 リリース今回のリリースの内容Spring3に更新Grails 1.2 マイルストーン2は最新のSpring3を使用したGrailsの最初のリリースになります。このリリースから、@Serviceや@Component等、Springのアノテーションがサポートされています。※Mavenな人への注意点：このリリースでは、Spring3のスナップショットを使用しているためMavenリポジトリの物と内容が違います。次のマイルストーンでは最終リリースのSpring3になるのでPOMはその時に設定するそうです。そして、@Controllerをもったクラスは、通常のSpring-MVCと同じようにリクエストを処理できるようになったので、Spring-MVCとGrailsの組み合わせで開発をすることもできます。
+@Controller
+class SpringController {
+@Autowired 
+SessionFactory sessionFactory
+@RequestMapping("/hello.dispatch") 
+ModelMap handleRequest() { 
+def session = sessionFactory.getCurrentSession() 
+return new ModelMap(session.get(Person, 1L)) 
+}
+}
+URI Re-writing onto any URIURLマッピングgrails-app/conf/UrlMappings.groovyで以下のような書式を使用して、どのようなリクエストURIも他のURIへリライトできるようになりました。以下の例は、上記のSpring-MVCでの例。
+"/hello"(uri:"/hello.dispatch")
+@Transactionalでのメソッド単位のトランザクションの実装Springのアノテーションorg.springframework.transaction.annotation.TransactionalをGrailsのサービスで使用可能になりました。@Transactionalの定義をすることでメソッド単位のトランザクション実装が可能です。
+import org.springframework.transaction.annotation.*
+class BookService {
+@Transactional(readOnly = true)
+def listBooks() {
+Book.list()
+}
+@Transactional
+def updateBook() {
+// …
+}
+}
+GORM ダイナミックファインダでのBoolean値の機能を追加
+class Book {
+String title
+String author
+Boolean paperback
+}
+def results = Book.findAllPaperbackByAuthor("Douglas Adams")
+def results = Book.findAllNotPaperbackByAuthor("Douglas Adams")
+GORMにhasOneマッピングをサポート
+class Person { 
+String name 
+static hasOne = [address: Address]
+}
+class Address {
+String street
+String postCode
+}
+Named Query Support ドメインクラスで名前付き問合せ定義が可能になりました。
+class Publication {
+String title
+Date datePublished
+static namedQueries = {
+recentPublications {
+def now = new Date()
+gt 'datePublished', now - 365
+}
+publicationsWithBookInTitle {
+like 'title', '%Book%'
+}
+}
+}
+// get all recent publications…
+def recentPubs = Publication.recentPublications()
+// get all recent publications (alternate syntax)…
+def recentPubs = Publication.recentPublications.list()
+// get up to 10 recent publications, skip the first 5…
+def recentPubs = Publication.recentPublications(max: 10, offset: 5)
+def recentPubs = Publication.recentPublications.list(max: 10, offset: 5)
+// get the number of recent publications…
+def numberOfRecentPubs = Publication.recentPublications.count()
+// get a recent publication with a specific id…
+def pub = Publication.recentPublications.get(42)
+GORM 厳密なバリデーションエラーsave()メソッドに、引数としてfailOnError:trueを付けるとValidationExceptionを返すようになりました。
+try {
+book.save(failOnError:true)
+}catch(ValidationException e) {
+// handle
+}
+WARデプロイでのGSPプリコンパイルWar書きだし時にGSPがプリコンパイルされます。i18nでのクラス名プロパティ名をハンドルi18nのmessages.propertieに以下のように記述できるようになりました。これらの設定をおこなうとデフォルトのエラーメッセージにも定義した内容で表示されます。i18m-templateプラグインとほぼ同等です。
+book.label = ラベル
+book.title.label = ラベルの名称
+マルチ組込コンテナサポート、デフォルトはTomcatに！プラグインの切替によって組込コンテナを変更できます。デフォルトはTomcatになりました。
+grails uninstall-plugin tomcat
+grails install-plugin jetty
+名称付きURLマッピング名称付きURLマッピングの実装と共に、ViewレイヤーでのURL再生成用のダイナミックタグを実装。
+name productDetail: "/showProduct/$productName/$flavor?" {
+controller = "product"
+action = "show"
+}
+上記の例は、productDetailという名称付きURLマッピングの定義です。そして下記の内容の書式でリンクが生成できます。
+"licorice" 
+flavor="strawberry">Strawberry Licorice
+プロジェクトドキュメントエンジンプロジェクトのsrc/doc/ref、src/doc/guide以下にファイルを配置することで、Grailsのリファレンスと同じドキュメントエンジンがプロジェクトで利用可能。サンプルはこんな感じ http://github.com/grails/grails/tree/bf118efa2926671e7dbdf51dacde42d16d8d49e0/grails-doc/src/guideプラグインメタジェネレータセントラルリポジトリ(Grails公式リポジトリ)にプラグインをリリースする際に、ランタイム時(Grails起動時)にGrailsクラスに追加されたメソッドやプロパティ情報のメタデータが生成されます。このメタデータ情報はplugin.xmlに記述されIDEやドキュメントエンジンから参照可能にするものです。もしそのプラグインがメソッドの追加等を行わない場合は、メタデータ情報生成を以下のコマンドで停止することができます。grails release-plugin --skipMetadata マイルストーン3での目標は、スタンドアロンGSP、Webフローをプラグインに切り離し等らしいです。

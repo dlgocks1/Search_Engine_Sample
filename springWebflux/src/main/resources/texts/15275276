@@ -1,0 +1,61 @@
+設定の概要 †
+OS のインストール/設定
+Nutch-1.0 (2009-03-28 release) のインストール
+とりあえずクロールする
+とりあえず検索する
+Web UI の設定
+↑
+OS のインストール/設定 †
+とりあえず Ubuntu 8.10 をインストールしてください。
+% sudo apt-get install sun-java6-jdk
+% sudo apt-get install ant-optional
+% sudo apt-get install apache2
+ant-optional を入れるのを忘れないようにしてください。 ML
+% export JAVA_HOME=/usr/lib/jvm/java-6-sun
+JAVA_HOME の設定は適切なドットファイルに記述しておいた方が良いでしょう。
+↑
+Nutch-1.0 (2009-03-28 release) のインストール †
+% tar xzvf nutch-1.0.tar.gz
+% cd nutch-1.0
+% ant
+% bin/nutch
+bin/nutch コマンドで各種オプションが表示されるのを確認してください。
+↑
+とりあえずクロールする †
+クロールの起点の URLs を示したファイルを入れたディレクトリを作成する。例えば nutch のサイトを起点にクロールする際には urls/nutch というファイルに以下のように記述する。
+http://lucene.apache.org/nutch/
+NAIST のサイトを起点にクロールする際には urls/naist というファイルに以下のように記述する。
+http://www.naist.jp/
+クロールするサイトの制限の設定を行う。 conf/crawl-urlfilter.txt の MY.DOMAIN.NAME を制限するサイトの URLs に応じて置き換える。例えば apache.org に制限する場合には
++^http://([a-z0-9]*\.)*apache\.org/
+naist.jp に制限する場合には
++^http://([a-z0-9]*\.)*naist\.jp/
+とする。
+conf/nutch-site.xml に最小限の properties を記述する。 記述例 &ref(nutch-site.xml) (このまま利用しないでください)
+クロールする。 nutch crawl コマンドを実行すれば良い。オプションとして以下のようなものがある：
+-dir dir クロールする URLs が記述されたファイルがあるディレクトリ指定
+-threads threads 並列に走らせるスレッドの数
+-depth depth クロールするリンク深度：起点となるページからのリンクホップ数
+-topN N 各リンク階層でとってくるページ数の最大値
+例えば次のように実行する
+bin/nutch crawl urls -dir crawl -depth 3 -topN 50
+↑
+Web UI の設定 †
+apache-tomcat の install。何故か ubuntu において、apt-get による apache-tomcat のインストールでは動かない。情報源
+$NUTCH_HOME で
+# export JAVA_HOME=/usr/lib/jvm/java-6-sun
+/opt/apache-tomcat-5.5.27/ に展開 apache-tomcat のバイナリパッケージを展開、ビルド
+# rm -rf /opt/apache-tomcat-5.5.27/web-apps/ROOT*
+# cp /opt/nutch/nutch-1.0.war /opt/apache-tomcat-5.5.27/web-apps/ROOT.war
+# /opt/apache-tomcat-5.5.27/bin/catalina.sh start
+# /opt/apache-tomcat-5.5.27/bin/catalina.sh stop
+# cd /opt/apache-tomcat-5.5.27/web-apps/ROOT/WEB-INF/classes
+# emacs -nw nutch-site.xml
+searcher.dir の設定
+<property>
+<name>searcher.dir</name>
+<value>/opt/nutch/crawl</value>
+</property>
+# /opt/apache-tomcat-5.5.27/bin/catalina.sh start
+注意点:tomcat-5.5.27 以降を利用する場合、STRICT_QUOTE_ESCAPING を disable にする必要がある。.bashrc などに 以下のように記述すれば良い：
+% export CATALINA_OPTS="-Dorg.apache.jasper.compiler.Parser.STRICT_QUOTE_ESCAPING=false"

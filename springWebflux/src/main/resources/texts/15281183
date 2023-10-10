@@ -1,0 +1,55 @@
+hp netserver lp 1000r †
+もう古いサーバーですね。引き上げてきて使わない状態になっていたので、クラスタリングの練習にでも使ってみます。
+↑
+CentOS4.4 をインストール †
+[root@centos62 src]# wget "http://www.tuxyturvy.com/files/megaraid2.tar.bz2"
+--13:15:10-- http://www.tuxyturvy.com/files/megaraid2.tar.bz2
+=> `megaraid2.tar.bz2'
+Resolving www.tuxyturvy.com... 63.144.60.89
+Connecting to www.tuxyturvy.com|63.144.60.89|:80... connected.
+HTTP request sent, awaiting response... 301 Moved Permanently
+Location: http://www.tuxyturvy.com/files/megaraid.tar.bz2 [following]
+--13:15:11-- http://www.tuxyturvy.com/files/megaraid.tar.bz2
+=> `megaraid.tar.bz2'
+Connecting to www.tuxyturvy.com|63.144.60.89|:80... connected.
+HTTP request sent, awaiting response... 200 OK
+Length: 33,769 (33K) [application/x-bzip2]
+100%[==============================================>] 33,769 56.32K/s
+13:15:12 (56.27 KB/s) - `megaraid.tar.bz2' saved [33769/33769]
+[root@centos32 megaraid]# tar xjvfp megaraid.tar.bz2
+[root@centos32 megaraid]# make -C /lib/modules/2.6.9-42.EL/build SUBDIRS=/usr/src/megaraid modules
+して megaraid.ko を作成します。
+このカーネルモジュールをフロッピーにコピーしておきます。
+フロッピーディスクはFATでフォーマットされたものを用意しておけば、
+既存のCentOSデスクトップなどから、GUIでコピーできます。
+次はMegaRAIDを積んだマシンで普通にインストールを始めます。ポイントはBOOT画面で
+linux noprobe 
+して起動すること。そうすると「デバイスを追加しますか？」という類のメッセージが出て来ますので、「ADD DEVICE」を選択します。
+作成したフロッピーを挿入し
+Ctrl + Alt + F2
+mkdir /mnt/floppy
+insmod /mnt/floppy/megaraid.ko
+lsmodしたり Alt + F4 画面で megaraid が有効になっていることを確認し、Ctrl + Alt + F1 で元の画面に戻ります。他のデバイスには目をくれず、戻ります。
+続きは普通にインストールしてください。
+大事なのは「Reboot」と出る最後の部分。焦ってリブートしないでください。
+Ctrl + Alt + F2
+chroot /mnt/sysimage
+vi /etc/modprobe.conf
+「alias scsi_hostadapter sym53c8xx」 の行を
+「alias scsi_hostadapter megaraid」
+に変更して保存。
+cd /boot
+/sbin/mkinitrd initrd-2.6.9-42.EL.img.megaraid 2.6.9-42.EL
+cp initrd-2.6.9-42.EL.img.megaraid initrd-2.6.9-42.EL.img
+exit
+Alt + F7
+「Reboot」
+まだ注意点があります。それはシングルプロセッサマシンでない場合。上の作業ではシングルプロセッサ用のイメージしか作っていませんので、インストール直後の最初の起動は BOOT 画面 で UP kernel を選択してください。マルチプロセッサの場合の作業も同上です。
+root でログイン
+フロッピー挿入
+mount /media/floppy
+cp /mnt/floppy/megaraid.ko /mnt/sysimage/lib/modules/2.6.9-42.ELsmp/kernel/drivers/scsi/
+/sbin/mkinitrd initrd-2.6.9-42.ELsmp.img.megaraid 2.6.9-42smp.EL
+cp initrd-2.6.9-42.ELsmp.img.megaraid initrd-2.6.9-42.ELsmp.img
+この状態でもう一度「reboot」してください。
+↑

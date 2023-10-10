@@ -1,0 +1,164 @@
+End-of-Sale and End-of-Life Products : Cisco PIX 500 シリーズ セキュリティ アプライアンス
+PIX/ASA/FWSMのオブジェクトグループの使用と設定
+目次 
+概要 前提条件       要件       使用するコンポーネント       関連製品       表記法 オブジェクトグループを使用して下さい オブジェクトグループを設定して下さい       ICMP タイプの設定       ネットワークの設定       プロトコルの設定       サービスの設定       オブジェクト グループのネスト設定 検証 トラブルシューティング       問題       解決策 NetPro ディスカッション フォーラム - 特集対話 関連情報 
+概要 
+この文書では、PIX コードのバージョン 6.2 で導入された、オブジェクト グループについて説明します。 オブジェクトをグループ化すると、IP ホスト、またはネットワーク、プロトコル、ポート、Internet Control Message Protocol（ICMP; インターネット制御メッセージ プロトコル）タイプなどのオブジェクトを、オブジェクト グループとしてまとめることが可能です。 設定されてそのグループ内のすべてのオブジェクトを参照するために、オブジェクトグループは標準のコンジットまたはaccess-listのPixコマンドでそれから使用することができます。 これはコンフィギュレーションサイズを減らします。 
+注： オブジェクトグループの名前を変更することができません。 それらを削除し、変更との再度加える必要があります。 
+注： access-listがオブジェクトグループで作成されれば、access-groupコマンドでインターフェイスに適用する必要があります。 
+前提条件 
+要件 
+この文書に関する特別な要件はありません。 
+使用するコンポーネント 
+この文書の情報は、次のソフトウェアとハードウェアのバージョンに基づいています。 
+CiscoのPIXソフトウェアリリース6.2 (2)およびそれ以降 
+Cisco 515のPIXファイアウォール(どのPIXモデルRでもこれらのコンフィギュレーションを使用します) 
+ソフトウェアリリース7.0およびそれ以降が付いているCisco ASA 
+Cisco Firewallのサービスモジュール(FWSM)その実行のソフトウェアのバージョン1.1およびそれ以降 
+この文書の情報は、特定のラボ環境にあるデバイスに基づいて作成されています。 この文書で使用するデバイスは、すべて初期（デフォルト）の設定で起動しています。 コマンドが実稼動中のネットワークに与える影響について理解しておいてください。 
+関連製品 
+この文書に記載されている情報はCisco 5500シリーズの適応性があるセキュリティアプライアンスモデル(ASA)にまた適当その実行のソフトウェアのバージョン7.0およびそれ以降です。 
+表記法 
+文書の表記法の詳細は、「シスコ テクニカル ティップスの表記法」を参照してください。 
+オブジェクトグループを使用して下さい 
+コマンド内のオブジェクトグループを使用するとき、この例に示すようにグループ名の前にキーワードのオブジェクト・グループを、使用して下さい。 
+access-list 100 permit object-group protocols object-group
+remotes object-group locals object-group services
+この例では、protocols、remotes、locals、services は、以前に定義されたオブジェクト グループ名です。 オブジェクトグループはまた他のオブジェクトグループのサブセットとして1つのオブジェクトグループを含むことができるところに入り込むことができます。 
+コマンドのセットはこの出力で示されています。 
+object-group grp_id
+object-group description description_text
+group-object object_grp_name
+object-group icmp-type grp_id
+icmp-object icmp_type
+object-group network grp_id
+network-object host host_addr
+network-object net_addr netmask
+object-group protocol grp_id
+protocol-object protocol
+object-group service grp_id {tcp|udp|tcp-udp}
+port-object eq service
+port-object range begin_service end_service
+オブジェクトグループを設定して下さい 
+ICMP タイプの設定 
+ICMPタイプのオブジェクトグループはICMPのAccess Control List (ACL)およびコンジットとのだけ使用のために特定のICMPのタイプを指定するために使用されます。 ICMPのタイプの詳細なリストはobject-groupコマンドのためのPIXコマンド・レファレンスにあります。 
+(config)#object-group icmp-type icmp-allowed
+(config-icmp-type)#icmp-object echo 
+(config-icmp-type)#icmp-object time-exceeded
+(config-icmp-type)#exit
+(config)#access-list 100 permit icmp any any object-group icmp-allowed
+ネットワークの設定 
+ACLかコンジットで定義したいと思うサブネットレンジかホストのIPアドレスを指定するためにネットワーク・オブジェクトのグループを使用して下さい。 ホスト IP アドレスには、プレフィクスとしてキーワード hostを使用し、IP アドレスまたはすでに nameコマンドで定義されているホスト名のいずれかを指定できます。 関連するACL/conduitでソースか宛先としてこのオブジェクトグループを使用できます。 
+(config)#names
+(config)#name 10.1.1.10 myFTPserver
+(config)#object-group network ftp_servers
+(config-network)#network-object host 10.1.1.14
+(config-network)#network-object host myFTPserver
+(config-network)#network-object 10.1.1.32 255.255.255.224
+(config-network)#exit
+(config)#access-list 101 permit ip any object-group ftp_servers
+このリストがFTPサーバからだけ成っている場合、この特定の例は適用されます。 
+(config)#access-list 101 permit tcp any object-group ftp_servers eq ftp
+プロトコルの設定 
+ACLかコンジットで定義したいと思うプロトコルを指定するためにプロトコル・オブジェクト・グループを使用して下さい。 関連するACLかコンジットでだけプロトコルタイプとしてこのオブジェクトグループを使用できます。 このオブジェクト グループに使用可能なプロトコルは、access-list または conduit コマンドで認められている標準 PIX プロトコル名だけであることに注意してください。標準 PIX プロトコル名には、Transmission Control Protocol（TCP）、User Datagram Protocol（UDP）、Generic Routing Encapsulation（GRE）、Enhanced Interior Gateway Routing Protocol（EIGRP）、Encapsulating Security Payload（ESP）、Authentication Header（AH）などがあります。 TCP または UDP の上位にあるプロトコルは、プロトコル オブジェクト グループでは、指定できません。 その代り、これらのプロトコルはこの例に示すようにオブジェクトグループを、使用します。 
+(config)#object-group protocol proto_grp_1
+(config-protocol)#protocol-object udp
+(config-protocol)#protocol-object tcp
+(config-protocol)#protocol-object esp
+(config-protocol)#exit
+(config)#access-list 102 permit object-group proto_grp_1 any any
+サービスの設定 
+ACLかコンジットで定義したいと思うTCPやUDPポートの細目か範囲を指定するためにサービスオブジェクトグループを使用して下さい。 この例に示すように関連するACL/conduitでソースポートか宛先ポートとしてこのオブジェクトグループを、使用できます。 
+(config)#object-group service allowed_prots tcp
+(config-service)#port-object eq ftp
+(config-service)#port-object range 2020 2021
+(config-service)#exit
+(config)#object-group service high_ports tcp-udp
+(config-service)#port-object range 1024 65535
+(config-service)#exit 
+(config)#access-list 103 permit tcp any object-group 
+high_ports any object-group allowed_prots
+注： より充実したサービスのオブジェクト・グループはソフトウェアのバージョン8.0のリリースを使用してもたらされました。 より充実したサービスのオブジェクト・グループはプロトコルおよびICMPタイプの細目のオブジェクトグループの必要性を省く同じサービス・グループでIPのプロトコルを統合するためにASA/PIXを有効にします。 プロトコルタイプはより充実したサービスのオブジェクト・グループを設定するために指定されてはなりません。 
+(config)#object-group service RTPUsers
+(config-service)#service-object icmp echo-reply
+(config-service)#service-object icmp echo
+(config-service)#service-object tcp http
+(config-service)#service-object tcp https
+(config-service)#service-object tcp http
+(config-service)#service-object tcp pptp
+(config-service)#service-object udp domain
+(config-service)#service-object udp isakmp
+(config-service)#service-object esp
+(config-service)#service-object gre
+(config-service)#exit 
+(config)#access-list acl_inside permit object-group RTPUsers 192.168.50.0 
+255.255.255.0 any
+(config)#show access-list acl_inside
+access-list acl_inside line 1 extended permit object-group RTPUsers 
+192.168.50.0 255.255.255.0 any 
+access-list acl_inside line 1 extended permit icmp 
+192.168.50.0 255.255.255.0 any echo-reply (hitcnt=0) 
+access-list acl_inside line 1 extended permit icmp 
+192.168.50.0 255.255.255.0 any echo (hitcnt=0) 
+access-list acl_inside line 1 extended permit tcp 
+192.168.50.0 255.255.255.0 any eq www (hitcnt=0) 
+access-list acl_inside line 1 extended permit tcp 
+192.168.50.0 255.255.255.0 any eq https (hitcnt=0) 
+access-list acl_inside line 1 extended permit udp 
+192.168.50.0 255.255.255.0 any eq domain (hitcnt=0) 
+access-list acl_inside line 1 extended permit esp 
+192.168.50.0 255.255.255.0 any (hitcnt=0) 
+access-list acl_inside line 1 extended permit gre 
+192.168.50.0 255.255.255.0 any (hitcnt=0) 
+access-list acl_inside line 1 extended permit udp 
+192.168.50.0 255.255.255.0 any eq isakmp (hitcnt=0) 
+access-list acl_inside line 1 extended permit tcp 
+192.168.50.0 255.255.255.0 any eq pptp (hitcnt=0) 
+オブジェクト グループのネスト設定 
+同じタイプのオブジェクト グループだけを、他のオブジェクト グループ内にネストできます。 たとえば、ネットワーク タイプのオブジェクト グループには、プロトコル タイプのオブジェクト グループをネストできません。 
+グループ内のグループに入り込むためには、group-objectサブコマンドを発行して下さい。 この例では、ACLかコンジットで4つのホストをすべて指定するためにall_hostsのグループを使用できます。 または、各グループ内の2つのホストだけ指定するためにhost_grp_1かhost_grp_2を使用できます。 
+(config)#object-group network host_grp_1
+(config-network)#network-object host 10.1.1.10
+(config-network)#network-object host 10.1.1.14 
+(config-network)#exit
+(config)#object-group network host_grp_2
+(config-network)#network-object host 172.16.10.1
+(config-network)#network-object host 172.16.10.2
+(config-network)#exit
+(config)#object-group network all_hosts
+(config-network)#group-object host_grp_1
+(config-network)#group-object host_grp_2
+(config-network)#exit
+検証 
+このセクションは設定作業をきちんと確認するために使用できる情報を提供します。 
+特定の show コマンドは、アウトプットインタープリタ（登録ユーザ専用）によってサポートされています。これにより、show コマンド出力の分析を表示できます。 
+show running-configオブジェクトグループSHOW現在定義されたACL。 
+show access-list < acl > -各ラインのためのACLおよび関連するヒットカウンタを示します。 このコマンドは、定義済みの各オブジェクト グループに関する拡張 ACL エントリを表示します。 
+clear object-group [grp_type] -パラメータなしで入力されたとき、clear object-groupコマンドはコマンドで使用しないすべての定義されたオブジェクトグループを取除きます。 grp_typeのパラメータの使用はそのグループタイプだけのためにコマンドで使用しないすべての定義されたオブジェクトグループを取除きます。 
+トラブルシューティング 
+問題 
+このエラーメッセージが現れます: 
+error message: "ERROR: Unable to add, access-list config limit reached"
+解決策 
+このエラーメッセージはセキュリティアプライアンスモデルがこのコンテキストのためのACLの限界に密接であることを示します。 
+FWSMがリソースをどのようにについての割り当てるか情報に関しては仕様を参照して下さい。 
+ルールとメモリ割り当て間のマッピングはマッピングする1から1ではないです。 それはルールによって実際にハードウェアでどのようにプログラムされるか、決まり。 利用可能な2つのオプションがACEのメモリの使用を最大限にするためにあります: 
+簡素化するACE Antries 
+これらの推奨される操作はACEエントリを要約し、簡素化することを可能にします: 
+隣接するホスト・アドレスを可能な限り使用して下さい。 ACEのAggegrateのホストの文かネットワークへのオブジェクト・グループ。 
+可能な場合「」ネットワークの代りに使用し、ホストの代りにネットワークを使用して下さい。 
+オブジェクト グループの簡素化を試みます。 これにより、ACL が拡張される場合、ACE を何百も節約できる可能性があります。 
+範囲に個別のポートの文を、たとえば一緒にグループ化して下さい。 
+分割のメモリ割り当て 
+もう一つのオプションはメモリが各配分のACEのために割り当てた分割にあります。 このオプションはFWSMをリブートすることを必要とします。 このアプローチと注意し、電流ACEを取り扱うために確かめて下さい。 
+FWSMは12の配分に基本的にACEのために割り当てられるメモリを配分し、それぞれのためのメモリを割り当てます。 これは自動的に実行されます。 
+2.3 (2)およびそれ以降、持っている基づいてメモリを再割当てするためにコンテキストの数にリソースマネージャを使用できます。 次の手順を実行します。 
+何コンテキストを有するか判別するためには、show contextのカウントのコマンドを発行して下さい。 
+設定とのこれを確認して下さい。 それから、提示リソースのACL配分のコマンドを発行して下さい。 
+このコマンドは持っている配分の数を知らせたものです。 
+定義されたコンテキストよりより多くの配分がある場合、コンテキストの数に配分の数を一致させるためにリソースのACL配分の<number-of-partitions>のコマンドを発行して下さい。 
+設定を保存し、FWSMをリブートして下さい。 
+このコマンドはこれがコンテキストに追加するACEによって十分決まるであるかどうか、ACEのためのそれ以上のメモリを与えたものです。 
+この再マッピングの1つの欠点は別のコンテキストを追加したいと思えば再度マッピングしているメモリを再割当てする必要があることです。 これはより小さいメモリを各コンテキストに利用可能にし、現在のACE定義を壊すことができます。 FWSMに割り当てられるメモリは20 mbの有限な量であり、前もって決定された方法でまたはこの手動リソースアロケータによってそれに応じて開発されます。 これのためのモジュールの他の部品からメモリを借りることができません。 
+NetPro ディスカッション フォーラム - 特集対話 
+Networking Professionals Connection はネットワーキング プロフェッショナルが、ネットワーキングに関するソリューション、製品、およびテクノロジーについての質問、提案、情報を共有するためのフォーラムです。 特集リンクでは、このテクノロジー分野での最新の対話を取り上げています。

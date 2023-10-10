@@ -1,0 +1,2 @@
+*BSDのためのRemote ndis("rndis")デバイスドライバを開発する。 
+"rndis"は、ホストコンピュータとWindows Mobileデバイスの間の通信プロトコル。

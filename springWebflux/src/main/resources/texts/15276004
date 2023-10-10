@@ -1,0 +1,1 @@
+entity ID who died, userid should be used first, to get the dead Player. Otherwise, it is not a player, so use this.

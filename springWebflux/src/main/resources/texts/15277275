@@ -1,0 +1,13 @@
+Friday, July 03, 2009
+ImageMagickとPHPでランダムな円を描画する
+Imagickでランダムな円を描画するには、以下のコードを実行します。 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"> <html xmlns="http://www.w3.org/1999/xhtml" lang="ja" xml:lang="ja" dir="ltr"> <head> <title>sample1152(ImageMagick6.5.2)</title> </head> <body> <?php /* 画像サイズ */ $sw = 200; $sh = 200; /* 円の半径 */ $minr = 5; $maxr = 20; /* 線の太さ */ $minsw = 3; $maxsw = 6; /* 円の数 */ $noc = 30; /* 円の色 */ $cc = array( "#7799ff80", "#ffd02080", "#ff705080", "#c0ff9080" ); $im = new Imagick(); $im->newImage($sw, $sh, "none"); $im->setImageMatte(true); $idraw = new ImagickDraw(); $idraw->setFillColor("none"); for($lc=0;$lc<$noc;$lc++){ $idraw->setStrokeColor($cc[rand(0,count($cc)-1)]); $idraw->setStrokeWidth(rand($minsw, $maxsw)); $rad = rand($minr, $maxr); $idraw->ellipse(rand(0,$sw),rand(0,$sh), $rad, $rad,0,360); } $im->drawImage($idraw); $im->writeImage('sample1152a.png'); $idraw->destroy(); $im->destroy(); ?> <img src="sample1152a.png" /><br /> </body> </html> 出力画像(sample1152a.png) 
+投稿者
+kyle
+場所
+7:08 AM
+ラベル:
+PHP,
+図形描画
+0
+コメント:
+Post a Comment

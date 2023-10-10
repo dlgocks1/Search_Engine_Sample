@@ -1,0 +1,253 @@
+Abstract (概要)
+OpenID Authentication provides a way to prove that an end user
+controls an Identifier. It does this without the Relying Party
+needing access to end user credentials such as a password or
+to other sensitive information such as an email address.
+OpenID認証は、エンドユーザが管理する任意のIdentifierを証明する方法を提供します。Relying Partyがエンドユーザのパスワードのようなクレデンシャルや他のE-Mailアドレス等のセンシティブな情報にアクセスする必要がありません。
+OpenID is decentralized. No central authority must approve or
+register Relying Parties or OpenID Providers. An end user
+can freely choose which OpenID Provider to use, and can
+preserve their Identifier if they switch OpenID Providers.
+OpenIDは分散的です。中央の証明機関の承認やRelying PartyやOpenID Providerを登録する必要がありません。エンドユーザは利用するOpenID Providerを自由に選ぶ事ができ、もしOpenID Providerを切り替えたとしてもそれらのIdentifierを保つ事が出来ます。
+While nothing in the protocol requires JavaScript or modern
+browsers, the authentication scheme plays nicely with
+"AJAX"-style setups. This means an end user can prove their
+Identity to a Relying Party without having to leave their
+current Web page.
+その手順の中ではJavaScriptやモダンブラウザを要求しませんが、認証スキームはAJAXスタイルの機構でうまくいきます。これは、エンドユーザが現在のWebページを離れる事なく、Relying PartyにIdentityを証明出来る事を意味します。
+OpenID Authentication uses only standard HTTP(S) requests and
+responses, so it does not require any special capabilities of
+the User-Agent or other client software. OpenID is not tied to
+the use of cookies or any other specific mechanism of Relying
+Party or OpenID Provider session management. Extensions to
+User-Agents can simplify the end user interaction, though are
+not required to utilize the protocol.
+OpenID認証は標準的なHTTP(S)リクエストとレスポンスのみを使うので、User-Agentの特別な能力や他のクライアントソフトウェアを要求しません。OpenIDはRelyng PartyやOpenID Providerのセッション管理について、Cookieや他の仕組みで束縛する事をしません。User-Agentの為の拡張ははエンドユーザの相互作用を単純にしますが、プロトコルの利用に置いて必須ではありません。
+The exchange of profile information, or the exchange of other
+information not covered in this specification, can be addressed
+through additional service types built on top of this
+protocol to create a framework. OpenID Authentication is
+designed to provide a base service to enable portable,
+user-centric digital identity in a free and decentralized manner.
+プロフィール情報の交換や、この仕様書の中で扱われない他の情報の交換は、フレームワークを作る為にこnプロトコルの上に組まれる追加サービスタイプを通して行う事が出来ます。OpenID認証は、自由で分散的な方法によるユーザ中心のデジタルアイデンティティを、移植しやすい基本サービスを提供する為に設計されています。
+Table of Contents
+1. 
+Requirements Notation and Conventions(要求される表記法と慣習) 
+2. 
+Terminology(用語) 
+3. 
+Protocol Overview(プロトコル概観) 
+4. 
+Data Formats(データ形式) 
+4.1. 
+Protocol Messages(プロトコルメッセージ) 
+4.2. 
+Integer Representations(整数表現) 
+5. 
+Communication Types(通信タイプ) 
+5.1. 
+Direct Communication(直接通信) 
+5.2. 
+Indirect Communication(間接通信) 
+6. 
+Generating Signatures(署名の生成) 
+6.1. 
+Procedure(手順) 
+6.2. 
+Signature Algorithms(署名アルゴリズム) 
+7. 
+Initiation and Discovery(開始と発見) 
+7.1. 
+Initiation(開始) 
+7.2. 
+Normalization(正規化) 
+7.3. 
+Discovery(発見) 
+8. 
+Establishing Associations(関連付けの確立) 
+8.1. 
+Association Session Request(関連づけセッション要求) 
+8.2. 
+Association Session Response(関連づけセッション応答) 
+8.3. 
+Association Types(関連づけタイプ) 
+8.4. 
+Association Session Types(関連づけセッションタイプ) 
+9. 
+Requesting Authentication(認証の要求) 
+9.1. 
+Request Parameters(要求のパラメータ) 
+9.2. 
+Realms(レルム) 
+9.3. 
+Immediate Requests(直接の要求) 
+10. 
+Responding to Authentication Requests(認証リクエストへの応答) 
+10.1. 
+Positive Assertions(肯定表明) 
+10.2. 
+Negative Assertions(否定表明) 
+11. 
+Verifying Assertions(表明の照合) 
+11.1. 
+Verifying the Return URL(戻りURLの照合) 
+11.2. 
+Verifying Discovered Information(発見した情報の照合) 
+11.3. 
+Checking the Nonce(Nonceの確認) 
+11.4. 
+Verifying Signatures(署名の照合) 
+11.5. 
+Identifying the end user(エンドユーザの身元確認) 
+12. 
+Extensions(拡張) 
+13. 
+Discovering OpenID Relying Parties(OpenID Relying Partyの発見) 
+14. 
+OpenID Authentication 1.1 Compatibility(OpenID認証 1.1 互換) 
+14.1. 
+Changes from OpenID Authentication 1.1(OpenID認証 1.1からの変更) 
+14.2. 
+Implementing OpenID Authentication 1.1 Compatibility(OpenID認証 1.1互換の実装) 
+15. 
+Security Considerations(セキュリティ考察) 
+15.1. 
+Preventing Attacks(攻撃の防止) 
+15.2. 
+User-Agents 
+15.3. 
+User Interface Considerations(ユーザインターフェースの考察) 
+15.4. 
+HTTP and HTTPS URL Identifiers(HTTPとHTTPSのURL Identifier) 
+15.5. 
+Denial of Service Attacks(サービス拒否攻撃) 
+15.6. 
+Protocol Variants 
+Appendix A. 
+Examples 
+Appendix A.1. 
+Normalization 
+Appendix A.2. 
+OP-Local Identifiers 
+Appendix A.3. 
+XRDS 
+Appendix A.4. 
+HTML Identifier Markup 
+Appendix A.5. 
+XRI CanonicalID 
+Appendix B. 
+Diffie-Hellman Key Exchange Default Value 
+Appendix C. 
+Acknowledgements 
+16. 
+Normative References 
+§ 
+Author's Address 
+1. 
+Requirements Notation and Conventions
+The key words "MUST", "MUST NOT", "REQUIRED", "SHALL",
+"SHALL NOT", "SHOULD", "SHOULD NOT", "RECOMMENDED", "MAY",
+and "OPTIONAL" in this document are to be interpreted as
+described in [RFC2119] (Bradner, B., “Key words for use in RFCs to Indicate Requirement Levels,” .).
+Throughout this document, values are quoted to indicate that
+they are to be taken literally. When using these values in
+protocol messages, the quotes MUST NOT be used as part of the
+value.
+2. 
+Terminology (用語)
+Identifier:
+An Identifier is either a "http" or "https" URI, (commonly
+referred to as a "URL" within this document), or an XRI (Reed, D. and D. McAlpin, “Extensible Resource Identifier (XRI) Syntax V2.0,” .) [XRI_Syntax_2.0]. This document defines
+various kinds of Identifiers, designed for use in different
+contexts.
+Identifierは"http"か"https"のURI(このドキュメント中では"URL"として参照されます)か、XRI (Reed, D. and D. McAlpin, “Extensible Resource Identifier (XRI) Syntax V2.0,” .) [XRI_Syntax_2.0]です。このドキュメントは、異なる文脈の中で使う為に設計された様々な種類のIdentifierを定義します。
+User-Agent:
+The end user's Web browser which implements HTTP/1.1 [RFC2616] (Fielding, R., Gettys, J., Mogul, J., Frystyk, H., Masinter, L., Leach, P., and T. Berners-Lee, “Hypertext Transfer Protocol -- HTTP/1.1,” .).
+HTTP/1.1 [RFC2616] (Fielding, R., Gettys, J., Mogul, J., Frystyk, H., Masinter, L., Leach, P., and T. Berners-Lee, “Hypertext Transfer Protocol -- HTTP/1.1,” .)を実装しているエンドユーザのウェブブラウザです。
+Relying Party:
+RP. A Web application that wants proof that the end user
+controls an Identifier.
+RPと呼びます。エンドユーザが管理するIdentifierの証明を望むウェブアプリケーションの事です。
+OpenID Provider:
+OP. An OpenID Authentication server on which a Relying
+Party relies for an assertion that the end user controls
+an Identifier.
+OPと呼びます。エンドユーザが管理するIdentifierの表明の為にRelying Partyが信頼するOpenID認証サーバです。
+OP Endpoint URL:
+The URL which accepts OpenID Authentication protocol messages,
+obtained by performing discovery on the User-Supplied
+Identifier. This value MUST be an absolute HTTP or HTTPS URL.
+User-Supplied Identifier上での発見行為によって獲得された、OpenID認証のプロトコルメッセージを受け取るURLです。
+OP Identifier:
+An Identifier for an OpenID Provider.
+OPのためのIdentifierです。
+User-Supplied Identifier:
+An Identifier that was presented by the end user to the
+Relying Party, or selected by the user at the OpenID
+Provider. During the initiation phase of the protocol,
+an end user may enter either their own Identifier or an OP
+Identifier. If an OP Identifier is used, the OP may then
+assist the end user in selecting an Identifier to share with
+the Relying Party.
+エンドユーザによってRPに与えられたか、OPでエンドユーザに選ばれたIdentifierです。プロトコルの開始段階の間、エンドユーザは自身のIdentifierかOP Identifierのどちらか一方を記入するかもしれません。もしOP Identifierが使われたなら、OPはRPと共有する為にIdentifierを選択する事についてエンドユーザを助けるかもしれなません。
+Claimed Identifier:
+An Identifier that the end user claims to own; the overall
+aim of the protocol is verifying this claim. The Claimed
+Identifier is either:
+The Identifier obtained by normalizing (Normalization) the User-Supplied Identifier, if it
+was an URL.
+The CanonicalID (XRI and the CanonicalID Element), if it
+was an XRI.
+エンドユーザが自分のものであると主張するIdentifierです。このプロトコルの全体にわたる狙いは、この主張が真実である事を証明する事です。Claimed Identifierは以下のいずれか一方となります。
+(URLだった場合)User-Supplied Identifierのnormalizing (正規化) (Normalization)によって獲得したIdentifier
+(XRIだった場合)CanonicalID (XRI and the CanonicalID Element)
+OP-Local Identifier:
+An alternate Identifier for an end user that is local to a
+particular OP and thus not necessarily under the end user's
+control.
+個々のOPで局所的なエンドユーザの為の代替Identifierで、エンドユーザの管理下にある必要はありません。
+3. 
+Protocol Overview (プロトコル概観)
+The end user initiates
+authentication (Initiation) by presenting a User-Supplied Identifier
+to the Relying Party via their User-Agent.
+エンドユーザは、User-Agentを介してRPにUser-Supplied Identifierを与える事で、認証を開始します(initiates authentication) (Initiation)。
+After normalizing (Normalization) the
+User-Supplied Identifier, the Relying Party performs discovery (Discovery) on it and
+establishes the OP Endpoint URL that the end user uses for
+authentication. It should be noted that the User-Supplied
+Identifier may be an OP Identifier, as discussed in Section 7.3.1 (Discovered Information), which allows selection of a
+Claimed Identifier at the OP or for the protocol to
+proceed without a Claimed Identifier if something else
+useful is being done via an extension (Extensions).
+User-Supplied Identifierの正規化(normalizing) (Normalization)後、Rlying PartyはUser-Supplied Identifier上で発見を行い(performs discovery) (Discovery)、エンドユーザの認証に使うOP Endpoint URLを確立します。Section 7.3.1 (Discovered Information)で論じられている様に、User-Supplied IdentifierがOP Identifierであるかもしれず、OP上でのClaimed Identifierの選択か、Claimed Identifierなしでプロトコルが続行するための拡張(extension) (Extensions)による有用な何かしらが行われる事を許可する、という事に注意すべきです。
+(optional)
+The Relying Party and the OP establish an association (Establishing Associations) -- a shared
+secret established using Diffie-Hellman Key Exchange (Rescorla, E., “Diffie-Hellman Key Agreement Method,” .) [RFC2631]. The
+OP uses an association to sign subsequent messages and the
+Relying Party to verify those messages; this removes the
+need for subsequent direct requests to verify the
+signature after each authentication request/response.
+(任意) 
+RPとOPは関連づけ(association) (Establishing Associations)を確立します -- 共有秘密鍵はDiffie-Hellman鍵交換(Diffie-Hellman Key Exchange) (Rescorla, E., “Diffie-Hellman Key Agreement Method,” .) [RFC2631]を使って確立されます。OPは以降のメッセージへの署名とRPがメッセージを照合する為に関連付けを使います; 互いの認証リクエスト/レスポンスの後の署名の照合の為に直接リクエストを続ける必要性をなくします。
+The Relying Party redirects the end user's User-Agent to
+the OP with an OpenID Authentication
+request (Requesting Authentication).
+RPはOpenIDの認証リクエスト(Authentication request) (Requesting Authentication)をつけてエンドユーザのUser-AgentをOPにリダイレクトします。
+The OP establishes whether the end user is authorized to
+perform OpenID Authentication and wishes to do so. The
+manner in which the end user authenticates to their OP and
+any policies surrounding such authentication is out of
+scope for this document.
+OPはそうであろうと期待しながら、エンドユーザがOpenID認証を行う為に正当と認められているか確かめます。OPに対してエンドユーザが信頼できると証明する方法や、そのような認証周辺のいかなる方針は、このドキュメントの範囲外です。
+The OP redirects the end user's User-Agent back to the
+Relying Party with either an assertion that authentication is
+approved (Positive Assertions) or a message that authentication failed (Negative Assertions).
+OPは、認証が承認された(authentication is approved) (Positive Assertions)という表明か認証が失敗した(authentication failed) (Negative Assertions)というメッセージのいずれか一方をつけて、エンドユーザのUser-AgentをRPにリダイレクトして戻します。
+The Relying Party verifies (Verifying Assertions) the information received from the OP including
+checking the Return URL, verifying the discovered
+information, checking the nonce, and verifying the
+signature by using either the shared key established
+during the association or by sending a direct request
+to the OP.
+RPはOPから受け取った情報について、Return URLの確認、発見された情報の照合、nonceの確認、関連付けで確立された共有鍵かOPへの直接要求のどちらか一方を使って署名の照合、を含めて照合(verifies) (Verifying Assertions)します。

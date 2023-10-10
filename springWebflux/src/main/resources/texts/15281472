@@ -1,0 +1,73 @@
+Source route options LSRR, SSRR 
+Normally IP routing is dynamic with each router making
+decisions about which next hop router to send the
+packet to. However, another option exists where the
+sender can choose the route. In the case of the Loose
+Source Route, the sender (host) can specify a list of
+routers the packet must traverse, but it may also pass
+through other routers between any two addresses in the
+list. The Strict Source Route works very much the same
+way, except the packet must traverse only through the
+specified addresses. Source routing can potentially be
+used to reach hosts behind the firewall even if these
+hosts use private IP addresses which normally are not
+reachable over the Internet.
+Record route option RR
+This option causes every router that handles the
+packet on the way to add its IP address to a list in
+the options field. This option is used by the ping
+utility when it is called with the "-R" command line
+switch; it can potentially be exploited to discover
+the internal network addressing and layout behind the
+firewall. Although the risk is low, some firewall
+administrators prefer to block packets with this
+option set.
+Timestamp option
+This option tells routers that handle the packet to
+record their timestamps and sometimes addresses (like
+in the case of the record route option). This option
+is seldom used, but can potentially be exploited to
+gather information about the protected network, so
+some firewall administrators prefer to block packets
+with this option set.
+Fragment options
+IP packets may sometimes become fragmented. This
+happens if the original datagram is larger than what a
+physical network layer can transmit. The IP packet
+header has special fields (called "Flags" and
+"Fragmentation Offset") that detect fragmented packets
+and help reassemble them. Many firewalls can check
+these bits as well. Certain combinations of ﬂags and
+fragmentation offsets can never happen during a normal
+operation but were seen to be used by
+attackers. Firewall Builder provides two options for
+most commonly used cases related to packet
+fragmentation: the ’all fragments’ option matches the
+second and further fragments, while the ’short’ option
+is used to match packets that are too short to contain
+even a complete IP header.
+Standard IP Service objects that come with Firewall
+Builder appear in the Standard objects library, in
+the Services/IP branch.
+Support for TOS and DSCP
+Some firewalls can match IP packets based on the TOS
+("Type Of Service") or DSCP ("Differentiated Services
+Code Point") bits setting. These bits are used to
+define "quality of service". Since TOS and DSCP use
+the same byte in the IP header, these two are mutually
+exclusive. The dialog for the IP service uses radio
+buttons to choose between TOS and DSCP and provides an
+entry field for the actual code. The code is usually
+either a hexadecimal number or a class code such as
+"BE", "EF", "AFxx" or "CSx" that will be used verbatim
+in the generated firewall configuration.
+Using IP service objects in policy rules
+Consider the following IP Service objects:
+Object EF has DSCP matching turned on, matching
+traffic class EF. Object TOS 0x10 matches
+packets with TOS bits set to 0x10 (low delay).
+Object all_fragments has flag "all fragments"
+turned on, and finally object
+lsrr matches "loose source routing"
+option. Here is what we get for iptables when we use
+these objects in policy rules as follows:

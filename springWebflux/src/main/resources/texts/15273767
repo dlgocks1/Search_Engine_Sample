@@ -1,0 +1,39 @@
+流れは次のような感じということですよね（？）。 
+ゲーム開始前のページ（例：index.html） 
+↓ 
+Flashゲームのページ(例：game.html?user=xxxx) 
+↓ 
+ゲームクリアのページ(例：p_get.html?user=xxxx&point=yyyy) 
+最難関は「Flashゲームのページ」 で， 
+ゲームSWFが貼り付いている HTML の URLクエリパラメータ(例：user=xxxx) を 
+SWF で取得（SWFに送信）する部分だと思います。 
+URLクエリ 取得の前に URL を取得しなければそのパラメータが取得できないわけですが， 
+ActionScript2.0 まででは HTML の URL を取得できません。 
+（ActionScript3.0でも無理そうです。） 
+ですからまず， 
+HTML の URL を JavaScript で取得してパラメータ部分を取り出し， 
+SWF中に放り込んでやるというような，遠回りなことをしなければなりません。 
+「Flash内のテキストを外部から書き換えるには」 
+​http://okwave.jp/qa3789381.html​ 
+↑一応その方法例を＃２で書いています。 
+しかし， 
+できるならば，HTML の URL を JS で取得＆解析するよりも， 
+＃１ の方の書いていらっしゃるように， 
+プログラマの方に会員のパラメータが書いてあるテキストファイルを生成してもらって， 
+Flash から LoadVars.load する方がFlash作成側としては確実で簡単のように思います。 
+と言いますか， 
+上に書いたことは，ご質問の題 「FlashとPHPの連携」 ではありませんよ。 
+「FlashとPHPの連携」させるのでしたら， 
+ゲームSWFを表示させるページをPHPで動的に生成して， 
+そのページに FlashVars を入れておくか， 
+「***.swf」 で貼り付けるところを 「***.swf?user=xxx」 で貼り付ければ良いだけです。 
+ですから普通は， 
+そういうようなPHPを作成してもらうのが一般的な方法だと思います。 
+「FlashとPHPの連携」させる方法 ではなく， 
+PHP で パラメータ 付きの HTML を表示させて， 
+その HTML の URLクエリパラメータ を SWF で取得する方法 
+を書いているため，手間なだけです。 
+あと，ページの URL を SWF で取得するには， 
+JavaScript を getURL で実行させる方法もあるようです。 
+「Flash：自分が張られているページのURLを取得」 
+​http://quality.ekndesign.com/archives/2006/08/flashurl_1.html​

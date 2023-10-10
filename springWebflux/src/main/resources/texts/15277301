@@ -1,0 +1,36 @@
+MODxのsnippetを使うと、コンテンツを管理、表示するための便利な機能を作ることができます。
+snippetはMODx本体と同じように、PHPで書きます。zeera document searchのページで使う、「次のページへ」のリンクを作るsnippetを作りました。
+modx オブジェクトの関数
+modx オブジェクトはMODxがページを表示するときに必ず作成されるオブジェクトです。
+DocumentParserクラスから作られます。DocumentParserクラスはドキュメントを表示する機能を提供するクラスですが、それ以外にも
+データベースから任意のドキュメントを取ってくる
+ドキュメントのパラメータの取得
+プレースホルダーの作成
+などのAPIを提供しています。たとえば、次のようなAPIがあります。
+getParentIds($id, $height, $parent) : 親ドキュメントのIDをrecursiveに取得
+getChildIds($id, $height, $children) : 子ドキュメントのIDをrecursiveに取得
+getDocument($id, $fields, $published, $deleted) : ドキュメントを取得してarrayで返します。
+getDocuments($id, $fields, $published, $deleted) : $id に一括取得するドキュメントのIDをarrayで指定します。
+getActiveChildren($id, $sort, $dir, $fields) : 子ドキュメントを一括取得します。
+makeURL($id, $alias, $args, $scheme) : フレンドリーURLを返します。
+getPlaceholder($name) : プレースホルダーに設定された値を取得。
+setPlaceholder($name, $value) : プレースホルダーを作ります。
+snippetの作成
+管理画面で、[リソース]->[リソース管理]->[スニペット]->[新規作成]で、snippetを作成します。
+今回は[次へ]リンクを作成するためのDocumentPager snippetを作りました。
+親IDが同じドキュメントのうち、指定したソート順で次(前)のドキュメントをプレースホルダーにします。
+[[DocumentPager? &sortBy='id' &sortDir='ASC' &returnId='xx']]
+[+dpPrev+] [+dpNext+]
+パラメータ
+sortBy: 次、前のドキュメントを探す順番
+sortDir: 次、前のドキュメントを探す順番
+returnId: 最初と最後のドキュメントで[戻る]リンクの先ドキュメントID
+作られるPlaceholder
+[+dpPrevId+]: 前のドキュメントのID
+[+dpPrevPagetitle+]: 前のドキュメントのページタイトル
+[+dpPrevAlias+]: 前のドキュメントのAlias
+[+dpPrevLink+]: 前のドキュメントへのリンク
+[+dpNextId+]: 次のドキュメントのID
+[+dpNextPagetitle+]: 次のドキュメントのページタイトル
+[+dpNextAlias+]: 次のドキュメントのAlias
+[+dpNextLink+]: 次のドキュメントのリンク

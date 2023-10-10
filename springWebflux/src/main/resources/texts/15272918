@@ -1,0 +1,21 @@
+linux, vimできる patch を id:guyon が作ってくれた。 id:guyon++。PuTTYを使ってリモートのシェル操作でWindowsのクリップボードにテキストをコピーする - Guyon Diary素晴らしすぎる。素晴らしすぎるので少し補足など。 winclipコピペできるVer.
+#!/bin/sh
+echo -ne "\e[5i"
+cat $*
+echo -ne "\e[4i"
+Vim
+vnoremap "+Y :w !winclip
+vnoremap "*Y :w !winclip
+行指向で良ければこれだけで大丈夫。{lhs}は単に好みです。が2つあるのは、 hit-enter-prompt が出ちゃうから。 'cmdheight' が2以上の人は要らないと思う。あ、winclipにはパス通してあります。念のため。行指向がいやならやっぱりファイルに落とす必要がある。
+vnoremap "+y :call winclip()
+vnoremap "*y :call winclip()
+function! s:winclip()
+let save = @"
+silent! normal! gvy
+let temp = tempname()
+call writefile(split(@", "\n", 1), temp, 'b')
+silent! execute '!winclip ' . shellescape(temp)
+call delete(temp)
+let @" = save
+endfunction
+g@ とかを駆使すれば visual mode だけじゃなく normal mode でもいけるけど、めんどい。というかそこまでやるなら fakeclip.vim に機能追加したい。 ここまで来ると読み込みもできると嬉しいなぁ。Shift+Insertすればいいという話もあるけど、shellから読めると便利かも。さすがに難しいかー。 ところで長めのテキスト*1を貼り付けると何故かうまくいかない。最後の部分だけ残って先頭の方はバッサリなくなる。なにか設定がいるのだろうか。あと今回の patch とは関係ないと思うけど、 patch 前の設定を引き継いだら色の設定がなんだかおかしくなった。ANSI 白 太字 のデフォルト値が黄色(255,255,0)になってる。まあ1回設定し直せば済む話だったのでこれらはそこまで大きな問題ではないかな。

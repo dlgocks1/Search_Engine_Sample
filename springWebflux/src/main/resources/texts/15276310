@@ -1,0 +1,20 @@
+FormクラスのFormClosingイベントについて気づいたことを。
+フォームを閉じるときに、FormClosingイベントが発生する。 
+このイベントの引数として、FormClosingEventArgsのオブジェクトが渡ってくる。
+このFormClosingEventArgsには、CloseReasonプロパティがあり、フォームを閉じようとしている理由を提供してくれる。 
+Form.Closeメソッドや、ALT+F4などでウィンドウを閉じると、UserClosingになる。 
+また、タスクマネージャーのアプリケーション一覧から「閉じる」と、TaskManagerClosingになる。 
+どうしてタスクマネージャーってわかるの？と思うが、単にSendMessage/PostMessageで直接WM_CLOSEを送信すれば、この値になる。
+Formクラスは、closeReasonフィールドを持っており、名前の通り、閉じる理由を保持している。 
+初期値は、Noneだ。 
+Closeメソッドは、WM_CLOSEをSendMessageする前に、このcloseReasonにUserClosingを設定しており、WmProc側は、closeReasonを参照して、閉じる理由としているだけのことだ。 
+外部プロセスやSendMessageで直接送られてきたWM_CLOSEの場合は、closeReasonを設定する機会がないので、WmProcでは、NoneをTaskManagerClosingとしているだけだ。
+さて、問題は、FormClosingイベントでキャンセルした場合だ。 
+誰もこのcloseReasonフィールドをNoneに戻さないのだ。 
+次にSendMessageで直接送られたWM_CLOSEを受信すると、closeReasonがNoneでないから、その値が使われるのだ。
+だから、 
+1. Closeメソッドで閉じる 
+2. FormClosingイベントハンドラでキャンセルする。(このときの値はUserClosing) 
+3. タスクマネージャーから「閉じる」 
+4. FormClosingイベントハンドラには、TaskManagerClosingでなく、UserClosingが渡ってくる。
+そういうわけで、この値を信用してはいけない。

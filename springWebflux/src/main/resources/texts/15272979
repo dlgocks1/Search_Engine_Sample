@@ -1,0 +1,44 @@
+レイヤのコンテンツ全体に作用するエフェクトを実行する場合は、Core Animation Transitionを利用するのが便利です。Core Animationは色々複雑なことが出来るようですが、今のところアニメーション関連はUIViewのクラスメソッドとこのCATransitionで事足りています。 CATransitionは、UIViewアニメーションのようにブロック単位で動作を指定するのではなく、レイヤ全体が対象となります。ですので、下記のように記述しておけば次回画面が描画されるタイミングで、指定したレイヤに対してアニメーションが実行されます。
+// QuartzCoreが必要
+#import 
+...
+- (void) startTransition {
+CATransition *animation = [CATransition animation];
+// アニメーションのタイプ
+[animation setType:kCATransitionFade];
+[animation setSubtype:kCATransitionFromBottom];
+// アニメーションの長さ
+[animation setDuration:0.5];
+// アニメーションのタイミング
+[animation setTimingFunction:[CAMediaTimingFunction functionWithName:kCAMediaTimingFunctionEaseInEaseOut]];
+// 終了時のイベントを受け取る
+[animation setDelegate:self];
+// アニメーションを登録する。forKeyはアニメの識別子
+[[self.view layer] addAnimation:animation forKey: @"transitionViewAnimation"]; 
+// TODO 描画処理
+}
+...
+startTransitionを実行すれば「TODO 描画処理」で描画した内容がフェードインします。ここで指定できるタイプとタイミングはそれぞれ、CATransition Class Referance、Predefined Timing Functionsで定義されているので、色々試してみると面白いです。
+Transition Types
+NSString * const kCATransitionFade;
+NSString * const kCATransitionMoveIn;
+NSString * const kCATransitionPush;
+NSString * const kCATransitionReveal
+Transition Subtypes
+NSString * const kCATransitionFromRight;
+NSString * const kCATransitionFromLeft;
+NSString * const kCATransitionFromTop;
+NSString * const kCATransitionFromBottom;
+Timing Functions
+NSString * const kCAMediaTimingFunctionLinear;
+NSString * const kCAMediaTimingFunctionEaseIn;
+NSString * const kCAMediaTimingFunctionEaseOut;
+NSString * const kCAMediaTimingFunctionEaseInEaseOut;
+デリゲートを設定した場合は下記のメソッドが呼ばれるので、アニメーション後に不要になるオブジェクトはここで破棄すればよいと思います。
+- (void)animationDidStart:(CAAnimation *)anim{
+NSLog(@"start");
+}
+- (void)animationDidStop:(CAAnimation *)anim finished:(BOOL)flag{
+NSLog(@"end"); 
+}
+サンプルはこちら。

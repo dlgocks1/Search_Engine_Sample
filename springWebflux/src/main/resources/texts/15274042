@@ -1,0 +1,68 @@
+世界最大のシェアをもつLinuxディストリビューションであるRed Hat Linuxのフリー版の後継OS、Fedora 11をインストールする。 
+ここではインストールパッケージは必要最小限におさえ、あとで必要なものを個別にインストールしていく。 
+Fedora 11リリースノート 
+（１）FedoraのダウンロードページからインストールCDイメージ(Fedora-11-i386-disc1.iso,Fedora-11-i386-disc2.iso,Fedora-11-i386-disc3.iso,Fedora-11-i386-disc4.iso)をダウンロードする。 
+※インストールディスクは6枚あるが、当サイトのインストール手順では4枚のみしか使用しない 
+（２）ダウンロードしたCDイメージが破損していないかチェックするために使用するCHECKSUMをCDイメージと同じフォルダにダウンロードする。 
+※CHECKSUMのダウンロードは、ブラウザがIEの場合、リンク右クリックで｢対象をファイルに保存｣でダウンロードする 
+（３）Windows用のCHECKSUMコマンド群をダウンロード&解凍後、でてきたsha256sum.exeをCDイメージと同じフォルダに格納する。 
+（４）ダウンロードしたCDイメージが破損していないかチェックする。 
+C:\Documents and Settings\xxxxxxxx>cd C:\Documents and Settings\xxxxxxxx\デスクトップ\Fedora
+←　CDイメージ保存フォルダへ移動
+C:\Documents and Settings\takashi\デスクトップ\fedora>sha256sum --check Fedora-11-i386-CHECKSUM.txt　←　SHA256SUMチェック実行
+sha256sum: Fedora-11-i386-DVD.iso: No such file or directory
+Fedora-11-i386-DVD.iso: FAILED open or read　←　Fedora-11-i386-DVD.isoはダウンロードしてないのでNGでOK
+sha256sum: Fedora-11-i386-disc1.iso: OK　←　インストールディスク1枚目OK
+sha256sum: Fedora-11-i386-disc2.iso: OK　←　インストールディスク2枚目OK
+sha256sum: Fedora-11-i386-disc3.iso: OK　←　インストールディスク3枚目OK
+sha256sum: Fedora-11-i386-disc4.iso: OK　←　インストールディスク4枚目OK
+sha256sum: Fedora-11-i386-disc5.iso: No such file or directory
+Fedora-11-i386-disc5.iso: FAILED open or read　←　インストールディスク5枚目はダウンロードしてないのでNGでOK
+sha256sum: Fedora-11-i386-disc6.iso: No such file or directory
+Fedora-11-i386-disc6.iso: FAILED open or read　←　インストールディスク6枚目はダウンロードしてないのでNGでOK
+sha256sum: Fedora-11-i386-netinst.iso: No such file or directory
+Fedora-11-i386-netinst.iso: FAILED open or read　←　Fedora-11-i386-netinst.isoはダウンロードしてないのでNGでOK
+sha256sum: WARNING: 4 of 8 listed files could not be read
+Fedoraインストールディスク1枚目をCDドライブにセットして再起動する。 
+※BIOSの設定で1番最初にCDからブートするように設定しておくこと 
+Fedoraインストール実行
+Install or upgrade an existing systemを選択してENTER
+メディアチェック
+｢Skip｣を選択※カーソルの移動はTabキーで、決定はEnterキー押下
+Fedoraグラフィカルインストーラ起動
+｢Next｣
+言語選択
+｢Japanese(日本語)｣を選択して｢Next｣
+キーボード設定
+｢Japanese｣を選択して｢次｣
+※警告ウィンドウが表示されたら｢ドライブの再初期化｣をクリック
+ホスト名設定
+｢ホスト名｣にサーバーのホスト名(例:fedora.fedorasrv.com)を入力して｢次｣
+タイムゾーン設定
+｢アジア／東京｣を選択
+｢システムクロックでUTCを使用｣のチェックをはずして｢次｣
+rootユーザー(管理ユーザー)パスワード設定
+任意のrootユーザーパスワードを2箇所入力して｢次｣
+ディスクパーティション設定
+｢ドライブ全域を使用｣を選択して｢次｣
+インストールパッケージ選択
+｢オフィスとプロダクティビティ｣のチェックをはずす
+｢今すぐカスタマイズする｣を選択して｢次｣
+｢デスクトップ環境｣パッケージグループのインストールパッケージ選択
+全てのチェックをはずす
+｢アプリケーション｣パッケージグループのインストールパッケージ選択
+全てのチェックをはずす
+｢開発｣パッケージグループのインストールパッケージ選択
+｢開発ツール｣のみ選択して他は全てチェックをはずす
+｢サーバー｣パッケージグループのインストールパッケージ選択
+全てのチェックをはずす
+｢ベースシステム｣パッケージグループのインストールパッケージ選択
+｢ベース｣のみ選択して他は全てチェックをはずす
+｢言語｣パッケージグループのインストールパッケージ選択
+｢日本語のサポート｣のみ選択して他は全てチェックをはずして｢次｣
+インストール準備完了
+｢続行｣
+パッケージのインストール
+インストールが完了すると次のCDへの交換要求がくるので、CD4までインストールする
+インストール完了
+｢再起動｣

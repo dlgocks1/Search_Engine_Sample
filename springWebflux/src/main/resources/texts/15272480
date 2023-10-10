@@ -1,0 +1,27 @@
+javascriptというか、はまりまくったのでメモ。Lotus Notes/Domino 8.5でLotus Scriptの代りにServer Side JavaScriptで同様に開発ができるとの事でやってみました。サーバー・サイド JavaScript は XPages 用に用意された Lotus Domino サーバー上の ECMA 262 準拠のインタープリタで実行されます。NotesSession や NotesDocument などのNotes オブジェクトにアクセスするためのメソッドが用意されており、従来の NSF アプリケーションと同様のバックエンド処理を行うことができます。IBM Lotus Notes/Domino 8.5 におけるアプリケーション開発特定の構文が通らなかったりする匿名関数を定義して即実行する記述があると、そこから先の処理が実行されない。例外も飛ばない。
+(function(){
+print('hoge');
+})();
+一度、匿名関数を変数に入れてから実行しないとダメ。なんか動作が違うその辺のブラウザで次のコードを実行した場合。
+var reg = /A/;
+reg instanceof RegExp; // =>true
+reg.constructor == RegExp; // =>true
+Object.prototype.toString.apply(reg); // =>"[object RegExp]"
+Lotus Notes上のJavaScriptインタプリタで実行した場合。
+var reg = /A/;
+reg instanceof RegExp; // =>false
+reg.constructor == RegExp; // =>true
+Object.prototype.toString.apply(reg); // =>exception
+>HTTP JVM: スクリプトインタープリタエラー、
+>行=XX、列=XX: タイプ「function」のオブジェクトで
+>メソッド「apply(RegExp)」を呼び出し中にエラーが発生しました
+オブジェクトが何なのか調べる時は constructorプロパティを使わないとダメっぽい。コメント中に波括弧(中括弧)があると構文エラーとなりNotes Designerのエディタで保存できない。バグかな?String.prototype.replaceメソッドの第二引数にfunctionを渡しても動作しない。ECMA-262の仕様書どおりなのでしょうがないのかも。(第二引数はStringのみ)メソッドの上書きができない。String.prototype.replace を上書きしても、上書き前のメソッドが呼び出されてしまったので。catchできない例外が飛ぶというか、処理が唐突に終ってしまいエラーハンドリングできない。突然Javaになるこんな感じで、StringだったらString.prototype.replaceを呼びだしたい時に……
+function replaceHoge(value) {
+if (typeof value === 'string') {
+return value.replace(/hoge/g, "fuga"); // exception
+} 
+}
+>HTTP JVM: スクリプトインタープリターエラー、
+>行=xx 列=xx Java classs [java.lang.String]上で
+>メソッド「replace(regExp, string)] が見つかりません
+というわけで既存のライブラリを使おうとしても動きません。開発元にフィードバックを送っているので、これからもっと良くなる事を期待しています。クライアントサイドJavaScriptは実行環境によって動作が違いまくるという現状ですが、サーバーサイドはそうなって欲しくないですね。

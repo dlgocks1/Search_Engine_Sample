@@ -1,0 +1,86 @@
+Real Web 2.0: Practical linked, open data with Exhibit
+Discover a tool for managing data the right way, while reducing burdens on developers and users
+Uche Ogbuji is Partner at Zepheira, LLC, a solutions firm specializing in the next generation of Web technologies. Mr. Ogbuji is lead developer of 4Suite, an open source platform for XML, RDF and knowledge-management applications and lead developer of the Versa RDF query language. He is a Computer Engineer and writer born in Nigeria, living and working in Boulder, Colorado, USA. You can find more about Mr. Ogbuji at his Weblog Copia.
+Summary:  In the previous installment of this column you learned about Linking Open Data
+(LOD), a community initiative for moving the Web from separated documents to a broad
+information space of data. That article covered the main ideas of LOD, and in this article you will see how to quickly put these ideas to use. Learn about the Exhibit Web library from the MIT Simile project, which allows you to construct functional and visually attractive user interfaces without much work, once you have good LOD available.
+View more content in this series
+Last time in Real Web 2.0 I discussed Linking Open Data (LOD), a movement
+focusing on a few simple principles for increasing the value of collections of
+data published on the Web (see the previous article). 
+I mentioned once again that Ajax is not the true essence of LOD nor even Web 2.0,
+but that it is valuable because of how, when used well, it can enhance the
+usability of Web sites. This fact is not lost on the LOD community, and in
+addition to promoting sound Web architecture, the community has been developing
+tools to show off attractive results. A major hub of such development is SIMILE (Semantic Interoperability of Metadata and Information in unLike Environments), a research project developing tools to share diverse collections of data and digital media. SIMILE is a joint project of Massachusetts Institute of Technology (MIT) and the W3C, and it has produced some real gems. One of these is Exhibit, which allows you to produce Web pages with widgets the user can use to quickly comb through large collections of data. Exhibit makes this easy and requires little programming. It is developed by David Huynh, with contributions from others on the SIMILE team. In this article I'll show you how to use Exhibit to publish LOD without tears.
+It's all about the data
+First I'll focus on the data to be published with Exhibit. Exhibit works on JSON input following a simple set of conventions. Listing 1 is a basic outline you can use for a starting point on most Exhibit ventures.
+Listing 1. Exhibit JSON skeleton 
+This is the outline of a JSON object with a single property named items, whose value is an array of objects. Each of the item objects can have any set of properties, and these properties are what Exhibit uses to construct the user interface.
+A good data source
+I'd like to create an Exhibit from the Web feed of recent contributions to the Open
+Clip Art Library, a collection of clip art available under generous licenses. A Web
+feed is a nice showcase for Exhibit, as it includes linked data with titles, dates,
+and categories (also know as tags) that are useful for users looking for information. Open Clip Art Library includes images in its Atom 1.0 feed, which is also nice for showing off Exhibit. The Atom 1.0 flavor of Web feed is especially useful because it is designed with solid, LOD-compatible principles. Listing 2 (clipart.feed.xml) is a representative sample trimmed from a recent snapshot of the feed in question.
+Listing 2 (clipart.feed.xml). Atom 1.0 feed of recent contributions to the Open Clip Art Library 
+<feed xmlns="http://www.w3.org/2005/Atom">
+<title>Open Clip Art Library (clip_art)</title>
+<link rel="self" href="http://openclipart.org/media/feed/atom/clip_art"></link>
+<link rel="alternate" href="http://openclipart.org/media/feed/atom/clip_art"></link>
+<updated>2008-03-11T20:06:06+00:00</updated>
+<id>http://openclipart.org/media/feed/atom/clip_art</id>
+<entry>
+<id>http://openclipart.org/media/files/adriano/8006</id>
+<title>Hard Hat</title>
+<author>
+<name>Adriano Ribeiro</name>
+</author>
+<logo>http://openclipart.org/people/adriano/avatar.gif</logo>
+<link rel="alternate" href="http://openclipart.org/media/files/adriano/8006"
+type="text/html"></link>
+<link rel="enclosure"
+href="http://openclipart.org/people/adriano/adriano_Hard_Hat.svg"
+length="9353" type="image/svg+xml"></link>
+<category term="unchecked"></category>
+<category term="public_domain"></category>
+<category term="image"></category>
+<category term="tool"></category>
+<category term="man"></category>
+<category term="hat"></category>
+<category term="hard"></category>
+<category term="work"></category>
+<category term="wrench"></category>
+<updated>2008-03-11T20:06:06+00:00</updated>
+<content type="text/plain">A yellow hard hat and a wrench</content>
+<link rel="license" href="http://creativecommons.org/licenses/publicdomain"
+type="text/html"></link>
+</entry><entry>
+<id>http://openclipart.org/media/files/Caggles/8005</id>
+<title>Ship's Badge</title>
+<author>
+<name>Caggles</name>
+</author>
+<logo>http://openclipart.org/ccimages/person.png</logo>
+<link rel="alternate" href="http://openclipart.org/media/files/Caggles/8005"
+type="text/html"></link>
+<link rel="enclosure"
+href="http://openclipart.org/people/Caggles/Caggles_Ship_s_Badge.svg"
+length="99224" type="image/svg+xml"></link>
+<category term="unchecked"></category>
+<category term="public_domain"></category>
+<category term="image"></category>
+<category term="svg"></category>
+<category term="png"></category>
+<category term="badge"></category>
+<category term="heraldry"></category>
+<category term="crest"></category>
+<category term="navy"></category>
+<category term="ship"></category>
+<category term="insignia"></category>
+<updated>2008-03-11T16:45:01+00:00</updated>
+<content type="text/plain">Blank outline for a Royal Navy ship's crest.
+</content>
+<link rel="license" href="http://creativecommons.org/licenses/publicdomain"
+type="text/html"></link>
+</entry>
+</feed>

@@ -1,0 +1,21 @@
+前回の記事でWindows環境へのGrowl&ruby_gntpの導入について簡単にまとめました。http://d.hatena.ne.jp/dot_h2o2/20090806/p2 いろいろ遊べそうだけど使い方を覚える意味で定番のHelloWorldをやってみた。 
+#!/usr/bin/ruby
+require "rubygems"
+require "ruby_gntp"
+GNTP.notify({
+:app_name => "Hello",
+:title => "Hello",
+:text => "HelloWorld",
+:sticky=> true,
+})
+ちなみに日本語も問題なし。コードをUTF8にしておけばOK。 
+#!/usr/bin/ruby
+require "rubygems"
+require "ruby_gntp"
+GNTP.notify({
+:app_name => "Hello",
+:title => "Hello",
+:text => "こんにちは",
+:sticky=> true,
+})
+簡単なのでほとんど解説不要だけど、ちょっとわかりにくいのが”sticky”。 この”sticky”がtrueの場合、通知が一定時間表示が残ってくれる。重要な通知にはこのオプションをつけた方が便利かも。 つづく...？かな。

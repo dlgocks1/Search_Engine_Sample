@@ -1,0 +1,173 @@
+An Interface for Data Access
+Version 2.3, April 1993
+Russ Rew, Glenn Davis, and Steve Emmerson
+Unidata Program Center
+Foreword
+Summary
+Introduction
+The NetCDF Interface
+NetCDF is Not a Database Management System
+What about Performance?
+Is NetCDF a Good Archive Format?
+Background and Evolution of the NetCDF Interface
+What's New in this Release?
+Future Plans for NetCDF
+References
+Components of a NetCDF File
+Dimensions
+Using Dimensions to Specify Variable Shapes
+Using Dimensions to Relate Variables
+Using Dimensions to Define Coordinate Systems
+Variables
+Attributes
+Attribute Conventions
+Differences between Attributes and Variables
+Data
+NetCDF Data Types
+Data Access
+Data Structures
+Use of the NetCDF Library
+Creating a NetCDF File
+Reading a NetCDF File with Known Names
+Reading a netCDF File with Unknown Names
+Adding New Dimensions, Variables, Attributes
+Error Handling
+NetCDF Operations
+NetCDF Library Interface Descriptions
+Create a NetCDF file
+nccreate: C Interface
+NCCRE: FORTRAN Interface
+Open a NetCDF File for Access
+ncopen: C Interface
+NCOPN: FORTRAN Interface
+Put Open NetCDF File into Define Mode
+ncredef: C Interface
+NCREDF: FORTRAN Interface
+Leave Define Mode
+ncendef: C Interface
+NCENDF: FORTRAN Interface
+Close an Open NetCDF File
+ncclose: C Interface
+NCCLOS: FORTRAN Interface
+Inquire about an Open NetCDF File
+ncinquire: C Interface
+NCINQ: FORTRAN Interface
+Synchronize an Open NetCDF File to Disk
+ncsync: C Interface
+NCSNC: FORTRAN Interface
+Back Out of Recent Definitions
+ncabort: C Interface
+NCABOR: FORTRAN Interface
+Set Fill Mode for Writes
+ncsetfill: C Interface
+NCSFIL: FORTRAN Interface
+Dimensions
+Create a Dimension
+ncdimdef: C Interface
+NCDDEF: FORTRAN Interface
+Get a Dimension ID from Its Name
+ncdimid: C Interface
+NCDID: FORTRAN Interface
+Inquire about a Dimension
+ncdiminq: C Interface
+NCDINQ: FORTRAN Interface
+Rename a Dimension
+ncdimrename: C Interface
+NCDREN: FORTRAN Interface
+Variables
+Create a Variable
+ncvardef: C Interface
+NCVDEF: FORTRAN Interface
+Get a Variable ID from Its Name
+ncvarid: C Interface
+NCVID: FORTRAN Interface
+Get Information about a Variable from Its ID
+ncvarinq: C Interface
+NCVINQ: FORTRAN Interface
+Write a Single Data Value
+ncvarput1: C Interface
+NCVPT1: FORTRAN Interface
+Write a Hyperslab of Values
+ncvarput: C Interface
+NCVPT: FORTRAN Interface
+Write a Generalized Hyperslab of Values
+ncvarputg: C Interface
+NCVPTG, NCVPGC: FORTRAN Interface
+Put a Record
+ncrecput: C Interface
+Read a Single Data Value
+ncvarget1: C Interface
+NCVGT1: FORTRAN Interface
+Read a Hyperslab of Values
+ncvarget: C Interface
+NCVGT, NCVGTC: FORTRAN Interface
+Read a Generalized Hyperslab of Values
+ncvargetg: C Interface
+NCVGTG, NCVGGC: FORTRAN Interface
+Get a Record
+ncrecget: C Interface
+Reading and Writing Character String Values
+C Interface
+FORTRAN Interface
+Missing Values
+Rename a Variable
+ncvarrename: C Interface
+NCVREN: FORTRAN Interface
+Get Number of Bytes for a Data Type
+nctypelen: C Interface
+NCTLEN: FORTRAN Interface
+Get Information About Record Variables
+ncrecinq: C Interface
+Attributes
+Create an Attribute
+ncattput: C Interface
+NCAPT, NCAPTC: FORTRAN Interface
+Get Information about an Attribute
+ncattinq: C Interface
+NCAINQ: FORTRAN Interface
+Get Attribute's Values
+ncattget: C Interface
+NCAGT, NCAGTC: FORTRAN Interface
+Copy Attribute from One NetCDF to Another
+ncattcopy: C Interface
+NCACPY: FORTRAN Interface
+Get Name of Attribute from Its Number
+ncattname: C Interface
+NCANAM: FORTRAN Interface
+Rename an Attribute
+ncattrename: C Interface
+NCAREN: FORTRAN Interface
+Delete an Attribute
+ncattdel: C Interface
+NCADEL: FORTRAN Interface
+NetCDF File Structure and Performance
+Parts of a NetCDF File
+The XDR Layer
+Higher-Level netCDF Operations
+CDL Syntax
+CDL Data Types
+CDL Notation for Data Constants
+ncgen
+Examples
+ncdump
+Examples
+Answers to Some Frequently Asked Questions
+What is netCDF?
+How do I get the netCDF software package?
+What does netCDF run on?
+What is the connection between netCDF and CDF?
+What is the connection between netCDF and HDF?
+What are the files in pub/netcdf/ on unidata.ucar.edu?
+Why do I get XDR error messages when trying to write data?
+What's the best way to represent data using netCDF?
+Are there plans to add facilities for data compression to netCDF?
+What utilities are available for netCDF?
+Is there a mailing list for netCDF discussions and questions?
+How do I make a bug report?
+How widely is netCDF used?
+Is there any WAIS or gopher access to netCDF information?
+Summary of C Interface
+Summary of FORTRAN Interface
+Units
+Function and Variable Index
+General Index

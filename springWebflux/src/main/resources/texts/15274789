@@ -1,0 +1,45 @@
+Trac序章で挙げた案件ラストML名でのwikiページからのリンクが出来ないんじゃーと言うことで試行錯誤しましたよ、ええ('ω`)なにせpythonでの正規表現がよく判ってない最初期からこれは引っかかっていて、しかも結構地味に痛い。MailArchivePluginはDBにメール保存する際の番号を無頓着に振ってくるのでメーリングリストの番号と整合しないのよね。結果、wiki側からMailArchive側にリンク貼りたい場合、この機能が使えるかどうかは使い勝手の上で結構個人的に大事。結論から書くとwikisyntax.pyを弄って、他のwiki書式と衝突しないようにすれば大丈夫な模様。とりあえず以下の変更で（仕様変更してますが）使えるように。
+@@ -21,8 +21,8 @@
+row = cursor.fetchone()
+if row:
+subject = util.escape(util.shorten_line(row[0]))
+- return '%s' \
+- % (formatter.href.mailarchive(row[1]), subject, label)
++ return '%s (%s)' \
++ % (formatter.href.mailarchive(row[1]), subject, subject, label)
+else:
+return label
+@@ -35,8 +35,10 @@
+return [('ml', self._format_link)]
+def get_wiki_syntax(self):
+- yield (r"!?\[(.+?)[ :]([0-9]+)\]", # [xxx 123] or [aaa:123]
+- lambda x, y, z: self._format_link(x, 'ml', y[1:1], y))
++# yield (r"!?\[(.+?)[ :]([0-9]+)\]", # [xxx 123] or [aaa:123]
++# lambda x, y, z: self._format_link(x, 'ml', y[1:1], y))
++ yield (r"!?\[ML:\[(.+?)[ :]([0-9]+)\]\]", # [xxx 123] or [aaa:123]
++ lambda x, y, z: self._format_link(x, 'ml', y[1:1], y[4:-1]))
+def _format_link(self, formatter, ns, target, label):
+cursor = formatter.db.cursor()
+@@ -45,9 +47,9 @@
+if row:
+subject = util.escape(util.shorten_line(row[0]))
+return '%s' \
+- % (formatter.href.mailarchive(row[1]), subject, label)
++ % (formatter.href.mailarchive(row[1]), subject, subject)
+else:
+- return label
++ return 'zzz %s' % (label)
+class WikiSyntaxMessageId(Component):
+implements(IWikiSyntaxProvider)
+@@ -65,8 +67,9 @@
+row = cursor.fetchone()
+if row:
+subject = util.escape(util.shorten_line(row[0]))
+- return '%s' \
+- % (formatter.href.mailarchive(row[1]), subject, label)
++ return '%s (Message-ID:)' \
++ % (formatter.href.mailarchive(row[1]), subject, subject, target)
++# % (formatter.href.mailarchive(row[1]), subject, label)
+wiki側での記述は
+[ML:[ML名:****]]
+とちょっと面倒ですが、変更前の状態だとTrac本体の[***:***]パターンマッチングと衝突するようで挙動がおかしいので、目的達成できればよしとの天の声に従いこれでフィックスｗ

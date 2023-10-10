@@ -1,0 +1,51 @@
+CAPE 
+(Communicating Autonomous Programs Environment) 
+for Java
+(CAPE には、第１版と第２版とがあり、このホームページでは第２版を説明します。
+資料はおいおい作成してゆきます。)
+CAPE とは ? 
+CAPE は, "融通性の高い分散処理" と "並行処理" を
+簡潔に実現できる JAVA ライブラリー です。
+能動オブジェクトにより、簡潔に分散システムを実現できることに
+特徴があります。
+能動オブジェクト
+分散処理
+並行多重処理
+融通性に富むメッセージ転送機構
+非同期メッセージ
+非同期返答(Future type reply)
+メッセージのマルチキャスト
+返答の選択的受信
+返答のタイムオーバー例外
+メッセージの転送
+100% pure Java
+By merely importing the "cape" pakcage, you can easily write 100 % pure Java 
+communicating autonomous programs.
+単に "cape" パッケージを import し、"ActObject" を継承するだけで、
+簡単に 100 % pure Java で 分散処理システムを実現できます。
+日本語マニュアル (PDF)
+インストール法
+"cape.tar" をダウンロードする 
+(Unix tar file: Last modified = 2003/Sept/01.)
+TAR ファイルを展開する 
+% cd /export/home/maruyama 
+% tar xvf cape.tar 
+Directory structure
+--- cape ---+--- classes --- cape-byte-codes (.class files)
+|
++--- demo ---+-- demo1 ----- (source and classes)
+| |
+| +-- demo2 ----- Client/Server demos
+| :
+|
++--- docs ----- documents (.html files)
+|
++--- index.html (This file)
+:
++--- src ----- Cape source programs (.java files)
+|
++--- tools ---- Mediator generator source programs
+環境変数 CLASSPATH に "cape/classes" を含ませる. 
+For example, if the "cape" is installed at "/export/home/maruyama".
+% setenv CLASSPATH .:/export/home/maruyama/cape/classes
+CAPE API documents -- to be updated for Version 2

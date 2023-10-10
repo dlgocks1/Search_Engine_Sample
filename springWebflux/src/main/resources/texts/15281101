@@ -1,0 +1,11 @@
+30 Wavelet Transforms
+This chapter describes functions for performing Discrete Wavelet
+Transforms (DWTs). The library includes wavelets for real data in both
+one and two dimensions. The wavelet functions are declared in the header
+files gsl_wavelet.h and gsl_wavelet2d.h.
+DWT Definitions
+DWT Initialization
+DWT Transform Functions
+DWT Examples
+DWT References
+The GNU Scientific Library - a free numerical library licensed under the GNU GPL Back to the GNU Scientific Library Homepage

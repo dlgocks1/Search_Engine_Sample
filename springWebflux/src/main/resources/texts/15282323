@@ -1,0 +1,41 @@
+About Flickriver
+Flickriver is a web-based image viewer that provides a new way to explore and view Flickr photos.
+It's a personal project of Alex Sirota (aka iosart).
+Flickriver enhances your photo browsing experience in several ways:
+River of photos - the photographs are always displayed as one continuous stream - you can view thousands of photos without ever needing to hit 'next' and waiting for the next page to load! This is also known as "infinite scroll". Check out my most interesting photos for an example
+Large images - size really matters when you truly want to appreciate the beauty of photography
+Black background - most photographs just look better on black - won't you agree?
+User most interesting photos - see other people's photos ordered by interestingness
+Most interesting Pool photos - see photos in any Pool ordered by interestingness
+Random order view - explore any user's or group's photos in random order
+Photos of user's contacts - see recent photos from contacts of any user
+Keyboard navigation - you can press j/k to go to next/previous photo. Hitting space also allows quickly jumping to the next photo. v opens the original Flickr page for the currently visible photo
+Beyond the features above, Flickriver has many additional Flickr photo views - user recent photos, favorites, sets, user and everyone's photos by tag, everyone's most interesting and recent photos, group and pool photos and more. Also, Flickriver follows the Flickr URL structure as much as possible, so you can easily go back and forth between the two.
+Important 
+Question: Why am I seeing my photos on Flickriver?
+Answer: Flickriver is simply an alternative Flickr viewer, and as such it displays all public Flickr photos using the official Flickr API - similarly to hundreds of other alternative Flickr viewers and tools. Flickriver doesn't host any photos and doesn't reference any photos specifically - it is merely a viewer that reflects whatever Flickr provides it when you ask it to.
+Flickr have specific guidelines for viewers such as Flickriver and other applications that use their API - for example, once a viewer displays a public Flickr photo, the photo must link back to its original Flickr page - so there can be no misunderstanding about the image origin, author or copyright. As you can see, Flickriver is absolutely compliant with this guideline. You can read the official Flickr FAQ about this here and here.
+Flickr allows you to opt out from third party services having access to your photos using Flickr API. 
+You can opt out on this page by selecting both:
+Hide your photostream from searches on 3rd party sites that use the API
+Your profile - hide me from searches 
+Once you opt out on Flickr, your photos should no longer be viewable through Flickriver. Please allow up to 24 hours for this change to take place.
+Note: Flickriver uses the Flickr API but is not endorsed or certified by Flickr.
+close this panel
+Badge creator
+Use Flickriver Badge Creator to create a badge linking to your photos, your group or any other Flickriver view. 
+You can place your badge on your Flickr profile, Blog or Website.
+Embed on your Web site
+To embed this view, Copy and Paste the following HTML code:
+Black background (preview):
+White background (preview):
+"View on Flickriver" Greasemonkey script
+A Greasemonkey script that adds Flickriver links to various Flickr photo pages - user photos, favorites, pools etc, allowing to quickly open the corresponding Flickriver view. 
+Also, allows quickly viewing any Flickr photo on black background in large size.
+Install "View on Flickriver" script
+Bookmarklet
+While viewing any Flickr photos page, click on the bookmarklet to open the same view on Flickriver.
+To install: drag and drop the following link to your Bookmarks toolbar. 
+IE users - add the link to your Favorites under the Links folder
+View on Flickriver (open on same page)
+View on Flickriver (open on new page)

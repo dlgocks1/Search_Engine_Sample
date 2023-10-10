@@ -1,0 +1,49 @@
+配列同士の差を得たい時、Rubyだと「配列A - 配列B」で得られたりする。試しにirbでやってみるとすぐにわかる。
+$ irb
+>> a = ['a', 'b', 'c', 'd', 'e', 'f', 'g']
+=> ["a", "b", "c", "d", "e", "f", "g"]
+>> b = ['b', 'd', 'f']
+=> ["b", "d", "f"]
+>> p a - b
+["a", "c", "e", "g"]
+こういう書き方ができるのは、きれいだなあと思う。JavaScriptでメソッドを追加するとしたら、こんな感じだろうか。。。
+////////////////////////////////////////////配列の差分（a_array - b_array）
+if (typeof Array.prototype.subtract !== 'function') {
+Array.prototype.subtract = function(aList){
+var my_result, tmp_f, i, ii;
+my_result = new Array();
+for (i = 0; i this.length; i++) {
+tmp_f = true;
+for (ii = 0; ii {
+if (this[i] === aList[ii]) {
+tmp_f = false;
+break;
+}
+}
+if (tmp_f) {my_result.push(this[i])}
+}
+return my_result;
+}
+}
+var a = ["a", "b", "c", "d", "e", "f", "g", "h"];
+var b = ["a", "c", "e", "g", "i"];
+a.subtract(b);//->["b", "d", "f", "h"]
+この書き方はどうなの、とお気づきの方は別途ご指摘いただくとして^^　この「a.subtract(b)」って文法がどうにも気に入らない。書き換えて「b.subtract(a)」と渡せるようにしてもいいんだけど、それだと元配列（多分大きい）に対して操作してる感じがしない。書き慣れていないってのもあるけれど、普通の関数呼び出しで「subtract(a, b)」の方がまだしっくりくるかな。どうだろう。
+function subtract_array(a_array, b_array) {
+var my_result, tmp_f, i, ii;
+my_result = new Array();
+for (i = 0; i {
+tmp_f = true;
+for (ii = 0; ii {
+if (a_array[i] === b_array[ii]) {
+tmp_f = false;
+break;
+}
+}
+if (tmp_f) {my_result.push(a_array[i])}
+}
+return my_result;
+}
+var a = ["a", "b", "c", "d", "e", "f", "g", "h"];
+var b = ["a", "c", "e", "g", "i"];
+subtract_array(a, b);//->["b", "d", "f", "h"]

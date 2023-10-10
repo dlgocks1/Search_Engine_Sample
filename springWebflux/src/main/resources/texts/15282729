@@ -1,0 +1,26 @@
+このコンテンツのポイント開発時における、 SQL Server Mobile 向けアセンブリへの参照設定ADO.NET による SQL Server Mobile の操作プログラム コードからデータベースの操作 今回紹介するコード
+private void button1_Click(object sender, EventArgs e)
+{
+// ファイル名で指定したデータベースを作成します。拡張子は SDF です。
+SqlCeEngine eng = new SqlCeEngine (
+@"Data Source=\My Documents\MySqlCeTest.sdf") ;
+eng.CreateDatabase();
+// データベースを開きます。
+SqlCeConnection cn = new SqlCeConnection (
+@"Data Source=\My Documents\MySqlCeTest.sdf");
+cn.Open();
+// テーブルを作成します。
+string sql = "CREATE TABLE Customers " +
+"(CustomerID nchar(6) Primary Key NOT NULL, " + 
+"CustomerName nvarchar(40) NOT NULL)" ;
+SqlCeCommand cmd = new SqlCeCommand (sql, cn);
+cmd.CommandType = CommandType.Text ;
+cmd.ExecuteNonQuery();
+// データを挿入します。
+sql = "INSERT INTO Customers " +
+"(CustomerID, CustomerName) VALUES ('ICHIRT', 'Ichiro Tanaka')" ;
+cmd.CommandText = sql;
+cmd.ExecuteNonQuery();
+// データベースを閉じます。
+cn.Close();
+}

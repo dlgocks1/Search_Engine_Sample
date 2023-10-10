@@ -1,0 +1,33 @@
+以前もお世話になりました。またよろしくお願いできますでしょうか。（OS: XP , Access 2003) 
+今回はACCESS VBA からDAOを使ってのExcelファイルの読み込みを試みています。 
+最初はTransferSpreadsheetを使ってうまく行っている様に見えたのですが、Quit及びSet XLApp=Nothingをちゃんとしていても、タスクマネージャーを開けると裏でEXCELが走っている状態でした。 
+他サイトで同じ現象の解決でAddNewが提案されており、そのサイトの例と他のDAOを使っている例を自分用にアレンジしてみました。 
+（他サイトのURL張っていいのかわからないので外しておきます） 
+エラー１）Import元のファイルを開けていないと"External table is not in the expected format" でOpenDatabaseの行で止まります。これは仕様でしょうか？わざわざ Excel.Applicationなどで開けないと行けないということですか？ 
+エラー２）"Run-time error 1004. Method 'Range' of object '_Global' failed"。ファイルを開けて実行した場合Rangeの所で止まります。Public subにしたりしましたが関係なかったようです。 
+申し訳ありませんが、アドバイスお願い致します。 
+------- 
+Sub loadToDB() 
+Dim rs, rs2 As DAO.Recordset 
+Dim db As DAO.Database 
+Dim SheetName As String 
+Set db = OpenDatabase("U:\projects\ABC\TestFile.xls", False, False, "Excel 8.0;")　 　’ファイルを開けていないとまずここで 
+SheetName = db.TableDefs(0).Name 
+Set rs = db.OpenRecordset(SheetName) 
+Set rs2 = CurrentDb.OpenRecordset("TableA") 
+Do Until rs.EOF 
+rs2.AddNew 
+rs!F1 = Range("A1").Value　　　’ファイル開けているとここで駄目です 
+rs!F2 = Range("B1").Value 
+rs!F3 = Range("C1").Value 
+rs!F4 = Range("D1").Value 
+rs2.Update 
+rs.MoveNext 
+Loop 
+rs.Close 
+Set rs = Nothing 
+db.Close 
+Set db = Nothing 
+rs2.Close 
+Set rs2 = Nothing 
+End Sub

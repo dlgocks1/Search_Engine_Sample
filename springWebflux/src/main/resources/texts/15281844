@@ -1,0 +1,46 @@
+PVFS2 servers are deployed using configuration files that provide information
+about the file systems, storage locations and endpoints that each server
+manages. For every pvfs2 deployment, there should be a global config file
+(fs.conf) shared across all of the pvfs2 servers. When the servers
+are started up, a command line parameter (server-alias) indicates what options
+are relevant and applicable for a particular server.
+This parameter will be used by the server to parse relevant options.
+Configuration options in the global config files have the following format:
+OptionName OptionValue
+An option cannot span more than one line, and only one option can
+be specified on each line. The OptionValue should 
+be formatted based on the option's type:
+Integer - must be an integer value
+String - must be a string without breaks (newlines)
+List - a set of strings separated by commas
+Options are grouped together using contexts, and usually
+indented within a context for clarity. A context is started
+with a context start tag, and ended with a context end tag:
+<ContextName>
+Option1Name Option1Value
+Option2Name Option2Value
+</ContextName>
+Options are required to be defined within a specified context 
+or set of contexts. 
+Sub-contexts can also be specified, and must be defined within
+their specified parent context. For example, the Range option is
+specified in either the DataHandleRanges or MetaHandleRanges 
+contexts. Both of
+those contexts are specified to be defined in the FileSystem context.
+Details of the required context an option or sub-context must be defined in
+are given in the Option Details section. 
+Options and contexts that appear in the top-level (not defined within
+another context) are considered to be defined in a special Global
+context. Many options are only specified to appear within
+the Default context, 
+which is a context that allows a default value to be specified for certain
+options.
+The options detailed below each specify their type, the context
+where they appear, a default value, and description. The default
+value is used if the option is not specified in any of the config files.
+Options without default values are required to be defined in the
+config file.
+Options Grouped by Context
+This is the summarized list of all available options, grouped by the
+context where they are allowed to appear.
+<Defaults>     TroveMaxConcurrentIO     LogFile     LogType     EventLogging     EnableTracing     UnexpectedRequests     StorageSpace     TCPBufferSend     TCPBufferReceive     TCPBindSpecific     ServerJobBMITimeoutSecs     ServerJobFlowTimeoutSecs     ClientJobBMITimeoutSecs     ClientJobFlowTimeoutSecs     ClientRetryLimit     ClientRetryDelayMilliSecs     PrecreateBatchSize     PrecreateLowThreshold     PerfUpdateInterval     BMIModules     FlowModules     LogStamp     TroveMethod </Defaults><Security>     TrustedPorts     TrustedNetwork </Security><ServerOptions> </ServerOptions><Aliases>     Alias </Aliases><FileSystem>     RootHandle     Name     ID     FileStuffing     FlowBufferSizeBytes     FlowBuffersPerFlow     DefaultNumDFiles     SecretKey     SmallFileSize     <StorageHints>         HandleRecycleTimeoutSecs         AttrCacheKeywords         AttrCacheSize         AttrCacheMaxNumElems         TroveSyncMeta         TroveSyncData         DBCacheSizeBytes         DBCacheType         ImmediateCompletion         CoalescingHighWatermark         CoalescingLowWatermark         TroveMethod         DirectIOThreadNum         DirectIOOpsPerQueue         DirectIOTimeout     </StorageHints>    <ExportOptions>     </ExportOptions>    <DataHandleRanges>         Range     </DataHandleRanges>    <MetaHandleRanges>         Range     </MetaHandleRanges>    <Distribution>         Name         Param         Value     </Distribution></FileSystem>Option Details

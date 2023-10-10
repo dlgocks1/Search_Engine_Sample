@@ -1,0 +1,25 @@
+ｂｉｇｓｕｎ’ｓ　ｉＰｈｏｎｅ Ｌｉｆｅｂｉｇｓｕｎ流ⅰＰｈｏｎｅ活用方法や、日常、我が家のトイプーちゃんを思ったままに。犬/パソコン【iPhoneSDK3.0】プロファイル、コードサインがエラーとなった場合iPhoneSDK
+おはこんばんちわ～。
+iPhone OS 3.0 正式リリースもあとわずかとなり、SDKも3.0へアップしてる方も多くいらっしゃると思います。
+しかし、アップするとプロファイルが読めなくなるというエラーがでたりするかと思います。
+そんなときの対処方法をメモ代わりに公開いたします。
+簡単には、、、
+まず、コード署名IDが「？」になる、は言語を英語にすると治ります。beta5から？は改善されてる模様。
+次に、プロファイルが、
+「profile doesn’t match any valid cirtificate/private key pair in the default keychain」
+となり選択できない、これはキーチェーンアクセスでデフォルトをログインにすることで解消。といった感じ。
+これだけではわかりにくいとは思いますので、以下に詳しく書いときます。
+ちみにこれは、Apple Developer Connectionへ問い合わせて回答です↓
+お使いの Mac でシステム言語設定が日本語になっている場合には、英語(English) に変更してください。その上で、以下をご参照の上で再作成を行ってください。なお、App ID はシステムの仕様上削除する事は出来ません。必要に応じて、新しい ID を追加作成していただけますようお願い申し上げます。
+1. Development Certificate および Distribution Provisioning Profile を破棄する。
+2. お使いのMac上で ~/Library/MobileDevice/Provisions および~/Library/MobileDevice/Provisioning Profiles から、登録済みのDistribution Provisioning Profile を削除する。
+3. Xcode を終了して、新規に Development Certificate、WWDR Intermediate Certificate 、Distribution Provisioning Profile をダウンロードおよびインストールする。
+- 証明書を作成する際には、入力するEメールアドレスおよびCommon Name 欄へ入力する氏名の情報が、iPhone Developerとして登録した際の情報と一致している事を確認してください。
+- Development Provisioning Profile を作成する際には、開発で使用するすべてのデバイスの UDID が Program Portal 上に登録されている事、そして Provisioning Profile 上で選択されている事を確認してください。
+4. Provisioning Profile をダウンロードした後、ファイルをXcode のオーガナイザへドラッグして iPhone/iPod touch にインストールする。
+5. デバイス上の Settings -> General -> Profilesで、Certificate がインストールされている事を確認する。
+6. キーチェーンアクセスにおいて、iPhone Development Certificateに対応する秘密鍵および公開鍵の両方が、鍵のカテゴリ（分類）に登録されている事を確認する。
+7. Xcodeでプロジェクトを再起動後、プロジェクトを最上段にハイライトする。上部のメニューバーで [情報] アイコンを選択して、'ビルド' において'Debug' 設定が選択されている事を確認する。
+8. 'Code Signing Identity’ -> ’Any iPhone OS’ の入力欄に"iPhone Developer: YourFirstname YourLastName" の形式で入力して（Development Certificate 上の Common Name と一致している事）、‘Code Signing Provisioning Profile’ において、自分が作成したDevelopment Provisioning Profile を選択する。
+9. プロジェクトウインドウで、‘Device - iPhone OS 2.0 (Project Setting)’ のドロップダウンメニューから ‘Device | Debug’を選択して、'アクティブな構成'で 'Debug' が設定されている事を確認する。
+10. 'ビルドして進行' をクリックして、デバイスにアプリケーションをインストールする。

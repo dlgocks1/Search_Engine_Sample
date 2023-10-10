@@ -1,0 +1,51 @@
+＜A4-4＞
+デッドロックが発生している可能性が高いです。まずスレッドダンプを取得しましょう。 
+スレッドダンプを取得する方法は次の通りです。 
+○Windowsの場合： 
+java.exeが動作しているDOS窓上で、Ctrl+Breakを押します。 
+（javaw.exeでは取得できません） 
+○UNIX系OSの場合： 
+対象のJavaプロセスにQUITシグナルを送信します。 
+$ kill -QUIT <pid> 
+この操作により、スレッドダンプがJavaVMの標準エラー出力に表示されます。 
+J2SE1.4.1からは HotSpotVMにデッドロック検出ユーティリティが追加され、モニターオブジェクトをロックし合うような単純デッドロックの場合、スレッドダンプと共にJavaVMが警告を発してくれます。また複雑なデッドロックやライブロックが発生している場合でも、スレッドダンプを解析することでロック箇所を特定することができるでしょう。 
+以下はJ2SE1.4.1_01-b01によるスレッドダンプの出力例です。 
+Full thread dump Java HotSpot(TM) Client VM (1.4.1_01-b01 mixed mode):
+"DestroyJavaVM" prio=5 tid=0x00034788 nid=0x764 waiting on condition [0..7fadc]
+"Thread-2" prio=5 tid=0x00A12430 nid=0xaf4 waiting for monitor entry [acef000..acefd8c]
+at sample.deadlock.DeadLock.lock(DeadLock.java:29)
+- waiting to lock <02AA3B28> (a java.lang.Object)
+at sample.deadlock.DeadLock.run(DeadLock.java:47)
+- locked <02AA3B30> (a java.lang.Object)
+"Thread-1" prio=5 tid=0x00A12EB0 nid=0x5cc waiting for monitor entry [acaf000..acafd8c]
+at sample.deadlock.DeadLock.lock(DeadLock.java:29)
+- waiting to lock <02AA3B30> (a java.lang.Object)
+at sample.deadlock.DeadLock.run(DeadLock.java:47)
+- locked <02AA3B28> (a java.lang.Object)
+==== 中略 ====
+"Suspend Checker Thread" prio=10 tid=0x009A8530 nid=0xb08 runnable
+Found one Java-level deadlock:
+=============================
+"Thread-2":
+waiting to lock monitor 0x9a4b7c (object 0x2aa3b28, a java.lang.Object),
+which is held by "Thread-1"
+"Thread-1":
+waiting to lock monitor 0x9a4b5c (object 0x2aa3b30, a java.lang.Object),
+which is held by "Thread-2"
+Java stack information for the threads listed above: 
+=================================
+"Thread-2":
+at sample.deadlock.DeadLock.lock(DeadLock.java:29)
+- waiting to lock <02AA3B28> (a java.lang.Object)
+at sample.deadlock.DeadLock.run(DeadLock.java:47)
+- locked <02AA3B30> (a java.lang.Object)
+"Thread-1":
+at sample.deadlock.DeadLock.lock(DeadLock.java:29)
+- waiting to lock <02AA3B30> (a java.lang.Object)
+at sample.deadlock.DeadLock.run(DeadLock.java:47)
+- locked <02AA3B28> (a java.lang.Object)
+Found 1 deadlock.
+上の例では、"Thread-1"と"Thread-2"がlock()メソッドでロックしており、そのデッドロックをJavaVMが検出／指摘していることが分かります。 
+参考) 
+自分のプログラムでスレッドを生成するときには、名前をつけることをお勧めします。 
+スレッド名称はデフォルトでは「Thread-<連番>」となり、スレッドダンプの解析が非常に困難になります。

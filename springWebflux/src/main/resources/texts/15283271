@@ -1,0 +1,31 @@
+WEBMacが二台あるが、そこをうまく、かつ面白く同期したいなあと思い、無料のプロジェクト管理（らしい）サービス「Unfuddle」を使うことにしました。http://unfuddle.com/昔もアカウントを取って使っていました。あの頃はまだ若かったのでSVNリポジトリのために借りていました。そう、このこのサービス、無料で200MBものリポジトリが使えるのです。しかもいつの間にか進化していて、今ではGitが使える。さらに、無料アカウントではプロジェクトは１個だけだが、なぜかリポジトリの数は無制限になっている。このサービス、いつか破綻するんではなかろうか、などと思ってしまうほど太っ腹です。あえて制限があるとしたら、無料アカウントだと、プロジェクトメンバーが２人までということだろうか。まあ友達の少ない僕には関係のない話です。UIも使いやすい。ここで自分はMacを使っていたので、MacでUnfuddleのGitを使った手順をざっと紹介。１）そもそもMacにGitがなきゃいかんhttp://code.google.com/p/git-osx-installer/便利なインストーラがあるので、それを使ってインストール。２）ローカルレポジトリを作成します
+$ mkdir repo
+$ cd repo
+$ git init
+３）UnfuddleのGitサーバを登録、その前にRSAキーを作成して認証が通るようにします。このあたりはUnfuddle内に説明書きがあるのでそれを読むとわかります。以下、例。
+$ ssh-keygen -t rsa
+Generating public/private rsa key pair.
+Enter file in which to save the key (/Users/user/.ssh/id_rsa): [enter for default]
+Enter passphrase (empty for no passphrase): [password]
+Enter same passphrase again: [password confirmation]
+Your identification has been saved in /Users/user/.ssh/id_rsa.
+Your public key has been saved in /Users/user/.ssh/id_rsa.pub.
+The key fingerprint is:
+46:1b:99:56:77:0b:38:1e:35:92:de:94:58:b4:f3:d4 user@machine.local
+$ cat ~/.ssh/id_rsa.pub
+ssh-rsa AAAAB3NzaC1yc2EAAAABIwAAAQEAwIuZA6ca9I1E2c06j1lbqvzDpZD2XQ5dRGVjeby1SGX+6
+tyjA1zcN9mim9DXOWiX1wyUwGnQdNR3qmzJwjlX1riLpXoEutZxRHsvWyeQFsrWM8B5rJk0U0HDEEH+/9
+u0SjGZZq0ERZE+L999ZzAYp7voxD7L7zFqp+odqNMpLln4A98JTBI50q5tVBQBbkh8wXHKPI0xLB1N9u7
+VCLB8NzrR7/SC73/t3XicnhmaaPL8R+9GKyfRtjxAWyRGZiG+A9ZDXgQ9m6kNP2xS3AFi2jRvHfH2tnmy
++KD80sn9hwqTIMANVr2FjVloBHmi+FIHeL9qFbdI/4DCJMHt/hEdAw== user@machine.local
+この cat でだした文字列すべてをUnfuddleの「Personal Settings」->「Public Keys」->「value」に放り込みます。これで認証は通るはず。４）Gitの設定とかいろいろここまできたら、後は教科書通り。
+$ git remote add unfuddle git@testgit.unfuddle.com:user/repo.git
+$ git config remote.unfuddle.push refs/heads/master:refs/heads/master
+上のやつで、リモートのGitサーバを指定（用語の使い方が間違っているかも）する。下のやつは、何だろうね。５）コミットとプッシュここで適当なファイルやディレクトリを作ってみる。そんでaddする。
+$ git add *
+$ git commit -am 'initial commit'
+これはローカルの話。リモートにプッシュするには以下コマンドを使う。
+$ git push unfuddle master
+プッシュ、どーん。上記４）の項目は、最初だけ。例えば別のマシンからチェックアウトするときは、cloneを使う。
+$ git clone git@testgit.unfuddle.com:user/repo.git
+GitのGUIクライアントもあるにはあるけれど、まだ完成度もさほど高くないし、Macならコマンドライン操作も悪くないので、当面はCUIでがんばろう。今回紹介したUnfuddleはすべて英語表記になっているが、一応日本語にも対応している。ただし、これは以前自分が遭ったことなのだが、ある日を境に文字化けしていたことがあった。何かサーバ内をリセットか何かをしたときに重なったのかもしれないが、念のためと学習のため、英語で使ってみるのが良いかもしれない。

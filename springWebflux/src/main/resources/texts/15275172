@@ -1,0 +1,20 @@
+07.10.07 
+Clearing out the master boot record with Linux
+Posted in How To, Intermediate, Linux at 9:35 pm by Techie
+In the old days, a techie might install Windows on a computer, then install Linux. Later, the techie might decide to trash the Linux partitions for some reason, but on reboot — oops! LILO was still there. These days, GRUB has taken the place of LILO, but the old problem is still there: how do you clear out the master boot record completely?
+If you had a Windows 98 boot disk lying around, you probably remember the old magic of fdisk /mbr. This simple command did just what you wanted — flashed out the master boot record, and things worked like you expected.
+However, in this day and age of Linux live CDs, there must be a way to do so without breaking out the floppies. As it turns out, there is, through a simple program known as dd.
+The beginning of a hard drive is where you keep both the master boot record, as well as the partition table. What you want to do is write zeroes to the master boot record, but not the partition table. Many folks recommend writing zeroes to the first 512 bytes of the drive — this is wrong.
+The truth is, the first 446 bytes of the drive are dedicated to the master boot record executable. The remaining 66 bytes are used to hold the partition table. Hence, what we need to do is read in a source of zeroes, and output it to the first 446 bytes of the drive. Simple! Let’s take a look at the command:
+dd if=/dev/zero of=/dev/hda bs=446 count=1
+This says to do just that — use as an input file the special device /dev/zero, an output file of the drive (substitute the drive identifier in question here!), with a block size of 446 bytes. Oh, and do it just once. No nonsense, quick, and effective. So, put away those MS DOS disks — that Linux live CD works just fine.
+Reference: LinuxQuestions.org: Using Linux’s fdisk to erase or fix a MBR?
+Permalink
+1 Comment »
+Blinded By Tech » Lenovo X41 Recovery CDs not booting? Check the partitions said,
+July 11, 2007 at 4:06 pm 
+[...] Blinded By Tech « Clearing out the master boot record with Linux Lenovo X41 Recovery CDs not booting? Check the partitions [...]
+Leave a Comment
+Name (required)
+E-mail (required)
+URI

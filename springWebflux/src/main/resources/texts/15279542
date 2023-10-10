@@ -1,0 +1,4 @@
+テレビ番組表に掲載されている出演者データを基に、独自に集計した出演時間・出演番組数ランキングを掲載Warning: mysql_fetch_row(): supplied argument is not a valid MySQL result resource in /home/doma/public_html/nilenile.net/tv/inc/yahoo_ranking_people.php on line 52 
+Warning: fopen(./temp/yahoo_ranking_people.php) [function.fopen]: failed to open stream: Permission denied in /home/doma/public_html/nilenile.net/tv/inc/init.php on line 182 
+8月11日の注目の人物
+1位 酒井法子2位 東方神起3位 嵐4位 押尾学5位 北川景子6位 工藤静香7位 高相祐一8位 狩野舞子9位 Versailles10位 野口美佳11位 EXILE12位 福山雅治13位 水野美紀14位 B'z15位 佐藤健16位 梨花17位 大原麗子18位 鈴木早智子19位 ダルビッシュ紗栄子（サエコ）20位 辻希美(Yahoo! Japan)

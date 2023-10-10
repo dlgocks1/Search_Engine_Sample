@@ -1,0 +1,19 @@
+二日前の投稿にも書いたが、wordpress muはなくなるっぽい。 
+mu用のプラグインたちはどうなるんだうろか？
+そうは言っても、今欲しい機能を試さない手はない。
+今回取り上げるのは、wordpress muをSNS化してくれるbuddypress。
+BuddyPressのインストール
+wordpress muをインストールする。
+buddypressをダウンロードする。
+buddypressを解凍して「wp-content/plugins」フォルダにアップロード。
+管理画面の「プラグイン」→「インストール済み」→「BuddyPress」の「使用する」をクリックする。
+日本語化するには「http://wppluginsj.sourceforge.jp/i18n-ja_jp/buddypress/」さんからリソースをダウンロードする。
+「buddypress101-ja.zip」を解凍して「buddypress-ja.mo」を「 wp-content/plugins/buddypress/bp-languages」にアップロードする。
+以上でインストールは終了。
+テーマの修正
+インストール直後は、ページのヘッダーにbuddypressのナビゲーションが現れるが、 
+テーマが適切に設定されていないということでエラーになる。
+「wp-content/plugins/buddypress/bp-themes/」を 
+「wp-content/bp-themes/」に移動する。
+BuddyPress 設定を再読み込みする。
+以上でデフォルトのテーマが適応されるっぽい。

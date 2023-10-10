@@ -1,0 +1,52 @@
+Distortion effect designed for the TB-303. Where the original TS-303 was a variant of the infamous TS-808, with some adaptations to match the signal levels of the TB-303 and a few soundwise alterations, this MK2 version is a complete new design with possibilities never seen anywhere. From electronic design and mechanical construction point of view it is lightyears ahead of the previous one. 
+Features: 
+2 different operation modes: Distortion and overdrive
+Variable dynamics restoration: Every distortion effect has the same problem: Dynamics gets lost and everything sounds equally loud. Translated to the TB-303 this means that you lose accents. This dynamics restoration reconstructs the envelope of the original signal while maintaining the distorted sound. It can be gradually tuned from no restoration to the double of the original dynamic range.
+Frequency selective distortion: This gives the possibility to choose which part of the frequency spectrum gets the most distortion. Quite amazing how this enables to pick things out of the soup which were otherwise not audible.
+A more detailed description of what and how can be read in the release notes: 
+RELEASE NOTES 
+Sound samples: 
+Samples by me: TB-303 into TS-303 MK2: 
+sample 1 sample 2 sample 3 sample 4
+Sample by me: Dynamics restoration demo. Same TB-303 loop while turning the dynamics knob from off to fully on: 
+sample
+Samples by J. Steverlinck: MS-20 into TS-303 MK2: 
+sample 1 sample 2 sample 3 sample 4 sample 5 sample 6 sample 7 sample 8
+Sample by J. Steverlinck: Moog Prodigy into TS-303 MK2: 
+sample
+Sample by Ventian Snares: TB-303 into TS-303 MK2 and drums: 
+sample
+Samples by Mike Dred: TB-303 and MC-202 into TS-303 MK2 + TR-606 and reverb: 
+sample 1 sample 2 sample 3 sample 4 sample 5 sample 6 sample 7 sample 8
+2009 Update: Revision 2 
+The first run of the TS-303 MK2 was limited to 10 pieces plus a bunch of prototypes. I discontinued it this fast because these were assembled with lead solder and thus not conform with the RoHS directive and I already had a bunch of ideas to further improve it. 
+Functional Changes:
+Very smooth drive control: Now the amount of distortion can be very gradually adjusted from just a tiny bit for that extra bit of crunch to big growling and screaming.
+Equally loud sounding overdrive and distortion: There was quite a big difference between the level of the overdrive and the distortion mode in the previous version. This difference is much smaller now.
+Improved interference immunity: Compared with the previous version, this one rejects much more outside interference (50/60Hz power hum, radio,...) resulting in a much cleaner signal output.
+Construction Changes:
+PCB design: The TS-303 MK2 rev2 is the first product that uses my new advanced component library. Designed to greatly improve the soldering quality and to reduce the effects of the problems introduced with the RoHS directive. See here.
+Thicker PCB: The PCB used now has double the thickness of a normal PCB. This makes it almost unbendable and almost unbreakable (I tried to break one by clamping it in bench vise and hitting it with a big hammer without success). Stress on SMD components by PCB bending is their major cause of malfunction. This stress is now removed.
+Sandwich Construction: The PCB is now fastened to the frontpanel with mechanical supports and the switches and pots are sandwiched between them. This together with the thick PCB greatly improves the overal strength and now the knobs will withstand a good beating.
+No electrolytic capacitors: I changed the main supply bypass capacitors from elcos to ceramic capacitors because the former are known time bombs. At the end of their life they can do anything from slowly outgassing/leaking of the corosive electrolyte to exploding (I recently repaired a TR-909 in which an exploded elco shot a huge hole in the main pcb). Ceramics don't do anything destructive while becomming old.
+Assembled in my kitchen with the help of beautiful Flemish girls
+Buy: 
+103 of these are built. If you are interested in purchasing one: send a mail to At this moment I am handling the requests for all people who were in the waiting list. A few are still available. 
+Price is 125 EUR + 15 EUR for shipping by registered international mail with proof of shipment. A suitable stabilized power supply can be added for the extra cost of 10 EUR. EU and UK plug available.
+Pictures: 
+Click for bigger or here for biggest 
+Click for bigger or here for biggest 
+Click for bigger or here for biggest 
+Below are pictures of the MK2 rev1 version 
+Ege Bam Yasi egging one of the first MK2 acid screamers. Click for bigger or here for biggest 
+Mike Dred and Herman Gillis at the night of electronics and opera in Li鑒e May 17th. 2008. Unannounced and unnoticed by most attendants Herman brought 2 FB2's and the protype of the restyler and joined in with Mike Dred for a live acid jam. I brought a prototype of the TS-303 MK2 for the occasion. Click for bigger or here for biggest 
+Venetian Snares at Domino 2009 in Brussels April 9th. with a TS-303 MK2 rev2. Click for bigger or here for biggest 
+Crop of the above Click for bigger. 
+Click for bigger or here for biggest 
+Studio shot. From left to right: The second TS-303 MK2 prototype, The first TS-303 model 1 prototype and the first prototype of the MK2 version. This together with various other equipment. Click for bigger or here for biggest 
+Click for bigger or here for biggest 
+Click for bigger or here for biggest 
+Click for bigger or here for biggest 
+Click for bigger or here for biggest 
+Click for bigger or here for biggest 
+Click for bigger

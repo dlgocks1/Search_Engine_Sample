@@ -1,0 +1,18 @@
+java.langパッケージ - Systemクラスを使用します。
+System.currentTimeMillis()を呼び出すと、1970年1月1日からのミリ秒を取得できます。
+サンプルソースコードlong currentTimeMillis = System.currentTimeMillis();
+Log.v("Test", String.valueOf(currentTimeMillis));
+Calendar calendar = Calendar.getInstance();
+calendar.setTimeInMillis(currentTimeMillis);
+Log.v("Test",
+calendar.get(Calendar.HOUR_OF_DAY) + ":" +
+calendar.get(Calendar.MINUTE) + ":" +
+calendar.get(Calendar.SECOND) + ":" +
+calendar.get(Calendar.MILLISECOND));
+Date date = new Date(currentTimeMillis);
+SimpleDateFormat simpleDateFormat = new SimpleDateFormat("HH:mm:ss SSS");
+Log.v("Test", simpleDateFormat.format(date))
+参考ページ
+System | Android Developers
+Calendar | Android Developers
+Date | Android Developers

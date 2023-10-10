@@ -1,0 +1,15 @@
+C# 4.0 introduces a new static type called dynamic. When an instance variable is defined with the type dynamic, the compiler ignores the call and won't complain. These actions are picked up at runtime. Here are comparison with C# 3.0 and C# 4.0 using Dynamic Types. 
+Let's say I have the following code in C# 3.0 
+// will not work in c# 3.0 
+object o = "farooq"; 
+Console.Write(o.Insert(o.Length, " Kaiser "));  
+// will work in c# 3.0 
+object o = "farooq"; 
+string myName = o as string ; 
+Console.Write(myName.Insert(myName.Length, " Kaiser ")); 
+Now, using Dynamic Types in C# 4.0 
+// will work in c# 4.0 
+dynamic d = "farooq";       // implicit conversion 
+Console.Write(d.Insert(d.Length, " Kaiser "));  
+Summary  
+In this article, we explored C# 4.0’s new feature dynamic types and I will continue to explore C# 4's features in the next article.

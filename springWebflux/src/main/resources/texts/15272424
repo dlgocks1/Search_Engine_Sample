@@ -1,0 +1,20 @@
+実は今まで、ページの親子関係はいちいち手入力してました。 
+phpで組めばいいのですが、調べ方がとくわからなかったからです。 
+何気にふと検索したら、その方法が出ていました。
+自分用に若干手を加えたので載せておきます。 
+<!-- structure tree view -->
+<?php
+global $wp_query;
+if( empty($wp_query->post->post_parent) ) {
+$parent = $wp_query->post->ID;
+} else {
+$parent = $wp_query->post->post_parent;
+} ?>
+<?php if(wp_list_pages("title_li=&child_of=$parent&echo=0" )): ?>
+<ul>
+<?php wp_list_pages("title_li=&child_of=$parent" ); ?>
+</ul>
+<?php endif; ?>
+<!-- /structure tree view -->
+テーマ編集、ページテンプレートに追加すると幸せになれることでしょう。 
+ただし、今見ているページから下のみを表示できるわけではなく、今見ているページから一番上の親から下の全てになります。

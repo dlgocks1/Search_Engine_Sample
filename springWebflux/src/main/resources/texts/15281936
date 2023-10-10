@@ -1,0 +1,15 @@
+オープンソース・フリーウェアを毎日紹介するブログ。日々の業務の効率化、新しいサービスのネタ探しにどうぞ。SNS、SBS、CMS、オフィス、画像編集、ユーティリティ、Firefoxアドオン、テキストエディタ、ゲーム…ジャンルは様々。
+[Firefox] [ Firefox アドオン] [ Google Code] [ JavaScript] [ MIT License] [ オープンソース] [ 開発]
+Webアプリケーションが増えるに従って、JSONフォーマットを利用する機会も増えてきた。だがJSONファイルの扱いはそれほど良くなく、Firefoxの場合ダウンロードのダイアログが開いてしまう。それにシステム向けに改行なしで作られているケースが多く閲覧には不向きだ。
+JSONフォーマットをFirefox上で閲覧できる
+今後さらに利用が進んでいくと思われるだけに、扱い勝手が悪いのは問題だ。そこで使ってみたいのがJSONViewだ。
+今回紹介するオープンソース・ソフトウェアはJSONView、Firefox上でJSONファイルを閲覧できるようにするFirefoxアドオンだ。
+JSONViewをインストールした状態でJSONファイルを開くとダウンロードダイアログが開かず、そのままソースが見られるようになる。キー、文字列、数値とそれぞれハイライト化されて表示されるので分かりやすい。配列やハッシュの場合は折り畳んで表示することができる。
+通常はこのようにダウンロードが開始されてしまう
+日本語表示にも対応しており、UTF-8であれば問題なく表示される。EUC-JPにすると文字化けるが、あまりないケースだと思うので大丈夫だろう。リンクは自動認識されてクリッカブルになる。Web上のファイルまたはローカルファイルの閲覧に対応している。
+表示は自動的に改行されるので、改行を含まないJSONファイルであっても見やすくなる。Web APIやWebアプリケーションの開発のお供にいかがだろう。
+JSONView - View JSON in Firefox | BRH.numbera.com　http://brh.numbera.com/software/jsonview/ 
+JSONView :: Add-ons for Firefox 
+https://addons.mozilla.org/en-US/firefox/addon/10869/ 
+jsonview - Project Hosting on Google Code 
+http://code.google.com/p/jsonview/

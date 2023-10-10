@@ -1,0 +1,21 @@
+遠距離広帯域インフラ上で大容量ファイルの高速転送をめざして開発しています. 
+scp のファイル転送部分を UDP 通信に変えることで高速転送を実現しています. 
+hscp は high speed copy を意識しています(hybrid scp が本当の意味だという噂もあります). 
+センターで運用しているサーバにはすべてインストールしてあります.　ご活用ください. 
+センターとの通信に関わらず、ご利用頂くことに制限はありません. 
+通信速度の例についてはPerformanceを参照ください.
+最新情報 
+Ver.0.9.9-7 公開をはじめました. 
+Windows コンソール版 hscp も公開しています. 7/24
+Feature
+Platform
+Download
+How to build
+How to install
+How to setup
+How to use
+License
+FAQ
+People
+Future
+Technical note

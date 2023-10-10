@@ -1,0 +1,64 @@
+SSHのON/OFFがネックでBossPrefsからの移行を躊躇していましたが、とっくに修正されています。 
+最新のバージョンでは安定もしているようなので早速移行。以下導入メモ。今の所はBossPrefsも併用しています。 
+アドオンは把握しきれていないので使ってから書きます。また次回。 
+wikisrvdのトグルは用意したい所。
+SBSettingsはBossPrefsの後継ツールです。製作者も同じ。いずれ置き換わるものなので、この機会に移行しましょう。 
+その前に注意書きテンプレートを。
+注意：まずは以下を読んでください。
+SBSettingsはapp storeでダウンロードできるAppleの認可を受けたアプリケーションではありません。 
+使うにはJailbreakが必要です。Jailbreakをする事によってAppleやSoftBankのサポートが受けられなくなります。 
+また、使い方によってはセキュリティリスクを増やす事になります。操作を誤ると簡単に壊れます。 
+私はJailbreakする事を薦めませんし、これから説明する手順を実行した際のいかなる問題にも責任を持ちません。
+インストール
+Mobile Substrateが必要なので事前にインストール。 
+リポジトリの追加は必要無いので、Cydiaで検索すれば見つかります。 
+WinterBoardを使っている人は既にインストールしているでしょう。
+SBSettingsも同様にリポジトリの追加は必要ありません。 
+Cydiaで検索するか、Home→Featured PackagesのFree Extensionsからインストールしましょう。 
+この記事を書いている時点の最新バージョンは1.0.7-1です。
+インストール後SpringBoardを再起動。ホーム画面に戻ってもSBSettingsのアイコンはありません。 
+SBSettingsはステータスバーをフリックするか左右にフリックする事で起動します。 
+他のアプリ起動中でも使えるので、設定関係以外に色々な使い方ができるのが利点。
+最初は明るさの設定とSSHとWiFiのトグルがあります。iPhoneだと3Gのトグルもデフォルトで表示されているでしょうか。 
+中段のMoreをタップするとBossPrefsでもお馴染みの設定の他に、SBSettings固有の表示設定ができます。
+初回起動時にはWelcomeのダイアログ。BossPrefsでも表示されました。 
+右は設定画面。順番に説明していきます。
+Manage Themes
+Manage ThemesをタップするとSBSettingsのテーマを変更できます。矢印アイコンをタップするとプレビューが表示される。 
+変更してホームボタンクリックでSpringBoardが再起動される。
+テーマはCydiaからDLできます。インストール先は以下に。 
+/private/var/mobile/Library/SBSettings/Themes
+詳しくはSBSettings Themes | iPhone News, Help and Guidesをどうぞ。 
+テーマを自作する時は既存のテーマをベースにファイルを置き換えて作る方が簡単です。先駆者に感謝しつつ、恩恵に与りましょう。
+Settings
+まずはSet Toggles。SBSettingsに表示させるトグルのON / OFFができます。
+次はDock Applications。中段のDockに表示するアプリを設定します。ここを上手く使うとiPhone / iPod touchがとても便利になる。 
+デフォルトでは全てOFFになっています。
+次はHide Icons。BossPrefsにも同じ機能があります。 
+ホーム画面のアイコンの表示非表示を切り替える。
+最後にExtras。これもBossPrefsに同じ機能があります。 
+メールアプリが起動しなくなったりした時にはFix User Dir Permissionsを。要はパーミッションを規定値に戻してくれる機能。本当に困った時だけ使いましょう。 
+Enable Numeric Batteryはバッテリー残量をアイコンから数値化表示に変更する機能。タップしてSpringBoardを再起動すると変更されます。 
+Disable Apple App Killswitchは以前話題になったキルスイッチ関連。詳しくはGoogleで”apple iphone killswitch”を検索してねとのこと。
+他はHelpとAbout。SBSettingsの下部には広告が表示されます。
+SBSettingsの下段にはいくつかの情報が表示されます。
+WifiのIPアドレスと、Data IPは3G回線だろうか。OFFならN/Aと表示。 
+他にはHDD Freeなんてありますが/var以下の空き容量。Available Memoryはメモリの空き容量。
+説明は以上です。 
+要はインストールするだけで使えるようになります。 
+Moreから設定すればDockをタップしてアプリのランチャーにもなるし、アドオンを追加する事で便利な使い方ができる。この辺りは次の機会に書きます。
+BossPrefsでできた事はSBSettingsでも可能です。 
+SSH関連のトラブルは修正されました。OFFにしたのにいつのまにかONになっていたり、切り替える時にしばらくフリーズしたりする事はもう無いようです。
+実はSSH切り替えのバグがクリティカルで、しばらくの間無視していました。 
+導入の決め手はmoyashiさん製作のSBSettings用アドオンのリリースラッシュ。 
+リポジトリを追加しておく事をおすすめします。 
+http://homepage3.nifty.com/moyashi/cydia/ 
+詳しくはひとりぶろぐ: [iPhone]i.softbank.jpドメインのメール着信通知時に着信音とバイブレーションを鳴動させる「SBankNotify」のインストールをどうぞ。
+アドオン情報
+アドオン関係の記事を追加しています。
+NowPlaying – 再生中の曲情報を辞書登録
+LastVisitURL – Safariで閲覧したページのタイトルとURLを辞書登録
+JPMemoDic – メモアプリに入力した単語を辞書登録
+DateStamper – 現在時刻を辞書登録
+AutoCorrection – 英語キーボードのオートコレクト機能をON/OFFする
+随時追加予定です。

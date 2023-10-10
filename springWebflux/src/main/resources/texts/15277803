@@ -1,0 +1,63 @@
+MovableTypeでは記事の一覧を表示するのにMTEntriesタグで簡単に表示することができましたが、WordPressはちょっとだけ複雑です。
+<?php if(have_posts()) : while(have_posts()) : the_post(); ?>
+～記事の表示～
+<?php endwhile; else: ?>
+～記事がないときの処理～
+<?php endif; ?>
+このようにWordPress内で定義されている関数を使うことになります。have_posts関数は記事があるかどうかという判断をする関数で、while構文でループさせるようです。
+ループについてはこちらを参照。
+The Loop – WordPress Codex 日本語版
+英語版はこっち
+The Loop « WordPress Codex
+ここで使われているPHPのifやwhileといった構文は普通
+<?php if ( 条件式 )
+{
+～処理～
+}
+?>
+という風に波括弧が使われますがここでは
+<?php if ( 条件式 ): ?>
+～処理～
+<?php endif; ?>
+という形が使われています。
+PHP: 制御構造に関する別の構文 – Manual
+これは知りませんでした。覚えとこ。
+ループを使って記事のタイトルと本文を表示してみます。
+<?php if(have_posts()) : while(have_posts()) : the_post(); ?>
+<h2><a href="<?php the_permalink(); ?>" title="<?php the_title();?>"><?php the_title();?></a></h2>
+<?php the_content(); ?>
+<?php endwhile; else: ?>
+<?php _e('Sorry, no posts matched your criteria.'); ?>
+<?php endif; ?>
+タイトルはh2要素でマークアップ。その下に記事本文を表示する形にしました。
+ここで使ったテンプレートタグの一覧。
+have_posts
+記事があるかどうかを判断する。
+the_post
+次の記事にいわゆるポインタを進める関数。
+the_permalink
+記事のパーマリンクを表示。
+the_title
+記事のタイトルを表示。
+<?php the_title(’before’, ‘after’, display); ?>
+before:(string) タイトルの直前に出力するHTMLタグやテキスト。デフォルトは空。
+after:(string) タイトルの直後に出力するHTMLタグやテキスト。デフォルトは空。
+display:(Boolean) trueにするとタイトルとして表示、faulseならPHP内で使える形にして返す。
+the_content
+記事の本文を出力。本文中に<!–more–>クイックタグがある場合、それより前の内容のみを表示させることもできる。
+<?php the_content(’more_link_text’, strip_teaser, ‘more_file’); ?> 
+more_link_text:(string) 追記部分（<!–more–>タグ以降）へのリンクを表示。デフォルトは「more…」
+strip_teaser:(Boolean) <!–more–>タグ以降の記事を隠すかどうか。隠すときはtrue、表示するときはfalse。
+more_file:(string)パーマリンクのリンク先として使うファイル名。現時点のバージョンではこの引数を指定してもデフォルト値が採用される。
+<?php _e('Sorry, no posts matched your criteria.'); ?>
+これは記事がまったくないときの処理で、実際には「該当する投稿は見つかりませんでした。」と表示されます。_e()はローカライズするための関数だそう。配布テンプレートをみているとよくみかけます。
+wp-content\languages\ja.po
+の中8753行目
+#: wp-content/themes/classic/index.php:31 msgid “Sorry, no posts matched your criteria.” msgstr “該当する投稿は見つかりませんでした。”
+で定義されてます。
+関連する投稿
+検索フォームを設置する[WordPressテンプレート作成#8] (0)
+最近の記事を表示する[WordPressテーマ作成#10] (0)
+最近のコメントを表示する[WordPressテーマ作成#11] (0)
+必要なテンプレートをさらに追加する[WordPressテンプレート作成#9] (0)
+テンプレートファイルをわけてみた[WordPressテーマ作成#7] (0)

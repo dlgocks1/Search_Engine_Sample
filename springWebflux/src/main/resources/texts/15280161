@@ -1,0 +1,15 @@
+フォームで使えるjQueryテクニック集「10+ JQuery tutorials for working with HTML forms」
+軽量で高機能なjavascriptライブラリの一つjQuery。様々な所で利用されていますが、今日紹介するのはフォームで使えるjQueryテクニックをまとめた「10+ JQuery tutorials for working with HTML forms」と言うエントリーです。
+Submit A Form Without Page Refresh using jQuery
+ツールチップから、オートコンプリート機能まで、様々な機能をjQueryを用いてフォームに実装できるようになっています。いくつか公開されていますが、今日はその中からいくつか気になったものを紹介したいと思います。
+詳しくは以下
+■A jQuery inline form validation, because validation is a mess 
+フォームにツールチップで注意書きを表示させる為のjQuery。入力に慣れていない人が使うフォームだと便利かもしれません。
+■WordPress & jQuery Contact Form without a Plugin 
+WordpressのプラグインであるContactFormとjQueryを組み合わせて、角Rのフォームや強調表示を可能にするチュートリアル。 
+■Creating a Digg Style Sign Up Form 
+Diggっぽいサインアップフォームを制作する為のチュートリアル。 
+上記の他に様々なフォーム関連のテクニックが収録されています。かなりコアな部分なので訳に立つと言う人と立たない人と別れるテクニック集だと思いますが、WEBには欠かせない要素の一つだと思いますので、WEBに携わっている人は目を通しておいても良いんじゃないかなと思います。
+Related Articles:最新のjQueryプラグインとチュートリアル25選「25 Fresh and New jQuery Plugins and Tutorials」スムーズに伸び縮みするサイドバー用タブメニュー「jQuery Sidebar Sliding Tab Menu Tutorial」jQueryで実現するツールチップ集「15 jQuery Plugins To Create A User Friendly Tooltip」ベクターデータからテクスチャまでデザイナーの為のリソース50選手書き風の表現を可能にしてくれるフリーphotoshopブラシ集「22 Free High Quality Doodle Photoshop Brushes Set」
+Tags: Javascript, webdesign This entry was written by designdevelop and posted on 2009/8/11 火曜日 at 22:33:15 and filed under WEBデザイン. Bookmark the permalink. Follow any comments here with the RSS feed for this post.
+Post a comment or leave a trackback: Trackback URL.
