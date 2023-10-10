@@ -21,9 +21,13 @@ repositories {
 dependencies {
 	implementation("org.springframework.boot:spring-boot-starter-data-mongodb")
 	implementation("org.springframework.boot:spring-boot-starter-web")
+	implementation("org.springframework.boot:spring-boot-starter-webflux")
+	implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.7.3")
+	implementation("org.jetbrains.kotlinx:kotlinx-coroutines-reactor:1.5.2")  // Kotlin Coroutines integration with Reactor
 	implementation("com.fasterxml.jackson.module:jackson-module-kotlin")
 	implementation("org.jetbrains.kotlin:kotlin-reflect")
 	implementation("org.apache.lucene:lucene-core:9.7.0")
+	testImplementation("org.jetbrains.kotlinx:kotlinx-coroutines-test:1.7.3")
 	implementation("org.apache.lucene:lucene-analyzers-common:8.11.2")
 
 	testImplementation("org.springframework.boot:spring-boot-starter-test")

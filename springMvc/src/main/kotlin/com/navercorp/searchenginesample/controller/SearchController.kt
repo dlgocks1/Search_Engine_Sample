@@ -11,11 +11,11 @@ class SearchController(
     private val searchService: SearchService
 ) {
 
-    @GetMapping
+    @GetMapping("/hatena/query")
     fun query(
-        @RequestParam keyword: String
+        @RequestParam("query") query: String
     ): List<SearchResult> {
-        return searchService.query(keyword)
+        return searchService.query(query)
     }
 
     @GetMapping("/health")

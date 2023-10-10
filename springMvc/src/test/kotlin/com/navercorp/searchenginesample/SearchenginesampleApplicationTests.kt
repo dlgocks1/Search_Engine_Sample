@@ -2,20 +2,35 @@ package com.navercorp.searchenginesample
 
 import com.navercorp.searchenginesample.domain.HatenaEntry
 import com.navercorp.searchenginesample.repository.InvertedIndexRepository
+import com.navercorp.searchenginesample.service.SearchService
+import kotlinx.coroutines.async
+import kotlinx.coroutines.awaitAll
+import kotlinx.coroutines.reactive.awaitFirstOrNull
+import kotlinx.coroutines.test.runTest
 import org.apache.lucene.analysis.ngram.NGramTokenizer
 import org.apache.lucene.analysis.tokenattributes.CharTermAttribute
+import org.junit.jupiter.api.DisplayName
 import org.junit.jupiter.api.Test
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.context.SpringBootTest
+import org.springframework.http.client.reactive.ReactorClientHttpConnector
+import org.springframework.web.reactive.function.client.WebClient
+import reactor.netty.http.client.HttpClient
+import reactor.netty.resources.ConnectionProvider
 import java.io.*
 import java.nio.charset.StandardCharsets
 import java.util.*
+import kotlin.system.measureTimeMillis
 
 @SpringBootTest
 class SearchenginesampleApplicationTests {
 
     @Autowired
     private lateinit var invertedIndexRepository: InvertedIndexRepository
+    @Autowired
+    private lateinit var hatenaSearchService: SearchService
+
+
 
     @Test
     fun nGramTokenizerTest() {
@@ -125,4 +140,38 @@ class SearchenginesampleApplicationTests {
         }
         return result
     }
+    @Test
+    @DisplayName("N번 만큼 API를 호출했을 때 평균 요청 시간을 구한다.")
+    fun apiCallTest() = runTest {
+        val connectionProvider = ConnectionProvider
+            .builder("myConnectionPool")
+            .maxConnections(100)
+            .pendingAcquireMaxCount(3000)
+            .build()
+        val clientHttpConnector = ReactorClientHttpConnector(HttpClient.create(connectionProvider))
+
+        val webClient: WebClient =
+            WebClient.builder()
+                .clientConnector(clientHttpConnector)
+                .baseUrl("http://localhost:8080").build() // Spring Boot에 의해 자동 주입됨
+        val numRequests = 3000
+
+        val apiCalls = (0..numRequests).map {
+            async {
+                measureTimeMillis {
+                    // API 호출
+                    webClient
+                        .get()
+                        .uri("/hatena/query?query=\"twitter\"")
+                        .retrieve()
+                        .bodyToMono(String::class.java)
+                        .awaitFirstOrNull()
+                }
+            }
+        }
+
+        println("Total requests: $numRequests")
+        println("Average request time: ${apiCalls.awaitAll().average()} ms")
+    }
+
 }

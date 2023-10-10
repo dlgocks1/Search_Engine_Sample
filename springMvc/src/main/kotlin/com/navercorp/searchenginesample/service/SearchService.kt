@@ -20,17 +20,21 @@ class SearchService(
     fun query(keyword: String): List<SearchResult> {
         val searchNgram = nGramTokenizer.performNgramTokenization(keyword, MIN_GRAM, MAX_GRAM)
         val invertedIndexes = invertedIndexRepository.findAllById(searchNgram)
-        return invertedIndexes.mapNotNull { invertedIndex ->
-            invertedIndex.postings.map { eid ->
+            .also { logger.info("all invertedIndex finded") }
+            .map { it.postings }
+            .flatten()
+            .sorted() // 스코어링 적용
+            .take(10) // 게시물 10개만 추출
+
+        return invertedIndexes.map {eid ->
                 val hatenaEntry = hatenaEntryRepository.findByIdOrNull(eid)
                 SearchResult(
                     eid = eid,
                     title = hatenaEntry?.title ?: "",
                     url = hatenaEntry?.url ?: "",
                     snippet = contentReader.getContent(eid)?.take(100) ?: ""
-                )
-            }
-        }.flatten().sortedByDescending { it.eid }.also { logger.info("totalElements : ${it.size}") }
+                ).also { logger.info("$eid is queried") }
+        }
     }
 
     companion object {
