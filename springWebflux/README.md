@@ -97,4 +97,34 @@ Average request time: 3264.9870043318892 ms
 
 `Why?` -> 이유 모르곘음..
 
-`webFlux`내부 로직의 문제인 것 같아 수정 중
+> `webFlux`내부 로직의 문제 즉, 내부에 Blocking코드 때문에 속도가 느려지는 것으로 추정됨
+
+---
+
+## Jmeter를 활용한 응답속도 측정
+
+### Webflux
+
+```text
+2995	18:21:32.553	Thread Group 1-972	HTTP Request	898	Success	4410	201	898	0
+2996	18:21:32.640	Thread Group 1-966	HTTP Request	811	Success	4410	201	811	0
+2997	18:21:32.562	Thread Group 1-986	HTTP Request	889	Success	4410	201	889	0
+2998	18:21:32.596	Thread Group 1-969	HTTP Request	855	Success	4410	201	855	0
+2999	18:21:32.561	Thread Group 1-994	HTTP Request	890	Success	4410	201	890	0
+```
+
+평균 `800ms~900ms` 소비
+
+### MVC
+
+```text
+2990	18:25:48.926	Thread Group 1-986	HTTP Request	764	Success	5114	201	764	0
+2991	18:25:48.920	Thread Group 1-964	HTTP Request	771	Success	5114	201	771	0
+2992	18:25:48.895	Thread Group 1-958	HTTP Request	796	Success	5114	201	796	0
+2993	18:25:48.959	Thread Group 1-996	HTTP Request	732	Success	5114	201	732	0
+2994	18:25:48.750	Thread Group 1-849	HTTP Request	942	Success	5114	201	942	0
+2995	18:25:48.886	Thread Group 1-974	HTTP Request	806	Success	5114	201	806	0
+2996	18:25:48.977	Thread Group 1-976	HTTP Request	715	Success	5114	201	715	0
+```
+
+평균 `700ms~800ms` 소비

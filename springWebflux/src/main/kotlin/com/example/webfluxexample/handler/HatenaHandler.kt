@@ -3,6 +3,7 @@ package com.example.webfluxexample.handler
 import com.example.webfluxexample.domain.common.CommonResponse
 import com.example.webfluxexample.repository.HatenaEntryRepository
 import com.example.webfluxexample.service.HatenaSearchService
+import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.flow.firstOrNull
 import kotlinx.coroutines.flow.toList
 import kotlinx.coroutines.reactive.asFlow
@@ -24,19 +25,17 @@ class HatenaHandler(
         return CommonResponse.onSuccess(result)
     }
 
-    suspend fun findByCategoryId(request: ServerRequest): ServerResponse {
+    suspend fun findByCategoryId(request: ServerRequest): ServerResponse = coroutineScope {
         val categoryId = request.queryParam("categoryId").getOrNull()
             ?: throw IllegalStateException("유효하지 않는 필드입니다.")
-        return CommonResponse.onSuccess(
+        return@coroutineScope CommonResponse.onSuccess(
             hatenaEntryRepository.findAllByCategoryId(categoryId).asFlow().toList()
         )
     }
 
-    suspend fun query(request: ServerRequest): ServerResponse {
+    suspend fun query(request: ServerRequest): ServerResponse = coroutineScope {
         val query = request.queryParam("query").getOrNull()
             ?: throw IllegalStateException("유효하지 않는 필드입니다.")
-        return CommonResponse.onSuccess(
-            hatenaSearchService.query(query)
-        )
+        return@coroutineScope CommonResponse.onSuccess(hatenaSearchService.query(query))
     }
 }
