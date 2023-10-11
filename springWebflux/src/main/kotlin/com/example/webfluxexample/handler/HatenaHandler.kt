@@ -33,9 +33,9 @@ class HatenaHandler(
         )
     }
 
-    suspend fun query(request: ServerRequest): ServerResponse = coroutineScope {
+    suspend fun query(request: ServerRequest): ServerResponse {
         val query = request.queryParam("query").getOrNull()
             ?: throw IllegalStateException("유효하지 않는 필드입니다.")
-        return@coroutineScope CommonResponse.onSuccess(hatenaSearchService.query(query))
+        return CommonResponse.onSuccess(hatenaSearchService.query(query))
     }
 }
