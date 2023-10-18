@@ -22,7 +22,7 @@ class SearchService(
         val invertedIndexes = invertedIndexRepository.findAllById(searchNgram)
             .map { it.postings }
             .flatten()
-            .take(10) // 게시물 10개만 추출
+            .take(400)
 
         return invertedIndexes.map {eid ->
                 val hatenaEntry = hatenaEntryRepository.findByIdOrNull(eid)

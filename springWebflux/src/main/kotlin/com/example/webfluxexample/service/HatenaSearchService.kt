@@ -3,9 +3,9 @@ package com.example.webfluxexample.service
 import com.example.webfluxexample.domain.dto.SearchResult
 import com.example.webfluxexample.repository.HatenaEntryRepository
 import com.example.webfluxexample.repository.InvertedIndexRepository
-import kotlinx.coroutines.reactor.awaitSingle
 import org.slf4j.LoggerFactory
 import org.springframework.stereotype.Service
+import reactor.core.publisher.Flux
 import reactor.core.publisher.Flux.fromIterable
 import reactor.core.scheduler.Schedulers
 
@@ -19,7 +19,7 @@ class HatenaSearchService(
 
     private val logger = LoggerFactory.getLogger(HatenaSearchService::class.java)
 
-    suspend fun query(keyword: String): List<SearchResult> {
+    suspend fun query(keyword: String): Flux<SearchResult> {
         val ngramTokenization = nGramTokenizer.performNgramTokenization(keyword, MIN_GRAM, MAX_GRAM)
         val invertedIndex = ngramTokenization
             .let { invertedIndexRepository.findAllById(it) }
@@ -29,19 +29,17 @@ class HatenaSearchService(
 
         return invertedIndex
             .flatMapSequential { eid ->
-                hatenaEntryRepository.findById(eid)
-                    .map {
-                        SearchResult(
-                            eid = it._id,
-                            title = it.title,
-                            url = it.url
-                        )
-                    }
+                hatenaEntryRepository.findById(eid).map {
+                    SearchResult(
+                        eid = it._id,
+                        title = it.title,
+                        url = it.url
+                    )
+                }
+//            .collectList()
+//            .awaitSingle()
             }
-            .collectList()
-            .awaitSingle()
     }
-
 
     companion object {
         const val MIN_GRAM = 2
